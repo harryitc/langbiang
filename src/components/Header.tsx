@@ -119,29 +119,15 @@ export default function Header() {
 
 function Logo() {
   return (
-    <span className="relative flex h-11 w-11 items-center justify-center">
-      <svg viewBox="0 0 48 48" className="h-11 w-11" aria-label={site.name}>
-        <defs>
-          <linearGradient id="lg-blue" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#6cc5e0" />
-            <stop offset="1" stopColor="#2b7bbd" />
-          </linearGradient>
-          <linearGradient id="lg-green" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#7cc34a" />
-            <stop offset="1" stopColor="#2e7d32" />
-          </linearGradient>
-        </defs>
-        <circle cx="30" cy="12" r="6" fill="#f5a623" />
-        <path
-          d="M8 40 C 8 20, 24 10, 40 10 C 40 30, 26 42, 8 40 Z"
-          fill="url(#lg-green)"
-        />
-        <path
-          d="M8 40 C 8 26, 18 18, 30 16 C 26 30, 20 38, 8 40 Z"
-          fill="url(#lg-blue)"
-          opacity="0.9"
-        />
-      </svg>
+    <span className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl shadow-sm ring-1 ring-white/50 dark:ring-white/10">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/logo-mark.png"
+        alt={site.name}
+        width={44}
+        height={44}
+        className="h-11 w-11 object-cover"
+      />
     </span>
   );
 }

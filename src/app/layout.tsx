@@ -48,9 +48,9 @@ export const metadata: Metadata = {
     description: site.description,
     images: [
       {
-        url: "/og-image.svg",
+        url: "/og.jpg",
         width: 1200,
-        height: 630,
+        height: 628,
         alt: site.name,
       },
     ],
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${site.name} — ${site.tagline} 2026`,
     description: site.description,
-    images: ["/og-image.svg"],
+    images: ["/og.jpg"],
   },
   robots: {
     index: true,
@@ -67,8 +67,8 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: "/favicon.svg",
+    icon: [{ url: "/logo-mark.png", type: "image/png" }],
+    apple: "/logo-mark.png",
   },
 };
 
@@ -91,7 +91,7 @@ const jsonLd = {
       addressCountry: "VN",
     },
   },
-  image: [`${site.url}/og-image.svg`],
+  image: [`${site.url}/og.jpg`],
   organizer: {
     "@type": "Organization",
     name: site.name,
