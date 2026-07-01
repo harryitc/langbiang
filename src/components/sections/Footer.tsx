@@ -35,13 +35,13 @@ export default function Footer() {
             </h3>
             <ul className="mt-4 space-y-2.5 text-white/80">
               {[
-                ["#about", "Về dự án"],
-                ["#gallery", "Khoảnh khắc"],
-                ["#volunteers", "Tình nguyện viên"],
-                ["#sponsors", "Nhà tài trợ"],
-                ["#news", "Tin tức"],
-                ["#fundraising", "Gây quỹ"],
-                ["#register", "Đăng ký"],
+                ["/#about", "Về dự án"],
+                ["/#activities", "Hoạt động"],
+                ["/#fundraising", "Gây quỹ"],
+                ["/#register", "Đăng ký"],
+                ["/2025", "Mùa 2025"],
+                ["/2025#volunteers", "Tình nguyện viên"],
+                ["/2025#news", "Tin tức"],
               ].map(([h, l]) => (
                 <li key={h}>
                   <a href={h} className="transition hover:text-grass">
