@@ -190,6 +190,26 @@ html.lenis body {
   }
 }
 
+/* ---------- Custom cursor ---------- */
+@media (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor [role="button"],
+  body.has-custom-cursor input,
+  body.has-custom-cursor textarea,
+  body.has-custom-cursor select {
+    cursor: none;
+  }
+}
+.cursor-ring {
+  transition: opacity 0.2s, border-color 0.2s;
+  will-change: transform;
+}
+.cursor-ring.cursor-down {
+  border-color: var(--color-sun);
+}
+
 ::selection {
   background: #7cc34a;
   color: #fff;

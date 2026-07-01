@@ -1,4 +1,5 @@
 import SmoothScroll from "@/components/SmoothScroll";
+import Cursor from "@/components/Cursor";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <>
       <SmoothScroll />
+      <Cursor />
       <Header />
       <main>
         <Hero />
