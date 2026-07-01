@@ -37,11 +37,10 @@ export default function Footer() {
               {[
                 ["/#about", "Về dự án"],
                 ["/#activities", "Hoạt động"],
-                ["/#fundraising", "Gây quỹ"],
-                ["/#register", "Đăng ký"],
                 ["/2025", "Mùa 2025"],
-                ["/2025#volunteers", "Tình nguyện viên"],
-                ["/2025#news", "Tin tức"],
+                ["/tin-tuc", "Tin tức"],
+                ["/gay-quy", "Gây quỹ"],
+                ["/#register", "Đăng ký"],
               ].map(([h, l]) => (
                 <li key={h}>
                   <a href={h} className="transition hover:text-grass">

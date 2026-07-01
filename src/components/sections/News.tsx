@@ -4,25 +4,27 @@ import { useState } from "react";
 import Reveal from "@/components/Reveal";
 import { news, site } from "@/lib/site";
 
-export default function News() {
+export default function News({ showHeading = true }: { showHeading?: boolean }) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
   return (
-    <section id="news" className="relative py-24 sm:py-32">
+    <section id="news" className="relative py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
-            Tin tức & Bản tin
-          </span>
-          <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
-            Câu chuyện từ{" "}
-            <span className="text-gradient-green">hành trình</span>
-          </h2>
-          <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-            Những dòng nhật ký, hình ảnh và tin tức mới nhất về Trăng Sáng Langbiang.
-          </p>
-        </Reveal>
+        {showHeading && (
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
+              Tin tức & Bản tin
+            </span>
+            <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
+              Câu chuyện từ{" "}
+              <span className="text-gradient-green">hành trình</span>
+            </h2>
+            <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
+              Những dòng nhật ký, hình ảnh và tin tức mới nhất về Trăng Sáng Langbiang.
+            </p>
+          </Reveal>
+        )}
 
         <Reveal
           childrenStagger

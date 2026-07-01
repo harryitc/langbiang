@@ -8,7 +8,8 @@ const nav = [
   { href: "#activities", label: "Hoạt động" },
   { href: "#timeline", label: "Lịch trình" },
   { href: "/2025", label: "Mùa 2025" },
-  { href: "#fundraising", label: "Gây quỹ" },
+  { href: "/tin-tuc", label: "Tin tức" },
+  { href: "/gay-quy", label: "Gây quỹ" },
   { href: "#faq", label: "Hỏi đáp" },
 ];
 

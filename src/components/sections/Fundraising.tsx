@@ -1,11 +1,19 @@
 import Reveal from "@/components/Reveal";
 import { fundraising } from "@/lib/site";
 
-export default function Fundraising() {
+export default function Fundraising({
+  showHeading = true,
+  bg = true,
+}: {
+  showHeading?: boolean;
+  bg?: boolean;
+}) {
   return (
     <section
       id="fundraising"
-      className="relative overflow-hidden bg-[#eef8ea] py-24 sm:py-32 dark:bg-night-2"
+      className={`relative overflow-hidden py-16 sm:py-24 ${
+        bg ? "bg-[#eef8ea] dark:bg-night-2" : ""
+      }`}
     >
       {/* đốm sáng nền */}
       <div className="pointer-events-none absolute inset-0 opacity-40 dark:opacity-25">
@@ -14,18 +22,20 @@ export default function Fundraising() {
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <span className="mb-3 inline-block rounded-full bg-sun/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-sunset">
-            Chung tay gây quỹ
-          </span>
-          <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
-            {fundraising.title}{" "}
-            <span className="text-gradient-sun">Trăng Sáng</span>
-          </h2>
-          <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-            {fundraising.desc}
-          </p>
-        </Reveal>
+        {showHeading && (
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <span className="mb-3 inline-block rounded-full bg-sun/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-sunset">
+              Chung tay gây quỹ
+            </span>
+            <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
+              {fundraising.title}{" "}
+              <span className="text-gradient-sun">Trăng Sáng</span>
+            </h2>
+            <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
+              {fundraising.desc}
+            </p>
+          </Reveal>
+        )}
 
         <Reveal
           childrenStagger

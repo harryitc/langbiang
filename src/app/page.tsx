@@ -9,7 +9,7 @@ import Journey from "@/components/sections/Journey";
 import Activities from "@/components/sections/Activities";
 import Timeline from "@/components/sections/Timeline";
 import Retro2025Callout from "@/components/Retro2025Callout";
-import Fundraising from "@/components/sections/Fundraising";
+import MorePages from "@/components/MorePages";
 import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import Footer from "@/components/sections/Footer";
@@ -29,7 +29,7 @@ export default function Home() {
         <Activities />
         <Timeline />
         <Retro2025Callout />
-        <Fundraising />
+        <MorePages />
         <Register />
         <Faq />
       </main>
