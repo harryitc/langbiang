@@ -34,10 +34,10 @@ export default function Countdown() {
     <div className="flex items-center gap-2.5 sm:gap-3.5">
       {cells.map((c, i) => (
         <div key={i} className="flex flex-col items-center">
-          <div className="glass flex h-16 w-16 items-center justify-center rounded-2xl text-2xl font-bold tabular-nums text-leaf-deep shadow-soft sm:h-[68px] sm:w-[68px] sm:text-3xl">
+          <div className="glass glass-adaptive flex h-16 w-16 items-center justify-center rounded-2xl text-2xl font-bold tabular-nums text-leaf-deep shadow-soft sm:h-[68px] sm:w-[68px] sm:text-3xl dark:text-leaf-bright">
             {t ? String(c.v).padStart(2, "0") : "--"}
           </div>
-          <span className="mt-1.5 text-[11px] font-semibold uppercase tracking-wide text-forest/70">
+          <span className="mt-1.5 text-[11px] font-semibold uppercase tracking-wide text-forest/70 dark:text-ink/70">
             {c.l}
           </span>
         </div>

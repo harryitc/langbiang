@@ -11,10 +11,10 @@ export default function Faq() {
     <section id="faq" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-3xl px-6">
         <Reveal className="text-center">
-          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep">
+          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
             Hỏi đáp
           </span>
-          <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl">
+          <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
             Câu hỏi <span className="text-gradient-green">thường gặp</span>
           </h2>
         </Reveal>
@@ -23,16 +23,16 @@ export default function Faq() {
           {faqs.map((f, i) => (
             <div
               key={f.q}
-              className="overflow-hidden rounded-2xl bg-white/70 ring-1 ring-leaf/10"
+              className="overflow-hidden rounded-2xl bg-white/70 ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10"
             >
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
                 aria-expanded={open === i}
               >
-                <span className="text-lg font-bold text-forest">{f.q}</span>
+                <span className="text-lg font-bold text-forest dark:text-ink">{f.q}</span>
                 <span
-                  className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-leaf/15 text-leaf-deep transition ${
+                  className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-leaf/15 text-leaf-deep transition dark:bg-leaf-bright/15 dark:text-leaf-bright ${
                     open === i ? "rotate-45" : ""
                   }`}
                 >
@@ -47,7 +47,7 @@ export default function Faq() {
                 }`}
               >
                 <div className="overflow-hidden">
-                  <p className="px-6 pb-5 leading-relaxed text-forest/75">
+                  <p className="px-6 pb-5 leading-relaxed text-forest/75 dark:text-ink/70">
                     {f.a}
                   </p>
                 </div>

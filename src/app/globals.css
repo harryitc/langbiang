@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================================
    TRĂNG SÁNG LANGBIANG — Design System
    Tông chủ đạo: trời xanh, cỏ non, lá cây, hoa cúc, nắng cam
@@ -16,6 +18,12 @@
   --color-sunset: #f57f17;
   --color-cream: #fdfcf5;
   --color-petal: #ffffff;
+
+  /* Dark mode "đêm trăng" */
+  --color-night: #0c1712;
+  --color-night-2: #12211b;
+  --color-ink: #dbeadd;
+  --color-leaf-bright: #8fd465;
 
   --font-display: var(--font-dancing), "Dancing Script", cursive;
   --font-sans: var(--font-be-vietnam), system-ui, sans-serif;
@@ -42,6 +50,29 @@ body {
   background: var(--color-cream);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.5s var(--ease-smooth), color 0.5s var(--ease-smooth);
+}
+
+/* ---------- Dark mode base ---------- */
+.dark body {
+  color: var(--color-ink);
+  background: var(--color-night);
+}
+.dark ::selection {
+  background: #8fd465;
+  color: #0c1712;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #12211b;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f7a34;
+}
+/* Theme-transition cho các mảng nền lớn */
+section,
+header,
+footer {
+  transition: background-color 0.5s var(--ease-smooth);
 }
 
 /* Lenis smooth scroll */
@@ -67,6 +98,11 @@ html.lenis body {
   background-clip: text;
   color: transparent;
 }
+.dark .text-gradient-green {
+  background: linear-gradient(120deg, #7cc34a, #9be06a 45%, #c6f39a);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
 
 .text-gradient-sun {
   background: linear-gradient(120deg, #f57f17, #f5a623);
@@ -80,6 +116,11 @@ html.lenis body {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.6);
+}
+/* Glass trên nền SÁNG (Header) chuyển tối trong dark mode */
+.dark .glass-adaptive {
+  background: rgba(18, 33, 27, 0.72);
+  border-color: rgba(143, 212, 101, 0.18);
 }
 
 .shadow-soft {

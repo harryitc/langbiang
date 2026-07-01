@@ -1,5 +1,6 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
+import ThemeToggle from "@/components/ThemeToggle";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
@@ -17,6 +18,7 @@ export default function Home() {
     <>
       <SmoothScroll />
       <Cursor />
+      <ThemeToggle />
       <Header />
       <main>
         <Hero />

@@ -19,7 +19,7 @@ export default function Placeholder({
     <div
       className={`group relative overflow-hidden rounded-3xl ${ratio} ${className}`}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-sky-soft via-[#cdeecb] to-grass" />
+      <div className="absolute inset-0 bg-gradient-to-br from-sky-soft via-[#cdeecb] to-grass dark:from-[#12314a] dark:via-[#163a2a] dark:to-[#1c3a1c]" />
       <div className="skeleton absolute inset-0 opacity-60" />
       {/* subtle hills */}
       <svg
@@ -37,7 +37,7 @@ export default function Placeholder({
           fill="rgba(46,125,50,0.45)"
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-forest/70">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-forest/70 dark:text-ink/70">
         <span className="text-4xl drop-shadow-sm transition-transform duration-500 group-hover:scale-110">
           {icon}
         </span>
@@ -45,7 +45,7 @@ export default function Placeholder({
           {label}
         </span>
       </div>
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/50" />
+      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/50 dark:ring-white/10" />
     </div>
   );
 }

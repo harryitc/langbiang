@@ -26,17 +26,17 @@ export default function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass shadow-soft py-2" : "bg-transparent py-4"
+        scrolled ? "glass glass-adaptive shadow-soft py-2" : "bg-transparent py-4"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
         <a href="#top" className="flex items-center gap-2.5">
           <Logo />
           <span className="leading-tight">
-            <span className="block text-[11px] font-semibold uppercase tracking-wider text-leaf-deep/70">
+            <span className="block text-[11px] font-semibold uppercase tracking-wider text-leaf-deep/70 dark:text-leaf-bright/70">
               Dự án tình nguyện
             </span>
-            <span className="font-display text-xl font-bold text-leaf-deep">
+            <span className="font-display text-xl font-bold text-leaf-deep dark:text-leaf-bright">
               Trăng sáng Langbiang
             </span>
           </span>
@@ -47,7 +47,7 @@ export default function Header() {
             <a
               key={n.href}
               href={n.href}
-              className="rounded-full px-3.5 py-2 text-sm font-medium text-forest/80 transition hover:bg-leaf/15 hover:text-leaf-deep"
+              className="rounded-full px-3.5 py-2 text-sm font-medium text-forest/80 transition hover:bg-leaf/15 hover:text-leaf-deep dark:text-ink/80 dark:hover:bg-leaf-bright/10 dark:hover:text-leaf-bright"
             >
               {n.label}
             </a>
@@ -62,7 +62,7 @@ export default function Header() {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center rounded-full text-leaf-deep lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full text-leaf-deep dark:text-leaf-bright lg:hidden"
           aria-label="Mở menu"
           aria-expanded={open}
         >
@@ -92,13 +92,13 @@ export default function Header() {
           open ? "max-h-96" : "max-h-0"
         }`}
       >
-        <nav className="glass mx-4 mt-2 flex flex-col rounded-2xl p-3">
+        <nav className="glass glass-adaptive mx-4 mt-2 flex flex-col rounded-2xl p-3">
           {nav.map((n) => (
             <a
               key={n.href}
               href={n.href}
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm font-medium text-forest/85 transition hover:bg-leaf/15"
+              className="rounded-xl px-4 py-3 text-sm font-medium text-forest/85 transition hover:bg-leaf/15 dark:text-ink/85 dark:hover:bg-leaf-bright/10"
             >
               {n.label}
             </a>

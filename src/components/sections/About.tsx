@@ -15,11 +15,11 @@ export default function About() {
               icon="🌕"
               className="shadow-soft"
             />
-            <div className="glass absolute -bottom-6 -right-4 max-w-[220px] rounded-2xl p-4 shadow-soft sm:-right-8">
-              <p className="font-display text-3xl font-bold text-leaf-deep">
+            <div className="glass glass-adaptive absolute -bottom-6 -right-4 max-w-[220px] rounded-2xl p-4 shadow-soft sm:-right-8">
+              <p className="font-display text-3xl font-bold text-leaf-deep dark:text-leaf-bright">
                 Mùa 2 · 2026
               </p>
-              <p className="mt-1 text-sm text-forest/75">
+              <p className="mt-1 text-sm text-forest/75 dark:text-ink/75">
                 Trở lại Langbiang với thật nhiều yêu thương.
               </p>
             </div>
@@ -29,19 +29,19 @@ export default function About() {
 
         {/* Nội dung */}
         <Reveal childrenStagger>
-          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep">
+          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
             Về dự án
           </span>
-          <h2 className="text-3xl font-extrabold leading-tight text-forest sm:text-4xl md:text-5xl">
+          <h2 className="text-3xl font-extrabold leading-tight text-forest sm:text-4xl md:text-5xl dark:text-ink">
             Mang ánh trăng ấm áp{" "}
             <span className="text-gradient-green">đến với núi rừng</span>
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-forest/80">
+          <p className="mt-5 text-lg leading-relaxed text-forest/80 dark:text-ink/80">
             <strong>Trăng sáng Langbiang</strong> là dự án tình nguyện phi lợi
             nhuận, mang một mùa Trung thu trọn vẹn đến các em nhỏ vùng cao tại
             phường Langbiang – Đà Lạt, tỉnh Lâm Đồng.
           </p>
-          <p className="mt-4 text-lg leading-relaxed text-forest/80">
+          <p className="mt-4 text-lg leading-relaxed text-forest/80 dark:text-ink/80">
             Năm trước, chúng mình đã cùng nhau thắp sáng những nụ cười trong đêm
             hội Trăng rằm. Năm nay, hành trình yêu thương ấy tiếp tục — với những
             phần quà, sân chơi và cả những ước mơ được chắp cánh.
@@ -56,10 +56,10 @@ export default function About() {
             ].map(([icon, text]) => (
               <li
                 key={text}
-                className="flex items-center gap-3 rounded-2xl bg-white/60 p-3 shadow-sm ring-1 ring-leaf/10"
+                className="flex items-center gap-3 rounded-2xl bg-white/60 p-3 shadow-sm ring-1 ring-leaf/10 dark:bg-white/5 dark:ring-leaf-bright/10"
               >
                 <span className="text-2xl">{icon}</span>
-                <span className="text-sm font-semibold text-forest/85">
+                <span className="text-sm font-semibold text-forest/85 dark:text-ink/85">
                   {text}
                 </span>
               </li>

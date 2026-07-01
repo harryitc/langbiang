@@ -18,7 +18,10 @@ const dancing = Dancing_Script({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#7cc34a",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#7cc34a" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c1712" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
@@ -103,7 +106,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className={`${beVietnam.variable} ${dancing.variable}`}>
+    <html
+      lang="vi"
+      suppressHydrationWarning
+      className={`${beVietnam.variable} ${dancing.variable}`}
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body>
         <script
           type="application/ld+json"

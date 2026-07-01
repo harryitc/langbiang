@@ -56,7 +56,7 @@ export default function Hero() {
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden"
     >
       {/* Bầu trời gradient */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream dark:from-[#0a1626] dark:via-[#0c1712] dark:to-[#0c1712]" />
       <HeroCanvas />
 
       {/* Cành lá góc trên */}
@@ -73,7 +73,7 @@ export default function Hero() {
 
       {/* Nội dung */}
       <div className="hero-content relative z-20 mx-auto max-w-4xl px-6 pt-24 text-center">
-        <p className="hero-eyebrow mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur">
+        <p className="hero-eyebrow mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
           Dự án tình nguyện
         </p>
 
@@ -93,7 +93,7 @@ export default function Hero() {
           {site.subtitle}
         </p>
 
-        <p className="hero-date mt-2 font-display text-2xl font-semibold text-leaf-deep sm:text-3xl">
+        <p className="hero-date mt-2 font-display text-2xl font-semibold text-leaf-deep sm:text-3xl dark:text-leaf-bright">
           {site.dateLabel}
         </p>
 
@@ -106,14 +106,14 @@ export default function Hero() {
           </a>
           <a
             href="#about"
-            className="rounded-full border-2 border-leaf-deep/30 bg-white/60 px-8 py-3.5 text-base font-semibold text-leaf-deep backdrop-blur transition hover:-translate-y-0.5 hover:bg-white"
+            className="rounded-full border-2 border-leaf-deep/30 bg-white/60 px-8 py-3.5 text-base font-semibold text-leaf-deep backdrop-blur transition hover:-translate-y-0.5 hover:bg-white dark:border-leaf-bright/25 dark:bg-white/5 dark:text-leaf-bright dark:hover:bg-white/10"
           >
             Tìm hiểu dự án
           </a>
         </div>
 
         <div className="hero-count mt-10 flex flex-col items-center gap-3">
-          <span className="text-xs font-semibold uppercase tracking-widest text-forest/60">
+          <span className="text-xs font-semibold uppercase tracking-widest text-forest/60 dark:text-ink/60">
             Đếm ngược đến ngày lên đường
           </span>
           <Countdown />
@@ -123,7 +123,7 @@ export default function Hero() {
       {/* Scroll indicator */}
       <a
         href="#about"
-        className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 text-center text-forest/60"
+        className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 text-center text-forest/60 dark:text-ink/55"
         aria-label="Cuộn xuống"
       >
         <span className="mb-1 block text-[10px] font-semibold uppercase tracking-widest">

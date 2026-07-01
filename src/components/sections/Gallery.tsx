@@ -9,14 +9,14 @@ export default function Gallery() {
     <section id="gallery" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep">
+          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
             Khoảnh khắc
           </span>
-          <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl">
+          <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
             Lưu giữ những{" "}
             <span className="text-gradient-green">nụ cười</span>
           </h2>
-          <p className="mt-4 text-lg text-forest/75">
+          <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
             Album hình ảnh sẽ được cập nhật liên tục trước và trong hành trình.
           </p>
         </Reveal>
