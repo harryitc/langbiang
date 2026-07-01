@@ -1,3 +1,13 @@
+// URL gốc của site — ưu tiên biến môi trường, tự nhận domain khi deploy trên Vercel.
+// Đặt NEXT_PUBLIC_SITE_URL = domain thật (vd https://trangsanglangbiang.com) để chắc chắn.
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "https://trangsanglangbiang.vn");
+
 export const site = {
   name: "Trăng Sáng Langbiang",
   shortName: "Trăng Sáng Langbiang",
@@ -6,7 +16,7 @@ export const site = {
   dateLabel: "Ngày 19 – 20 tháng 9 năm 2026",
   dateISO: "2026-09-19",
   location: "Phường Langbiang, Đà Lạt, Lâm Đồng",
-  url: "https://trangsanglangbiang.vn",
+  url: siteUrl,
   description:
     "Trăng Sáng Langbiang là dự án tình nguyện mang Trung thu ấm áp, sân chơi và những phần quà yêu thương đến các em nhỏ vùng cao Langbiang – Đà Lạt, Lâm Đồng. Mùa 2026 diễn ra ngày 19–20/9. Đăng ký đồng hành cùng chúng mình!",
   facebook: "https://www.facebook.com/profile.php?id=61580211752903",
