@@ -11,6 +11,8 @@ export const site = {
     "Trăng Sáng Langbiang là dự án tình nguyện mang Trung thu ấm áp, sân chơi và những phần quà yêu thương đến các em nhỏ vùng cao Langbiang – Đà Lạt, Lâm Đồng. Mùa 2026 diễn ra ngày 19–20/9. Đăng ký đồng hành cùng chúng mình!",
   facebook: "https://www.facebook.com/profile.php?id=61580211752903",
   email: "trangsanglangbiang@gmail.com",
+  // TODO: thay bằng link gian hàng Shopee gây quỹ thật
+  shopee: "https://shopee.vn/trangsanglangbiang",
   keywords: [
     "Trăng Sáng Langbiang",
     "tình nguyện Đà Lạt",
@@ -116,5 +118,123 @@ export const faqs = [
   {
     q: "Làm sao để liên hệ với ban tổ chức?",
     a: "Bạn có thể nhắn tin trực tiếp qua Fanpage Facebook hoặc gửi email cho chúng mình. Đội ngũ sẽ phản hồi trong thời gian sớm nhất.",
+  },
+];
+
+/* ------------------------------------------------------------------
+   GÂY QUỸ (Shopee) — Lê Minh Vũ đề xuất đưa link gian hàng gây quỹ
+   ------------------------------------------------------------------ */
+export const fundraising = {
+  title: "Gian hàng gây quỹ",
+  desc: "Mỗi sản phẩm bạn mua tại gian hàng Shopee của dự án là một phần quà Trung thu gửi đến các em nhỏ Langbiang. Mua sắm cũng là sẻ chia!",
+  channels: [
+    {
+      icon: "🛒",
+      name: "Gian hàng Shopee",
+      note: "Ủng hộ qua mua sắm sản phẩm gây quỹ",
+      cta: "Ghé gian hàng",
+      href: site.shopee,
+      highlight: true,
+    },
+    {
+      icon: "💳",
+      name: "Chuyển khoản trực tiếp",
+      note: "Vietcombank • 0123456789 • TRANG SANG LANGBIANG",
+      cta: "Sao chép STK",
+      href: "#",
+      highlight: false,
+    },
+    {
+      icon: "🎁",
+      name: "Ủng hộ hiện vật",
+      note: "Quà Trung thu, sách vở, nhu yếu phẩm...",
+      cta: "Liên hệ Fanpage",
+      href: site.facebook,
+      highlight: false,
+    },
+  ],
+};
+
+/* ------------------------------------------------------------------
+   DANH SÁCH TÌNH NGUYỆN VIÊN 2025 (placeholder — thay tên thật sau)
+   ------------------------------------------------------------------ */
+export const volunteerTeams = [
+  {
+    name: "Ban Tổ chức",
+    members: ["Phan Ngọc Cường", "Lê Minh Vũ", "Nguyễn Thị Mai", "Trần Quốc Bảo"],
+  },
+  {
+    name: "Ban Chương trình",
+    members: ["Đỗ Hoàng Long", "Vũ Thảo Nhi", "Phạm Gia Hân", "Ngô Minh Khôi", "Lý Tuyết Vân"],
+  },
+  {
+    name: "Ban Hậu cần",
+    members: ["Bùi Thanh Tùng", "Hoàng Yến Nhi", "Đặng Văn Phú", "Cao Mỹ Linh", "Tạ Đức Anh"],
+  },
+  {
+    name: "Ban Truyền thông",
+    members: ["Nguyễn Hải Đăng", "Trịnh Khánh Ly", "Lê Bảo Trâm", "Võ Thành Đạt"],
+  },
+  {
+    name: "Ban Vận động tài trợ",
+    members: ["Phan Thị Kim Ngân", "Dương Quốc Huy", "Hồ Ngọc Diệp", "Đinh Tiến Dũng"],
+  },
+];
+
+// tổng số TNV hiển thị (đồng bộ với stats)
+export const volunteerCount = 80;
+
+/* ------------------------------------------------------------------
+   ĐƠN VỊ TÀI TRỢ & ĐỒNG HÀNH 2025 (placeholder)
+   ------------------------------------------------------------------ */
+export const sponsorTiers = [
+  {
+    tier: "Nhà tài trợ Kim cương",
+    sponsors: [{ name: "Công ty ABC" }, { name: "Tập đoàn XYZ" }],
+  },
+  {
+    tier: "Nhà tài trợ Vàng",
+    sponsors: [{ name: "Cà phê Đà Lạt" }, { name: "Nông sản Cao Nguyên" }, { name: "Nhà sách Ánh Sáng" }],
+  },
+  {
+    tier: "Đơn vị đồng hành",
+    sponsors: [
+      { name: "CLB Thiện Nguyện Trẻ" },
+      { name: "Nhóm Bạn Đà Lạt" },
+      { name: "Hội SV Tình Nguyện" },
+      { name: "Quán Cơm 2K" },
+      { name: "Xưởng In Xanh" },
+      { name: "Vận Tải Lâm Đồng" },
+    ],
+  },
+];
+
+/* ------------------------------------------------------------------
+   TIN TỨC / BẢN TIN — content dạng bài đăng trên Fanpage
+   ------------------------------------------------------------------ */
+export const news = [
+  {
+    img: "/gallery/g2.jpg",
+    date: "22/09/2025",
+    tag: "Tổng kết",
+    title: "Trọn vẹn mùa trăng đầu tiên tại Langbiang 💚",
+    excerpt:
+      "Hai ngày một đêm với hơn 500 phần quà, 80 tình nguyện viên và vô vàn nụ cười. Cảm ơn tất cả những tấm lòng đã cùng chúng mình thắp sáng Trung thu vùng cao!",
+  },
+  {
+    img: "/gallery/g5.jpg",
+    date: "15/09/2025",
+    tag: "Hành trình",
+    title: "Đêm hội Trăng rằm rực rỡ dưới chân núi",
+    excerpt:
+      "Rước đèn, phá cỗ, múa lân... các em nhỏ Langbiang đã có một đêm Trung thu thật đáng nhớ. Cùng nhìn lại những khoảnh khắc lung linh nhất nhé!",
+  },
+  {
+    img: "/gallery/g8.jpg",
+    date: "01/09/2025",
+    tag: "Kêu gọi",
+    title: "Chung tay góp một mùa Trung thu cho em",
+    excerpt:
+      "Chỉ còn ít ngày nữa là đến hành trình. Mỗi chiếc lồng đèn, mỗi quyển vở đều là món quà ý nghĩa. Cùng đồng hành với Trăng Sáng Langbiang bạn nhé!",
   },
 ];

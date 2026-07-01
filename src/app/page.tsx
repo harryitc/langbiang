@@ -10,6 +10,10 @@ import Activities from "@/components/sections/Activities";
 import Timeline from "@/components/sections/Timeline";
 import Gallery from "@/components/sections/Gallery";
 import Team from "@/components/sections/Team";
+import Volunteers from "@/components/sections/Volunteers";
+import Sponsors from "@/components/sections/Sponsors";
+import News from "@/components/sections/News";
+import Fundraising from "@/components/sections/Fundraising";
 import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import Footer from "@/components/sections/Footer";
@@ -30,6 +34,10 @@ export default function Home() {
         <Timeline />
         <Gallery />
         <Team />
+        <Volunteers />
+        <Sponsors />
+        <News />
+        <Fundraising />
         <Register />
         <Faq />
       </main>

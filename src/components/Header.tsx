@@ -5,11 +5,12 @@ import { site } from "@/lib/site";
 
 const nav = [
   { href: "#about", label: "Về dự án" },
-  { href: "#journey", label: "Hành trình" },
   { href: "#activities", label: "Hoạt động" },
-  { href: "#timeline", label: "Lịch trình" },
   { href: "#gallery", label: "Khoảnh khắc" },
-  { href: "#faq", label: "Hỏi đáp" },
+  { href: "#volunteers", label: "TNV" },
+  { href: "#sponsors", label: "Tài trợ" },
+  { href: "#news", label: "Tin tức" },
+  { href: "#fundraising", label: "Gây quỹ" },
 ];
 
 export default function Header() {

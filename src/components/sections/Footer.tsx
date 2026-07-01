@@ -36,9 +36,11 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5 text-white/80">
               {[
                 ["#about", "Về dự án"],
-                ["#activities", "Hoạt động"],
-                ["#timeline", "Lịch trình"],
                 ["#gallery", "Khoảnh khắc"],
+                ["#volunteers", "Tình nguyện viên"],
+                ["#sponsors", "Nhà tài trợ"],
+                ["#news", "Tin tức"],
+                ["#fundraising", "Gây quỹ"],
                 ["#register", "Đăng ký"],
               ].map(([h, l]) => (
                 <li key={h}>
