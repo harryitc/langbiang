@@ -171,17 +171,17 @@ export default function Cursor() {
       <canvas
         ref={canvasRef}
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-[9998]"
+        className="pointer-events-none fixed inset-0 z-[10010]"
       />
       <div
         ref={ringRef}
         aria-hidden
-        className="cursor-ring pointer-events-none fixed left-0 top-0 z-[9999] h-9 w-9 rounded-full border-2 border-leaf-deep/70 opacity-0 mix-blend-multiply transition-[opacity,border-color] duration-200"
+        className="cursor-ring pointer-events-none fixed left-0 top-0 z-[10011] h-9 w-9 rounded-full border-2 border-leaf-deep/70 opacity-0 mix-blend-multiply transition-[opacity,border-color] duration-200"
       />
       <div
         ref={dotRef}
         aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[9999] h-2 w-2 rounded-full bg-sun opacity-0 shadow-[0_0_10px_3px_rgba(245,166,35,0.7)]"
+        className="pointer-events-none fixed left-0 top-0 z-[10012] h-2 w-2 rounded-full bg-sun opacity-0 shadow-[0_0_10px_3px_rgba(245,166,35,0.7)]"
       />
     </>
   );

@@ -9,6 +9,7 @@ import Journey from "@/components/sections/Journey";
 import Activities from "@/components/sections/Activities";
 import Timeline from "@/components/sections/Timeline";
 import Gallery from "@/components/sections/Gallery";
+import Team from "@/components/sections/Team";
 import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import Footer from "@/components/sections/Footer";
@@ -28,6 +29,7 @@ export default function Home() {
         <Activities />
         <Timeline />
         <Gallery />
+        <Team />
         <Register />
         <Faq />
       </main>
