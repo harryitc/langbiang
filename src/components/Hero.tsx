@@ -81,7 +81,7 @@ export default function Hero() {
           <span className="sr-only">Trăng sáng Langbiang</span>
           <span
             aria-hidden
-            className="hero-script font-display block text-6xl font-bold leading-[0.95] text-gradient-green drop-shadow-sm sm:text-7xl md:text-8xl"
+            className="hero-script font-display block pb-4 text-6xl font-bold leading-[1.15] text-gradient-green drop-shadow-sm sm:text-7xl md:text-8xl"
           >
             Trăng sáng
             <br />
