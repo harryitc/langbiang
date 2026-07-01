@@ -1,0 +1,116 @@
+import type { Metadata, Viewport } from "next";
+import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
+import { site } from "@/lib/site";
+import "./globals.css";
+
+const beVietnam = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-be-vietnam",
+  display: "swap",
+});
+
+const dancing = Dancing_Script({
+  subsets: ["latin", "vietnamese"],
+  weight: ["500", "600", "700"],
+  variable: "--font-dancing",
+  display: "swap",
+});
+
+export const viewport: Viewport = {
+  themeColor: "#7cc34a",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} — ${site.tagline} 2026`,
+    template: `%s | ${site.name}`,
+  },
+  description: site.description,
+  keywords: site.keywords,
+  authors: [{ name: site.name }],
+  creator: site.name,
+  applicationName: site.name,
+  category: "nonprofit",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    url: site.url,
+    siteName: site.name,
+    title: `${site.name} — ${site.tagline} 2026`,
+    description: site.description,
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: site.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} — ${site.tagline} 2026`,
+    description: site.description,
+    images: ["/og-image.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: "/favicon.svg",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: `${site.name} 2026`,
+  description: site.description,
+  startDate: "2026-09-19",
+  endDate: "2026-09-20",
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  location: {
+    "@type": "Place",
+    name: "Phường Langbiang, Đà Lạt",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Đà Lạt",
+      addressRegion: "Lâm Đồng",
+      addressCountry: "VN",
+    },
+  },
+  image: [`${site.url}/og-image.svg`],
+  organizer: {
+    "@type": "Organization",
+    name: site.name,
+    url: site.facebook,
+  },
+  isAccessibleForFree: true,
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="vi" className={`${beVietnam.variable} ${dancing.variable}`}>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
+    </html>
+  );
+}

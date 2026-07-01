@@ -1,0 +1,31 @@
+{
+  "name": "trang-sang-langbiang",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page cho dự án tình nguyện Trăng sáng Langbiang",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@gsap/react": "2.1.2",
+    "gsap": "3.12.7",
+    "lenis": "1.1.19",
+    "next": "15.1.6",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "three": "0.172.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.2",
+    "@types/node": "22.10.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
+    "@types/three": "0.172.0",
+    "postcss": "8.5.1",
+    "tailwindcss": "^4.3.2",
+    "typescript": "5.7.3"
+  }
+}

@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/* ============================================================
+   TRĂNG SÁNG LANGBIANG — Design System
+   Tông chủ đạo: trời xanh, cỏ non, lá cây, hoa cúc, nắng cam
+   ============================================================ */
+
+@theme {
+  --color-sky-soft: #a8e0f0;
+  --color-sky-deep: #6cc5e0;
+  --color-leaf: #5cb85c;
+  --color-leaf-deep: #2e7d32;
+  --color-forest: #1b5e20;
+  --color-grass: #7cc34a;
+  --color-sun: #f5a623;
+  --color-sunset: #f57f17;
+  --color-cream: #fdfcf5;
+  --color-petal: #ffffff;
+
+  --font-display: var(--font-dancing), "Dancing Script", cursive;
+  --font-sans: var(--font-be-vietnam), system-ui, sans-serif;
+
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --header-h: 72px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-forest);
+  background: var(--color-cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---------- Utility ---------- */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-gradient-green {
+  background: linear-gradient(120deg, #2e7d32, #5cb85c 45%, #7cc34a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-sun {
+  background: linear-gradient(120deg, #f57f17, #f5a623);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.shadow-soft {
+  box-shadow: 0 18px 50px -20px rgba(27, 94, 32, 0.35);
+}
+
+/* ---------- Reveal (GSAP fallback: keep visible) ---------- */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* ---------- Animations ---------- */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+}
+.animate-float {
+  animation: float-y 6s var(--ease-smooth) infinite;
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+.animate-sway {
+  transform-origin: top center;
+  animation: sway 7s ease-in-out infinite;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(-120px, 60px) rotate(180deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    rgba(180, 225, 190, 0.25) 30%,
+    rgba(180, 225, 190, 0.55) 50%,
+    rgba(180, 225, 190, 0.25) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite linear;
+}
+
+@keyframes bounce-down {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 1;
+  }
+}
+.animate-bounce-down {
+  animation: bounce-down 1.8s ease-in-out infinite;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 24s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-sway,
+  .animate-marquee,
+  .animate-bounce-down,
+  .skeleton {
+    animation: none;
+  }
+  .reveal-init {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+::selection {
+  background: #7cc34a;
+  color: #fff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #eaf7ea;
+}
+::-webkit-scrollbar-thumb {
+  background: #7cc34a;
+  border-radius: 999px;
+}
