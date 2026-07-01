@@ -1,6 +1,6 @@
 import Reveal from "@/components/Reveal";
 import CountUp from "@/components/CountUp";
-import Placeholder from "@/components/Placeholder";
+import Photo from "@/components/Photo";
 import { stats } from "@/lib/site";
 
 export default function Journey() {
@@ -53,9 +53,9 @@ export default function Journey() {
           childrenStagger
           className="mt-12 grid gap-5 sm:grid-cols-3"
         >
-          <Placeholder label="Khoảnh khắc 2025" icon="📸" ratio="aspect-[4/3]" />
-          <Placeholder label="Trao quà Trung thu" icon="🎁" ratio="aspect-[4/3]" />
-          <Placeholder label="Đêm hội Trăng rằm" icon="🌕" ratio="aspect-[4/3]" />
+          <Photo src="/gallery/j1.jpg" alt="Khoảnh khắc Langbiang 2025" ratio="aspect-[4/3]" />
+          <Photo src="/gallery/j2.jpg" alt="Trao quà Trung thu" ratio="aspect-[4/3]" />
+          <Photo src="/gallery/j3.jpg" alt="Đêm hội Trăng rằm" ratio="aspect-[4/3]" />
         </Reveal>
       </div>
     </section>

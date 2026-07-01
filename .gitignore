@@ -8,3 +8,6 @@
 .vercel
 next-env.d.ts
 *.tsbuildinfo
+
+# Ảnh gốc nặng từ máy (10-20MB/ảnh) — chỉ commit bản đã tối ưu ở public/gallery
+/public/img

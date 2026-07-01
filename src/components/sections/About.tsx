@@ -1,5 +1,5 @@
 import Reveal from "@/components/Reveal";
-import Placeholder from "@/components/Placeholder";
+import Photo from "@/components/Photo";
 import { Daisy } from "@/components/Decor";
 
 export default function About() {
@@ -9,10 +9,11 @@ export default function About() {
         {/* Ảnh */}
         <Reveal className="relative">
           <div className="relative">
-            <Placeholder
-              label="Ảnh dự án Trăng sáng Langbiang"
+            <Photo
+              src="/gallery/about.jpg"
+              alt="Dự án Trăng Sáng Langbiang mùa đầu tiên"
               ratio="aspect-[4/5]"
-              icon="🌕"
+              priority
               className="shadow-soft"
             />
             <div className="glass glass-adaptive absolute -bottom-6 -right-4 max-w-[220px] rounded-2xl p-4 shadow-soft sm:-right-8">

@@ -86,14 +86,18 @@ export const timeline = [
 ];
 
 export const gallery = [
-  { caption: "Đêm hội Trăng rằm 2025", tall: true },
-  { caption: "Nụ cười em thơ", tall: false },
-  { caption: "Trao quà Trung thu", tall: false },
-  { caption: "Rước đèn dưới trăng", tall: false },
-  { caption: "Sân chơi dân gian", tall: true },
-  { caption: "Tình nguyện viên", tall: false },
-  { caption: "Núi rừng Langbiang", tall: false },
-  { caption: "Khoảnh khắc chia tay", tall: false },
+  { src: "/gallery/g1.jpg", caption: "Khoảnh khắc Langbiang 2025", tall: true },
+  { src: "/gallery/g2.jpg", caption: "Nụ cười em thơ", tall: false },
+  { src: "/gallery/g3.jpg", caption: "Trao quà Trung thu", tall: false },
+  { src: "/gallery/g4.jpg", caption: "Rước đèn dưới trăng", tall: false },
+  { src: "/gallery/g5.jpg", caption: "Sân chơi dân gian", tall: true },
+  { src: "/gallery/g6.jpg", caption: "Tình nguyện viên", tall: false },
+  { src: "/gallery/g7.jpg", caption: "Núi rừng Langbiang", tall: false },
+  { src: "/gallery/g8.jpg", caption: "Đêm hội Trăng rằm", tall: false },
+  { src: "/gallery/g9.jpg", caption: "Sẻ chia yêu thương", tall: true },
+  { src: "/gallery/g10.jpg", caption: "Bên các em nhỏ", tall: false },
+  { src: "/gallery/g11.jpg", caption: "Hành trình thiện nguyện", tall: false },
+  { src: "/gallery/g12.jpg", caption: "Khoảnh khắc chia tay", tall: false },
 ];
 
 export const faqs = [
