@@ -14,6 +14,26 @@ import Countdown from "./Countdown";
 import { LeafBranch, Daisy } from "./Decor";
 import { site } from "@/lib/site";
 
+/** Ảnh kỷ niệm "trôi nổi" ở hai dải trống trái/phải của Hero (chỉ màn hình lớn). */
+type HeroFloat = {
+  src: string;
+  alt: string;
+  side: "left" | "right";
+  top: string;
+  offset: string; // khoảng cách từ mép màn hình
+  width: string;
+  rotate: number;
+  depth: number; // hệ số parallax khi cuộn
+  delay: string;
+};
+
+const heroFloats: HeroFloat[] = [
+  { src: "/gallery/g8.jpg", alt: "Đêm hội Trăng rằm", side: "left", top: "32%", offset: "1.5vw", width: "clamp(96px,11vw,210px)", rotate: -7, depth: -70, delay: "0s" },
+  { src: "/gallery/g4.jpg", alt: "Rước đèn dưới trăng", side: "left", top: "64%", offset: "5vw", width: "clamp(80px,9vw,168px)", rotate: 5, depth: -110, delay: "1.4s" },
+  { src: "/gallery/g2.jpg", alt: "Nụ cười em thơ", side: "right", top: "28%", offset: "1.5vw", width: "clamp(96px,11vw,210px)", rotate: 7, depth: -80, delay: "0.7s" },
+  { src: "/gallery/g6.jpg", alt: "Tình nguyện viên", side: "right", top: "61%", offset: "4.5vw", width: "clamp(80px,9vw,168px)", rotate: -5, depth: -120, delay: "2.1s" },
+];
+
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null);
 
@@ -65,6 +85,21 @@ export default function Hero() {
           scrub: true,
         },
       });
+
+      // Ảnh trôi nổi hai bên: parallax nhẹ, mỗi ảnh một độ sâu khác nhau
+      gsap.utils.toArray<HTMLElement>(".hero-float").forEach((el) => {
+        const depth = Number(el.dataset.depth || 0);
+        gsap.to(el, {
+          y: depth,
+          ease: "none",
+          scrollTrigger: {
+            trigger: root.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      });
     },
     { scope: root }
   );
@@ -87,9 +122,36 @@ export default function Hero() {
       />
 
       {/* Hoa cúc lơ lửng */}
-      <Daisy className="animate-float absolute left-[12%] top-[40%] z-10 opacity-90" size={30} />
-      <Daisy className="animate-float absolute right-[14%] top-[55%] z-10 opacity-80" size={40} />
-      <Daisy className="animate-float absolute right-[28%] top-[28%] z-10 opacity-70" size={22} />
+      <Daisy className="animate-float absolute left-[13%] top-[46%] z-10 opacity-90" size={30} />
+      <Daisy className="animate-float absolute right-[14%] top-[52%] z-10 opacity-80" size={40} />
+      <Daisy className="animate-float absolute right-[28%] top-[24%] z-10 opacity-70" size={22} />
+
+      {/* Ảnh kỷ niệm trôi nổi hai bên (chỉ hiện trên màn hình lớn) */}
+      {heroFloats.map((f, i) => (
+        <div
+          key={i}
+          aria-hidden
+          data-depth={f.depth}
+          className="hero-float pointer-events-none absolute z-10 hidden lg:block"
+          style={{ top: f.top, [f.side]: f.offset, width: f.width }}
+        >
+          <div className="animate-float" style={{ animationDelay: f.delay }}>
+            <div
+              className="rounded-2xl bg-white/85 p-2 shadow-soft ring-1 ring-black/5 backdrop-blur-sm dark:bg-white/10 dark:ring-white/10"
+              style={{ transform: `rotate(${f.rotate}deg)` }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={f.src}
+                alt={f.alt}
+                loading="eager"
+                decoding="async"
+                className="block aspect-[4/5] w-full rounded-xl object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      ))}
 
       {/* Nội dung */}
       <div className="hero-content relative z-20 mx-auto max-w-4xl px-6 pt-24 text-center">
