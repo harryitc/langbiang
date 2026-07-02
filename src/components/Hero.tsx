@@ -154,7 +154,7 @@ export default function Hero() {
       ))}
 
       {/* Nội dung */}
-      <div className="hero-content relative z-20 mx-auto max-w-4xl px-5 pt-20 text-center sm:px-6 sm:pt-24">
+      <div className="hero-content relative z-20 mx-auto max-w-4xl px-5 pb-12 pt-20 text-center sm:px-6 sm:pb-0 sm:pt-24">
         <p className="hero-eyebrow mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
           Dự án tình nguyện
         </p>
@@ -205,7 +205,7 @@ export default function Hero() {
       {/* Scroll indicator */}
       <a
         href="#about"
-        className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 text-center text-forest/60 dark:text-ink/55"
+        className="absolute bottom-6 left-1/2 z-20 hidden -translate-x-1/2 text-center text-forest/60 sm:block dark:text-ink/55"
         aria-label="Cuộn xuống"
       >
         <span className="mb-1 block text-[10px] font-semibold uppercase tracking-widest">
