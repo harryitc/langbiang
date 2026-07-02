@@ -1,14 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import LightGallery from "lightgallery/react";
+import lgZoom from "lightgallery/plugins/zoom";
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import lgFullscreen from "lightgallery/plugins/fullscreen";
+
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lg-thumbnail.css";
+import "lightgallery/css/lg-fullscreen.css";
+
 import Reveal from "@/components/Reveal";
 import Photo from "@/components/Photo";
-import Lightbox from "@/components/Lightbox";
 import { gallery } from "@/lib/site";
 
 export default function Gallery() {
-  const [active, setActive] = useState<number | null>(null);
-
   return (
     <section id="gallery" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -26,18 +32,22 @@ export default function Gallery() {
           </p>
         </Reveal>
 
-        <Reveal
-          childrenStagger
-          stagger={0.08}
-          className="mt-14 columns-2 gap-5 sm:columns-3 lg:columns-4 [&>*]:mb-5"
-        >
-          {gallery.map((g, i) => (
-            <figure key={g.src} className="group relative break-inside-avoid">
-              <button
-                type="button"
-                onClick={() => setActive(i)}
+        <Reveal className="mt-14">
+          <LightGallery
+            speed={450}
+            plugins={[lgZoom, lgThumbnail, lgFullscreen]}
+            licenseKey="0000-0000-0000-0000"
+            download={false}
+            mobileSettings={{ controls: true, showCloseIcon: true, download: false }}
+            elementClassNames="columns-2 gap-5 sm:columns-3 lg:columns-4 [&>*]:mb-5"
+          >
+            {gallery.map((g) => (
+              <a
+                key={g.src}
+                href={g.src}
+                data-sub-html={`<div class="lg-sub">${g.caption}</div>`}
                 aria-label={`Xem ảnh: ${g.caption}`}
-                className="block w-full cursor-pointer text-left outline-none focus-visible:ring-4 focus-visible:ring-leaf/40 rounded-3xl"
+                className="group relative block break-inside-avoid cursor-pointer rounded-3xl outline-none focus-visible:ring-4 focus-visible:ring-leaf/40"
               >
                 <Photo
                   src={g.src}
@@ -51,21 +61,14 @@ export default function Gallery() {
                     <path d="M21 21l-4.3-4.3M11 8v6M8 11h6" />
                   </svg>
                 </span>
-              </button>
-              <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-4 text-sm font-semibold text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                {g.caption}
-              </figcaption>
-            </figure>
-          ))}
+                <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-4 text-sm font-semibold text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  {g.caption}
+                </span>
+              </a>
+            ))}
+          </LightGallery>
         </Reveal>
       </div>
-
-      <Lightbox
-        items={gallery}
-        index={active}
-        onClose={() => setActive(null)}
-        onNavigate={setActive}
-      />
     </section>
   );
 }
