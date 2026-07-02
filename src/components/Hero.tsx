@@ -154,7 +154,7 @@ export default function Hero() {
       ))}
 
       {/* Nội dung */}
-      <div className="hero-content relative z-20 mx-auto max-w-4xl px-5 pb-12 pt-20 text-center sm:px-6 sm:pb-0 sm:pt-24">
+      <div className="hero-content relative z-20 mx-auto max-w-4xl px-5 pb-6 pt-20 text-center sm:px-6 sm:pb-0 sm:pt-24">
         <p className="hero-eyebrow mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
           Dự án tình nguyện
         </p>
@@ -200,9 +200,25 @@ export default function Hero() {
           </span>
           <Countdown />
         </div>
+
+        {/* Cuộn xuống — bản mobile nằm trong luồng để không đè lên đếm ngược */}
+        <a
+          href="#about"
+          className="mt-9 inline-flex flex-col items-center text-forest/55 sm:hidden dark:text-ink/50"
+          aria-label="Cuộn xuống"
+        >
+          <span className="mb-1 text-[10px] font-semibold uppercase tracking-widest">
+            Cuộn xuống
+          </span>
+          <span className="animate-bounce-down block h-6 w-6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </a>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — bản desktop cố định ở đáy khung */}
       <a
         href="#about"
         className="absolute bottom-6 left-1/2 z-20 hidden -translate-x-1/2 text-center text-forest/60 sm:block dark:text-ink/55"

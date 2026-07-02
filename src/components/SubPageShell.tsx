@@ -3,6 +3,7 @@ import Link from "next/link";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import ThemeToggle from "@/components/ThemeToggle";
+import BackToTop from "@/components/BackToTop";
 import Footer from "@/components/sections/Footer";
 
 type NavItem = { href: string; label: string };
@@ -29,6 +30,7 @@ export default function SubPageShell({
       <SmoothScroll />
       <Cursor />
       <ThemeToggle />
+      <BackToTop />
 
       <header className="glass glass-adaptive fixed inset-x-0 top-0 z-50 py-2 shadow-soft">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
