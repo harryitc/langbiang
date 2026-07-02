@@ -16,11 +16,11 @@ export default function Retro2025Callout() {
               alt="Nhìn lại mùa Trăng Sáng Langbiang 2025"
               loading="lazy"
               decoding="async"
-              className="aspect-[21/9] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+              className="aspect-[4/5] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105 sm:aspect-[16/9] lg:aspect-[21/9]"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-forest/85 via-forest/55 to-forest/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/55 to-forest/25 sm:bg-gradient-to-r sm:from-forest/85 sm:via-forest/55 sm:to-forest/20" />
 
-            <div className="absolute inset-0 flex flex-col justify-center gap-3 p-8 sm:p-12">
+            <div className="absolute inset-0 flex flex-col justify-end gap-3 p-6 sm:justify-center sm:p-12">
               <span className="w-fit rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm">
                 Nhìn lại mùa 2025
               </span>

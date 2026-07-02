@@ -71,7 +71,7 @@ export default function SubPageShell({
             <span className="mb-3 inline-block rounded-full bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
               {eyebrow}
             </span>
-            <h1 className="font-display pb-3 text-5xl font-bold leading-[1.18] text-gradient-green sm:pb-5 sm:text-7xl">
+            <h1 className="font-display pb-3 text-4xl font-bold leading-[1.18] text-gradient-green sm:pb-5 sm:text-6xl md:text-7xl">
               {title}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-lg text-forest/80 dark:text-ink/80">

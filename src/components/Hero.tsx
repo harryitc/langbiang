@@ -154,7 +154,7 @@ export default function Hero() {
       ))}
 
       {/* Nội dung */}
-      <div className="hero-content relative z-20 mx-auto max-w-4xl px-6 pt-24 text-center">
+      <div className="hero-content relative z-20 mx-auto max-w-4xl px-5 pt-20 text-center sm:px-6 sm:pt-24">
         <p className="hero-eyebrow mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
           Dự án tình nguyện
         </p>
@@ -163,7 +163,7 @@ export default function Hero() {
           <span className="sr-only">Trăng sáng Langbiang</span>
           <span
             aria-hidden
-            className="hero-script font-display block pb-4 text-6xl font-bold leading-[1.15] text-gradient-green drop-shadow-sm sm:text-7xl md:text-8xl"
+            className="hero-script font-display block pb-4 text-[3.25rem] font-bold leading-[1.12] text-gradient-green drop-shadow-sm sm:text-7xl md:text-8xl"
           >
             Trăng sáng
             <br />

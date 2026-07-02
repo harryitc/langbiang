@@ -34,7 +34,7 @@ export default function Timeline() {
                 <div className="h-px flex-1 bg-gradient-to-r from-leaf/40 to-transparent" />
               </div>
 
-              <ol className="relative ml-8 space-y-6 border-l-2 border-dashed border-leaf/40 pl-8 dark:border-leaf-bright/25">
+              <ol className="relative ml-3 space-y-6 border-l-2 border-dashed border-leaf/40 pl-7 sm:ml-8 sm:pl-8 dark:border-leaf-bright/25">
                 {day.items.map((it) => (
                   <li key={it.time} className="relative">
                     <span className="absolute -left-[42px] top-1 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-4 ring-leaf/30 dark:bg-night-2 dark:ring-leaf-bright/25">

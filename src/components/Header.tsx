@@ -31,13 +31,13 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
-        <a href="#top" className="flex items-center gap-2.5">
+        <a href="#top" className="flex min-w-0 items-center gap-2 sm:gap-2.5">
           <Logo />
-          <span className="leading-tight">
-            <span className="block text-[11px] font-semibold uppercase tracking-wider text-leaf-deep/70 dark:text-leaf-bright/70">
+          <span className="min-w-0 leading-tight">
+            <span className="block text-[10px] font-semibold uppercase tracking-wider text-leaf-deep/70 sm:text-[11px] dark:text-leaf-bright/70">
               Dự án tình nguyện
             </span>
-            <span className="font-display text-xl font-bold text-leaf-deep dark:text-leaf-bright">
+            <span className="block truncate font-display text-lg font-bold text-leaf-deep sm:text-xl dark:text-leaf-bright">
               Trăng sáng Langbiang
             </span>
           </span>

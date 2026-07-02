@@ -27,7 +27,7 @@ export default function Team() {
               alt="Đại gia đình tình nguyện Trăng Sáng Langbiang chụp ảnh chung"
               loading="lazy"
               decoding="async"
-              className="aspect-[16/10] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04] sm:aspect-[2/1]"
+              className="aspect-[4/5] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04] sm:aspect-[16/10] md:aspect-[2/1]"
             />
             {/* Lớp phủ gradient để chữ nổi */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
