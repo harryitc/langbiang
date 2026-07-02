@@ -10,6 +10,7 @@ import Activities from "@/components/sections/Activities";
 import Timeline from "@/components/sections/Timeline";
 import Retro2025Callout from "@/components/Retro2025Callout";
 import MorePages from "@/components/MorePages";
+import SideFloats from "@/components/SideFloats";
 import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import Footer from "@/components/sections/Footer";
@@ -21,7 +22,8 @@ export default function Home() {
       <Cursor />
       <ThemeToggle />
       <Header />
-      <main>
+      <main className="relative">
+        <SideFloats />
         <Hero />
         <Marquee />
         <About />
