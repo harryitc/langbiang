@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import useEmblaCarousel from "embla-carousel-react";
 import Reveal from "@/components/Reveal";
 import { news, site } from "@/lib/site";
 
@@ -58,6 +59,27 @@ export default function News({ showHeading = true, carousel = false }: NewsProps
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
+  // Embla cho chế độ carousel (trang chủ)
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    loop: false,
+    dragFree: false,
+    containScroll: "trimSnaps",
+  });
+  const [selected, setSelected] = useState(0);
+  const [snaps, setSnaps] = useState<number[]>([]);
+  const scrollTo = useCallback((i: number) => emblaApi?.scrollTo(i), [emblaApi]);
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setSnaps(emblaApi.scrollSnapList());
+    const onSelect = () => setSelected(emblaApi.selectedScrollSnap());
+    onSelect();
+    emblaApi.on("select", onSelect).on("reInit", onSelect);
+  }, [emblaApi]);
+
   return (
     <section id="news" className="relative py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6">
@@ -78,18 +100,62 @@ export default function News({ showHeading = true, carousel = false }: NewsProps
 
         {carousel ? (
           <>
-            {/* Carousel ngang — mới nhất trước, vuốt trên mobile */}
-            <div className="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-6 sm:mt-14 [&::-webkit-scrollbar]:hidden">
-              {news.map((post) => (
-                <div
-                  key={post.title}
-                  className="w-[82%] flex-shrink-0 snap-start sm:w-[46%] lg:w-[31%]"
-                >
-                  <NewsCard post={post} />
+            {/* Carousel Embla — mới nhất trước, kéo/vuốt mượt */}
+            <div className="relative mt-10 sm:mt-14">
+              <div className="overflow-hidden" ref={emblaRef}>
+                <div className="-ml-5 flex touch-pan-y">
+                  {news.map((post) => (
+                    <div
+                      key={post.title}
+                      className="min-w-0 flex-[0_0_86%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
+                    >
+                      <NewsCard post={post} />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Prev / Next — hiện trên màn lớn */}
+              <button
+                onClick={scrollPrev}
+                aria-label="Tin trước"
+                className="absolute -left-3 top-[38%] hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-leaf-deep shadow-soft ring-1 ring-leaf/15 transition hover:-translate-y-1/2 hover:scale-105 disabled:opacity-40 lg:flex dark:bg-night-2 dark:text-leaf-bright dark:ring-leaf-bright/15"
+                disabled={selected === 0}
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+              <button
+                onClick={scrollNext}
+                aria-label="Tin sau"
+                className="absolute -right-3 top-[38%] hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-leaf-deep shadow-soft ring-1 ring-leaf/15 transition hover:-translate-y-1/2 hover:scale-105 disabled:opacity-40 lg:flex dark:bg-night-2 dark:text-leaf-bright dark:ring-leaf-bright/15"
+                disabled={selected >= snaps.length - 1}
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 6l6 6-6 6" />
+                </svg>
+              </button>
             </div>
-            <div className="mt-6 text-center">
+
+            {/* Dots + Xem tất cả */}
+            <div className="mt-6 flex flex-col items-center gap-5">
+              {snaps.length > 1 && (
+                <div className="flex items-center justify-center gap-2">
+                  {snaps.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => scrollTo(i)}
+                      aria-label={`Đến nhóm tin ${i + 1}`}
+                      className={`h-2 rounded-full transition-all ${
+                        i === selected
+                          ? "w-6 bg-leaf-deep dark:bg-leaf-bright"
+                          : "w-2 bg-leaf/30 hover:bg-leaf/50 dark:bg-leaf-bright/30"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
               <Link
                 href="/tin-tuc"
                 className="inline-flex items-center gap-2 rounded-full border-2 border-leaf-deep/25 bg-white/60 px-7 py-3 text-sm font-semibold text-leaf-deep transition hover:-translate-y-0.5 hover:bg-white dark:border-leaf-bright/25 dark:bg-white/5 dark:text-leaf-bright dark:hover:bg-white/10"
