@@ -302,18 +302,25 @@ export type Member = {
 };
 
 export const board: { founders: Member[]; organizers: Member[] } = {
+  // TODO: cập nhật ảnh (/public/team/) + tiểu sử thật cho từng thành viên
   founders: [
     {
-      name: "Phan Ngọc Cường",
-      role: "Nhà sáng lập / Trưởng dự án",
+      name: "Lê Minh Vũ",
+      role: "Trưởng ban sáng lập",
       photo: "",
-      bio: "Người khởi xướng Trăng Sáng Langbiang, mong mang một mùa Trung thu trọn vẹn đến trẻ em vùng cao.",
+      bio: "Người dẫn dắt Trăng Sáng Langbiang — định hướng dự án và kết nối nguồn lực để mang một mùa Trung thu trọn vẹn đến trẻ em vùng cao.",
     },
     {
-      name: "Lê Minh Vũ",
+      name: "Phạm Minh Phát",
       role: "Đồng sáng lập",
       photo: "",
-      bio: "Đồng hành xây dựng dự án từ những ngày đầu, phụ trách định hướng và kết nối nguồn lực.",
+      bio: "Đồng hành xây dựng Trăng Sáng Langbiang từ những ngày đầu tiên.",
+    },
+    {
+      name: "Nguyễn Anh Hào",
+      role: "Đồng sáng lập",
+      photo: "",
+      bio: "Đồng hành xây dựng Trăng Sáng Langbiang từ những ngày đầu tiên.",
     },
   ],
   organizers: [
