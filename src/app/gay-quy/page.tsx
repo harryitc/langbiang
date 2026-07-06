@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SubPageShell from "@/components/SubPageShell";
 import Fundraising from "@/components/sections/Fundraising";
 import Reveal from "@/components/Reveal";
-import { fundraising } from "@/lib/site";
+import { fundraising, spendingReport } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Gây quỹ & Đồng hành",
@@ -10,13 +10,6 @@ export const metadata: Metadata = {
     "Chung tay gây quỹ cùng Trăng Sáng Langbiang qua gian hàng Shopee, chuyển khoản hoặc ủng hộ hiện vật. Mỗi đóng góp là một mùa Trung thu cho em nhỏ vùng cao.",
   alternates: { canonical: "/gay-quy" },
 };
-
-const usage = [
-  { icon: "🎁", pct: "45%", label: "Quà & nhu yếu phẩm cho các em" },
-  { icon: "🏮", pct: "25%", label: "Đêm hội & sân chơi Trung thu" },
-  { icon: "📚", pct: "20%", label: "Sách vở, học bổng, dụng cụ học tập" },
-  { icon: "🚌", pct: "10%", label: "Hậu cần & di chuyển đoàn" },
-];
 
 export default function FundraisingPage() {
   return (
@@ -31,37 +24,56 @@ export default function FundraisingPage() {
     >
       <Fundraising showHeading={false} bg={false} />
 
-      {/* Quỹ được sử dụng như thế nào */}
-      <section className="bg-[#eef8ea] py-20 dark:bg-night-2 sm:py-24">
-        <div className="mx-auto max-w-5xl px-6">
-          <Reveal className="mx-auto mb-12 max-w-2xl text-center">
+      {/* Báo cáo chi (thay cho "Quỹ dùng để làm gì?") */}
+      <section id="bao-cao-chi" className="scroll-mt-24 bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
+        <div className="mx-auto max-w-4xl px-5 sm:px-6">
+          <Reveal className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
             <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
               Minh bạch
             </span>
-            <h2 className="text-3xl font-extrabold text-forest sm:text-4xl dark:text-ink">
-              Quỹ được dùng vào việc gì?
+            <h2 className="text-2xl font-extrabold text-forest sm:text-4xl dark:text-ink">
+              Báo cáo chi
             </h2>
-            <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-              Mọi đóng góp đều được sử dụng đúng mục đích và công khai trên Fanpage
-              sau mỗi mùa dự án.
+            <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
+              Mọi đóng góp đều được sử dụng đúng mục đích và công khai sau mỗi mùa
+              dự án.
             </p>
           </Reveal>
 
-          <Reveal childrenStagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {usage.map((u) => (
+          <Reveal childrenStagger className="space-y-3">
+            {spendingReport.items.map((it) => (
               <div
-                key={u.label}
-                className="rounded-3xl bg-white/80 p-6 text-center shadow-sm ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10"
+                key={it.item}
+                className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-2xl bg-white/85 px-5 py-4 shadow-sm ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10"
               >
-                <span className="text-4xl">{u.icon}</span>
-                <p className="mt-3 font-display text-3xl font-bold text-leaf-deep dark:text-leaf-bright">
-                  {u.pct}
-                </p>
-                <p className="mt-1 text-sm text-forest/75 dark:text-ink/70">
-                  {u.label}
-                </p>
+                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-leaf/15 to-sun/15 text-2xl">
+                  {it.icon}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold text-forest dark:text-ink">
+                    {it.item}
+                  </span>
+                  {it.note && (
+                    <span className="block text-xs text-forest/55 dark:text-ink/50">
+                      {it.note}
+                    </span>
+                  )}
+                </span>
+                <span className="font-bold text-leaf-deep dark:text-leaf-bright">
+                  {it.amount}
+                </span>
               </div>
             ))}
+          </Reveal>
+
+          <Reveal className="mt-5">
+            <div className="flex items-center justify-between rounded-2xl bg-gradient-to-r from-leaf-deep to-leaf px-5 py-4 text-white shadow-soft">
+              <span className="font-bold uppercase tracking-wide">Tổng chi</span>
+              <span className="text-lg font-extrabold">{spendingReport.total}</span>
+            </div>
+            <p className="mt-4 text-center text-sm text-forest/60 dark:text-ink/60">
+              {spendingReport.updatedNote}
+            </p>
           </Reveal>
         </div>
       </section>

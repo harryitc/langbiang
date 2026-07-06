@@ -3,21 +3,19 @@ import Link from "next/link";
 import SubPageShell from "@/components/SubPageShell";
 import Gallery from "@/components/sections/Gallery";
 import Team from "@/components/sections/Team";
-import Volunteers from "@/components/sections/Volunteers";
-import Sponsors from "@/components/sections/Sponsors";
+import Journey from "@/components/sections/Journey";
 
 export const metadata: Metadata = {
   title: "Nhìn lại mùa 2025",
   description:
-    "Nhìn lại hành trình Trăng Sáng Langbiang mùa 2025: khoảnh khắc, đội ngũ tình nguyện viên và nhà tài trợ đã đồng hành.",
+    "Nhìn lại hành trình Trăng Sáng Langbiang mùa 2025: khoảnh khắc, đại gia đình tình nguyện và những con số biết nói.",
   alternates: { canonical: "/2025" },
 };
 
 const nav = [
   { href: "#gallery", label: "Khoảnh khắc" },
   { href: "#team", label: "Đại gia đình" },
-  { href: "#volunteers", label: "Tình nguyện viên" },
-  { href: "#sponsors", label: "Tài trợ" },
+  { href: "#journey", label: "Những con số" },
 ];
 
 export default function Retro2025Page() {
@@ -30,15 +28,14 @@ export default function Retro2025Page() {
     >
       <Gallery />
       <Team />
-      <Volunteers />
-      <Sponsors />
+      <Journey />
 
-      <section className="py-20 text-center sm:py-24">
-        <div className="mx-auto max-w-2xl px-6">
-          <h2 className="text-3xl font-extrabold text-forest sm:text-4xl dark:text-ink">
+      <section className="py-16 text-center sm:py-24">
+        <div className="mx-auto max-w-2xl px-5 sm:px-6">
+          <h2 className="text-2xl font-extrabold text-forest sm:text-4xl dark:text-ink">
             Sẵn sàng cho mùa <span className="text-gradient-green">2026</span>?
           </h2>
-          <p className="mt-3 text-lg text-forest/75 dark:text-ink/75">
+          <p className="mt-3 text-base text-forest/75 sm:text-lg dark:text-ink/75">
             Hành trình mới đang chờ bạn. Cùng chúng mình viết tiếp câu chuyện nhé!
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-4">
@@ -49,10 +46,10 @@ export default function Retro2025Page() {
               Đăng ký tham gia 🌙
             </Link>
             <Link
-              href="/tin-tuc"
+              href="/ban-to-chuc"
               className="rounded-full border-2 border-leaf-deep/30 bg-white/60 px-8 py-3.5 font-semibold text-leaf-deep transition hover:-translate-y-0.5 hover:bg-white dark:border-leaf-bright/25 dark:bg-white/5 dark:text-leaf-bright dark:hover:bg-white/10"
             >
-              Xem tin tức
+              Gặp ban tổ chức
             </Link>
           </div>
         </div>

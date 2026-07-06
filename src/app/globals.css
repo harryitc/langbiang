@@ -204,6 +204,33 @@ html.lenis body {
   animation: bounce-down 1.8s ease-in-out infinite;
 }
 
+/* Gian hàng quyên góp — hiệu ứng "nháy nháy" thu hút */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(238, 77, 45, 0.55), 0 18px 40px -18px rgba(238, 77, 45, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(238, 77, 45, 0), 0 18px 40px -18px rgba(238, 77, 45, 0.6);
+  }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 1.8s var(--ease-smooth) infinite;
+}
+
+@keyframes blink-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+.animate-blink {
+  animation: blink-soft 1.1s ease-in-out infinite;
+}
+
 /* Marquee */
 @keyframes marquee {
   from {
@@ -222,6 +249,8 @@ html.lenis body {
   .animate-sway,
   .animate-marquee,
   .animate-bounce-down,
+  .animate-pulse-glow,
+  .animate-blink,
   .skeleton {
     animation: none;
   }

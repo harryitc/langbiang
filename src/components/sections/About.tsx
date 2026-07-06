@@ -9,9 +9,11 @@ export default function About() {
         {/* Ảnh */}
         <Reveal className="relative">
           <div className="relative">
+            {/* TODO(anh Vũ): thay bằng ảnh TNV áo Langbiang đang cho một bạn nhỏ
+                đồng bào ăn phở. Đặt file vào /public/gallery/about.jpg */}
             <Photo
               src="/gallery/about.jpg"
-              alt="Dự án Trăng Sáng Langbiang mùa đầu tiên"
+              alt="Tình nguyện viên Trăng Sáng Langbiang bên các em nhỏ vùng cao"
               ratio="aspect-[4/5]"
               priority
               className="shadow-soft"
@@ -48,24 +50,20 @@ export default function About() {
             phần quà, sân chơi và cả những ước mơ được chắp cánh.
           </p>
 
-          <ul className="mt-7 grid gap-3 sm:grid-cols-2">
-            {[
-              ["🌙", "Đêm hội Trung thu trọn vẹn"],
-              ["💚", "Sẻ chia yêu thương vùng cao"],
-              ["🤝", "Kết nối những trái tim thiện nguyện"],
-              ["🌿", "Gìn giữ thiên nhiên cao nguyên"],
-            ].map(([icon, text]) => (
-              <li
-                key={text}
-                className="flex items-center gap-3 rounded-2xl bg-white/60 p-3 shadow-sm ring-1 ring-leaf/10 dark:bg-white/5 dark:ring-leaf-bright/10"
-              >
-                <span className="text-2xl">{icon}</span>
-                <span className="text-sm font-semibold text-forest/85 dark:text-ink/85">
-                  {text}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a
+              href="#register"
+              className="rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:brightness-110"
+            >
+              Đăng ký đồng hành 🌙
+            </a>
+            <a
+              href="#why"
+              className="rounded-full border-2 border-leaf-deep/25 bg-white/60 px-6 py-3 text-sm font-semibold text-leaf-deep transition hover:-translate-y-0.5 hover:bg-white dark:border-leaf-bright/25 dark:bg-white/5 dark:text-leaf-bright dark:hover:bg-white/10"
+            >
+              Vì sao nên tham gia?
+            </a>
+          </div>
         </Reveal>
       </div>
     </section>

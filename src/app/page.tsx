@@ -4,15 +4,15 @@ import ThemeToggle from "@/components/ThemeToggle";
 import BackToTop from "@/components/BackToTop";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
+import BannerSlider from "@/components/BannerSlider";
+import News from "@/components/sections/News";
 import About from "@/components/sections/About";
-import Journey from "@/components/sections/Journey";
-import Activities from "@/components/sections/Activities";
-import Timeline from "@/components/sections/Timeline";
-import Retro2025Callout from "@/components/Retro2025Callout";
-import MorePages from "@/components/MorePages";
+import WhyJoin from "@/components/sections/WhyJoin";
+import DonateBand from "@/components/DonateBand";
 import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
+import ExploreGrid from "@/components/ExploreGrid";
+import Sponsors from "@/components/sections/Sponsors";
 import Footer from "@/components/sections/Footer";
 
 export default function Home() {
@@ -25,15 +25,15 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Marquee />
+        <BannerSlider />
+        <News carousel />
         <About />
-        <Journey />
-        <Activities />
-        <Timeline />
-        <Retro2025Callout />
-        <MorePages />
+        <WhyJoin />
+        <DonateBand />
         <Register />
         <Faq />
+        <ExploreGrid />
+        <Sponsors />
       </main>
       <Footer />
     </>

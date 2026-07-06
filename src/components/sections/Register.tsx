@@ -95,6 +95,19 @@ export default function Register() {
                     required
                   />
                 </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field
+                    label="Ngày sinh"
+                    name="dob"
+                    type="date"
+                    required
+                  />
+                  <Field
+                    label="Đơn vị học tập / công tác"
+                    name="organization"
+                    placeholder="Trường / công ty (không bắt buộc)"
+                  />
+                </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-semibold text-forest/80">
                     Bạn muốn tham gia với vai trò

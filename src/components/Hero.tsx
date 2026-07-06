@@ -171,11 +171,13 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p className="hero-sub mx-auto mt-6 max-w-xl text-base font-semibold uppercase tracking-wide text-sunset sm:text-lg">
-          {site.subtitle}
+        <p className="hero-sub mx-auto mt-6 max-w-md text-base font-semibold uppercase leading-snug tracking-wide text-sunset sm:max-w-xl sm:text-lg">
+          Tại phường Langbiang – Đà Lạt,
+          <br />
+          tỉnh Lâm Đồng
         </p>
 
-        <p className="hero-date mt-2 font-display text-2xl font-semibold text-leaf-deep sm:text-3xl dark:text-leaf-bright">
+        <p className="hero-date mt-2 font-display text-2xl font-semibold uppercase text-leaf-deep sm:text-3xl dark:text-leaf-bright">
           {site.dateLabel}
         </p>
 

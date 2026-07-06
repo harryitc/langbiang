@@ -6,7 +6,7 @@ const siteUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "https://trangsanglangbiang.vn");
+    : "https://langbiang-dalat.vercel.app");
 
 export const site = {
   name: "Trăng Sáng Langbiang",
@@ -196,25 +196,40 @@ export const volunteerCount = 80;
 
 /* ------------------------------------------------------------------
    ĐƠN VỊ TÀI TRỢ & ĐỒNG HÀNH 2025 (placeholder)
+   TODO: thay logo thật (đặt file trong /public/sponsors/), link & giới thiệu
    ------------------------------------------------------------------ */
-export const sponsorTiers = [
+export type Sponsor = {
+  name: string;
+  logo?: string; // đường dẫn logo thật, vd "/sponsors/abc.png". Bỏ trống -> hiện chữ viết tắt
+  url?: string; // website đơn vị
+  intro?: string; // lời giới thiệu ngắn (hiện khi bấm vào logo)
+};
+
+export const sponsorTiers: { tier: string; sponsors: Sponsor[] }[] = [
   {
     tier: "Nhà tài trợ Kim cương",
-    sponsors: [{ name: "Công ty ABC" }, { name: "Tập đoàn XYZ" }],
+    sponsors: [
+      { name: "Công ty ABC", url: "#", intro: "Nhà tài trợ đồng hành cùng dự án từ mùa đầu tiên." },
+      { name: "Tập đoàn XYZ", url: "#", intro: "Đơn vị tài trợ chính cho đêm hội Trung thu 2025." },
+    ],
   },
   {
     tier: "Nhà tài trợ Vàng",
-    sponsors: [{ name: "Cà phê Đà Lạt" }, { name: "Nông sản Cao Nguyên" }, { name: "Nhà sách Ánh Sáng" }],
+    sponsors: [
+      { name: "Cà phê Đà Lạt", url: "#", intro: "Thương hiệu cà phê địa phương ủng hộ nhu yếu phẩm." },
+      { name: "Nông sản Cao Nguyên", url: "#", intro: "Cung cấp nông sản sạch cho bữa cơm yêu thương." },
+      { name: "Nhà sách Ánh Sáng", url: "#", intro: "Tặng sách vở, dụng cụ học tập cho các em." },
+    ],
   },
   {
     tier: "Đơn vị đồng hành",
     sponsors: [
-      { name: "CLB Thiện Nguyện Trẻ" },
-      { name: "Nhóm Bạn Đà Lạt" },
-      { name: "Hội SV Tình Nguyện" },
-      { name: "Quán Cơm 2K" },
-      { name: "Xưởng In Xanh" },
-      { name: "Vận Tải Lâm Đồng" },
+      { name: "CLB Thiện Nguyện Trẻ", intro: "Đội ngũ tình nguyện viên nòng cốt." },
+      { name: "Nhóm Bạn Đà Lạt", intro: "Hỗ trợ hậu cần tại địa phương." },
+      { name: "Hội SV Tình Nguyện", intro: "Kết nối sinh viên tham gia dự án." },
+      { name: "Quán Cơm 2K", intro: "Đồng hành bữa ăn cho đoàn." },
+      { name: "Xưởng In Xanh", intro: "Tài trợ ấn phẩm truyền thông." },
+      { name: "Vận Tải Lâm Đồng", intro: "Hỗ trợ di chuyển đoàn." },
     ],
   },
 ];
@@ -248,3 +263,157 @@ export const news = [
       "Chỉ còn ít ngày nữa là đến hành trình. Mỗi chiếc lồng đèn, mỗi quyển vở đều là món quà ý nghĩa. Cùng đồng hành với Trăng Sáng Langbiang bạn nhé!",
   },
 ];
+
+/* ------------------------------------------------------------------
+   TẠI SAO NÊN THAM GIA — lý do đồng hành
+   ------------------------------------------------------------------ */
+export const whyJoin = [
+  {
+    icon: "🌕",
+    title: "Trọn một mùa trăng ý nghĩa",
+    desc: "Tự tay trao quà, tổ chức đêm hội và mang niềm vui Trung thu đến các em nhỏ vùng cao.",
+  },
+  {
+    icon: "🤝",
+    title: "Kết nối những trái tim",
+    desc: "Gặp gỡ, đồng hành cùng những người trẻ giàu nhiệt huyết và tấm lòng thiện nguyện.",
+  },
+  {
+    icon: "🌱",
+    title: "Trưởng thành & sẻ chia",
+    desc: "Rèn kỹ năng tổ chức, làm việc nhóm và lan toả giá trị tốt đẹp đến cộng đồng.",
+  },
+  {
+    icon: "💚",
+    title: "Minh bạch & tin cậy",
+    desc: "Mọi đóng góp đều được công khai, sử dụng đúng mục đích và báo cáo sau mỗi mùa.",
+  },
+];
+
+/* ------------------------------------------------------------------
+   BAN SÁNG LẬP & BAN TỔ CHỨC (placeholder — thay ảnh + tiểu sử thật)
+   TODO: ảnh thật đặt trong /public/team/ (vd /team/cuong.jpg)
+   ------------------------------------------------------------------ */
+export type Member = {
+  name: string;
+  role: string;
+  photo?: string; // ảnh thật; bỏ trống -> hiện avatar chữ cái
+  bio: string;
+};
+
+export const board: { founders: Member[]; organizers: Member[] } = {
+  founders: [
+    {
+      name: "Phan Ngọc Cường",
+      role: "Nhà sáng lập / Trưởng dự án",
+      photo: "",
+      bio: "Người khởi xướng Trăng Sáng Langbiang, mong mang một mùa Trung thu trọn vẹn đến trẻ em vùng cao.",
+    },
+    {
+      name: "Lê Minh Vũ",
+      role: "Đồng sáng lập",
+      photo: "",
+      bio: "Đồng hành xây dựng dự án từ những ngày đầu, phụ trách định hướng và kết nối nguồn lực.",
+    },
+  ],
+  organizers: [
+    {
+      name: "Nguyễn Thị Mai",
+      role: "Trưởng ban Chương trình",
+      photo: "",
+      bio: "Chịu trách nhiệm nội dung, kịch bản đêm hội và các hoạt động cho các em nhỏ.",
+    },
+    {
+      name: "Trần Quốc Bảo",
+      role: "Trưởng ban Hậu cần",
+      photo: "",
+      bio: "Lo hậu cần, di chuyển và an toàn cho toàn đoàn trong suốt hành trình.",
+    },
+    {
+      name: "Đỗ Hoàng Long",
+      role: "Trưởng ban Truyền thông",
+      photo: "",
+      bio: "Phụ trách hình ảnh, bản tin và lan toả câu chuyện của dự án đến cộng đồng.",
+    },
+    {
+      name: "Phạm Gia Hân",
+      role: "Trưởng ban Vận động tài trợ",
+      photo: "",
+      bio: "Kết nối các nhà hảo tâm, đơn vị đồng hành để gây quỹ cho mùa trăng.",
+    },
+  ],
+};
+
+/* ------------------------------------------------------------------
+   DANH SÁCH ĐÓNG GÓP (placeholder — cập nhật thật sau mỗi đợt)
+   ------------------------------------------------------------------ */
+export type Donation = {
+  name: string;
+  amount?: string; // vd "2.000.000đ" — để trống nếu là hiện vật
+  gift?: string; // hiện vật, vd "50 phần quà"
+  date: string;
+};
+
+export const donations: Donation[] = [
+  { name: "Anh Nguyễn Văn A", amount: "5.000.000đ", date: "20/09/2025" },
+  { name: "Chị Trần Thị B", amount: "2.000.000đ", date: "18/09/2025" },
+  { name: "Gia đình cô C", gift: "80 phần quà Trung thu", date: "15/09/2025" },
+  { name: "CLB Thiện Nguyện Trẻ", amount: "3.500.000đ", date: "12/09/2025" },
+  { name: "Bạn ẩn danh", amount: "1.000.000đ", date: "10/09/2025" },
+  { name: "Nhà sách Ánh Sáng", gift: "200 quyển vở, bút", date: "08/09/2025" },
+];
+
+/* ------------------------------------------------------------------
+   CẢM NHẬN TÌNH NGUYỆN VIÊN (placeholder)
+   ------------------------------------------------------------------ */
+export type Testimonial = {
+  name: string;
+  role: string;
+  avatar?: string;
+  quote: string;
+};
+
+export const testimonials: Testimonial[] = [
+  {
+    name: "Thảo Nhi",
+    role: "TNV Ban Chương trình 2025",
+    avatar: "",
+    quote:
+      "Nhìn nụ cười của các em khi nhận lồng đèn, mình biết mọi vất vả đều xứng đáng. Một mùa trăng mình sẽ nhớ mãi.",
+  },
+  {
+    name: "Minh Khôi",
+    role: "TNV Hậu cần 2025",
+    avatar: "",
+    quote:
+      "Lần đầu đi thiện nguyện xa nhà, mình học được cách sẻ chia và trân trọng những điều nhỏ bé. Cảm ơn Langbiang!",
+  },
+  {
+    name: "Yến Nhi",
+    role: "TNV Truyền thông 2025",
+    avatar: "",
+    quote:
+      "Được ghi lại từng khoảnh khắc của hành trình là một may mắn. Ai cũng ấm áp và hết mình vì các em.",
+  },
+];
+
+/* ------------------------------------------------------------------
+   BÁO CÁO CHI (placeholder — thay số liệu thực tế sau mỗi mùa)
+   ------------------------------------------------------------------ */
+export type SpendingItem = {
+  icon: string;
+  item: string;
+  amount: string;
+  note?: string;
+};
+
+export const spendingReport: { items: SpendingItem[]; total: string; updatedNote: string } = {
+  items: [
+    { icon: "🎁", item: "Quà & nhu yếu phẩm cho các em", amount: "45.000.000đ", note: "500+ phần quà" },
+    { icon: "🏮", item: "Đêm hội & sân chơi Trung thu", amount: "25.000.000đ", note: "Sân khấu, lồng đèn, trò chơi" },
+    { icon: "📚", item: "Sách vở, học bổng, dụng cụ học tập", amount: "20.000.000đ" },
+    { icon: "🚌", item: "Hậu cần & di chuyển đoàn", amount: "10.000.000đ" },
+  ],
+  total: "100.000.000đ",
+  updatedNote: "Số liệu mang tính minh hoạ — sẽ cập nhật báo cáo thực tế sau mùa 2026.",
+};

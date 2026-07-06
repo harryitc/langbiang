@@ -5,12 +5,11 @@ import { site } from "@/lib/site";
 
 const nav = [
   { href: "#about", label: "Về dự án" },
-  { href: "#activities", label: "Hoạt động" },
-  { href: "#timeline", label: "Lịch trình" },
+  { href: "/chuong-trinh", label: "Chương trình" },
+  { href: "/gay-quy", label: "Gây quỹ" },
+  { href: "/ban-to-chuc", label: "Ban tổ chức" },
   { href: "/2025", label: "Mùa 2025" },
   { href: "/tin-tuc", label: "Tin tức" },
-  { href: "/gay-quy", label: "Gây quỹ" },
-  { href: "#faq", label: "Hỏi đáp" },
 ];
 
 export default function Header() {
