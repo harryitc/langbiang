@@ -71,10 +71,15 @@ export default function Board({ showHeading = true }: { showHeading?: boolean })
           </div>
           <Reveal
             childrenStagger
-            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            className="flex flex-wrap justify-center gap-5"
           >
             {board.founders.map((m) => (
-              <MemberCard key={m.name} m={m} />
+              <div
+                key={m.name}
+                className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
+              >
+                <MemberCard m={m} />
+              </div>
             ))}
           </Reveal>
         </div>
@@ -89,10 +94,15 @@ export default function Board({ showHeading = true }: { showHeading?: boolean })
           </div>
           <Reveal
             childrenStagger
-            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            className="flex flex-wrap justify-center gap-5"
           >
             {board.organizers.map((m) => (
-              <MemberCard key={m.name} m={m} />
+              <div
+                key={m.name}
+                className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
+              >
+                <MemberCard m={m} />
+              </div>
             ))}
           </Reveal>
         </div>
