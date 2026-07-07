@@ -5,10 +5,8 @@ import { stats } from "@/lib/site";
 
 export default function Journey() {
   return (
-    <section
-      id="journey"
-      className="relative overflow-hidden bg-gradient-to-b from-leaf-deep to-forest py-24 text-white sm:py-32"
-    >
+    <section className="relative overflow-hidden bg-gradient-to-b from-leaf-deep to-forest py-24 text-white sm:py-32">
+      <span id="journey" aria-hidden className="block" />
       {/* đốm sáng nền */}
       <div className="pointer-events-none absolute inset-0 opacity-30">
         <div className="absolute left-[10%] top-[20%] h-40 w-40 rounded-full bg-sun blur-3xl" />

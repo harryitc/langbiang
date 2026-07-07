@@ -60,7 +60,8 @@ export default function Sponsors() {
   }, [active]);
 
   return (
-    <section id="sponsors" className="relative py-16 sm:py-24">
+    <section className="relative py-16 sm:py-24">
+      <span id="sponsors" aria-hidden className="block" />
       <div className="mx-auto max-w-7xl px-5 sm:px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="mb-3 inline-block rounded-full bg-sun/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-sunset">

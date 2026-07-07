@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
+import { Be_Vietnam_Pro, Pacifico } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -10,9 +10,10 @@ const beVietnam = Be_Vietnam_Pro({
   display: "swap",
 });
 
-const dancing = Dancing_Script({
+// Phông tiêu đề (viết tay). Giữ nguyên tên biến --font-dancing để mọi nơi dùng lại.
+const displayFont = Pacifico({
   subsets: ["latin", "vietnamese"],
-  weight: ["500", "600", "700"],
+  weight: "400",
   variable: "--font-dancing",
   display: "swap",
 });
@@ -109,7 +110,7 @@ export default function RootLayout({
     <html
       lang="vi"
       suppressHydrationWarning
-      className={`${beVietnam.variable} ${dancing.variable}`}
+      className={`${beVietnam.variable} ${displayFont.variable}`}
     >
       <head>
         <script

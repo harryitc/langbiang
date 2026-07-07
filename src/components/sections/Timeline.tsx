@@ -3,10 +3,9 @@ import { timeline } from "@/lib/site";
 
 export default function Timeline() {
   return (
-    <section
-      id="timeline"
-      className="relative overflow-hidden bg-[#eef8ea] py-24 sm:py-32 dark:bg-night-2"
-    >
+    <section className="relative overflow-hidden bg-[#eef8ea] py-24 sm:py-32 dark:bg-night-2">
+      {/* mốc neo đặt ngay đầu nội dung để anchor canh tiêu đề dưới header (bỏ padding thừa) */}
+      <span id="timeline" aria-hidden className="block" />
       <div className="mx-auto max-w-5xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">

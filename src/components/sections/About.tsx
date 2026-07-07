@@ -4,7 +4,8 @@ import { Daisy } from "@/components/Decor";
 
 export default function About() {
   return (
-    <section id="about" className="relative py-24 sm:py-32">
+    <section className="relative py-24 sm:py-32">
+      <span id="about" aria-hidden className="block" />
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
         {/* Ảnh */}
         <Reveal className="relative">

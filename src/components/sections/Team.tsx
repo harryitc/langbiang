@@ -3,7 +3,8 @@ import { Daisy } from "@/components/Decor";
 
 export default function Team() {
   return (
-    <section id="team" className="relative py-24 sm:py-32">
+    <section className="relative py-24 sm:py-32">
+      <span id="team" aria-hidden className="block" />
       <div className="mx-auto max-w-7xl px-6">
         <Reveal className="mx-auto mb-12 max-w-2xl text-center">
           <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
