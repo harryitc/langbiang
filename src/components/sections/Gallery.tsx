@@ -5,11 +5,17 @@ import LightGallery from "lightgallery/react";
 import lgZoom from "lightgallery/plugins/zoom";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgFullscreen from "lightgallery/plugins/fullscreen";
+import lgAutoplay from "lightgallery/plugins/autoplay";
+import lgRotate from "lightgallery/plugins/rotate";
+import lgShare from "lightgallery/plugins/share";
 
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
 import "lightgallery/css/lg-fullscreen.css";
+import "lightgallery/css/lg-autoplay.css";
+import "lightgallery/css/lg-rotate.css";
+import "lightgallery/css/lg-share.css";
 
 import Reveal from "@/components/Reveal";
 import Photo from "@/components/Photo";
@@ -102,9 +108,12 @@ export default function Gallery() {
         dynamic
         dynamicEl={dynamicEl}
         speed={450}
-        plugins={[lgZoom, lgThumbnail, lgFullscreen]}
+        plugins={[lgZoom, lgThumbnail, lgFullscreen, lgAutoplay, lgRotate, lgShare]}
         licenseKey="0000-0000-0000-0000"
         download={false}
+        autoplayFirstVideo={false}
+        slideShowAutoplay={false}
+        slideShowInterval={3500}
         mobileSettings={{ controls: true, showCloseIcon: true, download: false }}
       />
     </section>

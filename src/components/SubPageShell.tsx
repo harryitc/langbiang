@@ -67,8 +67,8 @@ export default function SubPageShell({
         </div>
       </header>
 
-      <main className="pt-20">
-        <section className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-[#dff2e6] to-cream py-20 text-center dark:from-[#0a1626] dark:via-night-2 dark:to-night sm:py-28">
+      <main>
+        <section className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-[#dff2e6] to-cream pb-16 pt-24 text-center dark:from-[#0a1626] dark:via-night-2 dark:to-night sm:pb-24 sm:pt-32">
           <div className="mx-auto max-w-3xl px-6">
             <span className="mb-3 inline-block rounded-full bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
               {eyebrow}
