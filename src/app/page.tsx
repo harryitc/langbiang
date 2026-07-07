@@ -24,9 +24,9 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <About />
         <BannerSlider />
         <News carousel />
-        <About />
         <DonateBand />
         <Register />
         <Faq />
