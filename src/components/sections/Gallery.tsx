@@ -12,7 +12,7 @@ import "lightgallery/css/lg-fullscreen.css";
 
 import Reveal from "@/components/Reveal";
 import Photo from "@/components/Photo";
-import { gallery } from "@/lib/site";
+import { gallery2025 as gallery } from "@/lib/gallery2025";
 
 export default function Gallery() {
   return (

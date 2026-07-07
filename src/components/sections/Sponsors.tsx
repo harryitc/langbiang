@@ -21,23 +21,25 @@ function SponsorLogo({ s, onClick }: { s: Sponsor; onClick: () => void }) {
       type="button"
       onClick={onClick}
       title={s.name}
-      className="group flex min-w-[150px] flex-1 items-center gap-3 rounded-2xl bg-white/70 p-4 text-left shadow-sm ring-1 ring-leaf/10 transition hover:-translate-y-1 hover:shadow-soft dark:bg-white/[0.04] dark:ring-leaf-bright/10 sm:max-w-[240px]"
+      aria-label={`Xem giới thiệu ${s.name}`}
+      className="group relative flex h-24 w-36 items-center justify-center rounded-2xl bg-white/80 p-4 shadow-sm ring-1 ring-leaf/10 transition hover:-translate-y-1.5 hover:shadow-soft dark:bg-white/[0.05] dark:ring-leaf-bright/10 sm:h-28 sm:w-44"
     >
-      <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-leaf/20 to-sun/20 text-sm font-extrabold text-leaf-deep dark:text-leaf-bright">
-        {s.logo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={s.logo} alt={s.name} className="h-full w-full object-contain" />
-        ) : (
-          initials(s.name)
-        )}
-      </span>
-      <span className="min-w-0">
-        <span className="block truncate text-sm font-semibold text-forest/85 dark:text-ink/85">
-          {s.name}
+      {s.logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={s.logo}
+          alt={s.name}
+          className="max-h-full max-w-full object-contain opacity-80 grayscale transition duration-300 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
+        />
+      ) : (
+        <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-leaf/20 to-sun/20 text-lg font-extrabold text-leaf-deep transition group-hover:scale-105 dark:text-leaf-bright">
+          {initials(s.name)}
         </span>
-        <span className="text-xs text-leaf-deep/70 dark:text-leaf-bright/70">
-          Xem giới thiệu →
-        </span>
+      )}
+
+      {/* Tên nhãn hiện khi rê chuột */}
+      <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-forest px-3 py-1 text-xs font-semibold text-cream opacity-0 shadow-soft transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 dark:bg-night-2 dark:text-ink">
+        {s.name}
       </span>
     </button>
   );
@@ -83,7 +85,7 @@ export default function Sponsors() {
                 </h3>
                 <div className="h-px flex-1 bg-gradient-to-r from-leaf/40 to-transparent" />
               </div>
-              <div className="flex flex-wrap gap-4 sm:gap-5">
+              <div className="flex flex-wrap justify-center gap-5 sm:gap-6">
                 {tier.sponsors.map((s) => (
                   <SponsorLogo key={s.name} s={s} onClick={() => setActive(s)} />
                 ))}

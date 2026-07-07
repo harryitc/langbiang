@@ -207,29 +207,24 @@ export type Sponsor = {
 
 export const sponsorTiers: { tier: string; sponsors: Sponsor[] }[] = [
   {
-    tier: "Nhà tài trợ Kim cương",
+    tier: "Nhà tài trợ & đơn vị đồng hành",
     sponsors: [
-      { name: "Công ty ABC", url: "#", intro: "Nhà tài trợ đồng hành cùng dự án từ mùa đầu tiên." },
-      { name: "Tập đoàn XYZ", url: "#", intro: "Đơn vị tài trợ chính cho đêm hội Trung thu 2025." },
-    ],
-  },
-  {
-    tier: "Nhà tài trợ Vàng",
-    sponsors: [
-      { name: "Cà phê Đà Lạt", url: "#", intro: "Thương hiệu cà phê địa phương ủng hộ nhu yếu phẩm." },
-      { name: "Nông sản Cao Nguyên", url: "#", intro: "Cung cấp nông sản sạch cho bữa cơm yêu thương." },
-      { name: "Nhà sách Ánh Sáng", url: "#", intro: "Tặng sách vở, dụng cụ học tập cho các em." },
-    ],
-  },
-  {
-    tier: "Đơn vị đồng hành",
-    sponsors: [
-      { name: "CLB Thiện Nguyện Trẻ", intro: "Đội ngũ tình nguyện viên nòng cốt." },
-      { name: "Nhóm Bạn Đà Lạt", intro: "Hỗ trợ hậu cần tại địa phương." },
-      { name: "Hội SV Tình Nguyện", intro: "Kết nối sinh viên tham gia dự án." },
-      { name: "Quán Cơm 2K", intro: "Đồng hành bữa ăn cho đoàn." },
-      { name: "Xưởng In Xanh", intro: "Tài trợ ấn phẩm truyền thông." },
-      { name: "Vận Tải Lâm Đồng", intro: "Hỗ trợ di chuyển đoàn." },
+      {
+        name: "WESET",
+        intro: "Trung tâm Anh ngữ WESET — đơn vị tài trợ đồng hành cùng Trăng Sáng Langbiang.",
+      },
+      {
+        name: "Phở Huỳnh Trâm",
+        intro: "Phở Huỳnh Trâm hỗ trợ những bữa ăn ấm lòng cho đoàn tình nguyện.",
+      },
+      {
+        name: "Sun Taxi Group",
+        intro: "Sun Taxi Group hỗ trợ di chuyển, đưa đón đoàn trong suốt hành trình.",
+      },
+      {
+        name: "Bệnh viện Đa khoa Tâm Phúc",
+        intro: "Bệnh viện Đa khoa Tâm Phúc (Tam Phuc Hospital) đồng hành, chăm sóc y tế cho chương trình.",
+      },
     ],
   },
 ];
@@ -302,19 +297,19 @@ export const board: { founders: Member[]; organizers: Member[] } = {
     {
       name: "Lê Minh Vũ",
       role: "Trưởng ban sáng lập",
-      photo: "",
+      photo: "/team/le-minh-vu.jpg",
       bio: "Người dẫn dắt Trăng Sáng Langbiang — định hướng dự án và kết nối nguồn lực để mang một mùa Trung thu trọn vẹn đến trẻ em vùng cao.",
     },
     {
       name: "Phạm Minh Phát",
       role: "Đồng sáng lập",
-      photo: "",
+      photo: "/team/pham-minh-phat.jpg",
       bio: "Đồng hành xây dựng Trăng Sáng Langbiang từ những ngày đầu tiên.",
     },
     {
       name: "Nguyễn Anh Hào",
       role: "Đồng sáng lập",
-      photo: "",
+      photo: "/team/nguyen-anh-hao.jpg",
       bio: "Đồng hành xây dựng Trăng Sáng Langbiang từ những ngày đầu tiên.",
     },
   ],
