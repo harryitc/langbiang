@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import LightGallery from "lightgallery/react";
 import lgZoom from "lightgallery/plugins/zoom";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
@@ -14,7 +15,28 @@ import Reveal from "@/components/Reveal";
 import Photo from "@/components/Photo";
 import { gallery2025 as gallery } from "@/lib/gallery2025";
 
+// Hiện 30 ảnh ở lưới đều (ô vuông) cho cân bằng; phần còn lại xem qua lightbox.
+// 30 chia hết cho số cột 2 / 3 / 5 nên hàng luôn đầy, không trống ô.
+const VISIBLE = 30;
+
 export default function Gallery() {
+  // Instance LightGallery (chế độ dynamic) để mở lightbox theo yêu cầu.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lgRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onInit = (detail: any) => {
+    lgRef.current = detail.instance;
+  };
+  const openAt = (i: number) => lgRef.current?.openGallery(i);
+
+  const dynamicEl = gallery.map((g) => ({
+    src: g.src,
+    thumb: g.src,
+    subHtml: `<div class="lg-sub">${g.caption}</div>`,
+  }));
+
+  const shown = gallery.slice(0, VISIBLE);
+
   return (
     <section id="gallery" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -33,27 +55,16 @@ export default function Gallery() {
         </Reveal>
 
         <Reveal className="mt-14">
-          <LightGallery
-            speed={450}
-            plugins={[lgZoom, lgThumbnail, lgFullscreen]}
-            licenseKey="0000-0000-0000-0000"
-            download={false}
-            mobileSettings={{ controls: true, showCloseIcon: true, download: false }}
-            elementClassNames="columns-2 gap-5 sm:columns-3 lg:columns-4 [&>*]:mb-5"
-          >
-            {gallery.map((g) => (
-              <a
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5">
+            {shown.map((g, i) => (
+              <button
                 key={g.src}
-                href={g.src}
-                data-sub-html={`<div class="lg-sub">${g.caption}</div>`}
+                type="button"
+                onClick={() => openAt(i)}
                 aria-label={`Xem ảnh: ${g.caption}`}
-                className="group relative block break-inside-avoid cursor-pointer rounded-3xl outline-none focus-visible:ring-4 focus-visible:ring-leaf/40"
+                className="group relative block cursor-pointer rounded-3xl outline-none focus-visible:ring-4 focus-visible:ring-leaf/40"
               >
-                <Photo
-                  src={g.src}
-                  alt={g.caption}
-                  ratio={g.tall ? "aspect-[3/4]" : "aspect-square"}
-                />
+                <Photo src={g.src} alt={g.caption} ratio="aspect-square" />
                 {/* icon phóng to khi hover */}
                 <span className="pointer-events-none absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100">
                   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -61,14 +72,41 @@ export default function Gallery() {
                     <path d="M21 21l-4.3-4.3M11 8v6M8 11h6" />
                   </svg>
                 </span>
-                <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-4 text-sm font-semibold text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-4 text-left text-sm font-semibold text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                   {g.caption}
                 </span>
-              </a>
+              </button>
             ))}
-          </LightGallery>
+          </div>
+
+          {gallery.length > VISIBLE && (
+            <div className="mt-10 text-center">
+              <button
+                type="button"
+                onClick={() => openAt(VISIBLE)}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:brightness-110"
+              >
+                Xem tất cả {gallery.length} ảnh
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          )}
         </Reveal>
       </div>
+
+      {/* LightGallery ở chế độ dynamic: chứa toàn bộ ảnh mùa 2025 */}
+      <LightGallery
+        onInit={onInit}
+        dynamic
+        dynamicEl={dynamicEl}
+        speed={450}
+        plugins={[lgZoom, lgThumbnail, lgFullscreen]}
+        licenseKey="0000-0000-0000-0000"
+        download={false}
+        mobileSettings={{ controls: true, showCloseIcon: true, download: false }}
+      />
     </section>
   );
 }
