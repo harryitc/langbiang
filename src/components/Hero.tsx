@@ -177,7 +177,7 @@ export default function Hero() {
           tỉnh Lâm Đồng
         </p>
 
-        <p className="hero-date mt-2 font-script text-3xl font-semibold text-leaf-deep sm:text-4xl dark:text-leaf-bright">
+        <p className="hero-date mt-2 font-script text-3xl font-semibold uppercase text-leaf-deep sm:text-4xl dark:text-leaf-bright">
           {site.dateLabel}
         </p>
 
