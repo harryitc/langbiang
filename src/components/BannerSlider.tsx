@@ -42,70 +42,66 @@ export default function BannerSlider() {
   }, [emblaApi]);
 
   return (
-    <section aria-label="Khoảnh khắc chương trình" className="relative py-4 sm:py-8">
-      <div className="mx-auto max-w-6xl px-5 sm:px-6">
-        <div className="group relative overflow-hidden rounded-[1.75rem] bg-leaf/10 shadow-soft ring-1 ring-leaf/10 dark:ring-leaf-bright/10">
-          {/* Viewport Embla */}
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex touch-pan-y">
-              {slides.map((s, i) => (
-                <div
-                  key={s.src}
-                  className="relative aspect-[4/3] min-w-0 flex-[0_0_100%] sm:aspect-[16/9] lg:aspect-[21/9]"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={s.src}
-                    alt={s.caption}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                    className="h-full w-full select-none object-cover"
-                    draggable={false}
-                  />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent p-4 sm:p-6">
-                    <p className="text-sm font-semibold text-white drop-shadow sm:text-base">
-                      {s.caption}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Prev / Next */}
-          <button
-            onClick={scrollPrev}
-            aria-label="Ảnh trước"
-            className="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/70 text-forest opacity-0 backdrop-blur transition hover:bg-white focus-visible:opacity-100 group-hover:opacity-100 sm:left-3 sm:h-10 sm:w-10"
-          >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <button
-            onClick={scrollNext}
-            aria-label="Ảnh sau"
-            className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/70 text-forest opacity-0 backdrop-blur transition hover:bg-white focus-visible:opacity-100 group-hover:opacity-100 sm:right-3 sm:h-10 sm:w-10"
-          >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 6l6 6-6 6" />
-            </svg>
-          </button>
-
-          {/* Dots */}
-          <div className="absolute inset-x-0 bottom-3 flex items-center justify-center gap-2">
-            {snaps.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollTo(i)}
-                aria-label={`Đến ảnh ${i + 1}`}
-                className={`h-2 rounded-full transition-all ${
-                  i === selected ? "w-6 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
-                }`}
+    <section
+      aria-label="Khoảnh khắc chương trình"
+      className="group relative h-[100svh] overflow-hidden bg-leaf/10"
+    >
+      {/* Viewport Embla — chiếm trọn chiều cao màn hình theo mọi tỉ lệ */}
+      <div className="h-full overflow-hidden" ref={emblaRef}>
+        <div className="flex h-full touch-pan-y">
+          {slides.map((s, i) => (
+            <div key={s.src} className="relative h-full min-w-0 flex-[0_0_100%]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={s.src}
+                alt={s.caption}
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                className="h-full w-full select-none object-cover"
+                draggable={false}
               />
-            ))}
-          </div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent p-6 pb-14 sm:p-10 sm:pb-16">
+                <p className="mx-auto max-w-6xl text-base font-semibold text-white drop-shadow sm:text-lg">
+                  {s.caption}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* Prev / Next */}
+      <button
+        onClick={scrollPrev}
+        aria-label="Ảnh trước"
+        className="absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/70 text-forest opacity-0 backdrop-blur transition hover:bg-white focus-visible:opacity-100 group-hover:opacity-100 sm:left-5 sm:h-12 sm:w-12"
+      >
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <button
+        onClick={scrollNext}
+        aria-label="Ảnh sau"
+        className="absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/70 text-forest opacity-0 backdrop-blur transition hover:bg-white focus-visible:opacity-100 group-hover:opacity-100 sm:right-5 sm:h-12 sm:w-12"
+      >
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 6l6 6-6 6" />
+        </svg>
+      </button>
+
+      {/* Dots */}
+      <div className="absolute inset-x-0 bottom-5 z-10 flex items-center justify-center gap-2">
+        {snaps.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => scrollTo(i)}
+            aria-label={`Đến ảnh ${i + 1}`}
+            className={`h-2 rounded-full transition-all ${
+              i === selected ? "w-6 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
+            }`}
+          />
+        ))}
       </div>
     </section>
   );
