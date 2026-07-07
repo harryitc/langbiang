@@ -11,7 +11,6 @@ import DonateBand from "@/components/DonateBand";
 import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import ExploreGrid from "@/components/ExploreGrid";
-import Sponsors from "@/components/sections/Sponsors";
 import Footer from "@/components/sections/Footer";
 
 export default function Home() {
@@ -31,7 +30,6 @@ export default function Home() {
         <Register />
         <Faq />
         <ExploreGrid />
-        <Sponsors />
       </main>
       <Footer />
     </>

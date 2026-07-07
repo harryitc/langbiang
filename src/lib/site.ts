@@ -207,7 +207,7 @@ export type Sponsor = {
 
 export const sponsorTiers: { tier: string; sponsors: Sponsor[] }[] = [
   {
-    tier: "Nhà tài trợ & đơn vị đồng hành",
+    tier: "Nhà tài trợ mùa 2025",
     sponsors: [
       {
         name: "WESET English Center",
