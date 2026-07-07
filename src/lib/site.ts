@@ -269,11 +269,6 @@ export const news = [
    ------------------------------------------------------------------ */
 export const whyJoin = [
   {
-    icon: "🌕",
-    title: "Trọn một mùa trăng ý nghĩa",
-    desc: "Tự tay trao quà, tổ chức đêm hội và mang niềm vui Trung thu đến các em nhỏ vùng cao.",
-  },
-  {
     icon: "🤝",
     title: "Kết nối những trái tim",
     desc: "Gặp gỡ, đồng hành cùng những người trẻ giàu nhiệt huyết và tấm lòng thiện nguyện.",
