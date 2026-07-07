@@ -63,9 +63,16 @@ export default function BannerSlider() {
               {/* Lớp tối phía dưới để hiển thị chữ mô tả */}
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black via-black/70 to-transparent" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-16 sm:px-10 sm:pb-20">
-                <p className="mx-auto max-w-5xl text-lg font-semibold leading-snug text-white drop-shadow-lg sm:text-2xl md:text-3xl">
-                  {s.caption}
-                </p>
+                <div className="mx-auto max-w-5xl">
+                  <p className="text-lg font-semibold leading-snug text-white drop-shadow-lg sm:text-2xl md:text-3xl">
+                    {s.caption}
+                  </p>
+                  {s.desc && (
+                    <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/85 drop-shadow-md sm:mt-3 sm:text-base md:text-lg">
+                      {s.desc}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           ))}

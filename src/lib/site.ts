@@ -98,18 +98,18 @@ export const timeline = [
 ];
 
 export const gallery = [
-  { src: "/gallery/g1.jpg", caption: "Khoảnh khắc Langbiang 2025", tall: true },
-  { src: "/gallery/g2.jpg", caption: "Nụ cười em thơ", tall: false },
-  { src: "/gallery/g3.jpg", caption: "Trao quà Trung thu", tall: false },
-  { src: "/gallery/g4.jpg", caption: "Rước đèn dưới trăng", tall: false },
-  { src: "/gallery/g5.jpg", caption: "Sân chơi dân gian", tall: true },
-  { src: "/gallery/g6.jpg", caption: "Tình nguyện viên", tall: false },
-  { src: "/gallery/g7.jpg", caption: "Núi rừng Langbiang", tall: false },
-  { src: "/gallery/g8.jpg", caption: "Đêm hội Trăng rằm", tall: false },
-  { src: "/gallery/g9.jpg", caption: "Sẻ chia yêu thương", tall: true },
-  { src: "/gallery/g10.jpg", caption: "Bên các em nhỏ", tall: false },
-  { src: "/gallery/g11.jpg", caption: "Hành trình thiện nguyện", tall: false },
-  { src: "/gallery/g12.jpg", caption: "Khoảnh khắc chia tay", tall: false },
+  { src: "/gallery/g1.jpg", caption: "Khoảnh khắc Langbiang 2025", desc: "Chuyến đi mở đầu cho hành trình mang trăng sáng đến với trẻ em vùng cao.", tall: true },
+  { src: "/gallery/g2.jpg", caption: "Nụ cười em thơ", desc: "Ánh mắt trong veo và nụ cười hồn nhiên là món quà quý nhất của mỗi chuyến đi.", tall: false },
+  { src: "/gallery/g3.jpg", caption: "Trao quà Trung thu", desc: "Từng phần quà nhỏ gói ghém yêu thương gửi đến các em nhỏ dưới chân núi.", tall: false },
+  { src: "/gallery/g4.jpg", caption: "Rước đèn dưới trăng", desc: "Đêm hội lung linh ánh đèn ông sao, rộn ràng tiếng cười giữa núi rừng.", tall: false },
+  { src: "/gallery/g5.jpg", caption: "Sân chơi dân gian", desc: "Những trò chơi tuổi thơ gắn kết tình nguyện viên và các em nhỏ.", tall: true },
+  { src: "/gallery/g6.jpg", caption: "Tình nguyện viên", desc: "Những trái tim trẻ tình nguyện, sẵn sàng sẻ chia trên mọi nẻo đường.", tall: false },
+  { src: "/gallery/g7.jpg", caption: "Núi rừng Langbiang", desc: "Vẻ đẹp hùng vĩ của cao nguyên Đà Lạt – nơi hành trình bắt đầu.", tall: false },
+  { src: "/gallery/g8.jpg", caption: "Đêm hội Trăng rằm", desc: "Ánh trăng rằm soi sáng đêm hội đoàn viên ấm áp nghĩa tình.", tall: false },
+  { src: "/gallery/g9.jpg", caption: "Sẻ chia yêu thương", desc: "Mỗi cái ôm, mỗi bàn tay nắm chặt là một mảnh yêu thương được trao đi.", tall: true },
+  { src: "/gallery/g10.jpg", caption: "Bên các em nhỏ", desc: "Cùng học, cùng chơi, cùng lớn lên trong vòng tay ấm áp của cộng đồng.", tall: false },
+  { src: "/gallery/g11.jpg", caption: "Hành trình thiện nguyện", desc: "Băng rừng vượt suối, mang ánh sáng và niềm tin đến những bản làng xa.", tall: false },
+  { src: "/gallery/g12.jpg", caption: "Khoảnh khắc chia tay", desc: "Tạm biệt trong lưu luyến, hẹn ngày trở lại với thật nhiều yêu thương.", tall: false },
 ];
 
 export const faqs = [
