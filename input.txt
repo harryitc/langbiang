@@ -1,0 +1,36 @@
+[Hình ảnh] 1.jfif
+[Hình ảnh] 2.jfif
+[Hình ảnh] 3.jfif
+[Hình ảnh] 4.jfif
+[Hình ảnh] 5.jfif
+1. chỉnh lại font chữ, cho xuống dòng ngắt dòng chữ tỉnh lâm đồng (font chữ đang như kiểu bị lỗi khi chuyển file qua thiết bị khác
+
+2. viết in hoa các chữ trong khung đó lên
+
+3. đổi 1 hình có tnv áo lanhbiang đang cho 1 bạn nhỏ đồng bào ăn phở (lấy tấm hình mà bạn dân tộc đen đen hơi vẻ khổ xíu)
+
+5. mục đó là để up ảnh của ban sáng lập và ban tổ chức: (ảnh + lời giới thiệu)
+
+6. bỏ các mục menu đó. bị dư thừa
+
+7. thêm ngày tháng năm sinh (bắt buộc) và đơn vị đang học tập/ công tác (không bắt buộc)
+chỉnh tạm mấy nady trước. a thấy trang chủ còn vẻ bừa bộn lắm (vì nhiều mục trùng nhau) nên để menu r nhấn dô mới dẫn ra nội dung muốn đưa lên. chứ j cũng muốn đưa lên hết thì tham quá, web bị rối
+
+- nội dung chữ vd lời giới thiệu câu từ còn lủng củng quá. này chỉng sau
+nên cất được j thì cất vào. chỉ để menu dẫn ra.
+chủ yếu là đưa:
+- giớii thiệu về dự án
+- bản tin ( hiện lên theo thời gian, nào mới đăng thì hiện lên trước)
+- gian hàng quyên góp ( làm nổi bật nháy nháy)
+- đăng ký đồng hành (quyên góp + tham gia tnv) 
+- đơn vị đồng hành: để ở cuối 1 list logo. khi nhấn vào logo nào thì dẫn ra lời giới thiệu về đơn vị đó
+https://www.veo.com.vn/
+@Phát  tham khảo giao diện này a thấy gọn nè. 
+- 1. đầu tiên: banner liét chạy hình ảnh chung về chtr
+- 2. là tag bản tin (hiệu ứng như mục “Tour du lịch sắp diẽn ra” của ngta)
+- 3. tại s nên tham gia?
+-4. các mục chức năng; giao diện như v luôn: gian hàng gây quỹ, đóng góp, danh sách đóng góp, ban sáng lập + ban tổ chức, cảm nhận TNV, đơn vị đồng hành...
+0. Đăng ký vs thông tin về dự án. đưa lên trên nha
+các mục còn lại thể hiện bằng menu dẫn qua trang khác
+
+bỏ mục Quỹ dùng để làm gì? thay vào đó là Báo cáo chi

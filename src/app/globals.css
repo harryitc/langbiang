@@ -26,6 +26,7 @@
   --color-leaf-bright: #8fd465;
 
   --font-display: var(--font-dancing), "Pacifico", cursive;
+  --font-script: var(--font-script-hand), "Dancing Script", cursive;
   --font-sans: var(--font-be-vietnam), system-ui, sans-serif;
 
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);

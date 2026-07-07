@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Be_Vietnam_Pro, Pacifico } from "next/font/google";
+import { Be_Vietnam_Pro, Pacifico, Dancing_Script } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -15,6 +15,14 @@ const displayFont = Pacifico({
   subsets: ["latin", "vietnamese"],
   weight: "400",
   variable: "--font-dancing",
+  display: "swap",
+});
+
+// Phông chữ ký (Dancing Script) — dùng cho dòng ngày tháng ở Hero như thiết kế cũ.
+const scriptFont = Dancing_Script({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-script-hand",
   display: "swap",
 });
 
@@ -110,7 +118,7 @@ export default function RootLayout({
     <html
       lang="vi"
       suppressHydrationWarning
-      className={`${beVietnam.variable} ${displayFont.variable}`}
+      className={`${beVietnam.variable} ${displayFont.variable} ${scriptFont.variable}`}
     >
       <head>
         <script
