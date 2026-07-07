@@ -31,7 +31,15 @@ export default function SmoothScroll() {
       const el = document.querySelector(id);
       if (el) {
         e.preventDefault();
-        lenis.scrollTo(el as HTMLElement, { offset: -72 });
+        // Đọc chiều cao header từ biến CSS --header-h để offset LUÔN khớp với
+        // scroll-margin-top (globals.css) — click link canh giống hệt nhảy hash.
+        const headerH =
+          parseInt(
+            getComputedStyle(document.documentElement).getPropertyValue(
+              "--header-h"
+            )
+          ) || 80;
+        lenis.scrollTo(el as HTMLElement, { offset: -headerH });
       }
     };
     document.addEventListener("click", onClick);

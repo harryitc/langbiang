@@ -32,7 +32,10 @@
 }
 
 :root {
-  --header-h: 72px;
+  /* Chiều cao header cố định (~60px lúc cuộn) + khoảng thở.
+     Dùng chung cho scroll-margin bên dưới và offset của Lenis (SmoothScroll.tsx)
+     để click link hay nhảy hash đều canh đúng, không lệch / thừa khoảng cách. */
+  --header-h: 80px;
 }
 
 * {
@@ -41,6 +44,13 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Mọi mục có id (đích của anchor link) chừa sẵn khoảng cho header cố định,
+   để tiêu đề nằm ngay dưới header — áp dụng cho cả cuộn mượt (Lenis) lẫn
+   nhảy hash gốc của trình duyệt. */
+[id] {
+  scroll-margin-top: var(--header-h);
 }
 
 body {

@@ -1,21 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { Dancing_Script, Pacifico, Lobster, Comfortaa } from "next/font/google";
+import {
+  Dancing_Script,
+  Great_Vibes,
+  Allura,
+  Alex_Brush,
+  Pinyon_Script,
+  Style_Script,
+  Italianno,
+  Pacifico,
+  Lobster,
+} from "next/font/google";
 
 // Tất cả phông dưới đây đều có subset "vietnamese" (dấu tiếng Việt đầy đủ).
 const dancing = Dancing_Script({ subsets: ["vietnamese", "latin"], weight: ["500", "700"] });
+const greatVibes = Great_Vibes({ subsets: ["vietnamese", "latin"], weight: "400" });
+const allura = Allura({ subsets: ["vietnamese", "latin"], weight: "400" });
+const alexBrush = Alex_Brush({ subsets: ["vietnamese", "latin"], weight: "400" });
+const pinyon = Pinyon_Script({ subsets: ["vietnamese", "latin"], weight: "400" });
+const styleScript = Style_Script({ subsets: ["vietnamese", "latin"], weight: "400" });
+const italianno = Italianno({ subsets: ["vietnamese", "latin"], weight: "400" });
 const pacifico = Pacifico({ subsets: ["vietnamese", "latin"], weight: "400" });
 const lobster = Lobster({ subsets: ["vietnamese", "latin"], weight: "400" });
-const comfortaa = Comfortaa({ subsets: ["vietnamese", "latin"], weight: ["500", "700"] });
 
 type FontDef = { name: string; className: string; note?: string };
 
 const FONTS: FontDef[] = [
   { name: "Dancing Script", className: dancing.className, note: "Đang dùng hiện tại" },
-  { name: "Pacifico", className: pacifico.className, note: "Viết tay" },
-  { name: "Lobster", className: lobster.className, note: "Viết tay" },
-  { name: "Comfortaa", className: comfortaa.className, note: "Bo tròn" },
+  { name: "Great Vibes", className: greatVibes.className, note: "Cursive thanh lịch" },
+  { name: "Allura", className: allura.className, note: "Cursive mềm mại" },
+  { name: "Alex Brush", className: alexBrush.className, note: "Nét cọ" },
+  { name: "Pinyon Script", className: pinyon.className, note: "Thư pháp cổ điển" },
+  { name: "Style Script", className: styleScript.className, note: "Viết tay tự nhiên" },
+  { name: "Italianno", className: italianno.className, note: "Thanh mảnh" },
+  { name: "Pacifico", className: pacifico.className, note: "Viết tay tròn" },
+  { name: "Lobster", className: lobster.className, note: "Đậm, cổ điển" },
 ];
 
 // Chuỗi thử tất cả nguyên âm + dấu tiếng Việt để lộ chữ bị đứt.
@@ -31,9 +51,9 @@ export default function FontPlayground() {
     <div className={dark ? "dark" : ""}>
       <main className="min-h-screen bg-cream px-5 py-10 text-forest dark:bg-night dark:text-ink sm:px-8">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-2xl font-extrabold sm:text-3xl">Playground phông chữ</h1>
+          <h1 className="text-2xl font-extrabold sm:text-3xl">Playground phông chữ viết tay</h1>
           <p className="mt-2 text-sm text-forest/70 dark:text-ink/70">
-            Gõ thử nội dung, đổi cỡ chữ và so sánh. Tất cả phông đều có tiếng Việt —
+            Gõ thử nội dung, đổi cỡ chữ và so sánh. Tất cả phông đều có tiếng Việt đầy đủ —
             dòng nhỏ bên dưới mỗi mẫu là chuỗi thử dấu để soi chữ bị đứt.
           </p>
 
@@ -59,7 +79,7 @@ export default function FontPlayground() {
                 className="w-full rounded-xl border border-leaf/20 bg-white px-4 py-2.5 text-sm outline-none focus:border-leaf dark:border-white/10 dark:bg-white/10"
               />
             </label>
-            <label className="sm:col-span-1">
+            <label>
               <span className="mb-1 block text-xs font-bold uppercase tracking-widest text-leaf-deep dark:text-leaf-bright">
                 Cỡ chữ: {size}px
               </span>
@@ -107,7 +127,7 @@ export default function FontPlayground() {
                 </p>
                 <p
                   className={`${f.className} mt-1 leading-tight text-forest dark:text-ink`}
-                  style={{ fontSize: `${Math.round(size * 0.7)}px` }}
+                  style={{ fontSize: `${Math.round(size * 0.72)}px` }}
                 >
                   {line2 || "Ban sáng lập & Tổ chức"}
                 </p>

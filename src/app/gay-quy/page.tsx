@@ -25,7 +25,7 @@ export default function FundraisingPage() {
       <Fundraising showHeading={false} bg={false} />
 
       {/* Báo cáo chi (thay cho "Quỹ dùng để làm gì?") */}
-      <section id="bao-cao-chi" className="scroll-mt-24 bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
+      <section id="bao-cao-chi" className="bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
         <div className="mx-auto max-w-4xl px-5 sm:px-6">
           <Reveal className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
             <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
