@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Be_Vietnam_Pro, Pacifico, Dancing_Script } from "next/font/google";
+import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -10,19 +10,11 @@ const beVietnam = Be_Vietnam_Pro({
   display: "swap",
 });
 
-// Phông tiêu đề (viết tay). Giữ nguyên tên biến --font-dancing để mọi nơi dùng lại.
-const displayFont = Pacifico({
-  subsets: ["latin", "vietnamese"],
-  weight: "400",
-  variable: "--font-dancing",
-  display: "swap",
-});
-
-// Phông chữ ký (Dancing Script) — dùng cho dòng ngày tháng ở Hero như thiết kế cũ.
-const scriptFont = Dancing_Script({
+// Phông tiêu đề (viết tay Dancing Script). Dùng chung cho tiêu đề và dòng ngày tháng.
+const displayFont = Dancing_Script({
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-script-hand",
+  variable: "--font-dancing",
   display: "swap",
 });
 
@@ -118,7 +110,7 @@ export default function RootLayout({
     <html
       lang="vi"
       suppressHydrationWarning
-      className={`${beVietnam.variable} ${displayFont.variable} ${scriptFont.variable}`}
+      className={`${beVietnam.variable} ${displayFont.variable}`}
     >
       <head>
         <script
