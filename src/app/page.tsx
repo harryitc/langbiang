@@ -7,7 +7,6 @@ import Hero from "@/components/Hero";
 import BannerSlider from "@/components/BannerSlider";
 import News from "@/components/sections/News";
 import About from "@/components/sections/About";
-import WhyJoin from "@/components/sections/WhyJoin";
 import DonateBand from "@/components/DonateBand";
 import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
@@ -28,7 +27,6 @@ export default function Home() {
         <BannerSlider />
         <News carousel />
         <About />
-        <WhyJoin />
         <DonateBand />
         <Register />
         <Faq />
