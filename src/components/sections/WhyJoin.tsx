@@ -9,10 +9,6 @@ export default function WhyJoin() {
           <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
             Tại sao nên tham gia?
           </span>
-          <h2 className="text-2xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
-            Mỗi tấm lòng là một{" "}
-            <span className="text-gradient-green">ánh trăng</span>
-          </h2>
           <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
             Đồng hành cùng Trăng Sáng Langbiang, bạn không chỉ cho đi mà còn nhận
             về thật nhiều yêu thương.
