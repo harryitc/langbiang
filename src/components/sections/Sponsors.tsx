@@ -22,14 +22,14 @@ function SponsorLogo({ s, onClick }: { s: Sponsor; onClick: () => void }) {
       onClick={onClick}
       title={s.name}
       aria-label={`Xem giới thiệu ${s.name}`}
-      className="group relative flex h-24 w-36 items-center justify-center rounded-2xl bg-white/80 p-4 shadow-sm ring-1 ring-leaf/10 transition hover:-translate-y-1.5 hover:shadow-soft dark:bg-white/[0.05] dark:ring-leaf-bright/10 sm:h-28 sm:w-44"
+      className="group relative flex h-28 w-44 items-center justify-center rounded-2xl bg-white p-5 shadow-sm ring-1 ring-leaf/10 transition hover:-translate-y-1.5 hover:shadow-soft dark:bg-white/90 dark:ring-leaf-bright/10 sm:h-32 sm:w-56 sm:p-6"
     >
       {s.logo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={s.logo}
           alt={s.name}
-          className="max-h-full max-w-full object-contain opacity-80 grayscale transition duration-300 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
+          className="max-h-full max-w-full object-contain transition duration-300 group-hover:scale-105"
         />
       ) : (
         <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-leaf/20 to-sun/20 text-lg font-extrabold text-leaf-deep transition group-hover:scale-105 dark:text-leaf-bright">
@@ -71,8 +71,8 @@ export default function Sponsors() {
             <span className="text-gradient-sun">tấm lòng vàng</span>
           </h2>
           <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
-            Bấm vào từng đơn vị để xem lời giới thiệu. Sự đồng hành của các đơn vị
-            giúp ánh trăng của chúng mình toả sáng hơn.
+            Sự đồng hành của các đơn vị dưới đây giúp ánh trăng của chúng mình
+            toả sáng hơn.
           </p>
         </Reveal>
 

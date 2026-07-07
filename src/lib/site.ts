@@ -210,19 +210,27 @@ export const sponsorTiers: { tier: string; sponsors: Sponsor[] }[] = [
     tier: "Nhà tài trợ & đơn vị đồng hành",
     sponsors: [
       {
-        name: "WESET",
+        name: "WESET English Center",
+        logo: "/sponsors/weset.png",
+        url: "https://weset.edu.vn",
         intro: "Trung tâm Anh ngữ WESET — đơn vị tài trợ đồng hành cùng Trăng Sáng Langbiang.",
       },
       {
         name: "Phở Huỳnh Trâm",
+        logo: "/sponsors/pho-huynh-tram.png",
+        url: "https://phohuynhtram.com",
         intro: "Phở Huỳnh Trâm hỗ trợ những bữa ăn ấm lòng cho đoàn tình nguyện.",
       },
       {
         name: "Sun Taxi Group",
+        logo: "/sponsors/sun-taxi.png",
+        url: "https://suntaxi.vn",
         intro: "Sun Taxi Group hỗ trợ di chuyển, đưa đón đoàn trong suốt hành trình.",
       },
       {
         name: "Bệnh viện Đa khoa Tâm Phúc",
+        logo: "/sponsors/tam-phuc.png",
+        url: "http://benhvientamphuc.com.vn",
         intro: "Bệnh viện Đa khoa Tâm Phúc (Tam Phuc Hospital) đồng hành, chăm sóc y tế cho chương trình.",
       },
     ],
