@@ -94,14 +94,14 @@ export default function BanToChucPage() {
               {coFounders.length > 0 && (
                 <div className="flex w-full flex-col gap-4 sm:flex-row">
                   {coFounders.map((m) => (
-                    <div key={m.name} className="flex flex-1 flex-col items-center gap-3 rounded-3xl bg-white/80 p-5 ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10">
+                    <div key={m.name} className="flex flex-1 items-start gap-3 rounded-3xl bg-white/80 p-5 ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10">
                       <span className="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-xl font-bold text-white ring-2 ring-white/60 dark:ring-white/10">
                         {m.photo ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={m.photo} alt={m.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
                         ) : initials(m.name)}
                       </span>
-                      <div className="text-center">
+                      <div>
                         <p className="font-bold text-forest dark:text-ink">{m.name}</p>
                         <p className="text-sm font-semibold text-leaf-deep dark:text-leaf-bright">{m.role}</p>
                         <p className="mt-1.5 text-sm leading-relaxed text-forest/70 dark:text-ink/70">{m.bio}</p>
