@@ -44,7 +44,7 @@ export default function BanToChucPage() {
               <span className="mb-4 inline-block rounded-full bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
                 Đội ngũ
               </span>
-              <h1 className="font-display text-5xl font-bold leading-[1.12] text-gradient-green sm:text-6xl md:text-7xl">
+              <h1 className="font-display pb-4 text-5xl font-bold leading-[1.12] text-gradient-green sm:text-6xl md:text-7xl">
                 Ban sáng lập
               </h1>
               <p className="mt-6 max-w-md text-lg leading-relaxed text-forest/75 dark:text-ink/75">
