@@ -4,7 +4,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 import BackToTop from "@/components/BackToTop";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Founders from "@/components/sections/Founders";
 import BannerSlider from "@/components/BannerSlider";
 import News from "@/components/sections/News";
 import About from "@/components/sections/About";
@@ -24,7 +23,6 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Founders />
         <About />
         <BannerSlider />
         <News carousel />

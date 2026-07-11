@@ -12,7 +12,7 @@ if (typeof window !== "undefined") {
 
 import Countdown from "./Countdown";
 import { LeafBranch, Daisy } from "./Decor";
-import { site } from "@/lib/site";
+import { site, board } from "@/lib/site";
 
 /** Ảnh kỷ niệm "trôi nổi" ở hai dải trống trái/phải của Hero (chỉ màn hình lớn). */
 type HeroFloat = {
@@ -201,6 +201,35 @@ export default function Hero() {
             Đếm ngược đến ngày lên đường
           </span>
           <Countdown />
+        </div>
+
+        {/* Ban sáng lập — hiển thị ngay trên màn hình đầu */}
+        <div className="hero-count mt-10 flex flex-col items-center gap-4">
+          <span className="text-xs font-semibold uppercase tracking-widest text-forest/60 dark:text-ink/60">
+            Ban sáng lập
+          </span>
+          <div className="flex flex-wrap items-start justify-center gap-4 sm:gap-6">
+            {board.founders.map((m, i) => {
+              const parts = m.name.trim().split(/\s+/);
+              const last = parts[parts.length - 1]?.[0] ?? "";
+              const first = parts.length > 1 ? parts[parts.length - 2]?.[0] ?? "" : "";
+              const ini = (first + last).toUpperCase();
+              return (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-leaf to-grass text-base font-bold text-white ring-2 ring-white/70 shadow-soft dark:ring-white/20 sm:h-16 sm:w-16 sm:text-lg">
+                    {m.photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={m.photo} alt={m.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
+                    ) : ini}
+                  </span>
+                  <div className="text-center">
+                    <p className="text-[13px] font-bold text-forest dark:text-ink leading-tight">{m.name}</p>
+                    <p className="text-[11px] text-leaf-deep dark:text-leaf-bright">{m.role}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Cuộn xuống — bản mobile nằm trong luồng để không đè lên đếm ngược */}
