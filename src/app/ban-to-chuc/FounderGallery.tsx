@@ -71,7 +71,7 @@ export default function FounderGallery() {
               style={{ height: "clamp(240px, 22vw, 420px)", fontSize: "clamp(1.2rem, 2vw, 2rem)" }}
             >
               {lead.photo ? (
-                <Image src={lead.photo} alt={lead.name} fill sizes="(max-width:1280px) 18vw, 320px" quality={95} className="object-cover" />
+                <Image src={lead.photo} alt={lead.name} fill className="object-cover" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(lead.name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(8px, 0.6vw, 14px)" }}>
@@ -99,7 +99,7 @@ export default function FounderGallery() {
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[0].photo ? (
-                <Image src={coFounders[0].photo} alt={coFounders[0].name} fill sizes="(max-width:1280px) 13vw, 240px" quality={95} className="object-cover" />
+                <Image src={coFounders[0].photo} alt={coFounders[0].name} fill className="object-cover" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[0].name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
@@ -126,7 +126,7 @@ export default function FounderGallery() {
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[1].photo ? (
-                <Image src={coFounders[1].photo} alt={coFounders[1].name} fill sizes="(max-width:1280px) 13vw, 240px" quality={95} className="object-cover" />
+                <Image src={coFounders[1].photo} alt={coFounders[1].name} fill className="object-cover" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[1].name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
