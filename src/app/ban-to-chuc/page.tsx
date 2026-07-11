@@ -73,7 +73,7 @@ export default function BanToChucPage() {
           {lead && (
             <div className="absolute top-1/2 hidden -translate-y-1/2 lg:block"
               style={{ rotate: "-3deg", right: "28%", width: "clamp(200px, 18vw, 320px)" }}>
-              <div className="rounded-3xl bg-white shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-black/5"
+              <div className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-leaf/20"
                 style={{ padding: "clamp(10px, 0.8vw, 16px)" }}>
                 <span className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
                   style={{ height: "clamp(240px, 22vw, 420px)", fontSize: "clamp(1.2rem, 2vw, 2rem)" }}>
@@ -95,7 +95,7 @@ export default function BanToChucPage() {
           {coFounders[0] && (
             <div className="absolute hidden lg:block"
               style={{ rotate: "4deg", top: "6%", right: "7%", width: "clamp(150px, 13vw, 240px)" }}>
-              <div className="rounded-3xl bg-white shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-black/5"
+              <div className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20"
                 style={{ padding: "clamp(8px, 0.6vw, 14px)" }}>
                 <span className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
                   style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}>
@@ -116,7 +116,7 @@ export default function BanToChucPage() {
           {coFounders[1] && (
             <div className="absolute hidden lg:block"
               style={{ rotate: "-2deg", bottom: "5%", right: "8%", width: "clamp(150px, 13vw, 240px)" }}>
-              <div className="rounded-3xl bg-white shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-black/5"
+              <div className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20"
                 style={{ padding: "clamp(8px, 0.6vw, 14px)" }}>
                 <span className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
                   style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}>
