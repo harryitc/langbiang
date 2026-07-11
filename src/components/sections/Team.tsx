@@ -52,6 +52,26 @@ export default function Team() {
             <Daisy className="absolute right-6 top-6 opacity-90 drop-shadow" size={40} />
           </figure>
         </Reveal>
+
+        <Reveal className="mt-12 mx-auto max-w-6xl">
+          <div className="rounded-[2rem] bg-leaf/5 p-8 sm:p-12 dark:bg-white/[0.02] ring-1 ring-leaf/10 dark:ring-leaf-bright/10 text-forest/80 dark:text-ink/80 text-base sm:text-lg leading-relaxed space-y-6">
+            <p>
+              Có lẽ điều đẹp nhất mà <strong>Trăng Sáng LangBiang</strong> mang lại không chỉ là một mùa Trung Thu trọn vẹn cho các em nhỏ, mà còn là sự gắn kết của những con người vốn xa lạ.
+            </p>
+            <p>
+              Chúng ta đến từ nhiều nơi khác nhau, mang những câu chuyện khác nhau, nhưng lại gặp nhau ở một điểm chung: mong muốn được cho đi bằng cả trái tim.
+            </p>
+            <p>
+              Cảm ơn từng anh chị, từng bạn tình nguyện viên đã dành thời gian, công sức và cả tuổi trẻ để cùng nhau tạo nên hành trình ý nghĩa này. Cảm ơn những ngày thức khuya chuẩn bị, những buổi tập luyện, những chuyến xe dài và cả những giọt mồ hôi đổi lấy nụ cười của các em.
+            </p>
+            <p className="font-bold text-leaf-deep dark:text-leaf-bright">
+              Chúng ta không chỉ cùng nhau tổ chức một chương trình, mà đã cùng nhau trở thành một gia đình.
+            </p>
+            <p>
+              Hy vọng rằng, sau khi ánh đèn sân khấu đã tắt, sau khi mùa trăng đã qua, mỗi người vẫn sẽ luôn nhớ rằng mình từng là một phần của <strong>Đại gia đình Trăng Sáng LangBiang</strong> – nơi yêu thương được bắt đầu từ những điều giản dị nhất. 💚
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

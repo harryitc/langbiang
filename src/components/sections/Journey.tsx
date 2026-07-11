@@ -16,7 +16,7 @@ export default function Journey() {
       <div className="relative mx-auto max-w-7xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="mb-3 inline-block rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
-            Hành trình năm trước
+            Hành trình năm 2025
           </span>
           <h2 className="text-3xl font-extrabold sm:text-4xl md:text-5xl">
             Những con số{" "}

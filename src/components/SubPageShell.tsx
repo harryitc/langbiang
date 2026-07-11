@@ -14,6 +14,7 @@ export default function SubPageShell({
   subtitle,
   nav = [],
   hero,
+  bgImage,
   children,
 }: {
   eyebrow: string;
@@ -22,6 +23,7 @@ export default function SubPageShell({
   nav?: NavItem[];
   /** Nội dung extra hiển thị ngay trong hero section, bên dưới subtitle */
   hero?: ReactNode;
+  bgImage?: string;
   children: ReactNode;
 }) {
   return (
@@ -34,8 +36,25 @@ export default function SubPageShell({
       <SubPageHeader nav={nav} />
 
       <main>
-        <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-gradient-to-b from-sky-soft via-[#dff2e6] to-cream px-6 py-24 text-center dark:from-[#0a1626] dark:via-night-2 dark:to-night sm:py-32">
-          <div className="mx-auto w-full max-w-3xl">
+        <section className="relative flex min-h-[100svh] items-center overflow-hidden px-6 py-24 text-center sm:py-32">
+          {/* Nền gradient */}
+          <div className="absolute inset-0 -z-20 bg-gradient-to-b from-sky-soft via-[#dff2e6] to-cream dark:from-[#0a1626] dark:via-night-2 dark:to-night" />
+
+          {/* Nền ảnh mờ */}
+          {bgImage && (
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={bgImage}
+                alt=""
+                className="h-full w-full object-cover opacity-65 transition-all duration-500 dark:opacity-40 dark:brightness-[0.8]"
+              />
+              {/* Lớp phủ chuyển màu mượt với nền */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#dff2e6]/30 to-cream dark:via-night-2/30 dark:to-night" />
+            </div>
+          )}
+
+          <div className="relative z-10 mx-auto w-full max-w-3xl">
             <span className="mb-3 inline-block rounded-full bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
               {eyebrow}
             </span>

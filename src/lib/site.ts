@@ -35,9 +35,9 @@ export const site = {
 };
 
 export const stats = [
-  { value: 500, suffix: "+", label: "Em nhỏ nhận quà" },
-  { value: 80, suffix: "", label: "Tình nguyện viên" },
-  { value: 30, suffix: "+", label: "Nhà hảo tâm đồng hành" },
+  { value: 200, suffix: "+", label: "Em nhỏ nhận quà" },
+  { value: 40, suffix: "", label: "Tình nguyện viên" },
+  { value: 20, suffix: "+", label: "Nhà hảo tâm đồng hành" },
   { value: 2, suffix: " ngày", label: "Hành trình yêu thương" },
 ];
 
