@@ -8,21 +8,20 @@ import Footer from "@/components/sections/Footer";
 
 type NavItem = { href: string; label: string };
 
-/**
- * Khung dùng chung cho các trang phụ (/2025, /tin-tuc, /gay-quy):
- * top bar quay về trang chủ + tiêu đề + footer.
- */
 export default function SubPageShell({
   eyebrow,
   title,
   subtitle,
   nav = [],
+  hero,
   children,
 }: {
   eyebrow: string;
   title: ReactNode;
   subtitle: string;
   nav?: NavItem[];
+  /** Nội dung extra hiển thị ngay trong hero section, bên dưới subtitle */
+  hero?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -46,6 +45,7 @@ export default function SubPageShell({
             <p className="mx-auto mt-5 max-w-xl text-lg text-forest/80 dark:text-ink/80">
               {subtitle}
             </p>
+            {hero && <div className="mt-12">{hero}</div>}
           </div>
         </section>
 
