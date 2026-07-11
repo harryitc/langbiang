@@ -4,10 +4,12 @@ import { useRef } from "react";
 import LightGallery from "lightgallery/react";
 import lgZoom from "lightgallery/plugins/zoom";
 import lgFullscreen from "lightgallery/plugins/fullscreen";
+import lgThumbnail from "lightgallery/plugins/thumbnail";
 
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-fullscreen.css";
+import "lightgallery/css/lg-thumbnail.css";
 
 import { board } from "@/lib/site";
 
@@ -143,7 +145,7 @@ export default function FounderGallery() {
         dynamic
         dynamicEl={dynamicEl}
         speed={450}
-        plugins={[lgZoom, lgFullscreen]}
+        plugins={[lgZoom, lgFullscreen, lgThumbnail]}
         licenseKey="0000-0000-0000-0000"
         download={false}
         mobileSettings={{ controls: true, showCloseIcon: true, download: false }}
