@@ -67,12 +67,12 @@ export default function BanToChucPage() {
             </div>
 
             {/* Cột phải — các thành viên ban sáng lập */}
-            <div className="flex w-full flex-col items-center gap-5 lg:w-auto lg:min-w-[420px] lg:max-w-lg">
+            <div className="flex w-full flex-col items-center gap-5 lg:w-auto lg:min-w-[460px] lg:max-w-xl">
               {/* Trưởng ban — nổi bật */}
               {lead && (
-                <div className="w-full rounded-3xl bg-gradient-to-br from-leaf/12 to-sun/12 p-5 ring-1 ring-leaf/25 dark:from-leaf-bright/10 dark:to-sun/5 dark:ring-leaf-bright/20 sm:p-6">
-                  <div className="flex items-start gap-4">
-                    <span className="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-leaf to-grass text-xl font-bold text-white ring-2 ring-white/60 dark:ring-white/10">
+                <div className="w-full rounded-3xl bg-gradient-to-br from-leaf/12 to-sun/12 p-6 ring-1 ring-leaf/25 dark:from-leaf-bright/10 dark:to-sun/5 dark:ring-leaf-bright/20">
+                  <div className="flex items-start gap-5">
+                    <span className="flex h-32 w-32 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-2xl font-bold text-white ring-2 ring-white/60 dark:ring-white/10">
                       {lead.photo ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={lead.photo} alt={lead.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
@@ -82,7 +82,7 @@ export default function BanToChucPage() {
                       <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-sun/20 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-sunset">
                         ⭐ Trưởng ban
                       </span>
-                      <p className="text-lg font-bold text-forest dark:text-ink">{lead.name}</p>
+                      <p className="text-xl font-bold text-forest dark:text-ink">{lead.name}</p>
                       <p className="text-sm font-semibold text-leaf-deep dark:text-leaf-bright">{lead.role}</p>
                       <p className="mt-2 text-sm leading-relaxed text-forest/70 dark:text-ink/70">{lead.bio}</p>
                     </div>
@@ -94,14 +94,14 @@ export default function BanToChucPage() {
               {coFounders.length > 0 && (
                 <div className="flex w-full flex-col gap-4 sm:flex-row">
                   {coFounders.map((m) => (
-                    <div key={m.name} className="flex flex-1 items-start gap-3 rounded-3xl bg-white/80 p-5 ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10">
-                      <span className="flex h-14 w-14 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-leaf to-grass text-base font-bold text-white ring-2 ring-white/60 dark:ring-white/10">
+                    <div key={m.name} className="flex flex-1 flex-col items-center gap-3 rounded-3xl bg-white/80 p-5 ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10">
+                      <span className="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-xl font-bold text-white ring-2 ring-white/60 dark:ring-white/10">
                         {m.photo ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={m.photo} alt={m.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
                         ) : initials(m.name)}
                       </span>
-                      <div>
+                      <div className="text-center">
                         <p className="font-bold text-forest dark:text-ink">{m.name}</p>
                         <p className="text-sm font-semibold text-leaf-deep dark:text-leaf-bright">{m.role}</p>
                         <p className="mt-1.5 text-sm leading-relaxed text-forest/70 dark:text-ink/70">{m.bio}</p>
