@@ -83,7 +83,7 @@ export default function BanToChucPage() {
                   ) : initials(lead.name)}
                 </span>
                 <div className="pb-1 text-center" style={{ paddingTop: "clamp(8px, 0.6vw, 14px)" }}>
-                  <span className="mb-0.5 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-sunset">⭐ Trưởng ban</span>
+                  <span className="mb-0.5 inline-flex items-center rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">Trưởng ban</span>
                   <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.9rem, 1.1vw, 1.2rem)" }}>{lead.name}</p>
                   <p className="text-xs text-forest/60">{lead.role}</p>
                 </div>
