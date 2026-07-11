@@ -61,36 +61,57 @@ function MemberCard({ m, featured = false }: { m: Member; featured?: boolean }) 
   );
 }
 
-export default function Board({ showHeading = true }: { showHeading?: boolean }) {
+function Connector() {
   return (
-    <section id="board" className="relative py-16 sm:py-24">
-      <div className="mx-auto max-w-5xl px-5 sm:px-6">
-        {showHeading && (
-          <Reveal className="mx-auto max-w-2xl text-center">
-            <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
-              Tổ chức
-            </span>
-            <h2 className="text-2xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
-              Ban <span className="text-gradient-green">tổ chức</span>
-            </h2>
-            <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
-              Những trưởng ban cùng nhau tổ chức từng mùa Trăng Sáng Langbiang.
-            </p>
-          </Reveal>
-        )}
+    <div className="mx-auto my-5 h-8 w-px bg-gradient-to-b from-leaf/40 to-leaf/10 dark:from-leaf-bright/30 dark:to-leaf-bright/5 sm:my-6 sm:h-10" />
+  );
+}
 
-        {/* Ban tổ chức */}
-        <div className="mt-12 sm:mt-16">
-          <Reveal
-            childrenStagger
-            className="flex flex-wrap justify-center gap-5"
-          >
-            {board.organizers.map((m) => (
-              <div key={m.name} className="w-full sm:w-[calc(50%-0.625rem)]">
-                <MemberCard m={m} />
-              </div>
-            ))}
-          </Reveal>
+export default function Founders() {
+  const [lead, ...coFounders] = board.founders;
+
+  return (
+    <section id="founders" className="relative py-16 sm:py-20">
+      <div className="mx-auto max-w-5xl px-5 sm:px-6">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
+            Sáng lập
+          </span>
+          <h2 className="text-2xl font-extrabold text-forest sm:text-4xl dark:text-ink">
+            Những người <span className="text-gradient-green">thắp sáng</span>
+          </h2>
+          <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
+            Ban sáng lập dẫn dắt hành trình Trăng Sáng Langbiang từ những ngày đầu tiên.
+          </p>
+        </Reveal>
+
+        {/* Trưởng ban sáng lập */}
+        <div className="mt-12">
+          {lead && (
+            <Reveal className="mx-auto w-full max-w-md">
+              <MemberCard m={lead} featured />
+            </Reveal>
+          )}
+
+          {/* Đồng sáng lập */}
+          {coFounders.length > 0 && (
+            <>
+              <Connector />
+              <Reveal
+                childrenStagger
+                className="mx-auto flex max-w-3xl flex-wrap justify-center gap-5"
+              >
+                {coFounders.map((m) => (
+                  <div
+                    key={m.name}
+                    className="w-full sm:w-[calc(50%-0.625rem)]"
+                  >
+                    <MemberCard m={m} />
+                  </div>
+                ))}
+              </Reveal>
+            </>
+          )}
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SubPageShell from "@/components/SubPageShell";
+import Founders from "@/components/sections/Founders";
 import Board from "@/components/sections/Board";
 
 export const metadata: Metadata = {
@@ -17,7 +18,8 @@ export default function BanToChucPage() {
       title="Ban sáng lập & Tổ chức"
       subtitle="Những người thắp trăng — cùng nhau xây dựng và tổ chức từng mùa Trăng Sáng Langbiang bằng cả tấm lòng."
     >
-      <Board showHeading={false} />
+      <Founders />
+      <Board showHeading={true} />
 
       <section className="py-16 text-center sm:py-20">
         <div className="mx-auto max-w-2xl px-5 sm:px-6">
