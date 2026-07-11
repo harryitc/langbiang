@@ -23,16 +23,24 @@ export default function FounderGallery() {
   const lgRef = useRef<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onInit = (detail: any) => { lgRef.current = detail.instance; };
-  const openAt = (i: number) => lgRef.current?.openGallery(i);
 
   const [lead, ...coFounders] = board.founders;
-  const all = [lead, ...coFounders].filter(Boolean);
 
-  const dynamicEl = all.map((m) => ({
-    src: m.photo || "",
-    thumb: m.photo || "",
+  // Chỉ đưa vào gallery những ảnh có thật
+  const withPhoto = [lead, ...coFounders].filter((m) => m?.photo);
+
+  const dynamicEl = withPhoto.map((m) => ({
+    src: m.photo!,
+    thumb: m.photo!,
     subHtml: `<div class="lg-sub"><strong>${m.name}</strong> — ${m.role}</div>`,
   }));
+
+  // Tìm index trong gallery (chỉ tính ảnh có photo)
+  const galleryIndex = (m: typeof lead) => withPhoto.findIndex((f) => f.name === m?.name);
+  const openAt = (m: typeof lead) => {
+    const idx = galleryIndex(m);
+    if (idx >= 0) lgRef.current?.openGallery(idx);
+  };
 
   return (
     <>
@@ -41,7 +49,7 @@ export default function FounderGallery() {
         <div
           className="absolute top-1/2 hidden -translate-y-1/2 cursor-pointer lg:block"
           style={{ rotate: "-3deg", right: "28%", width: "clamp(200px, 18vw, 320px)" }}
-          onClick={() => openAt(0)}
+          onClick={() => openAt(lead)}
         >
           <div
             className="relative rounded-3xl bg-gradient-to-br from-[#c8e6c0] to-[#a5d6a7] shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-leaf/30 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.22)]"
@@ -78,7 +86,7 @@ export default function FounderGallery() {
         <div
           className="absolute hidden cursor-pointer lg:block"
           style={{ rotate: "4deg", top: "6%", right: "7%", width: "clamp(150px, 13vw, 240px)" }}
-          onClick={() => openAt(1)}
+          onClick={() => openAt(coFounders[0])}
         >
           <div
             className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
@@ -106,7 +114,7 @@ export default function FounderGallery() {
         <div
           className="absolute hidden cursor-pointer lg:block"
           style={{ rotate: "-2deg", bottom: "5%", right: "8%", width: "clamp(150px, 13vw, 240px)" }}
-          onClick={() => openAt(2)}
+          onClick={() => openAt(coFounders[1])}
         >
           <div
             className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
