@@ -30,9 +30,9 @@ function NewsCard({ post }: { post: (typeof news)[number] }) {
         </span>
       </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <time className="text-xs font-semibold uppercase tracking-wide text-forest/50 dark:text-ink/50">
+        {/* <time className="text-xs font-semibold uppercase tracking-wide text-forest/50 dark:text-ink/50">
           {post.date}
-        </time>
+        </time> */}
         <h3 className="mt-2 text-lg font-bold leading-snug text-forest dark:text-ink">
           {post.title}
         </h3>
