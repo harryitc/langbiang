@@ -40,7 +40,7 @@ function NewsCard({ post }: { post: (typeof news)[number] }) {
           {post.excerpt}
         </p>
         <a
-          href={site.facebook}
+          href={post.link || site.facebook}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf-deep transition hover:gap-2.5 dark:text-leaf-bright"
