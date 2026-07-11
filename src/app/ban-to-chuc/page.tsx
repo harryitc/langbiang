@@ -71,17 +71,20 @@ export default function BanToChucPage() {
 
           {/* Trưởng ban — lớn, trung tâm bên phải */}
           {lead && (
-            <div className="absolute top-[50%] right-[28%] hidden -translate-y-1/2 lg:block" style={{ rotate: "-3deg" }}>
-              <div className="rounded-2xl bg-white p-3 shadow-[0_8px_32px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
-                <span className="flex h-64 w-52 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-leaf to-grass text-3xl font-bold text-white">
+            <div className="absolute top-1/2 hidden -translate-y-1/2 lg:block"
+              style={{ rotate: "-3deg", right: "28%", width: "clamp(200px, 18vw, 320px)" }}>
+              <div className="rounded-3xl bg-white shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-black/5"
+                style={{ padding: "clamp(10px, 0.8vw, 16px)" }}>
+                <span className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
+                  style={{ height: "clamp(240px, 22vw, 420px)", fontSize: "clamp(1.2rem, 2vw, 2rem)" }}>
                   {lead.photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={lead.photo} alt={lead.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
                   ) : initials(lead.name)}
                 </span>
-                <div className="pt-2.5 pb-1 text-center">
-                  <span className="mb-0.5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-sunset">⭐ Trưởng ban</span>
-                  <p className="font-display text-base font-bold text-forest">{lead.name}</p>
+                <div className="pb-1 text-center" style={{ paddingTop: "clamp(8px, 0.6vw, 14px)" }}>
+                  <span className="mb-0.5 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-sunset">⭐ Trưởng ban</span>
+                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.9rem, 1.1vw, 1.2rem)" }}>{lead.name}</p>
                   <p className="text-xs text-forest/60">{lead.role}</p>
                 </div>
               </div>
@@ -90,17 +93,20 @@ export default function BanToChucPage() {
 
           {/* Đồng sáng lập 1 */}
           {coFounders[0] && (
-            <div className="absolute top-[18%] right-[8%] hidden lg:block" style={{ rotate: "4deg" }}>
-              <div className="rounded-2xl bg-white p-2.5 shadow-[0_8px_28px_rgba(0,0,0,0.14)] ring-1 ring-black/5">
-                <span className="flex h-48 w-40 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-leaf to-grass text-2xl font-bold text-white">
+            <div className="absolute hidden lg:block"
+              style={{ rotate: "4deg", top: "6%", right: "7%", width: "clamp(150px, 13vw, 240px)" }}>
+              <div className="rounded-3xl bg-white shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-black/5"
+                style={{ padding: "clamp(8px, 0.6vw, 14px)" }}>
+                <span className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
+                  style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}>
                   {coFounders[0].photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={coFounders[0].photo} alt={coFounders[0].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
                   ) : initials(coFounders[0].name)}
                 </span>
-                <div className="pt-2 pb-0.5 text-center">
-                  <p className="font-display text-sm font-bold text-forest">{coFounders[0].name}</p>
-                  <p className="text-[11px] text-forest/60">{coFounders[0].role}</p>
+                <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
+                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.8rem, 1vw, 1rem)" }}>{coFounders[0].name}</p>
+                  <p className="text-xs text-forest/60">{coFounders[0].role}</p>
                 </div>
               </div>
             </div>
@@ -108,17 +114,20 @@ export default function BanToChucPage() {
 
           {/* Đồng sáng lập 2 */}
           {coFounders[1] && (
-            <div className="absolute bottom-[10%] right-[10%] hidden lg:block" style={{ rotate: "-2deg" }}>
-              <div className="rounded-2xl bg-white p-2.5 shadow-[0_8px_28px_rgba(0,0,0,0.14)] ring-1 ring-black/5">
-                <span className="flex h-48 w-40 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-leaf to-grass text-2xl font-bold text-white">
+            <div className="absolute hidden lg:block"
+              style={{ rotate: "-2deg", bottom: "5%", right: "8%", width: "clamp(150px, 13vw, 240px)" }}>
+              <div className="rounded-3xl bg-white shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-black/5"
+                style={{ padding: "clamp(8px, 0.6vw, 14px)" }}>
+                <span className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
+                  style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}>
                   {coFounders[1].photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={coFounders[1].photo} alt={coFounders[1].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
                   ) : initials(coFounders[1].name)}
                 </span>
-                <div className="pt-2 pb-0.5 text-center">
-                  <p className="font-display text-sm font-bold text-forest">{coFounders[1].name}</p>
-                  <p className="text-[11px] text-forest/60">{coFounders[1].role}</p>
+                <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
+                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.8rem, 1vw, 1rem)" }}>{coFounders[1].name}</p>
+                  <p className="text-xs text-forest/60">{coFounders[1].role}</p>
                 </div>
               </div>
             </div>
