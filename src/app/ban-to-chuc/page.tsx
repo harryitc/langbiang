@@ -73,8 +73,16 @@ export default function BanToChucPage() {
           {lead && (
             <div className="absolute top-1/2 hidden -translate-y-1/2 lg:block"
               style={{ rotate: "-3deg", right: "28%", width: "clamp(200px, 18vw, 320px)" }}>
-              <div className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-leaf/20"
+              <div className="relative rounded-3xl bg-gradient-to-br from-[#c8e6c0] to-[#a5d6a7] shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-leaf/30"
                 style={{ padding: "clamp(10px, 0.8vw, 16px)" }}>
+                {/* Ngôi sao vẽ tay góc trái */}
+                <div className="absolute -top-5 -left-5">
+                  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 4 C22 4 23.5 10 27 13 C31 16.5 38 16 38 16 C38 16 33 19.5 31.5 23.5 C30 27.5 32 34 32 34 C32 34 27 30 22 30 C17 30 12 34 12 34 C12 34 14 27.5 12.5 23.5 C11 19.5 6 16 6 16 C6 16 13 16.5 17 13 C20.5 10 22 4 22 4 Z"
+                      fill="#f5a623" stroke="#e8870a" strokeWidth="1.2" strokeLinejoin="round"/>
+                    <path d="M22 7 C22.5 10.5 24.5 12.5 27.5 14.5" stroke="#fff" strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
+                  </svg>
+                </div>
                 <span className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
                   style={{ height: "clamp(240px, 22vw, 420px)", fontSize: "clamp(1.2rem, 2vw, 2rem)" }}>
                   {lead.photo ? (
@@ -84,8 +92,8 @@ export default function BanToChucPage() {
                 </span>
                 <div className="pb-1 text-center" style={{ paddingTop: "clamp(8px, 0.6vw, 14px)" }}>
                   <span className="mb-0.5 inline-flex items-center rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">Trưởng ban</span>
-                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.9rem, 1.1vw, 1.2rem)" }}>{lead.name}</p>
-                  <p className="text-xs text-forest/60">{lead.role}</p>
+                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(1.1rem, 1.4vw, 1.5rem)" }}>{lead.name}</p>
+                  <p className="text-forest/60" style={{ fontSize: "clamp(0.8rem, 0.9vw, 1rem)" }}>{lead.role}</p>
                 </div>
               </div>
             </div>
@@ -105,8 +113,8 @@ export default function BanToChucPage() {
                   ) : initials(coFounders[0].name)}
                 </span>
                 <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
-                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.8rem, 1vw, 1rem)" }}>{coFounders[0].name}</p>
-                  <p className="text-xs text-forest/60">{coFounders[0].role}</p>
+                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.25rem)" }}>{coFounders[0].name}</p>
+                  <p className="text-forest/60" style={{ fontSize: "clamp(0.75rem, 0.85vw, 0.9rem)" }}>{coFounders[0].role}</p>
                 </div>
               </div>
             </div>
@@ -126,8 +134,8 @@ export default function BanToChucPage() {
                   ) : initials(coFounders[1].name)}
                 </span>
                 <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
-                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.8rem, 1vw, 1rem)" }}>{coFounders[1].name}</p>
-                  <p className="text-xs text-forest/60">{coFounders[1].role}</p>
+                  <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.25rem)" }}>{coFounders[1].name}</p>
+                  <p className="text-forest/60" style={{ fontSize: "clamp(0.75rem, 0.85vw, 0.9rem)" }}>{coFounders[1].role}</p>
                 </div>
               </div>
             </div>
