@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SubPageShell from "@/components/SubPageShell";
+import Summary from "@/components/sections/Summary";
 import Gallery from "@/components/sections/Gallery";
 import Team from "@/components/sections/Team";
 import Journey from "@/components/sections/Journey";
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 };
 
 const nav = [
+  { href: "#summary", label: "Tổng kết" },
   { href: "#gallery", label: "Khoảnh khắc" },
   { href: "#team", label: "Đại gia đình" },
   { href: "#journey", label: "Những con số" },
@@ -27,7 +29,9 @@ export default function Retro2025Page() {
       title="Nhìn lại mùa 2025"
       subtitle="Mùa Trăng Sáng Langbiang đầu tiên — nơi những tấm lòng gặp nhau và viết nên một câu chuyện thật đẹp giữa cao nguyên."
       nav={nav}
+      bgImage="/gallery/team.jpg"
     >
+      <Summary />
       <Gallery />
       <Team />
       <Journey />
