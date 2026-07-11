@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SubPageShell from "@/components/SubPageShell";
 import Founders from "@/components/sections/Founders";
-import Board from "@/components/sections/Board";
+import Members from "@/components/sections/Board";
 
 export const metadata: Metadata = {
-  title: "Ban sáng lập & Ban tổ chức",
+  title: "Ban sáng lập",
   description:
-    "Gặp gỡ ban sáng lập và ban tổ chức Trăng Sáng Langbiang — những người đứng sau hành trình mang Trung thu đến trẻ em vùng cao.",
+    "Gặp gỡ ban sáng lập Trăng Sáng Langbiang — những người đứng sau hành trình mang Trung thu đến trẻ em vùng cao.",
   alternates: { canonical: "/ban-to-chuc" },
 };
 
@@ -15,11 +15,11 @@ export default function BanToChucPage() {
   return (
     <SubPageShell
       eyebrow="Đội ngũ"
-      title="Ban sáng lập & Tổ chức"
+      title="Ban sáng lập"
       subtitle="Những người thắp trăng — cùng nhau xây dựng và tổ chức từng mùa Trăng Sáng Langbiang bằng cả tấm lòng."
     >
       <Founders />
-      <Board showHeading={true} />
+      <Members />
 
       <section className="py-16 text-center sm:py-20">
         <div className="mx-auto max-w-2xl px-5 sm:px-6">

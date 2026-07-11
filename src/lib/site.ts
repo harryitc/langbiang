@@ -299,8 +299,7 @@ export type Member = {
   bio: string;
 };
 
-export const board: { founders: Member[]; organizers: Member[] } = {
-  // TODO: cập nhật ảnh (/public/team/) + tiểu sử thật cho từng thành viên
+export const board: { founders: Member[]; members: Member[] } = {
   founders: [
     {
       name: "Lê Minh Vũ",
@@ -321,32 +320,8 @@ export const board: { founders: Member[]; organizers: Member[] } = {
       bio: "Đồng hành xây dựng Trăng Sáng Langbiang từ những ngày đầu tiên.",
     },
   ],
-  organizers: [
-    {
-      name: "Nguyễn Thị Mai",
-      role: "Trưởng ban Chương trình",
-      photo: "",
-      bio: "Chịu trách nhiệm nội dung, kịch bản đêm hội và các hoạt động cho các em nhỏ.",
-    },
-    {
-      name: "Trần Quốc Bảo",
-      role: "Trưởng ban Hậu cần",
-      photo: "",
-      bio: "Lo hậu cần, di chuyển và an toàn cho toàn đoàn trong suốt hành trình.",
-    },
-    {
-      name: "Đỗ Hoàng Long",
-      role: "Trưởng ban Truyền thông",
-      photo: "",
-      bio: "Phụ trách hình ảnh, bản tin và lan toả câu chuyện của dự án đến cộng đồng.",
-    },
-    {
-      name: "Phạm Gia Hân",
-      role: "Trưởng ban Vận động tài trợ",
-      photo: "",
-      bio: "Kết nối các nhà hảo tâm, đơn vị đồng hành để gây quỹ cho mùa trăng.",
-    },
-  ],
+  // TODO: bổ sung danh sách thành viên sau
+  members: [],
 };
 
 /* ------------------------------------------------------------------
