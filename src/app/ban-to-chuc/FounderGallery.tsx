@@ -51,7 +51,7 @@ export default function FounderGallery() {
       {lead && (
         <div
           className="absolute top-1/2 hidden -translate-y-1/2 cursor-pointer lg:block"
-          style={{ rotate: "-3deg", right: "28%", width: "clamp(200px, 18vw, 320px)" }}
+          style={{ rotate: "-3deg", right: "28%", width: "clamp(200px, 18vw, 320px)", isolation: "isolate" }}
           onClick={() => openAt(lead)}
         >
           <div
@@ -71,7 +71,7 @@ export default function FounderGallery() {
               style={{ height: "clamp(240px, 22vw, 420px)", fontSize: "clamp(1.2rem, 2vw, 2rem)" }}
             >
               {lead.photo ? (
-                <Image src={lead.photo} alt={lead.name} fill sizes="(max-width:1280px) 18vw, 320px" className="object-cover" />
+                <Image src={lead.photo} alt={lead.name} fill sizes="(max-width:1280px) 18vw, 320px" quality={95} className="object-cover" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(lead.name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(8px, 0.6vw, 14px)" }}>
@@ -87,7 +87,7 @@ export default function FounderGallery() {
       {coFounders[0] && (
         <div
           className="absolute hidden cursor-pointer lg:block"
-          style={{ rotate: "4deg", top: "6%", right: "7%", width: "clamp(150px, 13vw, 240px)" }}
+          style={{ rotate: "4deg", top: "6%", right: "7%", width: "clamp(150px, 13vw, 240px)", isolation: "isolate" }}
           onClick={() => openAt(coFounders[0])}
         >
           <div
@@ -99,7 +99,7 @@ export default function FounderGallery() {
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[0].photo ? (
-                <Image src={coFounders[0].photo} alt={coFounders[0].name} fill sizes="(max-width:1280px) 13vw, 240px" className="object-cover" />
+                <Image src={coFounders[0].photo} alt={coFounders[0].name} fill sizes="(max-width:1280px) 13vw, 240px" quality={95} className="object-cover" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[0].name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
@@ -114,7 +114,7 @@ export default function FounderGallery() {
       {coFounders[1] && (
         <div
           className="absolute hidden cursor-pointer lg:block"
-          style={{ rotate: "-2deg", bottom: "5%", right: "8%", width: "clamp(150px, 13vw, 240px)" }}
+          style={{ rotate: "-2deg", bottom: "5%", right: "8%", width: "clamp(150px, 13vw, 240px)", isolation: "isolate" }}
           onClick={() => openAt(coFounders[1])}
         >
           <div
@@ -126,7 +126,7 @@ export default function FounderGallery() {
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[1].photo ? (
-                <Image src={coFounders[1].photo} alt={coFounders[1].name} fill sizes="(max-width:1280px) 13vw, 240px" className="object-cover" />
+                <Image src={coFounders[1].photo} alt={coFounders[1].name} fill sizes="(max-width:1280px) 13vw, 240px" quality={95} className="object-cover" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[1].name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
