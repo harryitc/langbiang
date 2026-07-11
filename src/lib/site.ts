@@ -304,19 +304,19 @@ export const board: { founders: Member[]; members: Member[] } = {
     {
       name: "Lê Minh Vũ",
       role: "Trưởng ban sáng lập",
-      photo: "/img/BRO02291.JPG",
+      photo: "/team/le-minh-vu.jpg",
       bio: "Người dẫn dắt Trăng Sáng Langbiang — định hướng dự án và kết nối nguồn lực để mang một mùa Trung thu trọn vẹn đến trẻ em vùng cao.",
     },
     {
       name: "Phạm Minh Phát",
       role: "Đồng sáng lập",
-      photo: "/img/BRO01234.JPG",
+      photo: "/team/pham-minh-phat.jpg",
       bio: "Đồng hành xây dựng Trăng Sáng Langbiang từ những ngày đầu tiên.",
     },
     {
       name: "Nguyễn Anh Hào",
       role: "Đồng sáng lập",
-      photo: "/img/BRO01565.JPG",
+      photo: "/team/nguyen-anh-hao.jpg",
       bio: "Đồng hành xây dựng Trăng Sáng Langbiang từ những ngày đầu tiên.",
     },
   ],
