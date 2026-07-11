@@ -42,7 +42,7 @@ export default function BanToChucPage() {
           {/* Ảnh nền mờ */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/img/BRO01542.JPG"
+            src="/team/bg-hero.jpg"
             alt=""
             aria-hidden
             className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-multiply dark:opacity-90 dark:mix-blend-soft-light"
