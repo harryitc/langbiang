@@ -67,25 +67,22 @@ export default function BanToChucPage() {
             </div>
           </div>
 
-          {/* Cards ban sáng lập — mỗi card absolute riêng, tự do định vị */}
+          {/* Photos ban sáng lập — mỗi ảnh absolute, phong cách polaroid nổi */}
 
-          {/* Trưởng ban */}
+          {/* Trưởng ban — lớn, trung tâm bên phải */}
           {lead && (
-            <div className="absolute top-[12%] right-[6%] hidden w-[380px] rounded-3xl bg-gradient-to-br from-leaf/12 to-sun/12 p-6 shadow-soft ring-1 ring-leaf/25 backdrop-blur-sm dark:from-leaf-bright/10 dark:to-sun/5 dark:ring-leaf-bright/20 lg:block">
-              <div className="flex items-start gap-5">
-                <span className="flex h-36 w-36 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-2xl font-bold text-white ring-2 ring-white/60 shadow dark:ring-white/10">
+            <div className="absolute top-[50%] right-[28%] hidden -translate-y-1/2 lg:block" style={{ rotate: "-3deg" }}>
+              <div className="rounded-2xl bg-white p-3 shadow-[0_8px_32px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
+                <span className="flex h-64 w-52 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-leaf to-grass text-3xl font-bold text-white">
                   {lead.photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={lead.photo} alt={lead.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
                   ) : initials(lead.name)}
                 </span>
-                <div>
-                  <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-sun/20 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-sunset">
-                    ⭐ Trưởng ban
-                  </span>
-                  <p className="text-xl font-bold text-forest dark:text-ink">{lead.name}</p>
-                  <p className="text-sm font-semibold text-leaf-deep dark:text-leaf-bright">{lead.role}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-forest/70 dark:text-ink/70">{lead.bio}</p>
+                <div className="pt-2.5 pb-1 text-center">
+                  <span className="mb-0.5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-sunset">⭐ Trưởng ban</span>
+                  <p className="font-display text-base font-bold text-forest">{lead.name}</p>
+                  <p className="text-xs text-forest/60">{lead.role}</p>
                 </div>
               </div>
             </div>
@@ -93,34 +90,36 @@ export default function BanToChucPage() {
 
           {/* Đồng sáng lập 1 */}
           {coFounders[0] && (
-            <div className="absolute bottom-[12%] right-[22%] hidden w-[280px] items-start gap-4 rounded-3xl bg-white/85 p-5 shadow-soft ring-1 ring-leaf/10 backdrop-blur-sm dark:bg-white/[0.06] dark:ring-leaf-bright/10 lg:flex">
-              <span className="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-xl font-bold text-white ring-2 ring-white/60 shadow dark:ring-white/10">
-                {coFounders[0].photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={coFounders[0].photo} alt={coFounders[0].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
-                ) : initials(coFounders[0].name)}
-              </span>
-              <div>
-                <p className="font-bold text-forest dark:text-ink">{coFounders[0].name}</p>
-                <p className="text-sm font-semibold text-leaf-deep dark:text-leaf-bright">{coFounders[0].role}</p>
-                <p className="mt-1.5 text-sm leading-relaxed text-forest/70 dark:text-ink/70">{coFounders[0].bio}</p>
+            <div className="absolute top-[18%] right-[8%] hidden lg:block" style={{ rotate: "4deg" }}>
+              <div className="rounded-2xl bg-white p-2.5 shadow-[0_8px_28px_rgba(0,0,0,0.14)] ring-1 ring-black/5">
+                <span className="flex h-48 w-40 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-leaf to-grass text-2xl font-bold text-white">
+                  {coFounders[0].photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={coFounders[0].photo} alt={coFounders[0].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
+                  ) : initials(coFounders[0].name)}
+                </span>
+                <div className="pt-2 pb-0.5 text-center">
+                  <p className="font-display text-sm font-bold text-forest">{coFounders[0].name}</p>
+                  <p className="text-[11px] text-forest/60">{coFounders[0].role}</p>
+                </div>
               </div>
             </div>
           )}
 
           {/* Đồng sáng lập 2 */}
           {coFounders[1] && (
-            <div className="absolute bottom-[12%] right-[3%] hidden w-[280px] items-start gap-4 rounded-3xl bg-white/85 p-5 shadow-soft ring-1 ring-leaf/10 backdrop-blur-sm dark:bg-white/[0.06] dark:ring-leaf-bright/10 lg:flex">
-              <span className="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-xl font-bold text-white ring-2 ring-white/60 shadow dark:ring-white/10">
-                {coFounders[1].photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={coFounders[1].photo} alt={coFounders[1].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
-                ) : initials(coFounders[1].name)}
-              </span>
-              <div>
-                <p className="font-bold text-forest dark:text-ink">{coFounders[1].name}</p>
-                <p className="text-sm font-semibold text-leaf-deep dark:text-leaf-bright">{coFounders[1].role}</p>
-                <p className="mt-1.5 text-sm leading-relaxed text-forest/70 dark:text-ink/70">{coFounders[1].bio}</p>
+            <div className="absolute bottom-[10%] right-[10%] hidden lg:block" style={{ rotate: "-2deg" }}>
+              <div className="rounded-2xl bg-white p-2.5 shadow-[0_8px_28px_rgba(0,0,0,0.14)] ring-1 ring-black/5">
+                <span className="flex h-48 w-40 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-leaf to-grass text-2xl font-bold text-white">
+                  {coFounders[1].photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={coFounders[1].photo} alt={coFounders[1].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
+                  ) : initials(coFounders[1].name)}
+                </span>
+                <div className="pt-2 pb-0.5 text-center">
+                  <p className="font-display text-sm font-bold text-forest">{coFounders[1].name}</p>
+                  <p className="text-[11px] text-forest/60">{coFounders[1].role}</p>
+                </div>
               </div>
             </div>
           )}
