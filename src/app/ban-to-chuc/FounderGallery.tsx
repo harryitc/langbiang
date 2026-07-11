@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import LightGallery from "lightgallery/react";
 import lgZoom from "lightgallery/plugins/zoom";
 import lgFullscreen from "lightgallery/plugins/fullscreen";
@@ -65,15 +66,14 @@ export default function FounderGallery() {
                 <path d="M22 7 C22.5 10.5 24.5 12.5 27.5 14.5" stroke="#fff" strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
               </svg>
             </div>
-            <span
-              className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
+            <div
+              className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
               style={{ height: "clamp(240px, 22vw, 420px)", fontSize: "clamp(1.2rem, 2vw, 2rem)" }}
             >
               {lead.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={lead.photo} alt={lead.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
-              ) : initials(lead.name)}
-            </span>
+                <Image src={lead.photo} alt={lead.name} fill sizes="(max-width:1280px) 18vw, 320px" className="object-cover" />
+              ) : <span className="flex h-full w-full items-center justify-center">{initials(lead.name)}</span>}
+            </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(8px, 0.6vw, 14px)" }}>
               <span className="mb-0.5 inline-flex items-center rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">Trưởng ban</span>
               <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(1.1rem, 1.4vw, 1.5rem)" }}>{lead.name}</p>
@@ -94,15 +94,14 @@ export default function FounderGallery() {
             className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
             style={{ padding: "clamp(8px, 0.6vw, 14px)" }}
           >
-            <span
-              className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
+            <div
+              className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[0].photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={coFounders[0].photo} alt={coFounders[0].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
-              ) : initials(coFounders[0].name)}
-            </span>
+                <Image src={coFounders[0].photo} alt={coFounders[0].name} fill sizes="(max-width:1280px) 13vw, 240px" className="object-cover" />
+              ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[0].name)}</span>}
+            </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
               <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.25rem)" }}>{coFounders[0].name}</p>
               <p className="text-forest/60" style={{ fontSize: "clamp(0.75rem, 0.85vw, 0.9rem)" }}>{coFounders[0].role}</p>
@@ -122,15 +121,14 @@ export default function FounderGallery() {
             className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
             style={{ padding: "clamp(8px, 0.6vw, 14px)" }}
           >
-            <span
-              className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
+            <div
+              className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass font-bold text-white"
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[1].photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={coFounders[1].photo} alt={coFounders[1].name} loading="eager" decoding="async" className="h-full w-full object-cover" />
-              ) : initials(coFounders[1].name)}
-            </span>
+                <Image src={coFounders[1].photo} alt={coFounders[1].name} fill sizes="(max-width:1280px) 13vw, 240px" className="object-cover" />
+              ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[1].name)}</span>}
+            </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
               <p className="font-display font-bold text-forest" style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.25rem)" }}>{coFounders[1].name}</p>
               <p className="text-forest/60" style={{ fontSize: "clamp(0.75rem, 0.85vw, 0.9rem)" }}>{coFounders[1].role}</p>

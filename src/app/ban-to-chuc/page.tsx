@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -84,12 +85,11 @@ export default function BanToChucPage() {
             {lead && (
               <div className="rounded-3xl bg-gradient-to-br from-leaf/12 to-sun/12 p-5 ring-1 ring-leaf/25 dark:from-leaf-bright/10 dark:to-sun/5 dark:ring-leaf-bright/20">
                 <div className="flex items-start gap-4">
-                  <span className="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-xl font-bold text-white ring-2 ring-white/60 dark:ring-white/10">
+                  <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass ring-2 ring-white/60 dark:ring-white/10">
                     {lead.photo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={lead.photo} alt={lead.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
-                    ) : initials(lead.name)}
-                  </span>
+                      <Image src={lead.photo} alt={lead.name} fill sizes="96px" className="object-cover" />
+                    ) : <span className="flex h-full w-full items-center justify-center text-xl font-bold text-white">{initials(lead.name)}</span>}
+                  </div>
                   <div>
                     <span className="mb-1 inline-flex items-center rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
                       Trưởng ban
@@ -103,12 +103,11 @@ export default function BanToChucPage() {
             )}
             {coFounders.map((m) => (
               <div key={m.name} className="flex items-start gap-4 rounded-3xl bg-white/80 p-5 ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10">
-                <span className="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass text-lg font-bold text-white ring-2 ring-white/60 dark:ring-white/10">
+                <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass ring-2 ring-white/60 dark:ring-white/10">
                   {m.photo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={m.photo} alt={m.name} loading="eager" decoding="async" className="h-full w-full object-cover" />
-                  ) : initials(m.name)}
-                </span>
+                    <Image src={m.photo} alt={m.name} fill sizes="80px" className="object-cover" />
+                  ) : <span className="flex h-full w-full items-center justify-center text-lg font-bold text-white">{initials(m.name)}</span>}
+                </div>
                 <div>
                   <p className="font-bold text-forest dark:text-ink">{m.name}</p>
                   <p className="text-sm font-semibold text-leaf-deep dark:text-leaf-bright">{m.role}</p>
