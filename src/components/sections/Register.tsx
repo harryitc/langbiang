@@ -36,7 +36,7 @@ export default function Register() {
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             {[
-              ["🙋", "Tình nguyện viên", "Trực tiếp tham gia hành trình 19–20/9"],
+              ["🙋", "Tình nguyện viên", "Trực tiếp tham gia hành trình 26–27/9"],
               ["🎁", "Nhà hảo tâm", "Đóng góp quà, nhu yếu phẩm & kinh phí"],
             ].map(([icon, t, d]) => (
               <div key={t} className="glass rounded-2xl p-4 text-forest">

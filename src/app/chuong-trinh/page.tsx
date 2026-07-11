@@ -7,7 +7,7 @@ import Timeline from "@/components/sections/Timeline";
 export const metadata: Metadata = {
   title: "Chương trình 2026",
   description:
-    "Chương trình Trăng Sáng Langbiang 2026: các hoạt động chính và lịch trình chi tiết hai ngày một đêm (19–20/9) tại Langbiang, Đà Lạt.",
+    "Chương trình Trăng Sáng Langbiang 2026: các hoạt động chính và lịch trình chi tiết hai ngày một đêm (26–27/9) tại Langbiang, Đà Lạt.",
   alternates: { canonical: "/chuong-trinh" },
 };
 
@@ -21,7 +21,7 @@ export default function ChuongTrinhPage() {
     <SubPageShell
       eyebrow="Chương trình 2026"
       title="Hai ngày một đêm yêu thương"
-      subtitle="Toàn bộ hoạt động và lịch trình mùa Trăng Sáng Langbiang 2026 — ngày 19–20 tháng 9 tại phường Langbiang, Đà Lạt."
+      subtitle="Toàn bộ hoạt động và lịch trình mùa Trăng Sáng Langbiang 2026 — ngày 26–27 tháng 9 tại phường Langbiang, Đà Lạt."
       nav={nav}
     >
       <Activities />

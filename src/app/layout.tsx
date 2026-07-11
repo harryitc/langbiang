@@ -78,8 +78,8 @@ const jsonLd = {
   "@type": "Event",
   name: `${site.name} 2026`,
   description: site.description,
-  startDate: "2026-09-19",
-  endDate: "2026-09-20",
+  startDate: "2026-09-26",
+  endDate: "2026-09-27",
   eventStatus: "https://schema.org/EventScheduled",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
   location: {

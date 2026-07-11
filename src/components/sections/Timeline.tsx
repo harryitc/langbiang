@@ -16,7 +16,7 @@ export default function Timeline() {
             <span className="text-gradient-green">hai ngày một đêm</span>
           </h2>
           <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-            19 – 20 tháng 9 năm 2026 tại phường Langbiang, Đà Lạt.
+            26 – 27 tháng 9 năm 2026 tại phường Langbiang, Đà Lạt.
           </p>
         </Reveal>
 

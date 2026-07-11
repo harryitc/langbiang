@@ -13,12 +13,12 @@ export const site = {
   shortName: "Trăng Sáng Langbiang",
   tagline: "Dự án tình nguyện",
   subtitle: "Tại phường Langbiang – Đà Lạt, tỉnh Lâm Đồng",
-  dateLabel: "Ngày 19 – 20 tháng 9 năm 2026",
-  dateISO: "2026-09-19",
+  dateLabel: "Ngày 26 – 27 tháng 9 năm 2026",
+  dateISO: "2026-09-26",
   location: "Phường Langbiang, Đà Lạt, Lâm Đồng",
   url: siteUrl,
   description:
-    "Trăng Sáng Langbiang là dự án tình nguyện mang Trung thu ấm áp, sân chơi và những phần quà yêu thương đến các em nhỏ vùng cao Langbiang – Đà Lạt, Lâm Đồng. Mùa 2026 diễn ra ngày 19–20/9. Đăng ký đồng hành cùng chúng mình!",
+    "Trăng Sáng Langbiang là dự án tình nguyện mang Trung thu ấm áp, sân chơi và những phần quà yêu thương đến các em nhỏ vùng cao Langbiang – Đà Lạt, Lâm Đồng. Mùa 2026 diễn ra ngày 26–27/9. Đăng ký đồng hành cùng chúng mình!",
   facebook: "https://www.facebook.com/profile.php?id=61580211752903",
   email: "trangsanglangbiang@gmail.com",
   // TODO: thay bằng link gian hàng Shopee gây quỹ thật
@@ -77,7 +77,7 @@ export const activities = [
 export const timeline = [
   {
     day: "Ngày 1",
-    date: "19/09/2026",
+    date: "26/09/2026",
     items: [
       { time: "05:30", title: "Tập trung & khởi hành", desc: "Đoàn xuất phát từ TP.HCM hướng về cao nguyên Langbiang." },
       { time: "13:00", title: "Đến Langbiang", desc: "Nhận chỗ nghỉ, chuẩn bị hậu cần và trang trí sân khấu." },
@@ -87,7 +87,7 @@ export const timeline = [
   },
   {
     day: "Ngày 2",
-    date: "20/09/2026",
+    date: "27/09/2026",
     items: [
       { time: "07:00", title: "Sân chơi buổi sáng", desc: "Trò chơi dân gian, làm lồng đèn và các hoạt động trải nghiệm." },
       { time: "09:30", title: "Trao quà & học bổng", desc: "Gửi tặng quà, nhu yếu phẩm và học bổng đến các em." },
@@ -115,7 +115,7 @@ export const gallery = [
 export const faqs = [
   {
     q: "Ai có thể tham gia dự án?",
-    a: "Tất cả các bạn từ 18 tuổi, có tinh thần thiện nguyện, sức khỏe tốt và sắp xếp được thời gian 19–20/9/2026 đều có thể đăng ký làm tình nguyện viên.",
+    a: "Tất cả các bạn từ 18 tuổi, có tinh thần thiện nguyện, sức khỏe tốt và sắp xếp được thời gian 26–27/9/2026 đều có thể đăng ký làm tình nguyện viên.",
   },
   {
     q: "Chi phí tham gia như thế nào?",
