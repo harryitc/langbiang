@@ -242,28 +242,76 @@ export const sponsorTiers: { tier: string; sponsors: Sponsor[] }[] = [
    ------------------------------------------------------------------ */
 export const news = [
   {
-    img: "/gallery/g2.jpg",
-    date: "22/09/2025",
+    img: "/tintuc/n6.png",
     tag: "Tổng kết",
     title: "Trọn vẹn mùa trăng đầu tiên tại Langbiang 💚",
     excerpt:
       "Hai ngày một đêm với hơn 500 phần quà, 80 tình nguyện viên và vô vàn nụ cười. Cảm ơn tất cả những tấm lòng đã cùng chúng mình thắp sáng Trung thu vùng cao!",
+    link: "https://www.facebook.com/share/p/1TddG8KRT1/",
   },
   {
-    img: "/gallery/g5.jpg",
-    date: "15/09/2025",
-    tag: "Hành trình",
-    title: "Đêm hội Trăng rằm rực rỡ dưới chân núi",
+    img: "/tintuc/n8.png",
+    tag: "Hoạt động",
+    title: "Hội Trăng rằm - Tuổi thơ cổ tích tại Langbiang 🏮",
     excerpt:
-      "Rước đèn, phá cỗ, múa lân... các em nhỏ Langbiang đã có một đêm Trung thu thật đáng nhớ. Cùng nhìn lại những khoảnh khắc lung linh nhất nhé!",
+      "Không gian LangBiang hôm ấy bỗng rộn ràng và đầy ắp tiếng cười. Các em nhỏ được vui chơi hết mình trong những trò chơi dân gian, được sống lại trong thế giới cổ tích qua kịch Tấm Cám, Sự tích chú Cuội cung trăng...",
+    link: "https://www.facebook.com/share/p/14jbS3XKESE/",
   },
   {
-    img: "/gallery/g8.jpg",
-    date: "01/09/2025",
+    img: "/tintuc/n1.jpg",
+    tag: "Hoạt động",
+    title: "Nấu ăn cho em - Hơi ấm lan toả giữa núi rừng Langbiang 🍜",
+    excerpt:
+      "Trong cái se lạnh và cơn mưa lất phất của núi rừng LangBiang, chương trình “Nấu ăn cho em” đã mang đến một khoảnh khắc thật ấm lòng. 250 suất phở bò nóng hổi đã được gửi trao tận tay các em học sinh và phụ huynh địa phương.",
+    link: "https://www.facebook.com/share/p/1G8BCjszGM/",
+  },
+  {
+    img: "/tintuc/n2.png",
+    tag: "Tài trợ",
+    title: "Trân trọng cảm ơn Trung tâm Anh ngữ WESET English Center – Đơn vị tài trợ dự án \"Trăng Sáng Langbiang\"",
+    excerpt:
+      "Ban Tổ chức Dự án xin gửi lời cảm ơn chân thành đến Trung tâm Anh ngữ WESET English Center đã đồng hành và hỗ trợ cùng chương trình. Sự đóng góp quý báu từ WESET góp phần tạo nên những giá trị thiết thực cho các em nhỏ tại Langbiang.",
+    link: "https://www.facebook.com/share/p/1LsaVWTybt/",
+  },
+  {
+    img: "/tintuc/n3.png",
+    tag: "Tài trợ",
+    title: "Trân trọng cảm ơn Sun Taxi – Đơn vị tài trợ dự án \"Trăng Sáng Langbiang\"",
+    excerpt:
+      "Ban Tổ Chức Dự án xin trân trọng gửi lời cảm ơn đến Sun Taxi đã đồng hành và tài trợ cùng chương trình. Sự đóng góp của Sun Taxi không chỉ hỗ trợ thiết thực cho các hoạt động của Dự án, mà còn tiếp thêm động lực để sẻ chia yêu thương.",
+    link: "https://www.facebook.com/share/p/1EbgGr59es/",
+  },
+  {
+    img: "/tintuc/n4.png",
+    tag: "Tài trợ",
+    title: "Trân trọng cảm ơn Bệnh viện Đa khoa Tâm Phúc – Đơn vị đồng hành dự án \"Trăng Sáng Langbiang\"",
+    excerpt:
+      "Ban Tổ Chức Dự án xin gửi lời cảm ơn sâu sắc đến Bệnh viện Đa khoa Tâm Phúc đã đồng hành và hỗ trợ cùng chương trình. Sự quan tâm, sẻ chia từ Bệnh viện mang đến nguồn động viên to lớn cho các em nhỏ tại Langbiang.",
+    link: "https://www.facebook.com/share/p/1FzJcDgigQ/",
+  },
+  {
+    img: "/tintuc/n5.png",
+    tag: "Tài trợ",
+    title: "Trân trọng cảm ơn Phở Huỳnh Trâm - Đơn vị tài trợ dự án \"Trăng Sáng Langbiang\"",
+    excerpt:
+      "Ban Tổ Chức Dự án xin gửi lời tri ân sâu sắc đến Phở Huỳnh Trâm đã nhận lời đồng hành, tài trợ 250 suất phở trị giá 15.000.000 đồng cho nội dung “Nấu ăn cho em”. Sự chung tay của quý đơn vị góp phần mang đến những bữa ăn ấm áp, trọn vẹn yêu thương.",
+    link: "https://www.facebook.com/share/p/1E6Lkw5MgS/",
+  },
+  {
+    img: "/tintuc/n9.png",
+    tag: "Tuyển thành viên",
+    title: "[THÔNG BÁO] Tuyển thành viên dự án \"Trăng Sáng Langbiang\"",
+    excerpt:
+      "Mỗi mùa trăng rằm tháng Tám về, lòng ta lại rộn vang tiếng trống múa lân, ánh sáng lung linh của những chiếc lồng đèn và niềm háo hức đón Tết Trung thu. Nhưng ở vùng núi cao phường Langbiang (Lâm Đồng), vẫn còn biết bao em nhỏ chưa một lần trọn vẹn niềm vui ấy…",
+    link: "https://www.facebook.com/share/p/1cfAdnV86E/",
+  },
+  {
+    img: "/tintuc/n7.png",
     tag: "Kêu gọi",
     title: "Chung tay góp một mùa Trung thu cho em",
     excerpt:
       "Chỉ còn ít ngày nữa là đến hành trình. Mỗi chiếc lồng đèn, mỗi quyển vở đều là món quà ý nghĩa. Cùng đồng hành với Trăng Sáng Langbiang bạn nhé!",
+    link: "https://www.facebook.com/share/p/1Lk31g2wMD/",
   },
 ];
 
