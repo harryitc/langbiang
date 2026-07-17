@@ -3,9 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { gallery } from "@/lib/site";
-
-const slides = gallery.slice(0, 6);
+import type { Photo } from "@/lib/content/schema";
 
 /**
  * Slideshow đóng khung như một chiếc TV: thân máy xanh rừng, ăng-ten, loa lưới,
@@ -13,7 +11,10 @@ const slides = gallery.slice(0, 6);
  * Có lớp phản chiếu kính + scanline mờ cho ra chất TV.
  * Tôn trọng prefers-reduced-motion (tắt tự chạy).
  */
-export default function BannerSlider() {
+export default function BannerSlider({ photos }: { photos: Photo[] }) {
+  // Chỉ lấy 6 ảnh đầu của thư viện trang chính cho "màn hình TV".
+  const slides = photos.slice(0, 6);
+
   const autoplay = useRef(
     Autoplay({ delay: 4500, stopOnInteraction: false, stopOnMouseEnter: true })
   );
@@ -40,6 +41,9 @@ export default function BannerSlider() {
       autoplay.current.stop();
     }
   }, [emblaApi]);
+
+  // Thư viện rỗng -> ẩn cả khối.
+  if (slides.length === 0) return null;
 
   return (
     <section
@@ -71,7 +75,7 @@ export default function BannerSlider() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={s.src}
-                          alt={s.caption}
+                          alt={s.caption ?? ""}
                           loading={i === 0 ? "eager" : "lazy"}
                           decoding="async"
                           className="h-full w-full select-none object-cover"

@@ -3,25 +3,38 @@ import Link from "next/link";
 import SubPageShell from "@/components/SubPageShell";
 import Activities from "@/components/sections/Activities";
 import Timeline from "@/components/sections/Timeline";
+import { getContent } from "@/lib/content/store";
+import { fillYear } from "@/lib/content/year";
 
-export const metadata: Metadata = {
-  title: "Chương trình 2026",
-  description:
-    "Chương trình Trăng Sáng Langbiang 2026: các hoạt động chính và lịch trình chi tiết hai ngày một đêm (26–27/9) tại Langbiang, Đà Lạt.",
-  alternates: { canonical: "/chuong-trinh" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { main, currentYear } = await getContent();
+  return {
+    title: `Chương trình ${currentYear}`,
+    description: `Chương trình Trăng Sáng Langbiang ${currentYear}: các hoạt động chính và lịch trình chi tiết hai ngày một đêm — ${fillYear(
+      main.event.dateLabel,
+      currentYear
+    )} tại ${main.event.location}.`,
+    alternates: { canonical: "/chuong-trinh" },
+  };
+}
 
 const nav = [
   { href: "#activities", label: "Hoạt động" },
   { href: "#timeline", label: "Lịch trình" },
 ];
 
-export default function ChuongTrinhPage() {
+export default async function ChuongTrinhPage() {
+  const { main, currentYear } = await getContent();
+  const { event } = main;
+
   return (
     <SubPageShell
-      eyebrow="Chương trình 2026"
+      eyebrow={`Chương trình ${currentYear}`}
       title="Hai ngày một đêm yêu thương"
-      subtitle="Toàn bộ hoạt động và lịch trình mùa Trăng Sáng Langbiang 2026 — ngày 26–27 tháng 9 tại phường Langbiang, Đà Lạt."
+      subtitle={`Toàn bộ hoạt động và lịch trình mùa Trăng Sáng Langbiang ${currentYear} — ${fillYear(
+        event.dateLabel,
+        currentYear
+      )} tại ${event.location}.`}
       nav={nav}
     >
       <Activities />

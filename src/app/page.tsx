@@ -12,23 +12,35 @@ import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
+import { getContent } from "@/lib/content/store";
+import { fillYear } from "@/lib/content/year";
 
-export default function Home() {
+export default async function Home() {
+  const { main, currentYear, pastYears, news } = await getContent();
+  const { site, event } = main;
+  // Danh mục năm đã qua cho dropdown "Năm" ở header: mới → cũ (FR4).
+  const years = [...pastYears].sort((a, b) => b.year - a.year).map((y) => y.year);
+
   return (
     <>
       <SmoothScroll />
       <Cursor />
       <ThemeToggle />
       <BackToTop />
-      <Header />
+      <Header siteName={site.name} pastYears={years} />
       <main>
-        <Hero />
+        <Hero
+          dateLabel={fillYear(event.dateLabel, currentYear)}
+          dateISO={event.dateISO}
+          tagline={site.tagline}
+          subtitle={site.subtitle}
+        />
         <About />
-        <BannerSlider />
-        <News carousel />
+        <BannerSlider photos={main.gallery} />
+        <News posts={news} currentYear={currentYear} carousel />
         <DonateBand />
-        <Register />
-        <Faq />
+        <Register facebook={site.facebook} />
+        <Faq faqs={main.faqs} />
         <ExploreGrid />
       </main>
       <Footer />

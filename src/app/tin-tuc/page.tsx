@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SubPageShell from "@/components/SubPageShell";
 import News from "@/components/sections/News";
+import { getContent } from "@/lib/content/store";
 
 export const metadata: Metadata = {
   title: "Tin tức & Bản tin",
@@ -9,14 +10,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tin-tuc" },
 };
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const { news, currentYear } = await getContent();
+
   return (
     <SubPageShell
       eyebrow="Tin tức & Bản tin"
       title="Câu chuyện từ hành trình"
-      subtitle="Những dòng nhật ký, hình ảnh và tin tức mới nhất về Trăng Sáng Langbiang. Đăng ký bản tin để không bỏ lỡ mùa 2026!"
+      subtitle={`Những dòng nhật ký, hình ảnh và tin tức mới nhất về Trăng Sáng Langbiang. Đăng ký bản tin để không bỏ lỡ mùa ${currentYear}!`}
     >
-      <News showHeading={false} />
+      <News posts={news} currentYear={currentYear} showHeading={false} />
     </SubPageShell>
   );
 }

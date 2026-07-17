@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Reveal from "@/components/Reveal";
-import { sponsorTiers, type Sponsor } from "@/lib/site";
+import type { Sponsor, SponsorTier } from "@/lib/content/schema";
 
 // tạo initials từ tên đơn vị cho logo placeholder
 function initials(name: string) {
@@ -45,7 +45,14 @@ function SponsorLogo({ s, onClick }: { s: Sponsor; onClick: () => void }) {
   );
 }
 
-export default function Sponsors() {
+export default function Sponsors({
+  tiers,
+  currentYear,
+}: {
+  tiers: SponsorTier[];
+  /** Số năm hiện tại — dùng cho lời kêu gọi tài trợ (Phụ lục A, nhóm A1). */
+  currentYear: number;
+}) {
   const [active, setActive] = useState<Sponsor | null>(null);
 
   useEffect(() => {
@@ -58,6 +65,9 @@ export default function Sponsors() {
       document.body.style.overflow = "";
     };
   }, [active]);
+
+  // Phần rỗng thì ẩn (FR4).
+  if (tiers.length === 0) return null;
 
   return (
     <section className="relative py-16 sm:py-24">
@@ -78,7 +88,7 @@ export default function Sponsors() {
         </Reveal>
 
         <div className="mt-12 space-y-10 sm:mt-14 sm:space-y-12">
-          {sponsorTiers.map((tier) => (
+          {tiers.map((tier) => (
             <Reveal key={tier.tier}>
               <div className="mb-5 flex items-center gap-4">
                 <h3 className="text-sm font-bold uppercase tracking-widest text-leaf-deep dark:text-leaf-bright">
@@ -98,7 +108,7 @@ export default function Sponsors() {
         <Reveal className="mt-14 text-center">
           <div className="inline-flex flex-col items-center gap-3 rounded-3xl bg-leaf/5 px-6 py-7 ring-1 ring-leaf/15 dark:bg-white/[0.03] dark:ring-leaf-bright/10 sm:px-8">
             <p className="text-lg font-semibold text-forest dark:text-ink">
-              Trở thành đơn vị đồng hành mùa 2026?
+              Trở thành đơn vị đồng hành mùa {currentYear}?
             </p>
             <p className="max-w-md text-forest/70 dark:text-ink/70">
               Đồng hành cùng Trăng Sáng Langbiang để lan toả yêu thương đến nhiều

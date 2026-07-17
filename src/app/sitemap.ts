@@ -1,9 +1,12 @@
 import type { MetadataRoute } from "next";
-import { news, site } from "@/lib/site";
+import { site } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
 const lastModified = new Date("2026-07-06");
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { news, pastYears } = await getContent();
+
   const routes: { path: string; changeFrequency: "weekly" | "monthly"; priority: number }[] = [
     { path: "", changeFrequency: "weekly", priority: 1 },
     { path: "/chuong-trinh", changeFrequency: "monthly", priority: 0.8 },
@@ -12,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/ban-to-chuc", changeFrequency: "monthly", priority: 0.7 },
     { path: "/cam-nhan", changeFrequency: "monthly", priority: 0.6 },
     { path: "/tin-tuc", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/2025", changeFrequency: "monthly", priority: 0.7 },
   ];
 
   const staticRoutes = routes.map((r) => ({
@@ -22,6 +24,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: r.priority,
   }));
 
+  // Trang "Nhìn lại" của từng năm đã qua (FR4), mới → cũ.
+  const yearRoutes = [...pastYears]
+    .sort((a, b) => b.year - a.year)
+    .map((y) => ({
+      url: `${site.url}/${y.year}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }));
+
   const newsRoutes = news.map((post) => ({
     url: `${site.url}/tin-tuc/${post.id}`,
     lastModified,
@@ -29,5 +41,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...newsRoutes];
+  return [...staticRoutes, ...yearRoutes, ...newsRoutes];
 }

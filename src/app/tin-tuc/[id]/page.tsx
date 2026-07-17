@@ -9,12 +9,22 @@ import SubPageHeader from "@/components/SubPageHeader";
 import Footer from "@/components/sections/Footer";
 import NewsActions from "@/components/NewsActions";
 import Reveal from "@/components/Reveal";
-import { getNewsById, news, site } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
+import { sanitizeHtml } from "@/lib/content/html";
+import { absoluteUrl } from "@/lib/content/url";
+import { site } from "@/lib/site";
 
 type Params = { id: string };
 
-export function generateStaticParams(): Params[] {
+export async function generateStaticParams(): Promise<Params[]> {
+  const { news } = await getContent();
   return news.map((post) => ({ id: post.id }));
+}
+
+/** Tìm bài viết theo slug trong content store. */
+async function getPost(id: string) {
+  const { news } = await getContent();
+  return news.find((post) => post.id === id);
 }
 
 export async function generateMetadata({
@@ -23,9 +33,11 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const post = getNewsById(id);
+  const post = await getPost(id);
   if (!post) return { title: "Không tìm thấy tin tức" };
 
+  // FR8-R1: SEO của bài tin tự sinh theo tiêu đề/tóm tắt/ảnh của bài.
+  const { main } = await getContent();
   const url = `${site.url}/tin-tuc/${post.id}`;
   return {
     title: post.title,
@@ -35,7 +47,7 @@ export async function generateMetadata({
       title: post.title,
       description: post.excerpt,
       url,
-      siteName: site.name,
+      siteName: main.site.name,
       type: "article",
       locale: "vi_VN",
       images: [{ url: post.img, alt: post.title }],
@@ -55,10 +67,13 @@ export default async function NewsDetailPage({
   params: Promise<Params>;
 }) {
   const { id } = await params;
-  const post = getNewsById(id);
+  const content = await getContent();
+  const { news, currentYear } = content;
+  const post = news.find((p) => p.id === id);
   if (!post) notFound();
 
-  const paragraphs = post.body ?? [post.excerpt];
+  // Nội dung dài lưu dạng HTML (CKEditor); chưa có thì dùng tóm tắt.
+  const bodyHtml = sanitizeHtml(post.bodyHtml ?? `<p>${post.excerpt}</p>`);
   const related = news.filter((p) => p.id !== post.id).slice(0, 3);
 
   // JSON-LD cho bài viết
@@ -67,12 +82,13 @@ export default async function NewsDetailPage({
     "@type": "NewsArticle",
     headline: post.title,
     description: post.excerpt,
-    image: `${site.url}${post.img}`,
+    image: absoluteUrl(post.img),
     articleSection: post.tag,
     mainEntityOfPage: `${site.url}/tin-tuc/${post.id}`,
+    datePublished: post.date,
     publisher: {
       "@type": "Organization",
-      name: site.name,
+      name: content.main.site.name,
     },
   };
 
@@ -82,7 +98,10 @@ export default async function NewsDetailPage({
       <Cursor />
       <ThemeToggle />
       <BackToTop />
-      <SubPageHeader nav={[{ href: "/tin-tuc", label: "Tất cả tin tức" }]} />
+      <SubPageHeader
+        nav={[{ href: "/tin-tuc", label: "Tất cả tin tức" }]}
+        currentYear={currentYear}
+      />
 
       <script
         type="application/ld+json"
@@ -122,12 +141,11 @@ export default async function NewsDetailPage({
             />
           </div>
 
-          {/* Nội dung */}
-          <div className="mt-10 space-y-5 text-lg leading-relaxed text-forest/85 dark:text-ink/80">
-            {paragraphs.map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
-          </div>
+          {/* Nội dung — HTML rich text đã sanitize */}
+          <div
+            className="tsl-prose mt-10 text-lg leading-relaxed text-forest/85 dark:text-ink/80"
+            dangerouslySetInnerHTML={{ __html: bodyHtml }}
+          />
 
           {/* Nút thích / sao chép link */}
           <div className="mt-10 border-t border-leaf/10 pt-8 dark:border-leaf-bright/10">

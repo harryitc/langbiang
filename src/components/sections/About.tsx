@@ -1,8 +1,13 @@
 import Reveal from "@/components/Reveal";
 import Photo from "@/components/Photo";
 import { Daisy } from "@/components/Decor";
+import { getContent } from "@/lib/content/store";
 
-export default function About() {
+export default async function About() {
+  const { currentYear, pastYears } = await getContent();
+  // Mùa thứ mấy = số năm đã qua + 1 (mùa đang tới).
+  const seasonNo = pastYears.length + 1;
+
   return (
     <section className="relative py-24 sm:py-32">
       <span id="about" aria-hidden className="block" />
@@ -21,7 +26,7 @@ export default function About() {
             />
             <div className="glass glass-adaptive absolute -bottom-6 -right-4 max-w-[220px] rounded-2xl p-4 shadow-soft sm:-right-8">
               <p className="font-display text-3xl font-bold text-leaf-deep dark:text-leaf-bright">
-                Mùa 2 · 2026
+                Mùa {seasonNo} · {currentYear}
               </p>
               <p className="mt-1 text-sm text-forest/75 dark:text-ink/75">
                 Trở lại Langbiang với thật nhiều yêu thương.

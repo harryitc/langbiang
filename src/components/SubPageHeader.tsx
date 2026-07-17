@@ -9,7 +9,14 @@ type NavItem = { href: string; label: string };
  * Header trang phụ: trong suốt lúc đầu (nằm trên nền hero), khi cuộn xuống
  * >30px mới chuyển sang nền kính mờ + đổ bóng — giống hành vi Header trang chủ.
  */
-export default function SubPageHeader({ nav = [] }: { nav?: NavItem[] }) {
+export default function SubPageHeader({
+  nav = [],
+  currentYear,
+}: {
+  nav?: NavItem[];
+  /** Số năm hiện tại — nút "Đăng ký {năm}" (Phụ lục A, nhóm A1). */
+  currentYear: number;
+}) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -54,7 +61,7 @@ export default function SubPageHeader({ nav = [] }: { nav?: NavItem[] }) {
           href="/#register"
           className="rounded-full bg-gradient-to-r from-leaf to-grass px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:brightness-105"
         >
-          Đăng ký 2026
+          Đăng ký {currentYear}
         </Link>
       </div>
     </header>

@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const TARGET = new Date("2026-09-26T05:30:00+07:00").getTime();
+/**
+ * Mốc đếm ngược suy từ ngày bắt đầu sự kiện (Phụ lục A, nhóm A3).
+ * dateISO dạng "2026-09-26" -> mặc định 05:30 giờ Việt Nam (giờ tập trung).
+ */
+function targetTime(dateISO: string): number {
+  const iso = dateISO.includes("T") ? dateISO : `${dateISO}T05:30:00+07:00`;
+  const ms = new Date(iso).getTime();
+  return Number.isNaN(ms) ? 0 : ms;
+}
 
-function diff() {
-  const d = Math.max(0, TARGET - Date.now());
+function diff(target: number) {
+  const d = Math.max(0, target - Date.now());
   return {
     days: Math.floor(d / 86400000),
     hours: Math.floor((d / 3600000) % 24),
@@ -14,14 +22,15 @@ function diff() {
   };
 }
 
-export default function Countdown() {
+export default function Countdown({ dateISO }: { dateISO: string }) {
+  const target = useMemo(() => targetTime(dateISO), [dateISO]);
   const [t, setT] = useState<ReturnType<typeof diff> | null>(null);
 
   useEffect(() => {
-    setT(diff());
-    const id = setInterval(() => setT(diff()), 1000);
+    setT(diff(target));
+    const id = setInterval(() => setT(diff(target)), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [target]);
 
   const cells = [
     { v: t?.days, l: "Ngày" },

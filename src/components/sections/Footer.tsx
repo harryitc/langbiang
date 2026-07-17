@@ -1,7 +1,25 @@
 import { GrassBorder } from "@/components/Decor";
-import { site } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
+import { fillYear } from "@/lib/content/year";
 
-export default function Footer() {
+export default async function Footer() {
+  const { main, currentYear, pastYears } = await getContent();
+  const meta = main.site;
+  const { event } = main;
+  const latestPastYear = [...pastYears].sort((a, b) => b.year - a.year)[0];
+
+  const links: [string, string][] = [
+    ["/#about", "Về dự án"],
+    ["/#activities", "Hoạt động"],
+    // Mục năm đã qua (FR4) — ẩn khi danh mục rỗng.
+    ...(latestPastYear
+      ? ([[`/${latestPastYear.year}`, `Mùa ${latestPastYear.year}`]] as [string, string][])
+      : []),
+    ["/tin-tuc", "Tin tức"],
+    ["/gay-quy", "Gây quỹ"],
+    ["/#register", "Đăng ký"],
+  ];
+
   return (
     <footer className="relative bg-forest text-white">
       <GrassBorder className="absolute -top-[70px] left-0 h-[72px] w-full" />
@@ -10,14 +28,14 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <p className="font-display text-3xl font-bold text-white">
-              Trăng sáng Langbiang
+              {meta.name}
             </p>
             <p className="mt-3 max-w-sm text-white/70">
               Dự án tình nguyện mang Trung thu ấm áp đến các em nhỏ vùng cao
               Langbiang – Đà Lạt, Lâm Đồng.
             </p>
             <a
-              href={site.facebook}
+              href={meta.facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold transition hover:bg-white/20"
@@ -34,14 +52,7 @@ export default function Footer() {
               Khám phá
             </h3>
             <ul className="mt-4 space-y-2.5 text-white/80">
-              {[
-                ["/#about", "Về dự án"],
-                ["/#activities", "Hoạt động"],
-                ["/2025", "Mùa 2025"],
-                ["/tin-tuc", "Tin tức"],
-                ["/gay-quy", "Gây quỹ"],
-                ["/#register", "Đăng ký"],
-              ].map(([h, l]) => (
+              {links.map(([h, l]) => (
                 <li key={h}>
                   <a href={h} className="transition hover:text-grass">
                     {l}
@@ -58,16 +69,16 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5 text-white/80">
               <li className="flex items-start gap-2">
                 <span>📍</span>
-                <span>{site.location}</span>
+                <span>{event.location}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span>📅</span>
-                <span>{site.dateLabel}</span>
+                <span>{fillYear(event.dateLabel, currentYear)}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span>✉️</span>
-                <a href={`mailto:${site.email}`} className="transition hover:text-grass">
-                  {site.email}
+                <a href={`mailto:${meta.email}`} className="transition hover:text-grass">
+                  {meta.email}
                 </a>
               </li>
             </ul>
@@ -76,7 +87,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60 sm:flex-row">
           <p>
-            © 2026 {site.name}. Được tạo bằng tất cả yêu thương 💚
+            © {currentYear} {meta.name}. Được tạo bằng tất cả yêu thương 💚
           </p>
           <p>Langbiang · Đà Lạt · Lâm Đồng</p>
         </div>

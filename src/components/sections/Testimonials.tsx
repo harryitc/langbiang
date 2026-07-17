@@ -1,5 +1,5 @@
 import Reveal from "@/components/Reveal";
-import { testimonials } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -8,7 +8,10 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
-export default function Testimonials({ showHeading = true }: { showHeading?: boolean }) {
+export default async function Testimonials({ showHeading = true }: { showHeading?: boolean }) {
+  const { main } = await getContent();
+  const testimonials = main.testimonials;
+
   return (
     <section id="cam-nhan" className="relative bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6">

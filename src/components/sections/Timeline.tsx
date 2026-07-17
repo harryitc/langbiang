@@ -1,7 +1,11 @@
 import Reveal from "@/components/Reveal";
-import { timeline } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
+import { fillYear } from "@/lib/content/year";
 
-export default function Timeline() {
+export default async function Timeline() {
+  const { main, currentYear } = await getContent();
+  const { timeline, event } = main;
+
   return (
     <section className="relative overflow-hidden bg-[#eef8ea] py-24 sm:py-32 dark:bg-night-2">
       {/* mốc neo đặt ngay đầu nội dung để anchor canh tiêu đề dưới header (bỏ padding thừa) */}
@@ -16,7 +20,7 @@ export default function Timeline() {
             <span className="text-gradient-green">hai ngày một đêm</span>
           </h2>
           <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-            26 – 27 tháng 9 năm 2026 tại phường Langbiang, Đà Lạt.
+            {fillYear(event.dateLabel, currentYear)} tại {event.location}.
           </p>
         </Reveal>
 

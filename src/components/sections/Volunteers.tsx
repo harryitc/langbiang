@@ -1,24 +1,38 @@
 import Reveal from "@/components/Reveal";
-import { volunteerTeams, volunteerCount } from "@/lib/site";
+import type { Team } from "@/lib/content/schema";
 
-export default function Volunteers() {
+export default function Volunteers({
+  teams,
+  count,
+  year,
+  id = "volunteers",
+}: {
+  teams: Team[];
+  /** Tổng số tình nguyện viên hiển thị ở tiêu đề. */
+  count: number;
+  /** Số năm của mùa đang xem (nhóm A4). */
+  year: number;
+  id?: string;
+}) {
+  if (teams.length === 0) return null;
+
   return (
     <section
-      id="volunteers"
+      id={id}
       className="relative overflow-hidden bg-[#eef8ea] py-24 sm:py-32 dark:bg-night-2"
     >
       <div className="mx-auto max-w-7xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
-            Đội ngũ 2025
+            Đại gia đình {year}
           </span>
           <h2 className="text-3xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
-            <span className="text-gradient-green">{volunteerCount}+</span> trái tim
+            <span className="text-gradient-green">{count}+</span> trái tim
             tình nguyện
           </h2>
           <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-            Những con người đã cùng nhau làm nên mùa Trăng Sáng Langbiang đầu tiên.
-            Xin gửi lời cảm ơn đến từng thành viên.
+            Những con người đã cùng nhau làm nên mùa Trăng Sáng Langbiang {year}. Xin
+            gửi lời cảm ơn đến từng thành viên.
           </p>
         </Reveal>
 
@@ -26,7 +40,7 @@ export default function Volunteers() {
           childrenStagger
           className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {volunteerTeams.map((team) => (
+          {teams.map((team) => (
             <div
               key={team.name}
               className="rounded-3xl bg-white/70 p-6 shadow-sm ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10"

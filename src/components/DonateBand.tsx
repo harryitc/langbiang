@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import { site } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
 /**
  * Gian hàng quyên góp — dải CTA nổi bật, "nháy nháy" thu hút (anh Vũ yêu cầu).
  * Responsive: 1 cột trên mobile, 2 cột từ md.
  */
-export default function DonateBand() {
+export default async function DonateBand() {
+  const { main } = await getContent();
   return (
     <section id="donate" className="relative py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
@@ -32,7 +33,7 @@ export default function DonateBand() {
 
               <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:min-w-[220px]">
                 <a
-                  href={site.shopee}
+                  href={main.site.shopee}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="animate-pulse-glow flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-bold text-[#ee4d2d] transition hover:scale-[1.03]"

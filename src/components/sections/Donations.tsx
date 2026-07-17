@@ -1,7 +1,10 @@
 import Reveal from "@/components/Reveal";
-import { donations } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
-export default function Donations({ showHeading = true }: { showHeading?: boolean }) {
+export default async function Donations({ showHeading = true }: { showHeading?: boolean }) {
+  const { main, currentYear } = await getContent();
+  const donations = main.donations;
+
   return (
     <section id="danh-sach" className="relative py-16 sm:py-24">
       <div className="mx-auto max-w-4xl px-5 sm:px-6">
@@ -45,7 +48,7 @@ export default function Donations({ showHeading = true }: { showHeading?: boolea
 
         <Reveal className="mt-8 text-center">
           <p className="text-sm text-forest/60 dark:text-ink/60">
-            Danh sách mang tính minh hoạ — sẽ cập nhật đầy đủ trong mùa 2026. 💚
+            Danh sách mang tính minh hoạ — sẽ cập nhật đầy đủ trong mùa {currentYear}. 💚
           </p>
         </Reveal>
       </div>
