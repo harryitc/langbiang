@@ -15,7 +15,10 @@ type NewsProps = {
 
 function NewsCard({ post }: { post: (typeof news)[number] }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white/70 shadow-sm ring-1 ring-leaf/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-soft dark:bg-white/[0.04] dark:ring-leaf-bright/10">
+    <Link
+      href={`/tin-tuc/${post.id}`}
+      className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white/70 shadow-sm ring-1 ring-leaf/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-leaf-deep dark:bg-white/[0.04] dark:ring-leaf-bright/10"
+    >
       <div className="relative aspect-[16/10] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -30,26 +33,20 @@ function NewsCard({ post }: { post: (typeof news)[number] }) {
         </span>
       </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        {/* <time className="text-xs font-semibold uppercase tracking-wide text-forest/50 dark:text-ink/50">
-          {post.date}
-        </time> */}
         <h3 className="mt-2 text-lg font-bold leading-snug text-forest dark:text-ink">
           {post.title}
         </h3>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-forest/75 dark:text-ink/70">
           {post.excerpt}
         </p>
-        <Link
-          href={`/tin-tuc/${post.id}`}
-          className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf-deep transition hover:gap-2.5 dark:text-leaf-bright"
-        >
+        <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf-deep transition group-hover:gap-2.5 dark:text-leaf-bright">
           Đọc tiếp
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
-        </Link>
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }
 
