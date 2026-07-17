@@ -237,7 +237,9 @@
 - FR7-R1: Chấp nhận định dạng ảnh phổ biến (jpg, png, webp…).
 - FR7-R2: Có xem thu nhỏ (preview ảnh) sau khi chọn.
 - FR7-R3: Cho phép xoá/đổi ảnh đã chọn.
-- FR7-R4: **Đã chốt** — hỗ trợ **cả hai**: tải ảnh lên (lưu trên Vercel Blob) và dán liên kết. Ảnh chèn trong CKEditor ([FR2-R8](#fr2--chỉnh-sửa-nội-dung-trang-chính)) dùng chung cơ chế tải lên này. Khi dịch vụ lưu trữ chưa bật, tạm thời chỉ hoạt động Cách B (dán liên kết).
+- FR7-R4: **Đã chốt & đã bật** — hỗ trợ **cả hai**: tải ảnh lên (Vercel Blob) và dán liên kết. Ảnh chèn trong CKEditor ([FR2-R8](#fr2--chỉnh-sửa-nội-dung-trang-chính)) dùng chung cơ chế này. Khi chưa cấu hình token, nút Tải lên báo lỗi rõ ràng và vẫn dùng được Cách B (dán liên kết).
+- FR7-R5: **Store Blob phải ở chế độ Public.** Store Private cho URL `*.private.blob…` và khách nhận **403** → ảnh không hiện. Chế độ này chốt lúc tạo store, không sửa được sau.
+- FR7-R6: Chỉ **admin đã đăng nhập** mới được cấp token tải lên (khách → 401). Giới hạn **20MB**/ảnh.
 
 **Thông báo:** "Tệp không phải ảnh hợp lệ." · "Tải ảnh thất bại — thử lại."
 

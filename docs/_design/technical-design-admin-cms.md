@@ -122,13 +122,20 @@ export async function publishDraft() {
 | `upsertPastYearAction / deletePastYearAction` | Quản lý danh mục năm đã qua |
 | `uploadImageAction(file)` | Tải ảnh lên Vercel Blob, trả URL |
 
-## 7. Hình ảnh — Vercel Blob
+## 7. Hình ảnh — Vercel Blob (client upload)
 
-- Cài `@vercel/blob`; cấu hình `BLOB_READ_WRITE_TOKEN`.
-- `uploadImageAction`: nhận file → `put()` lên Blob (thư mục theo loại: `news/`, `gallery/`, `sponsors/`…) → trả public URL.
-- `ImageField`: 2 chế độ — **Tải lên** (gọi action) hoặc **Dán URL**; có xem thu nhỏ, xoá/đổi.
-- CKEditor dùng chung `uploadImageAction` qua upload adapter.
-- Chưa bật token → `ImageField`/CKEditor ẩn nút tải lên, chỉ cho dán URL (FR7-R4).
+> ⚠️ **Store Blob PHẢI ở chế độ Public.** Store Private trả URL `*.private.blob.vercel-storage.com`
+> và khách vãng lai nhận **403** → ảnh không hiện trên site. Chế độ access chốt lúc tạo store.
+> (Đã vấp thực tế: store private đầu tiên phải bỏ, tạo lại store public.)
+
+- Cài `@vercel/blob`; cấu hình `BLOB_READ_WRITE_TOKEN` (store **public**).
+- **Đi đường client upload, KHÔNG dùng server action:** server action giới hạn body **1MB**, và serverless Vercel chặn cứng **4.5MB** — ảnh thật thường 2–10MB nên sẽ hỏng.
+  - Route `src/app/api/admin/blob-upload/route.ts` dùng `handleUpload` cấp client token; `onBeforeGenerateToken` kiểm `isAdmin()` (khách → 401), giới hạn 20MB + chỉ content-type ảnh.
+  - `src/lib/content/upload-client.ts` — `uploadImage(file, folder)` gọi `upload()` của `@vercel/blob/client`, trình duyệt đẩy thẳng lên Blob.
+- `ImageField`: 2 chế độ — **Tải lên** (qua `uploadImage`) hoặc **Dán URL**; có xem thu nhỏ, xoá/đổi.
+- CKEditor dùng chung `uploadImage` qua upload adapter.
+- Chưa cấu hình token → route trả **501** kèm thông báo; `ImageField`/CKEditor vẫn dùng được ở chế độ dán URL (FR7-R4).
+- `next.config.mjs` khai báo `images.remotePatterns` cho `*.public.blob.vercel-storage.com` — bắt buộc, vì `ban-to-chuc` dùng `next/image` cho ảnh ban tổ chức do admin tải lên.
 
 ## 8. Đồng bộ số năm (FR3 + Phụ lục A của FRD)
 
