@@ -1,5 +1,6 @@
 import Reveal from "@/components/Reveal";
-import { board, type Member } from "@/lib/site";
+import { type Member } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -67,7 +68,8 @@ function Connector() {
   );
 }
 
-export default function Founders() {
+export default async function Founders() {
+  const { board } = await getContent();
   const [lead, ...coFounders] = board.founders;
 
   return (

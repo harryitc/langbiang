@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
 import { site } from "@/lib/site";
-import { getPublishedContent } from "@/lib/content/store";
+import { getContent } from "@/lib/content/store";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -33,7 +33,7 @@ export const viewport: Viewport = {
 export async function generateMetadata(): Promise<Metadata> {
   // Tiêu đề/mô tả/keywords lấy từ content store (chỉnh được trong /admin),
   // fallback về giá trị mặc định trong site.ts.
-  const { site: meta } = await getPublishedContent();
+  const { site: meta } = await getContent();
   const heroTitle = `${meta.name} — ${meta.tagline} 2026`;
   return {
     metadataBase: new URL(site.url),

@@ -1,9 +1,10 @@
 import Reveal from "@/components/Reveal";
 import CountUp from "@/components/CountUp";
 import Photo from "@/components/Photo";
-import { stats } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
-export default function Journey() {
+export default async function Journey() {
+  const { stats } = await getContent();
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-leaf-deep to-forest py-24 text-white sm:py-32">
       <span id="journey" aria-hidden className="block" />

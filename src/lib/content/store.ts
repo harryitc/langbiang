@@ -1,25 +1,42 @@
 import "server-only";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
+import { draftMode } from "next/headers";
 import { redis } from "@/lib/redis";
+import { isAdmin } from "@/lib/admin-auth";
 import { defaultContent } from "./defaults";
 import { CONTENT_VERSION, type SiteContent } from "./schema";
 
 /** Tag để revalidate cache khi xuất bản. */
 export const CONTENT_TAG = "content";
 
-// Redis keys: bản đã xuất bản (public thấy) và bản nháp (chỉ admin xem preview).
 const PUBLISHED_KEY = "content:published";
 const DRAFT_KEY = "content:draft";
 
 /** Trộn dữ liệu lưu trữ với mặc định để luôn đủ field (an toàn khi thêm field mới). */
-function normalize(stored: Partial<SiteContent> | null | undefined): SiteContent {
+function normalize(s: Partial<SiteContent> | null | undefined): SiteContent {
+  const d = defaultContent;
+  const arr = <T,>(v: unknown, fallback: T[]): T[] =>
+    Array.isArray(v) && v.length ? (v as T[]) : fallback;
   return {
     version: CONTENT_VERSION,
-    site: { ...defaultContent.site, ...(stored?.site ?? {}) },
-    news: Array.isArray(stored?.news) && stored.news.length
-      ? stored.news
-      : defaultContent.news,
+    site: { ...d.site, ...(s?.site ?? {}) },
+    seasons: arr(s?.seasons, d.seasons),
+    stats: arr(s?.stats, d.stats),
+    activities: arr(s?.activities, d.activities),
+    timeline: arr(s?.timeline, d.timeline),
+    gallery: arr(s?.gallery, d.gallery),
+    faqs: arr(s?.faqs, d.faqs),
+    fundraising: { ...d.fundraising, ...(s?.fundraising ?? {}) },
+    volunteerTeams: arr(s?.volunteerTeams, d.volunteerTeams),
+    volunteerCount: typeof s?.volunteerCount === "number" ? s.volunteerCount : d.volunteerCount,
+    sponsorTiers: arr(s?.sponsorTiers, d.sponsorTiers),
+    whyJoin: arr(s?.whyJoin, d.whyJoin),
+    news: arr(s?.news, d.news),
+    board: { ...d.board, ...(s?.board ?? {}) },
+    donations: arr(s?.donations, d.donations),
+    testimonials: arr(s?.testimonials, d.testimonials),
+    spendingReport: { ...d.spendingReport, ...(s?.spendingReport ?? {}) },
   };
 }
 
@@ -28,39 +45,44 @@ async function readKey(key: string): Promise<SiteContent | null> {
     const raw = await redis.get<Partial<SiteContent>>(key);
     return raw ? normalize(raw) : null;
   } catch {
-    return null; // Redis lỗi -> để caller fallback về mặc định
+    return null;
   }
 }
 
-// Cache bản đã xuất bản theo tag (giữ các trang public ở dạng tĩnh/ISR,
-// chỉ làm mới khi bấm Xuất bản qua revalidateTag(CONTENT_TAG)).
+// Bản đã xuất bản: cache theo tag -> trang public không phải gọi Redis mỗi request.
 const readPublishedCached = unstable_cache(
   async (): Promise<SiteContent> => (await readKey(PUBLISHED_KEY)) ?? defaultContent,
   ["content-published"],
   { tags: [CONTENT_TAG] }
 );
 
-/** Nội dung đã xuất bản (fallback: mặc định). Dedupe trong 1 request bằng React cache. */
-export const getPublishedContent = cache(async (): Promise<SiteContent> => {
-  return readPublishedCached();
-});
+export const getPublishedContent = cache((): Promise<SiteContent> => readPublishedCached());
 
-/** Bản nháp (fallback: bản đã xuất bản -> mặc định). Dùng cho preview. */
+/** Bản nháp (fallback: published -> defaults). Dùng cho preview. */
 export const getDraftContent = cache(async (): Promise<SiteContent> => {
   return (await readKey(DRAFT_KEY)) ?? (await getPublishedContent());
 });
 
-/** Lấy nội dung theo chế độ: preview=true đọc bản nháp, ngược lại đọc bản đã xuất bản. */
-export async function getContent(preview = false): Promise<SiteContent> {
-  return preview ? getDraftContent() : getPublishedContent();
-}
+/**
+ * Nội dung cho trang public. Nếu trình duyệt đang bật Draft Mode và là admin
+ * -> trả bản nháp (xem trước); ngược lại trả bản đã xuất bản.
+ */
+export const getContent = cache(async (): Promise<SiteContent> => {
+  try {
+    const { isEnabled } = await draftMode();
+    if (isEnabled && (await isAdmin())) return getDraftContent();
+  } catch {
+    /* draftMode() không dùng được ở ngữ cảnh này -> published */
+  }
+  return getPublishedContent();
+});
 
-/** Ghi bản nháp (khi admin gõ). */
+/** Ghi bản nháp. */
 export async function writeDraft(content: SiteContent): Promise<void> {
   await redis.set(DRAFT_KEY, { ...content, version: CONTENT_VERSION });
 }
 
-/** Xuất bản: sao chép bản nháp -> bản đã xuất bản. */
+/** Xuất bản: sao chép nháp -> đã xuất bản. */
 export async function publishDraft(): Promise<SiteContent> {
   const draft = (await readKey(DRAFT_KEY)) ?? (await getPublishedContent());
   await redis.set(PUBLISHED_KEY, { ...draft, version: CONTENT_VERSION });

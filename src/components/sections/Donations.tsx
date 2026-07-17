@@ -1,7 +1,8 @@
 import Reveal from "@/components/Reveal";
-import { donations } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
-export default function Donations({ showHeading = true }: { showHeading?: boolean }) {
+export default async function Donations({ showHeading = true }: { showHeading?: boolean }) {
+  const { donations } = await getContent();
   return (
     <section id="danh-sach" className="relative py-16 sm:py-24">
       <div className="mx-auto max-w-4xl px-5 sm:px-6">
