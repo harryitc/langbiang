@@ -1,7 +1,8 @@
 import Reveal from "@/components/Reveal";
-import { volunteerTeams, volunteerCount } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 
-export default function Volunteers() {
+export default async function Volunteers() {
+  const { volunteerTeams, volunteerCount } = await getContent();
   return (
     <section
       id="volunteers"

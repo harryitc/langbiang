@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import SubPageShell from "@/components/SubPageShell";
 import News from "@/components/sections/News";
-import { getPublishedContent } from "@/lib/content/store";
+import { getContent } from "@/lib/content/store";
 
 export const metadata: Metadata = {
   title: "Tin tức & Bản tin",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsPage() {
-  const { news } = await getPublishedContent();
+  const { news } = await getContent();
   return (
     <SubPageShell
       eyebrow="Tin tức & Bản tin"

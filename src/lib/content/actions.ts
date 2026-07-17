@@ -1,16 +1,15 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath, updateTag } from "next/cache";
 import { ADMIN_COOKIE, isAdmin, sessionToken } from "@/lib/admin-auth";
-import { CONTENT_TAG, getContent, getDraftContent, publishDraft, writeDraft } from "./store";
-import type { SiteContent, SiteMeta } from "./schema";
-import type { NewsPost } from "@/lib/site";
+import { CONTENT_TAG, getDraftContent, publishDraft, writeDraft } from "./store";
+import { SECTION_KEYS, type SectionKey, type SiteContent } from "./schema";
 
 const MONTH = 60 * 60 * 24 * 30;
 
-/** Đăng nhập admin: khớp mật khẩu -> đặt cookie phiên. */
+/** Đăng nhập admin: khớp mật khẩu -> đặt cookie phiên + bật Draft Mode để xem trước. */
 export async function loginAction(formData: FormData) {
   const password = String(formData.get("password") ?? "");
   const expected = process.env.ADMIN_PASSWORD;
@@ -25,57 +24,47 @@ export async function loginAction(formData: FormData) {
     path: "/",
     maxAge: MONTH,
   });
+  (await draftMode()).enable();
   redirect("/admin");
 }
 
 export async function logoutAction() {
   const jar = await cookies();
   jar.delete(ADMIN_COOKIE);
+  try {
+    (await draftMode()).disable();
+  } catch {
+    /* bỏ qua */
+  }
   redirect("/admin/login");
 }
 
-/** Lưu bản nháp toàn bộ (ít dùng — thường lưu theo từng phần bên dưới). */
-export async function saveDraftAction(
-  content: SiteContent
-): Promise<{ ok: boolean; error?: string }> {
-  if (!(await isAdmin())) return { ok: false, error: "unauthorized" };
-  try {
-    await writeDraft(content);
-    return { ok: true };
-  } catch {
-    return { ok: false, error: "save_failed" };
-  }
+/** Bật/tắt xem trước bản nháp (Draft Mode) cho trình duyệt admin. */
+export async function setPreviewAction(on: boolean) {
+  if (!(await isAdmin())) return { ok: false };
+  const dm = await draftMode();
+  if (on) dm.enable();
+  else dm.disable();
+  return { ok: true };
 }
 
-/** Lưu nháp phần Tin tức (không đụng các phần khác). */
-export async function saveNewsDraftAction(
-  news: NewsPost[]
+/** Lưu nháp một phần nội dung (autosave). Editor nào cũng dùng chung action này. */
+export async function saveSectionDraftAction<K extends SectionKey>(
+  section: K,
+  value: SiteContent[K]
 ): Promise<{ ok: boolean; error?: string }> {
   if (!(await isAdmin())) return { ok: false, error: "unauthorized" };
+  if (!SECTION_KEYS.includes(section)) return { ok: false, error: "bad_section" };
   try {
     const draft = await getDraftContent();
-    await writeDraft({ ...draft, news });
+    await writeDraft({ ...draft, [section]: value });
     return { ok: true };
   } catch {
     return { ok: false, error: "save_failed" };
   }
 }
 
-/** Lưu nháp phần Thông tin & SEO. */
-export async function saveSiteDraftAction(
-  siteMeta: SiteMeta
-): Promise<{ ok: boolean; error?: string }> {
-  if (!(await isAdmin())) return { ok: false, error: "unauthorized" };
-  try {
-    const draft = await getDraftContent();
-    await writeDraft({ ...draft, site: siteMeta });
-    return { ok: true };
-  } catch {
-    return { ok: false, error: "save_failed" };
-  }
-}
-
-/** Xuất bản bản nháp ra public + làm mới các trang liên quan. */
+/** Xuất bản nháp ra public + làm mới cache. */
 export async function publishAction(): Promise<{ ok: boolean; error?: string }> {
   if (!(await isAdmin())) return { ok: false, error: "unauthorized" };
   try {
@@ -86,10 +75,4 @@ export async function publishAction(): Promise<{ ok: boolean; error?: string }> 
   } catch {
     return { ok: false, error: "publish_failed" };
   }
-}
-
-/** Đọc nội dung hiện tại cho admin (mặc định lấy bản nháp). */
-export async function loadContentAction(preview = true): Promise<SiteContent | null> {
-  if (!(await isAdmin())) return null;
-  return getContent(preview);
 }

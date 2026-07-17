@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
-import { news, site } from "@/lib/site";
+import { site } from "@/lib/site";
+import { getPublishedContent } from "@/lib/content/store";
 
 const lastModified = new Date("2026-07-06");
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { news } = await getPublishedContent();
   const routes: { path: string; changeFrequency: "weekly" | "monthly"; priority: number }[] = [
     { path: "", changeFrequency: "weekly", priority: 1 },
     { path: "/chuong-trinh", changeFrequency: "monthly", priority: 0.8 },

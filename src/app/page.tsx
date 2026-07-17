@@ -12,10 +12,10 @@ import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
-import { getPublishedContent } from "@/lib/content/store";
+import { getContent } from "@/lib/content/store";
 
 export default async function Home() {
-  const { news } = await getPublishedContent();
+  const { news, gallery, faqs, site: meta } = await getContent();
   return (
     <>
       <SmoothScroll />
@@ -24,13 +24,13 @@ export default async function Home() {
       <BackToTop />
       <Header />
       <main>
-        <Hero />
+        <Hero dateLabel={meta.dateLabel} />
         <About />
-        <BannerSlider />
+        <BannerSlider items={gallery} />
         <News carousel posts={news} />
         <DonateBand />
-        <Register />
-        <Faq />
+        <Register facebook={meta.facebook} />
+        <Faq items={faqs} />
         <ExploreGrid />
       </main>
       <Footer />

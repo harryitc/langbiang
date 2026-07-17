@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { gallery } from "@/lib/site";
-
-const slides = gallery.slice(0, 6);
+import { gallery as defaultGallery } from "@/lib/site";
+import type { GalleryItem } from "@/lib/content/schema";
 
 /**
  * Slideshow đóng khung như một chiếc TV: thân máy xanh rừng, ăng-ten, loa lưới,
@@ -13,7 +12,8 @@ const slides = gallery.slice(0, 6);
  * Có lớp phản chiếu kính + scanline mờ cho ra chất TV.
  * Tôn trọng prefers-reduced-motion (tắt tự chạy).
  */
-export default function BannerSlider() {
+export default function BannerSlider({ items }: { items?: GalleryItem[] }) {
+  const slides = (items ?? defaultGallery).slice(0, 6);
   const autoplay = useRef(
     Autoplay({ delay: 4500, stopOnInteraction: false, stopOnMouseEnter: true })
   );
