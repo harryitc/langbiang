@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Reveal from "@/components/Reveal";
-import { sponsorTiers as defaultTiers, type Sponsor } from "@/lib/site";
-import type { SponsorTier } from "@/lib/content/schema";
+import { sponsorTiers, type Sponsor } from "@/lib/site";
 
 // tạo initials từ tên đơn vị cho logo placeholder
 function initials(name: string) {
@@ -46,8 +45,7 @@ function SponsorLogo({ s, onClick }: { s: Sponsor; onClick: () => void }) {
   );
 }
 
-export default function Sponsors({ tiers }: { tiers?: SponsorTier[] }) {
-  const sponsorTiers = tiers ?? defaultTiers;
+export default function Sponsors() {
   const [active, setActive] = useState<Sponsor | null>(null);
 
   useEffect(() => {

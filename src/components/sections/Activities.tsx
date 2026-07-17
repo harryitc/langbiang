@@ -1,8 +1,7 @@
 import Reveal from "@/components/Reveal";
-import { getContent } from "@/lib/content/store";
+import { activities } from "@/lib/site";
 
-export default async function Activities() {
-  const { activities } = await getContent();
+export default function Activities() {
   return (
     <section className="relative py-24 sm:py-32">
       <span id="activities" aria-hidden className="block" />

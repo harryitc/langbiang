@@ -12,8 +12,7 @@ import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-fullscreen.css";
 import "lightgallery/css/lg-thumbnail.css";
 
-import { board as defaultBoard } from "@/lib/site";
-import type { Board } from "@/lib/content/schema";
+import { board } from "@/lib/site";
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -22,7 +21,7 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
-export default function FounderGallery({ board = defaultBoard }: { board?: Board }) {
+export default function FounderGallery() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lgRef = useRef<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

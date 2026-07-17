@@ -1,6 +1,5 @@
 import Reveal from "@/components/Reveal";
-import { type Member } from "@/lib/site";
-import { getContent } from "@/lib/content/store";
+import { board, type Member } from "@/lib/site";
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -29,8 +28,7 @@ function MemberCard({ m }: { m: Member }) {
   );
 }
 
-export default async function Members() {
-  const { board } = await getContent();
+export default function Members() {
   if (board.members.length === 0) return null;
 
   return (

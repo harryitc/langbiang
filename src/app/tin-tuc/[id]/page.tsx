@@ -9,13 +9,13 @@ import SubPageHeader from "@/components/SubPageHeader";
 import Footer from "@/components/sections/Footer";
 import NewsActions from "@/components/NewsActions";
 import Reveal from "@/components/Reveal";
-import { site } from "@/lib/site";
-import { getContent } from "@/lib/content/store";
+import { getNewsById, news, site } from "@/lib/site";
 
 type Params = { id: string };
 
-// Đọc từ content store (Redis); admin bật Draft Mode sẽ thấy bản nháp.
-export const dynamic = "force-dynamic";
+export function generateStaticParams(): Params[] {
+  return news.map((post) => ({ id: post.id }));
+}
 
 export async function generateMetadata({
   params,
@@ -23,8 +23,7 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const { news } = await getContent();
-  const post = news.find((p) => p.id === id);
+  const post = getNewsById(id);
   if (!post) return { title: "Không tìm thấy tin tức" };
 
   const url = `${site.url}/tin-tuc/${post.id}`;
@@ -56,8 +55,7 @@ export default async function NewsDetailPage({
   params: Promise<Params>;
 }) {
   const { id } = await params;
-  const { news } = await getContent();
-  const post = news.find((p) => p.id === id);
+  const post = getNewsById(id);
   if (!post) notFound();
 
   const paragraphs = post.body ?? [post.excerpt];

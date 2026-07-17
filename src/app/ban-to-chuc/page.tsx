@@ -8,7 +8,7 @@ import BackToTop from "@/components/BackToTop";
 import SubPageHeader from "@/components/SubPageHeader";
 import Members from "@/components/sections/Board";
 import Footer from "@/components/sections/Footer";
-import { getContent } from "@/lib/content/store";
+import { board } from "@/lib/site";
 import FounderGallery from "./FounderGallery";
 
 export const metadata: Metadata = {
@@ -25,8 +25,7 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
-export default async function BanToChucPage() {
-  const { board } = await getContent();
+export default function BanToChucPage() {
   const [lead, ...coFounders] = board.founders;
 
   return (
@@ -79,7 +78,7 @@ export default async function BanToChucPage() {
           </div>
 
           {/* Polaroid cards + lightgallery (client component) */}
-          <FounderGallery board={board} />
+          <FounderGallery />
 
           {/* Mobile — cards xếp dưới tiêu đề */}
           <div className="flex flex-col gap-4 px-6 pb-16 lg:hidden">

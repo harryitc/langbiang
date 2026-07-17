@@ -1,8 +1,7 @@
 import { GrassBorder } from "@/components/Decor";
-import { getContent } from "@/lib/content/store";
+import { site } from "@/lib/site";
 
-export default async function Footer() {
-  const { site: meta } = await getContent();
+export default function Footer() {
   return (
     <footer className="relative bg-forest text-white">
       <GrassBorder className="absolute -top-[70px] left-0 h-[72px] w-full" />
@@ -18,7 +17,7 @@ export default async function Footer() {
               Langbiang – Đà Lạt, Lâm Đồng.
             </p>
             <a
-              href={meta.facebook}
+              href={site.facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold transition hover:bg-white/20"
@@ -59,16 +58,16 @@ export default async function Footer() {
             <ul className="mt-4 space-y-2.5 text-white/80">
               <li className="flex items-start gap-2">
                 <span>📍</span>
-                <span>{meta.location}</span>
+                <span>{site.location}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span>📅</span>
-                <span>{meta.dateLabel}</span>
+                <span>{site.dateLabel}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span>✉️</span>
-                <a href={`mailto:${meta.email}`} className="transition hover:text-grass">
-                  {meta.email}
+                <a href={`mailto:${site.email}`} className="transition hover:text-grass">
+                  {site.email}
                 </a>
               </li>
             </ul>
@@ -77,7 +76,7 @@ export default async function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60 sm:flex-row">
           <p>
-            © 2026 {meta.name}. Được tạo bằng tất cả yêu thương 💚
+            © 2026 {site.name}. Được tạo bằng tất cả yêu thương 💚
           </p>
           <p>Langbiang · Đà Lạt · Lâm Đồng</p>
         </div>

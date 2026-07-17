@@ -34,7 +34,7 @@ const heroFloats: HeroFloat[] = [
   { src: "/gallery/g6.jpg", alt: "Tình nguyện viên", side: "right", top: "61%", offset: "4.5vw", width: "clamp(80px,9vw,168px)", rotate: -5, depth: -120, delay: "2.1s" },
 ];
 
-export default function Hero({ dateLabel = site.dateLabel }: { dateLabel?: string }) {
+export default function Hero() {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -178,7 +178,7 @@ export default function Hero({ dateLabel = site.dateLabel }: { dateLabel?: strin
         </p>
 
         <p className="hero-date mt-2 font-script text-3xl font-semibold uppercase text-leaf-deep sm:text-4xl dark:text-leaf-bright">
-          {dateLabel}
+          {site.dateLabel}
         </p>
 
         <div className="hero-cta mt-8 flex flex-wrap items-center justify-center gap-4">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Reveal from "@/components/Reveal";
 import { site } from "@/lib/site";
 
-export default function Register({ facebook = site.facebook }: { facebook?: string }) {
+export default function Register() {
   const [sent, setSent] = useState(false);
 
   return (
@@ -142,7 +142,7 @@ export default function Register({ facebook = site.facebook }: { facebook?: stri
                 <p className="text-center text-xs text-forest/60">
                   Hoặc liên hệ trực tiếp qua{" "}
                   <a
-                    href={facebook}
+                    href={site.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-semibold text-leaf-deep underline"

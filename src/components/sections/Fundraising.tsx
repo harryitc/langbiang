@@ -1,14 +1,13 @@
 import Reveal from "@/components/Reveal";
-import { getContent } from "@/lib/content/store";
+import { fundraising } from "@/lib/site";
 
-export default async function Fundraising({
+export default function Fundraising({
   showHeading = true,
   bg = true,
 }: {
   showHeading?: boolean;
   bg?: boolean;
 }) {
-  const { fundraising } = await getContent();
   return (
     <section
       id="fundraising"

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SubPageShell from "@/components/SubPageShell";
 import Fundraising from "@/components/sections/Fundraising";
 import Reveal from "@/components/Reveal";
-import { getContent } from "@/lib/content/store";
+import { fundraising, spendingReport } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Gây quỹ & Đồng hành",
@@ -11,8 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/gay-quy" },
 };
 
-export default async function FundraisingPage() {
-  const { fundraising, spendingReport } = await getContent();
+export default function FundraisingPage() {
   return (
     <SubPageShell
       eyebrow="Chung tay gây quỹ"
