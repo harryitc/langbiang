@@ -1,8 +1,7 @@
 import Reveal from "@/components/Reveal";
-import { getContent } from "@/lib/content/store";
+import { timeline } from "@/lib/site";
 
-export default async function Timeline() {
-  const { timeline } = await getContent();
+export default function Timeline() {
   return (
     <section className="relative overflow-hidden bg-[#eef8ea] py-24 sm:py-32 dark:bg-night-2">
       {/* mốc neo đặt ngay đầu nội dung để anchor canh tiêu đề dưới header (bỏ padding thừa) */}

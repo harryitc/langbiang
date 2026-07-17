@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import Reveal from "@/components/Reveal";
-import { faqs as defaultFaqs } from "@/lib/site";
-import type { Faq as FaqItem } from "@/lib/content/schema";
+import { faqs } from "@/lib/site";
 
-export default function Faq({ items }: { items?: FaqItem[] }) {
-  const faqs = items ?? defaultFaqs;
+export default function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (

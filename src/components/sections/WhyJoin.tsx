@@ -1,8 +1,7 @@
 import Reveal from "@/components/Reveal";
-import { getContent } from "@/lib/content/store";
+import { whyJoin } from "@/lib/site";
 
-export default async function WhyJoin() {
-  const { whyJoin } = await getContent();
+export default function WhyJoin() {
   return (
     <section id="why" className="relative py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6">

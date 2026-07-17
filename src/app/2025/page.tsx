@@ -6,7 +6,6 @@ import Gallery from "@/components/sections/Gallery";
 import Team from "@/components/sections/Team";
 import Journey from "@/components/sections/Journey";
 import Sponsors from "@/components/sections/Sponsors";
-import { getContent } from "@/lib/content/store";
 
 export const metadata: Metadata = {
   title: "Nhìn lại mùa 2025",
@@ -23,8 +22,7 @@ const nav = [
   { href: "#sponsors", label: "Nhà tài trợ" },
 ];
 
-export default async function Retro2025Page() {
-  const { sponsorTiers } = await getContent();
+export default function Retro2025Page() {
   return (
     <SubPageShell
       eyebrow="Hồi ức"
@@ -37,7 +35,7 @@ export default async function Retro2025Page() {
       <Gallery />
       <Team />
       <Journey />
-      <Sponsors tiers={sponsorTiers} />
+      <Sponsors />
 
       <section className="py-16 text-center sm:py-24">
         <div className="mx-auto max-w-2xl px-5 sm:px-6">

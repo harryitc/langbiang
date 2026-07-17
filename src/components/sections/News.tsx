@@ -4,18 +4,16 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Reveal from "@/components/Reveal";
-import { news as defaultNews, type NewsPost } from "@/lib/site";
+import { news } from "@/lib/site";
 
 type NewsProps = {
   /** Ẩn phần tiêu đề chung (dùng khi trang phụ đã có tiêu đề riêng). */
   showHeading?: boolean;
   /** Trang chủ: hiển thị dạng carousel ngang + nút "Xem tất cả", ẩn form đăng ký bản tin. */
   carousel?: boolean;
-  /** Danh sách bài viết (từ content store). Bỏ trống -> dùng mặc định trong code. */
-  posts?: NewsPost[];
 };
 
-function NewsCard({ post }: { post: NewsPost }) {
+function NewsCard({ post }: { post: (typeof news)[number] }) {
   return (
     <Link
       href={`/tin-tuc/${post.id}`}
@@ -52,8 +50,7 @@ function NewsCard({ post }: { post: NewsPost }) {
   );
 }
 
-export default function News({ showHeading = true, carousel = false, posts }: NewsProps) {
-  const items = posts ?? defaultNews;
+export default function News({ showHeading = true, carousel = false }: NewsProps) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -102,7 +99,7 @@ export default function News({ showHeading = true, carousel = false, posts }: Ne
             <div className="relative mt-10 sm:mt-14">
               <div className="overflow-hidden" ref={emblaRef}>
                 <div className="-ml-5 flex touch-pan-y">
-                  {items.map((post) => (
+                  {news.map((post) => (
                     <div
                       key={post.title}
                       className="min-w-0 flex-[0_0_86%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
@@ -167,7 +164,7 @@ export default function News({ showHeading = true, carousel = false, posts }: Ne
           </>
         ) : (
           <Reveal childrenStagger className="mt-10 grid gap-6 sm:mt-14 md:grid-cols-3">
-            {items.map((post) => (
+            {news.map((post) => (
               <NewsCard key={post.title} post={post} />
             ))}
           </Reveal>
