@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Reveal from "@/components/Reveal";
-import { news, site } from "@/lib/site";
+import { news } from "@/lib/site";
 
 type NewsProps = {
   /** Ẩn phần tiêu đề chung (dùng khi trang phụ đã có tiêu đề riêng). */
@@ -39,17 +39,15 @@ function NewsCard({ post }: { post: (typeof news)[number] }) {
         <p className="mt-2 flex-1 text-sm leading-relaxed text-forest/75 dark:text-ink/70">
           {post.excerpt}
         </p>
-        <a
-          href={post.link || site.facebook}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={`/tin-tuc/${post.id}`}
           className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf-deep transition hover:gap-2.5 dark:text-leaf-bright"
         >
-          Đọc trên Fanpage
+          Đọc tiếp
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
-        </a>
+        </Link>
       </div>
     </article>
   );
