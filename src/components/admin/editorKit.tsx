@@ -29,7 +29,8 @@ import {
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { saveDraftAction, uploadImageAction } from "@/lib/content/actions";
+import { saveDraftAction } from "@/lib/content/actions";
+import { uploadImage } from "@/lib/content/upload-client";
 
 /* ------------------------------------------------------------------
    Autosave theo nhánh nội dung (debounce 700ms)
@@ -261,16 +262,11 @@ export function ImageField({
     }
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("folder", folder);
-      const res = await uploadImageAction(fd);
-      if (res.ok && res.data) {
-        onChange(res.data);
-        message.success("Đã tải ảnh lên.");
-      } else {
-        message.error(res.error || "Tải ảnh thất bại.");
-      }
+      const url = await uploadImage(file, folder);
+      onChange(url);
+      message.success("Đã tải ảnh lên.");
+    } catch (err) {
+      message.error(err instanceof Error ? err.message : "Tải ảnh thất bại.");
     } finally {
       setUploading(false);
     }

@@ -1,7 +1,7 @@
 "use client";
 
 // Bọc CKEditor 5 (ClassicEditor) — client-only, dùng license 'GPL'.
-// Upload ảnh trong bài đi qua uploadImageAction (Vercel Blob).
+// Upload ảnh trong bài đẩy thẳng lên Vercel Blob (client upload).
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import {
   ClassicEditor,
@@ -22,11 +22,11 @@ import {
   ImageUpload,
 } from "ckeditor5";
 import "ckeditor5/ckeditor5.css";
-import { uploadImageAction } from "@/lib/content/actions";
+import { uploadImage } from "@/lib/content/upload-client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// Adapter tải ảnh: nhận file từ CKEditor -> gọi server action -> trả URL.
+// Adapter tải ảnh: nhận file từ CKEditor -> đẩy thẳng lên Blob -> trả URL.
 class BlobUploadAdapter {
   loader: any;
   folder: string;
@@ -35,19 +35,8 @@ class BlobUploadAdapter {
     this.folder = folder;
   }
   upload(): Promise<{ default: string }> {
-    return this.loader.file.then(
-      (file: File) =>
-        new Promise<{ default: string }>((resolve, reject) => {
-          const fd = new FormData();
-          fd.append("file", file);
-          fd.append("folder", this.folder);
-          uploadImageAction(fd)
-            .then((res) => {
-              if (res.ok && res.data) resolve({ default: res.data });
-              else reject(res.error || "Tải ảnh thất bại");
-            })
-            .catch(() => reject("Tải ảnh thất bại"));
-        })
+    return this.loader.file.then((file: File) =>
+      uploadImage(file, this.folder).then((url) => ({ default: url }))
     );
   }
   abort() {}
