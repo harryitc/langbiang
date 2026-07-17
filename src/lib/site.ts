@@ -240,32 +240,64 @@ export const sponsorTiers: { tier: string; sponsors: Sponsor[] }[] = [
 /* ------------------------------------------------------------------
    TIN TỨC / BẢN TIN — content dạng bài đăng trên Fanpage
    ------------------------------------------------------------------ */
-export const news = [
+export type NewsPost = {
+  /** Slug dùng cho URL /tin-tuc/[id] */
+  id: string;
+  img: string;
+  tag: string;
+  title: string;
+  excerpt: string;
+  /** Nội dung đầy đủ (mỗi phần tử là 1 đoạn văn). Nếu bỏ trống sẽ dùng excerpt. */
+  body?: string[];
+  /** Link bài gốc trên Fanpage Facebook */
+  link: string;
+};
+
+export const news: NewsPost[] = [
   {
+    id: "tong-ket-mua-trang-dau-tien",
     img: "/tintuc/n6.png",
     tag: "Tổng kết",
     title: "Trọn vẹn mùa trăng đầu tiên tại Langbiang 💚",
     excerpt:
       "Hai ngày một đêm với hơn 500 phần quà, 80 tình nguyện viên và vô vàn nụ cười. Cảm ơn tất cả những tấm lòng đã cùng chúng mình thắp sáng Trung thu vùng cao!",
+    body: [
+      "Hai ngày một đêm tại phường Langbiang khép lại với thật nhiều cảm xúc. Hơn 500 phần quà đã được trao tận tay các em nhỏ, cùng 80 tình nguyện viên miệt mài xuyên suốt hành trình.",
+      "Từ những sân chơi rộn tiếng cười, những màn múa lân, đến ánh đèn lồng lung linh trong đêm hội trăng rằm — tất cả tạo nên một mùa Trung thu trọn vẹn cho các em vùng cao.",
+      "Cảm ơn tất cả những tấm lòng, những nhà hảo tâm và tình nguyện viên đã cùng chúng mình thắp sáng Langbiang. Hẹn gặp lại ở mùa trăng tiếp theo!",
+    ],
     link: "https://www.facebook.com/share/p/1TddG8KRT1/",
   },
   {
+    id: "hoi-trang-ram-tuoi-tho-co-tich",
     img: "/tintuc/n8.png",
     tag: "Hoạt động",
     title: "Hội Trăng rằm - Tuổi thơ cổ tích tại Langbiang 🏮",
     excerpt:
       "Không gian LangBiang hôm ấy bỗng rộn ràng và đầy ắp tiếng cười. Các em nhỏ được vui chơi hết mình trong những trò chơi dân gian, được sống lại trong thế giới cổ tích qua kịch Tấm Cám, Sự tích chú Cuội cung trăng...",
+    body: [
+      "Không gian Langbiang hôm ấy bỗng rộn ràng và đầy ắp tiếng cười. Các em nhỏ được vui chơi hết mình trong những trò chơi dân gian quen thuộc.",
+      "Đặc biệt, các em còn được sống lại trong thế giới cổ tích qua những vở kịch Tấm Cám, Sự tích chú Cuội cung trăng do chính các anh chị tình nguyện viên hóa thân biểu diễn.",
+      "Một đêm hội trăng rằm đúng nghĩa — nơi tuổi thơ được trọn vẹn với những giấc mơ cổ tích.",
+    ],
     link: "https://www.facebook.com/share/p/14jbS3XKESE/",
   },
   {
+    id: "nau-an-cho-em",
     img: "/tintuc/n1.jpg",
     tag: "Hoạt động",
     title: "Nấu ăn cho em - Hơi ấm lan toả giữa núi rừng Langbiang 🍜",
     excerpt:
       "Trong cái se lạnh và cơn mưa lất phất của núi rừng LangBiang, chương trình “Nấu ăn cho em” đã mang đến một khoảnh khắc thật ấm lòng. 250 suất phở bò nóng hổi đã được gửi trao tận tay các em học sinh và phụ huynh địa phương.",
+    body: [
+      "Trong cái se lạnh và cơn mưa lất phất của núi rừng Langbiang, chương trình “Nấu ăn cho em” đã mang đến một khoảnh khắc thật ấm lòng.",
+      "250 suất phở bò nóng hổi đã được gửi trao tận tay các em học sinh và phụ huynh địa phương. Mỗi tô phở là một hơi ấm, một lời sẻ chia giữa những ngày mưa cao nguyên.",
+      "Xin cảm ơn các đơn vị đồng hành đã cùng chúng mình mang bữa ăn ấm áp đến với các em.",
+    ],
     link: "https://www.facebook.com/share/p/1G8BCjszGM/",
   },
   {
+    id: "cam-on-weset-english-center",
     img: "/tintuc/n2.png",
     tag: "Tài trợ",
     title: "Trân trọng cảm ơn Trung tâm Anh ngữ WESET English Center – Đơn vị tài trợ dự án \"Trăng Sáng Langbiang\"",
@@ -274,6 +306,7 @@ export const news = [
     link: "https://www.facebook.com/share/p/1LsaVWTybt/",
   },
   {
+    id: "cam-on-sun-taxi",
     img: "/tintuc/n3.png",
     tag: "Tài trợ",
     title: "Trân trọng cảm ơn Sun Taxi – Đơn vị tài trợ dự án \"Trăng Sáng Langbiang\"",
@@ -282,6 +315,7 @@ export const news = [
     link: "https://www.facebook.com/share/p/1EbgGr59es/",
   },
   {
+    id: "cam-on-benh-vien-tam-phuc",
     img: "/tintuc/n4.png",
     tag: "Tài trợ",
     title: "Trân trọng cảm ơn Bệnh viện Đa khoa Tâm Phúc – Đơn vị đồng hành dự án \"Trăng Sáng Langbiang\"",
@@ -290,6 +324,7 @@ export const news = [
     link: "https://www.facebook.com/share/p/1FzJcDgigQ/",
   },
   {
+    id: "cam-on-pho-huynh-tram",
     img: "/tintuc/n5.png",
     tag: "Tài trợ",
     title: "Trân trọng cảm ơn Phở Huỳnh Trâm - Đơn vị tài trợ dự án \"Trăng Sáng Langbiang\"",
@@ -298,6 +333,7 @@ export const news = [
     link: "https://www.facebook.com/share/p/1E6Lkw5MgS/",
   },
   {
+    id: "tuyen-thanh-vien",
     img: "/tintuc/n9.png",
     tag: "Tuyển thành viên",
     title: "[THÔNG BÁO] Tuyển thành viên dự án \"Trăng Sáng Langbiang\"",
@@ -306,6 +342,7 @@ export const news = [
     link: "https://www.facebook.com/share/p/1cfAdnV86E/",
   },
   {
+    id: "chung-tay-mua-trung-thu",
     img: "/tintuc/n7.png",
     tag: "Kêu gọi",
     title: "Chung tay góp một mùa Trung thu cho em",
@@ -314,6 +351,11 @@ export const news = [
     link: "https://www.facebook.com/share/p/1Lk31g2wMD/",
   },
 ];
+
+/** Tìm 1 bài viết theo slug id. */
+export function getNewsById(id: string): NewsPost | undefined {
+  return news.find((post) => post.id === id);
+}
 
 /* ------------------------------------------------------------------
    TẠI SAO NÊN THAM GIA — lý do đồng hành

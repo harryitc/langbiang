@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/lib/site";
+import { news, site } from "@/lib/site";
 
 const lastModified = new Date("2026-07-06");
 
@@ -15,10 +15,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/2025", changeFrequency: "monthly", priority: 0.7 },
   ];
 
-  return routes.map((r) => ({
+  const staticRoutes = routes.map((r) => ({
     url: `${site.url}${r.path}`,
     lastModified,
     changeFrequency: r.changeFrequency,
     priority: r.priority,
   }));
+
+  const newsRoutes = news.map((post) => ({
+    url: `${site.url}/tin-tuc/${post.id}`,
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...newsRoutes];
 }
