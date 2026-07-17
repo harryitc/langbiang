@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
 import { site } from "@/lib/site";
+import { getPublishedContent } from "@/lib/content/store";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -29,51 +30,50 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} — ${site.tagline} 2026`,
-    template: `%s | ${site.name}`,
-  },
-  description: site.description,
-  keywords: site.keywords,
-  authors: [{ name: site.name }],
-  creator: site.name,
-  applicationName: site.name,
-  category: "nonprofit",
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: "vi_VN",
-    url: site.url,
-    siteName: site.name,
-    title: `${site.name} — ${site.tagline} 2026`,
-    description: site.description,
-    images: [
-      {
-        url: "/og.jpg",
-        width: 1200,
-        height: 628,
-        alt: site.name,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} — ${site.tagline} 2026`,
-    description: site.description,
-    images: ["/og.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
-  icons: {
-    icon: [{ url: "/logo-mark.png", type: "image/png" }],
-    apple: "/logo-mark.png",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // Tiêu đề/mô tả/keywords lấy từ content store (chỉnh được trong /admin),
+  // fallback về giá trị mặc định trong site.ts.
+  const { site: meta } = await getPublishedContent();
+  const heroTitle = `${meta.name} — ${meta.tagline} 2026`;
+  return {
+    metadataBase: new URL(site.url),
+    title: {
+      default: heroTitle,
+      template: `%s | ${meta.name}`,
+    },
+    description: meta.description,
+    keywords: meta.keywords,
+    authors: [{ name: meta.name }],
+    creator: meta.name,
+    applicationName: meta.name,
+    category: "nonprofit",
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      locale: "vi_VN",
+      url: site.url,
+      siteName: meta.name,
+      title: heroTitle,
+      description: meta.description,
+      images: [{ url: "/og.jpg", width: 1200, height: 628, alt: meta.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: heroTitle,
+      description: meta.description,
+      images: ["/og.jpg"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
+    icons: {
+      icon: [{ url: "/logo-mark.png", type: "image/png" }],
+      apple: "/logo-mark.png",
+    },
+  };
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

@@ -12,8 +12,10 @@ import Register from "@/components/sections/Register";
 import Faq from "@/components/sections/Faq";
 import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
+import { getPublishedContent } from "@/lib/content/store";
 
-export default function Home() {
+export default async function Home() {
+  const { news } = await getPublishedContent();
   return (
     <>
       <SmoothScroll />
@@ -25,7 +27,7 @@ export default function Home() {
         <Hero />
         <About />
         <BannerSlider />
-        <News carousel />
+        <News carousel posts={news} />
         <DonateBand />
         <Register />
         <Faq />

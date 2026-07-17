@@ -9,21 +9,32 @@ import SubPageHeader from "@/components/SubPageHeader";
 import Footer from "@/components/sections/Footer";
 import NewsActions from "@/components/NewsActions";
 import Reveal from "@/components/Reveal";
-import { getNewsById, news, site } from "@/lib/site";
+import { site } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
+import { isAdmin } from "@/lib/admin-auth";
 
 type Params = { id: string };
+type Search = { preview?: string };
 
-export function generateStaticParams(): Params[] {
-  return news.map((post) => ({ id: post.id }));
+// Đọc từ content store (Redis) nên render động; hỗ trợ xem trước bản nháp.
+export const dynamic = "force-dynamic";
+
+async function resolvePreview(searchParams: Promise<Search> | undefined) {
+  const sp = searchParams ? await searchParams : {};
+  return sp.preview === "1" && (await isAdmin());
 }
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<Params>;
+  searchParams?: Promise<Search>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const post = getNewsById(id);
+  const preview = await resolvePreview(searchParams);
+  const { news } = await getContent(preview);
+  const post = news.find((p) => p.id === id);
   if (!post) return { title: "Không tìm thấy tin tức" };
 
   const url = `${site.url}/tin-tuc/${post.id}`;
@@ -51,11 +62,15 @@ export async function generateMetadata({
 
 export default async function NewsDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<Params>;
+  searchParams?: Promise<Search>;
 }) {
   const { id } = await params;
-  const post = getNewsById(id);
+  const preview = await resolvePreview(searchParams);
+  const { news } = await getContent(preview);
+  const post = news.find((p) => p.id === id);
   if (!post) notFound();
 
   const paragraphs = post.body ?? [post.excerpt];
