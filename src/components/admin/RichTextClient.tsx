@@ -23,6 +23,11 @@ import {
 } from "ckeditor5";
 import "ckeditor5/ckeditor5.css";
 import { uploadImage } from "@/lib/content/upload-client";
+import { addMediaAction } from "@/lib/content/media-actions";
+
+// Ảnh chèn trong bài cũng vào kho ảnh (album "Khác") — theo yêu cầu mọi ảnh
+// upload phải đi qua kho.
+const CONTENT_ALBUM_ID = "alb-khac";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -36,7 +41,13 @@ class BlobUploadAdapter {
   }
   upload(): Promise<{ default: string }> {
     return this.loader.file.then((file: File) =>
-      uploadImage(file, this.folder).then((url) => ({ default: url }))
+      uploadImage(file, this.folder).then(async (url) => {
+        // Ghi vào kho ảnh (không chặn nếu lỗi).
+        await addMediaAction({ url, name: file.name, albumId: CONTENT_ALBUM_ID }).catch(
+          () => {}
+        );
+        return { default: url };
+      })
     );
   }
   abort() {}

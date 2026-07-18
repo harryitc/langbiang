@@ -32,6 +32,10 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     ],
   },
   {
+    label: "Tài nguyên",
+    items: [{ slug: "kho-anh", label: "Kho ảnh", icon: "🗂️" }],
+  },
+  {
     label: "Năm hiện tại",
     items: [{ slug: "su-kien", label: "Sự kiện & số năm", icon: "📅" }],
   },

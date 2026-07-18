@@ -10,13 +10,12 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import {
-  App,
   Button,
   Card,
   Input,
   List,
+  Modal,
   Popconfirm,
-  Segmented,
   Space,
   Spin,
   Tag,
@@ -26,11 +25,11 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   DeleteOutlined,
+  PictureOutlined,
   PlusOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import { saveDraftAction } from "@/lib/content/actions";
-import { uploadImage } from "@/lib/content/upload-client";
+import MediaBrowser from "./MediaBrowser";
 
 /* ------------------------------------------------------------------
    Autosave theo nhánh nội dung (debounce 700ms)
@@ -239,79 +238,23 @@ export function ListEditor<T>({
 }
 
 /* ------------------------------------------------------------------
-   ImageField — tải ảnh lên (Vercel Blob) hoặc dán URL
+   ImageField — chọn ảnh từ KHO ẢNH tập trung (hoặc dán URL ngoài)
    ------------------------------------------------------------------ */
 export function ImageField({
   value,
   onChange,
-  folder = "uploads",
 }: {
   value: string;
   onChange: (url: string) => void;
+  /** Giữ để tương thích call-site cũ; ảnh nay đi qua kho ảnh chung. */
   folder?: string;
 }) {
-  const { message } = App.useApp();
-  const [mode, setMode] = useState<"upload" | "url">("url");
-  const [uploading, setUploading] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleFile = async (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      message.error("Tệp không phải ảnh hợp lệ.");
-      return;
-    }
-    setUploading(true);
-    try {
-      const url = await uploadImage(file, folder);
-      onChange(url);
-      message.success("Đã tải ảnh lên.");
-    } catch (err) {
-      message.error(err instanceof Error ? err.message : "Tải ảnh thất bại.");
-    } finally {
-      setUploading(false);
-    }
-  };
+  const [open, setOpen] = useState(false);
+  const [urlMode, setUrlMode] = useState(false);
 
   return (
     <div>
       <Space direction="vertical" style={{ width: "100%" }} size={8}>
-        <Segmented
-          size="small"
-          value={mode}
-          onChange={(v) => setMode(v as "upload" | "url")}
-          options={[
-            { label: "Dán URL", value: "url" },
-            { label: "Tải lên", value: "upload" },
-          ]}
-        />
-        {mode === "url" ? (
-          <Input
-            placeholder="https://… hoặc /gallery/anh.jpg"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        ) : (
-          <div>
-            <input
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void handleFile(f);
-                e.target.value = "";
-              }}
-            />
-            <Button
-              icon={<UploadOutlined />}
-              loading={uploading}
-              onClick={() => inputRef.current?.click()}
-            >
-              Chọn ảnh từ máy
-            </Button>
-          </div>
-        )}
         {value ? (
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -326,18 +269,49 @@ export function ImageField({
               }}
             />
             <div>
-              <Button
-                size="small"
-                type="link"
-                danger
-                onClick={() => onChange("")}
-              >
+              <Button size="small" icon={<PictureOutlined />} onClick={() => setOpen(true)}>
+                Đổi ảnh
+              </Button>
+              <Button size="small" type="link" danger onClick={() => onChange("")}>
                 Xoá ảnh
               </Button>
             </div>
           </div>
+        ) : (
+          <Space wrap>
+            <Button icon={<PictureOutlined />} onClick={() => setOpen(true)}>
+              Chọn từ kho ảnh
+            </Button>
+            <Button type="text" size="small" onClick={() => setUrlMode((v) => !v)}>
+              Dán URL ngoài
+            </Button>
+          </Space>
+        )}
+        {urlMode && !value ? (
+          <Input
+            placeholder="https://… hoặc /gallery/anh.jpg"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+          />
         ) : null}
       </Space>
+
+      <Modal
+        open={open}
+        onCancel={() => setOpen(false)}
+        width={920}
+        footer={null}
+        destroyOnHidden
+        title="Chọn ảnh từ kho"
+      >
+        <MediaBrowser
+          mode="pick"
+          onPick={(url) => {
+            onChange(url);
+            setOpen(false);
+          }}
+        />
+      </Modal>
     </div>
   );
 }
