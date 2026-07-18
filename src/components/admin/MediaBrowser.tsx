@@ -9,6 +9,7 @@ import {
   App,
   Button,
   Empty,
+  Image as AntdImage,
   Input,
   Popconfirm,
   Select,
@@ -20,6 +21,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   FolderAddOutlined,
+  PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import { uploadImage } from "@/lib/content/upload-client";
@@ -59,6 +61,8 @@ export default function MediaBrowser({
   const [uploading, setUploading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [limit, setLimit] = useState(PAGE_SIZE);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   async function refetch(force = false) {
@@ -315,7 +319,7 @@ export default function MediaBrowser({
           ) : (
             <>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-                {visible.slice(0, limit).map((it) => (
+                {visible.slice(0, limit).map((it, idx) => (
                   <Thumb
                     key={it.id}
                     item={it}
@@ -324,9 +328,25 @@ export default function MediaBrowser({
                     onDoubleClick={
                       mode === "pick" ? () => onPick?.(it.url) : undefined
                     }
+                    onPreview={() => {
+                      setPreviewIndex(idx);
+                      setPreviewOpen(true);
+                    }}
                   />
                 ))}
               </div>
+
+              {/* Lightbox xem chi tiết + duyệt qua lại (ảnh trong lô đang hiện). */}
+              <AntdImage.PreviewGroup
+                items={visible.slice(0, limit).map((it) => it.url)}
+                preview={{
+                  visible: previewOpen,
+                  current: previewIndex,
+                  onVisibleChange: (v) => setPreviewOpen(v),
+                  onChange: (c) => setPreviewIndex(c),
+                }}
+              />
+
               {visible.length > limit ? (
                 <div className="mt-3 text-center">
                   <Button onClick={() => setLimit((n) => n + PAGE_SIZE)}>
@@ -397,21 +417,35 @@ function Thumb({
   active,
   onClick,
   onDoubleClick,
+  onPreview,
 }: {
   item: MediaItem;
   active: boolean;
   onClick: () => void;
   onDoubleClick?: () => void;
+  onPreview: () => void;
 }) {
   return (
     <button
-      className={`relative aspect-square overflow-hidden rounded-lg border-2 transition ${
+      className={`group relative aspect-square overflow-hidden rounded-lg border-2 transition ${
         active ? "border-[#2e7d32]" : "border-transparent hover:border-black/20"
       }`}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       title={item.name}
     >
+      {/* Nút ＋ ở góc phải — xem ảnh chi tiết trong lightbox. */}
+      <span
+        role="button"
+        aria-label="Xem ảnh chi tiết"
+        className="absolute right-1 top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-black/55 text-white opacity-0 transition hover:bg-black/80 group-hover:opacity-100"
+        onClick={(e) => {
+          e.stopPropagation();
+          onPreview();
+        }}
+      >
+        <PlusOutlined style={{ fontSize: 11 }} />
+      </span>
       {canOptimize(item.url) ? (
         // next/image tự phục vụ ảnh thu nhỏ (giảm băng thông so với ảnh gốc).
         <Image
