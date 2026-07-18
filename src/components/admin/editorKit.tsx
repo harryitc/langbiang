@@ -350,11 +350,9 @@ const RichTextClient = dynamic(() => import("./RichTextClient"), {
   loading: () => <Spin />,
 });
 
-/** Loại bỏ thẻ script cơ bản trước khi lưu (sanitize nhẹ). */
-function stripScripts(html: string): string {
-  return html.replace(/<script[\s\S]*?<\/script>/gi, "");
-}
-
+// Lưu ý: HTML rich text được sanitize authoritative ở phía server khi render
+// (sanitizeHtml trong src/lib/content/html.ts, dùng ở tin-tuc/[id] & RetroSummary),
+// nên không cần strip lặp lại mỗi lần gõ ở client.
 export function RichText({
   value,
   onChange,
@@ -366,11 +364,7 @@ export function RichText({
 }) {
   return (
     <div className="tsl-richtext">
-      <RichTextClient
-        value={value}
-        onChange={(html) => onChange(stripScripts(html))}
-        folder={folder}
-      />
+      <RichTextClient value={value} onChange={onChange} folder={folder} />
     </div>
   );
 }

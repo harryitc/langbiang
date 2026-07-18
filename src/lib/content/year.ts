@@ -10,3 +10,8 @@ export function fillYear(text: string, year: number): string {
   if (!text) return text;
   return text.replace(YEAR_TOKEN, String(year));
 }
+
+/** Số năm hợp lệ = số nguyên 4 chữ số (FR3-R2 / FR4-R1). */
+export function isValidYear(year: unknown): year is number {
+  return typeof year === "number" && Number.isInteger(year) && year >= 1000 && year <= 9999;
+}

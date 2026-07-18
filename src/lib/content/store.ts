@@ -82,11 +82,15 @@ export async function getDraftContent(): Promise<SiteContent> {
 /* ------------------------------------------------------------------
    Ghi nháp theo đường dẫn (vd 'main.stats', 'currentYear', 'news')
    ------------------------------------------------------------------ */
-function setByPath(root: SiteContent, path: string, value: unknown): SiteContent {
+function setByPath(
+  root: Record<string, unknown>,
+  path: string,
+  value: unknown
+): Record<string, unknown> {
   const keys = path.split(".").filter(Boolean);
   if (keys.length === 0) return root;
   // clone nông theo nhánh để tránh đột biến state chia sẻ
-  const next = { ...(root as unknown as Record<string, unknown>) };
+  const next = { ...root };
   let cursor = next;
   for (let i = 0; i < keys.length - 1; i++) {
     const k = keys[i];
@@ -95,16 +99,22 @@ function setByPath(root: SiteContent, path: string, value: unknown): SiteContent
     cursor = cursor[k] as Record<string, unknown>;
   }
   cursor[keys[keys.length - 1]] = value;
-  return next as unknown as SiteContent;
+  return next;
 }
 
-/** Ghi 1 nhánh nội dung vào bản nháp. */
+/**
+ * Ghi 1 nhánh nội dung vào bản nháp.
+ * Vá thẳng lên dữ liệu thô trong Redis (không merge lại toàn bộ defaultContent
+ * mỗi lần lưu) — nhẹ hơn và lưu bản nháp thưa; khi đọc, normalize() vẫn bù đủ
+ * từ defaults nên admin luôn thấy nội dung đầy đủ.
+ */
 export async function writeDraft(
   path: string,
   value: unknown
 ): Promise<void> {
-  const current = await getDraftContent();
-  const updated = setByPath(current, path, value);
+  const raw = await readKey(DRAFT_KEY);
+  const base: Record<string, unknown> = isPlainObject(raw) ? { ...raw } : {};
+  const updated = setByPath(base, path, value);
   await redis.set(DRAFT_KEY, updated);
 }
 

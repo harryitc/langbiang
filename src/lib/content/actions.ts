@@ -2,6 +2,7 @@
 
 // Server actions cho Admin CMS. Mọi action kiểm isAdmin() trước.
 import { isAdmin } from "@/lib/admin-auth";
+import { isValidYear } from "./year";
 import { publishDraft, writeDraft } from "./store";
 
 export type ActionResult<T = undefined> = {
@@ -26,6 +27,10 @@ export async function saveDraftAction(
 ): Promise<ActionResult> {
   if (!(await isAdmin())) return { ok: false, error: "unauthorized" };
   if (!isAllowedPath(path)) return { ok: false, error: "Đường dẫn không hợp lệ." };
+  // FR3-R2: số năm hiện tại phải là số nguyên 4 chữ số (kiểm cả ở server).
+  if (path === "currentYear" && !isValidYear(value)) {
+    return { ok: false, error: "Số năm không hợp lệ (cần 4 chữ số)." };
+  }
   try {
     await writeDraft(path, value);
     return { ok: true };
@@ -45,19 +50,4 @@ export async function publishDraftAction(): Promise<ActionResult> {
   }
 }
 
-/** Đổi số năm hiện tại (FR3) — validate 4 chữ số. */
-export async function setCurrentYearAction(
-  year: number
-): Promise<ActionResult> {
-  if (!(await isAdmin())) return { ok: false, error: "unauthorized" };
-  if (!Number.isInteger(year) || year < 1000 || year > 9999) {
-    return { ok: false, error: "Số năm không hợp lệ (cần 4 chữ số)." };
-  }
-  try {
-    await writeDraft("currentYear", year);
-    return { ok: true };
-  } catch {
-    return { ok: false, error: "Lưu nháp thất bại. Vui lòng thử lại." };
-  }
-}
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Collapse, Input, InputNumber, Space, Switch, Tag } from "antd";
+import { Alert, Collapse, Input, InputNumber, Space, Tag } from "antd";
 import {
   useSectionAutosave,
   SaveStatusTag,
@@ -10,14 +10,19 @@ import {
   ImageField,
   RichText,
 } from "../editorKit";
-import type {
-  PastYear,
-  Photo,
-  Sponsor,
-  SponsorTier,
-  Stat,
-  Team,
-} from "@/lib/content/schema";
+import {
+  PhotoListEditor,
+  TeamListEditor,
+  StatListEditor,
+  SponsorTierListEditor,
+  missingPhotoFields,
+  missingTeamFields,
+  missingStatFields,
+  missingTierFields,
+  missingSponsorFields,
+} from "./sections";
+import { isValidYear } from "@/lib/content/year";
+import type { PastYear } from "@/lib/content/schema";
 
 /** Năm mặc định cho mục mới: năm trước năm hiện tại theo lịch. */
 function suggestYear(existing: PastYear[]): number {
@@ -26,11 +31,6 @@ function suggestYear(existing: PastYear[]): number {
   let candidate = base;
   while (used.has(candidate)) candidate -= 1;
   return candidate;
-}
-
-/** FR4-R1: năm phải là số 4 chữ số. */
-function isValidYear(year: number): boolean {
-  return Number.isInteger(year) && year >= 1000 && year <= 9999;
 }
 
 /** FR4-R1: năm không được trùng trong danh mục (năm là đường dẫn /{year}). */
@@ -47,49 +47,6 @@ function missingYearFields(item: PastYear): string[] {
   return missing;
 }
 
-/** FR4: ảnh trong "Khoảnh khắc" là bắt buộc. */
-function missingPhotoFields(photo: Photo): string[] {
-  return photo.src.trim() ? [] : ["ảnh"];
-}
-
-/** Như 2.10: tên ban bắt buộc + ít nhất một thành viên. */
-function missingTeamFields(team: Team): string[] {
-  const missing: string[] = [];
-  if (!team.name.trim()) missing.push("tên ban");
-  if (team.members.filter((m) => m.trim()).length === 0)
-    missing.push("ít nhất một thành viên");
-  return missing;
-}
-
-/** Như 2.3: nhãn con số là bắt buộc. */
-function missingStatFields(stat: Stat): string[] {
-  return stat.label.trim() ? [] : ["nhãn"];
-}
-
-/** Như 2.11: tên hạng bắt buộc + ít nhất một đơn vị. */
-function missingTierFields(tier: SponsorTier): string[] {
-  const missing: string[] = [];
-  if (!tier.tier.trim()) missing.push("tên hạng tài trợ");
-  if (tier.sponsors.length === 0) missing.push("ít nhất một đơn vị");
-  return missing;
-}
-
-/** Như 2.11: tên đơn vị tài trợ là bắt buộc. */
-function missingSponsorFields(sponsor: Sponsor): string[] {
-  return sponsor.name.trim() ? [] : ["tên đơn vị"];
-}
-
-/** Website tuỳ chọn nhưng nếu nhập thì phải là URL http/https. */
-function isValidUrl(url: string): boolean {
-  if (!url.trim()) return true;
-  try {
-    const parsed = new URL(url.trim());
-    return parsed.protocol === "http:" || parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
 /** Đếm mọi lỗi trong một năm (dùng cho nhãn cảnh báo ở đầu mục). */
 function countIssues(item: PastYear): number {
   return (
@@ -104,10 +61,6 @@ function countIssues(item: PastYear): number {
     ).length
   );
 }
-
-/* ------------------------------------------------------------------
-   Các phần con của một trang "Nhìn lại"
-   ------------------------------------------------------------------ */
 
 /** Phần 1 — Thông tin đầu trang. */
 function HeaderSection({
@@ -180,320 +133,6 @@ function HeaderSection({
         </div>
       ) : null}
     </Space>
-  );
-}
-
-/** Phần 3 — Khoảnh khắc (thư viện ảnh). */
-function GallerySection({
-  item,
-  updateItem,
-}: {
-  item: PastYear;
-  updateItem: (next: PastYear) => void;
-}) {
-  return (
-    <ListEditor<Photo>
-      value={item.gallery}
-      onChange={(gallery) => updateItem({ ...item, gallery })}
-      addLabel="Thêm ảnh"
-      newItem={() => ({ src: "", caption: "", desc: "", tall: false })}
-      renderItem={(photo, updatePhoto, index) => {
-        const missing = missingPhotoFields(photo);
-        return (
-          <Space direction="vertical" size={0} style={{ width: "100%" }}>
-            <div className="grid grid-cols-1 gap-x-4 md:grid-cols-2">
-              <Field label={`Ảnh #${index + 1}`} hint="Tải ảnh từ máy hoặc dán URL sẵn có.">
-                <ImageField
-                  value={photo.src}
-                  folder="past-years"
-                  onChange={(src) => updatePhoto({ ...photo, src })}
-                />
-              </Field>
-              <div>
-                <Field label="Chú thích" hint="Dòng chữ ngắn hiện trên ảnh.">
-                  <Input
-                    value={photo.caption ?? ""}
-                    placeholder="Đêm hội trăng rằm"
-                    onChange={(e) =>
-                      updatePhoto({ ...photo, caption: e.target.value })
-                    }
-                  />
-                </Field>
-                <Field label="Mô tả" hint="Tuỳ chọn.">
-                  <Input.TextArea
-                    value={photo.desc ?? ""}
-                    rows={2}
-                    placeholder="Các em nhỏ rước đèn quanh sân trường…"
-                    onChange={(e) =>
-                      updatePhoto({ ...photo, desc: e.target.value })
-                    }
-                  />
-                </Field>
-                <Field label="Ảnh cao" hint="Ảnh chiếm 2 hàng trong lưới masonry.">
-                  <Switch
-                    checked={!!photo.tall}
-                    onChange={(tall) => updatePhoto({ ...photo, tall })}
-                  />
-                </Field>
-              </div>
-            </div>
-            {missing.length > 0 ? (
-              <div className="text-xs text-red-500">Cần chọn ảnh.</div>
-            ) : null}
-          </Space>
-        );
-      }}
-    />
-  );
-}
-
-/** Phần 4 — Đại gia đình (TNV). */
-function TeamsSection({
-  item,
-  updateItem,
-}: {
-  item: PastYear;
-  updateItem: (next: PastYear) => void;
-}) {
-  return (
-    <ListEditor<Team>
-      value={item.volunteerTeams}
-      onChange={(volunteerTeams) => updateItem({ ...item, volunteerTeams })}
-      addLabel="Thêm ban"
-      newItem={() => ({ name: "", members: [] })}
-      renderItem={(team, updateTeam) => {
-        const missing = missingTeamFields(team);
-        return (
-          <Space direction="vertical" size={4} style={{ width: "100%" }}>
-            <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_auto] sm:items-end">
-              <Field label="Tên ban">
-                <Input
-                  value={team.name}
-                  placeholder="Ban Hậu cần"
-                  status={team.name.trim() ? "" : "error"}
-                  onChange={(e) => updateTeam({ ...team, name: e.target.value })}
-                />
-              </Field>
-              <div className="mb-[14px]">
-                <Tag color="blue">{team.members.length} thành viên</Tag>
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-black/10 p-3">
-              <ListEditor<string>
-                title="Danh sách thành viên"
-                value={team.members}
-                onChange={(members) => updateTeam({ ...team, members })}
-                addLabel="Thêm thành viên"
-                newItem={() => ""}
-                renderItem={(member, updateMember, index) => (
-                  <Input
-                    value={member}
-                    placeholder={`Họ và tên thành viên ${index + 1}`}
-                    status={member.trim() ? "" : "error"}
-                    onChange={(e) => updateMember(e.target.value)}
-                  />
-                )}
-              />
-            </div>
-
-            {missing.length > 0 ? (
-              <div className="text-xs text-red-500">
-                Cần điền {missing.join(", ")}.
-              </div>
-            ) : null}
-          </Space>
-        );
-      }}
-    />
-  );
-}
-
-/** Phần 5 — Những con số. */
-function StatsSection({
-  item,
-  updateItem,
-}: {
-  item: PastYear;
-  updateItem: (next: PastYear) => void;
-}) {
-  return (
-    <ListEditor<Stat>
-      value={item.stats}
-      onChange={(stats) => updateItem({ ...item, stats })}
-      addLabel="Thêm con số"
-      newItem={() => ({ value: 0, suffix: "", label: "" })}
-      renderItem={(stat, updateStat) => {
-        const missing = missingStatFields(stat);
-        return (
-          <Space direction="vertical" size={0} style={{ width: "100%" }}>
-            <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[140px_140px_1fr]">
-              <Field label="Giá trị số">
-                <InputNumber
-                  value={stat.value}
-                  min={0}
-                  precision={0}
-                  style={{ width: "100%" }}
-                  placeholder="200"
-                  // Để trống ô số ⇒ quy về 0 (tránh NaN lọt vào bản nháp JSON).
-                  onChange={(v) =>
-                    updateStat({ ...stat, value: typeof v === "number" ? v : 0 })
-                  }
-                />
-              </Field>
-              <Field label="Hậu tố" hint='Ví dụ: "+" hoặc " ngày"'>
-                <Input
-                  value={stat.suffix}
-                  placeholder="+"
-                  onChange={(e) => updateStat({ ...stat, suffix: e.target.value })}
-                />
-              </Field>
-              <Field label="Nhãn">
-                <Input
-                  value={stat.label}
-                  placeholder="Em nhỏ nhận quà"
-                  status={stat.label.trim() ? "" : "error"}
-                  onChange={(e) => updateStat({ ...stat, label: e.target.value })}
-                />
-              </Field>
-            </div>
-            {missing.length > 0 ? (
-              <div className="text-xs text-red-500">
-                Cần điền {missing.join(", ")}.
-              </div>
-            ) : (
-              <div className="text-xs opacity-60">
-                Hiển thị: {stat.value}
-                {stat.suffix} — {stat.label}
-              </div>
-            )}
-          </Space>
-        );
-      }}
-    />
-  );
-}
-
-/** Phần 6 — Nhà tài trợ. */
-function SponsorsSection({
-  item,
-  updateItem,
-}: {
-  item: PastYear;
-  updateItem: (next: PastYear) => void;
-}) {
-  return (
-    <ListEditor<SponsorTier>
-      value={item.sponsorTiers}
-      onChange={(sponsorTiers) => updateItem({ ...item, sponsorTiers })}
-      addLabel="Thêm hạng tài trợ"
-      newItem={() => ({ tier: "", sponsors: [] })}
-      renderItem={(tier, updateTier) => {
-        const missing = missingTierFields(tier);
-        return (
-          <Space direction="vertical" size={4} style={{ width: "100%" }}>
-            <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_auto] sm:items-end">
-              <Field label="Tên hạng tài trợ">
-                <Input
-                  value={tier.tier}
-                  placeholder="Nhà tài trợ Kim cương"
-                  status={tier.tier.trim() ? "" : "error"}
-                  onChange={(e) => updateTier({ ...tier, tier: e.target.value })}
-                />
-              </Field>
-              <div className="mb-[14px]">
-                <Tag color="blue">{tier.sponsors.length} đơn vị</Tag>
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-black/10 p-3">
-              <ListEditor<Sponsor>
-                title="Các đơn vị trong hạng"
-                value={tier.sponsors}
-                onChange={(sponsors) => updateTier({ ...tier, sponsors })}
-                addLabel="Thêm đơn vị"
-                newItem={() => ({ name: "", logo: "", url: "", intro: "" })}
-                renderItem={(sponsor, updateSponsor) => {
-                  const missingSponsor = missingSponsorFields(sponsor);
-                  const url = sponsor.url ?? "";
-                  const urlOk = isValidUrl(url);
-                  return (
-                    <Space direction="vertical" size={0} style={{ width: "100%" }}>
-                      <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-                        <Field label="Tên đơn vị">
-                          <Input
-                            value={sponsor.name}
-                            placeholder="Công ty ABC"
-                            status={sponsor.name.trim() ? "" : "error"}
-                            onChange={(e) =>
-                              updateSponsor({ ...sponsor, name: e.target.value })
-                            }
-                          />
-                        </Field>
-                        <Field
-                          label="Website"
-                          hint="Tuỳ chọn. Dán đầy đủ, ví dụ https://abc.vn"
-                        >
-                          <Input
-                            value={url}
-                            placeholder="https://abc.vn"
-                            status={urlOk ? "" : "error"}
-                            onChange={(e) =>
-                              updateSponsor({ ...sponsor, url: e.target.value })
-                            }
-                          />
-                        </Field>
-                      </div>
-
-                      <Field
-                        label="Logo"
-                        hint="Tuỳ chọn. Bỏ trống thì trang sẽ hiện chữ viết tắt tên đơn vị."
-                      >
-                        <ImageField
-                          value={sponsor.logo ?? ""}
-                          folder="sponsors"
-                          onChange={(logo) => updateSponsor({ ...sponsor, logo })}
-                        />
-                      </Field>
-
-                      <Field label="Giới thiệu ngắn" hint="Tuỳ chọn.">
-                        <Input.TextArea
-                          value={sponsor.intro ?? ""}
-                          rows={2}
-                          maxLength={300}
-                          showCount
-                          placeholder="Đơn vị đồng hành cùng chương trình…"
-                          onChange={(e) =>
-                            updateSponsor({ ...sponsor, intro: e.target.value })
-                          }
-                        />
-                      </Field>
-
-                      {missingSponsor.length > 0 ? (
-                        <div className="text-xs text-red-500">
-                          Cần điền {missingSponsor.join(", ")}.
-                        </div>
-                      ) : null}
-                      {!urlOk ? (
-                        <div className="text-xs text-red-500">
-                          Website phải bắt đầu bằng http:// hoặc https://.
-                        </div>
-                      ) : null}
-                    </Space>
-                  );
-                }}
-              />
-            </div>
-
-            {missing.length > 0 ? (
-              <div className="text-xs text-red-500">
-                Cần điền {missing.join(", ")}.
-              </div>
-            ) : null}
-          </Space>
-        );
-      }}
-    />
   );
 }
 
@@ -605,9 +244,7 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
                   {
                     key: "summary",
                     label: "Tổng kết",
-                    extra: item.summaryHtml.trim() ? null : (
-                      <Tag>Đang trống</Tag>
-                    ),
+                    extra: item.summaryHtml.trim() ? null : <Tag>Đang trống</Tag>,
                     children: (
                       <Field
                         label="Nội dung tổng kết"
@@ -627,28 +264,45 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
                     key: "gallery",
                     label: `Khoảnh khắc (${item.gallery.length} ảnh)`,
                     children: (
-                      <GallerySection item={item} updateItem={updateItem} />
+                      <PhotoListEditor
+                        value={item.gallery}
+                        folder="past-years"
+                        onChange={(gallery) => updateItem({ ...item, gallery })}
+                      />
                     ),
                   },
                   {
                     key: "teams",
                     label: `Đại gia đình (${item.volunteerTeams.length} ban)`,
                     children: (
-                      <TeamsSection item={item} updateItem={updateItem} />
+                      <TeamListEditor
+                        value={item.volunteerTeams}
+                        onChange={(volunteerTeams) =>
+                          updateItem({ ...item, volunteerTeams })
+                        }
+                      />
                     ),
                   },
                   {
                     key: "stats",
                     label: `Những con số (${item.stats.length} mục)`,
                     children: (
-                      <StatsSection item={item} updateItem={updateItem} />
+                      <StatListEditor
+                        value={item.stats}
+                        onChange={(stats) => updateItem({ ...item, stats })}
+                      />
                     ),
                   },
                   {
                     key: "sponsors",
                     label: `Nhà tài trợ (${item.sponsorTiers.length} hạng)`,
                     children: (
-                      <SponsorsSection item={item} updateItem={updateItem} />
+                      <SponsorTierListEditor
+                        value={item.sponsorTiers}
+                        onChange={(sponsorTiers) =>
+                          updateItem({ ...item, sponsorTiers })
+                        }
+                      />
                     ),
                   },
                 ]}

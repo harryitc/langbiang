@@ -11,6 +11,7 @@ import {
   EditorCard,
   Field,
 } from "../editorKit";
+import { fillYear, isValidYear } from "@/lib/content/year";
 import type { EventInfo } from "@/lib/content/schema";
 
 /** Editor sự kiện gom 2 nhánh nội dung: main.event và currentYear (FR3). */
@@ -20,6 +21,9 @@ export type EventEditorInitial = {
 };
 
 const DATE_FORMAT = "DD/MM/YYYY";
+
+// isValidYear + fillYear dùng chung từ @/lib/content/year (tránh lệch hành vi
+// giữa xem trước trong admin và nội dung render thật trên trang công khai).
 
 /** Chuỗi ISO 'YYYY-MM-DD' → Dayjs (null nếu trống/không hợp lệ). */
 function toDayjs(iso?: string): Dayjs | null {
@@ -32,11 +36,6 @@ function toDayjs(iso?: string): Dayjs | null {
 /** Dayjs → chuỗi ISO 'YYYY-MM-DD' (rỗng nếu bỏ chọn). */
 function toISO(d: Dayjs | null): string {
   return d ? d.format("YYYY-MM-DD") : "";
-}
-
-/** Số năm hợp lệ = số nguyên 4 chữ số (FR3-R2). */
-function isValidYear(y: unknown): y is number {
-  return typeof y === "number" && Number.isInteger(y) && y >= 1000 && y <= 9999;
 }
 
 export default function EventEditor({
@@ -73,8 +72,9 @@ export default function EventEditor({
   const errYear = isValidYear(yearDraft) ? "" : "Số năm không hợp lệ (cần 4 chữ số).";
 
   // Xem trước nhãn ngày sau khi thay ký hiệu {năm} bằng số năm hiện tại.
+  // Dùng chung fillYear để khớp đúng với nội dung render trên trang công khai.
   const dateLabelPreview = useMemo(
-    () => event.dateLabel.replaceAll("{năm}", String(year)),
+    () => fillYear(event.dateLabel, year),
     [event.dateLabel, year]
   );
 
