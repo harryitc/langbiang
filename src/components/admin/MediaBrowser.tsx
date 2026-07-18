@@ -4,6 +4,7 @@
 //  - Trang quản lý kho ảnh (mode="manage"): tạo/sửa/xoá album, xoá/di chuyển ảnh.
 //  - Bộ chọn ảnh trong ImageField (mode="pick"): duyệt theo album rồi chọn.
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import {
   App,
   Button,
@@ -23,7 +24,6 @@ import {
 } from "@ant-design/icons";
 import { uploadImage } from "@/lib/content/upload-client";
 import {
-  getMediaAction,
   addMediaAction,
   deleteMediaAction,
   moveMediaAction,
@@ -31,10 +31,18 @@ import {
   renameAlbumAction,
   deleteAlbumAction,
 } from "@/lib/content/media-actions";
+import { loadMediaLibrary } from "@/lib/content/media-cache";
 import type { MediaItem, MediaLibrary } from "@/lib/content/media";
 
 const ALL = "all";
 const MISC_ALBUM_ID = "alb-khac";
+/** Số ảnh render mỗi lô (phân trang lưới, tránh dựng hàng trăm node cùng lúc). */
+const PAGE_SIZE = 48;
+
+/** URL tối ưu được bằng next/image (ảnh /public hoặc Vercel Blob public). */
+function canOptimize(url: string): boolean {
+  return url.startsWith("/") || url.includes(".public.blob.vercel-storage.com");
+}
 
 export default function MediaBrowser({
   mode,
@@ -50,16 +58,22 @@ export default function MediaBrowser({
   const [selected, setSelected] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [limit, setLimit] = useState(PAGE_SIZE);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  async function refetch() {
-    const res = await getMediaAction();
-    if (res.ok && res.data) setLib(res.data);
-    else message.error(res.error || "Không tải được kho ảnh.");
+  async function refetch(force = false) {
+    const data = await loadMediaLibrary(force);
+    if (data) setLib(data);
+    else message.error("Không tải được kho ảnh.");
   }
   useEffect(() => {
     void refetch();
   }, []);
+
+  // Đổi album / từ khoá → xem lại từ lô đầu.
+  useEffect(() => {
+    setLimit(PAGE_SIZE);
+  }, [albumId, query]);
 
   const albums = lib?.albums ?? [];
   const items = lib?.items ?? [];
@@ -98,7 +112,7 @@ export default function MediaBrowser({
         if (res.ok) lastUrl = url;
         else message.error(res.error || "Không thêm được ảnh vào kho.");
       }
-      await refetch();
+      await refetch(true);
       if (lastUrl) message.success("Đã tải ảnh lên kho.");
     } catch (err) {
       message.error(err instanceof Error ? err.message : "Tải ảnh thất bại.");
@@ -113,7 +127,7 @@ export default function MediaBrowser({
     try {
       const res = await action;
       if (res.ok) {
-        await refetch();
+        await refetch(true);
         if (okMsg) message.success(okMsg);
       } else {
         message.error(res.error || "Thao tác thất bại.");
@@ -299,19 +313,28 @@ export default function MediaBrowser({
           {visible.length === 0 ? (
             <Empty description="Chưa có ảnh trong album này" />
           ) : (
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-              {visible.map((it) => (
-                <Thumb
-                  key={it.id}
-                  item={it}
-                  active={selected === it.id}
-                  onClick={() => setSelected(it.id)}
-                  onDoubleClick={
-                    mode === "pick" ? () => onPick?.(it.url) : undefined
-                  }
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
+                {visible.slice(0, limit).map((it) => (
+                  <Thumb
+                    key={it.id}
+                    item={it}
+                    active={selected === it.id}
+                    onClick={() => setSelected(it.id)}
+                    onDoubleClick={
+                      mode === "pick" ? () => onPick?.(it.url) : undefined
+                    }
+                  />
+                ))}
+              </div>
+              {visible.length > limit ? (
+                <div className="mt-3 text-center">
+                  <Button onClick={() => setLimit((n) => n + PAGE_SIZE)}>
+                    Xem thêm ({visible.length - limit} ảnh)
+                  </Button>
+                </div>
+              ) : null}
+            </>
           )}
         </Spin>
       </div>
@@ -389,13 +412,24 @@ function Thumb({
       onDoubleClick={onDoubleClick}
       title={item.name}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={item.url}
-        alt={item.name}
-        loading="lazy"
-        className="h-full w-full object-cover"
-      />
+      {canOptimize(item.url) ? (
+        // next/image tự phục vụ ảnh thu nhỏ (giảm băng thông so với ảnh gốc).
+        <Image
+          src={item.url}
+          alt={item.name}
+          fill
+          sizes="(max-width: 768px) 25vw, 140px"
+          className="object-cover"
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.url}
+          alt={item.name}
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+      )}
     </button>
   );
 }
