@@ -1,58 +1,18 @@
-"use client";
-
 // Khối "Đăng ký" ở trang chủ. Toàn bộ chữ và danh sách trường của form đều do
-// admin cấu hình (main.register).
-// Khi khách bấm gửi: dữ liệu đi tới server, được lưu lại và gửi email báo cho
-// Ban tổ chức. Chỉ khi thật sự thành công mới hiện màn cảm ơn; thất bại thì
-// giữ nguyên chữ khách đã gõ và hiện lời nhắn lỗi.
-import { useState } from "react";
+// admin cấu hình — form nào hiện ở đây là do admin chọn ("Đặt làm form hiển thị
+// ở trang chủ" trong mục Form đăng ký).
+// Phần thẻ form nằm ở RegisterFormCard để dùng chung với trang /dang-ky/<id>.
 import Reveal from "@/components/Reveal";
-import { submitRegistrationAction } from "@/lib/content/register-actions";
-import type { RegisterField, RegisterSection } from "@/lib/content/schema";
-
-const INPUT_CLASS =
-  "w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition placeholder:text-forest/40 focus:border-leaf focus:ring-2 focus:ring-leaf/30";
+import RegisterFormCard from "./RegisterFormCard";
+import type { RegisterForm } from "@/lib/content/schema";
 
 export default function Register({
   facebook,
   content,
 }: {
   facebook: string;
-  content: RegisterSection;
+  content: RegisterForm;
 }) {
-  const [sent, setSent] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (sending) return;
-    const form = e.currentTarget;
-    const data: Record<string, string> = {};
-    for (const [key, v] of new FormData(form).entries()) {
-      if (typeof v === "string") data[key] = v;
-    }
-
-    setSending(true);
-    setError(null);
-    try {
-      const res = await submitRegistrationAction(data);
-      if (res.ok) {
-        form.reset();
-        setSent(true);
-      } else {
-        // Không xoá form — khách chỉ cần sửa lại rồi gửi tiếp.
-        setError(res.error || "Chưa gửi được đăng ký. Bạn thử lại giúp nhé.");
-      }
-    } catch {
-      setError(
-        "Không kết nối được với máy chủ. Bạn kiểm tra mạng rồi thử lại, hoặc nhắn cho tụi mình qua Fanpage nhé."
-      );
-    } finally {
-      setSending(false);
-    }
-  }
-
   return (
     <section
       id="register"
@@ -91,117 +51,9 @@ export default function Register({
         </Reveal>
 
         <Reveal>
-          <div className="glass rounded-3xl p-7 text-forest shadow-soft sm:p-9">
-            {sent ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <span className="text-6xl">💚</span>
-                <h3 className="mt-4 text-2xl font-bold text-leaf-deep">
-                  {content.successTitle}
-                </h3>
-                <p className="mt-2 text-forest/75">{content.successNote}</p>
-                <button
-                  onClick={() => {
-                    setSent(false);
-                    setError(null);
-                  }}
-                  className="mt-6 cursor-pointer rounded-full border-2 border-leaf/30 px-6 py-2.5 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10"
-                >
-                  {content.successAgainLabel}
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="text-2xl font-bold text-leaf-deep">
-                  {content.formTitle}
-                </h3>
-
-                {content.fields.map((field, i) => (
-                  <RegisterFieldView key={field.name || i} field={field} />
-                ))}
-
-                {/* Ô ẩn chống spam: người thật không thấy nên luôn để trống,
-                    bot tự động điền thì đăng ký bị bỏ qua. */}
-                <input
-                  type="text"
-                  name="_website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  aria-hidden="true"
-                  className="hidden"
-                />
-
-                {error ? (
-                  <p
-                    role="alert"
-                    className="rounded-xl bg-sunset/10 px-4 py-3 text-sm font-medium text-sunset"
-                  >
-                    {error}
-                  </p>
-                ) : null}
-
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="w-full cursor-pointer rounded-full bg-gradient-to-r from-leaf-deep to-leaf py-3.5 text-base font-semibold text-white shadow-soft transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {sending ? "Đang gửi…" : content.submitLabel}
-                </button>
-                <p className="text-center text-xs text-forest/60">
-                  {content.contactNote}{" "}
-                  <a
-                    href={facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cursor-pointer font-semibold text-leaf-deep underline"
-                  >
-                    {content.contactLinkLabel}
-                  </a>
-                </p>
-              </form>
-            )}
-          </div>
+          <RegisterFormCard form={content} facebook={facebook} />
         </Reveal>
       </div>
     </section>
-  );
-}
-
-/** Một trường của form, dựng theo cấu hình trong admin. */
-function RegisterFieldView({ field }: { field: RegisterField }) {
-  return (
-    <div>
-      <label className="mb-1.5 block text-sm font-semibold text-forest/80">
-        {field.label}
-        {field.required && <span className="text-sunset"> *</span>}
-      </label>
-
-      {field.type === "textarea" ? (
-        <textarea
-          name={field.name}
-          rows={3}
-          placeholder={field.placeholder}
-          required={field.required}
-          className={`${INPUT_CLASS} resize-none`}
-        />
-      ) : field.type === "select" ? (
-        <select
-          name={field.name}
-          required={field.required}
-          className="w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/30"
-        >
-          {(field.options ?? []).map((opt, i) => (
-            <option key={i}>{opt}</option>
-          ))}
-        </select>
-      ) : (
-        <input
-          name={field.name}
-          type={field.type}
-          placeholder={field.placeholder}
-          required={field.required}
-          className={INPUT_CLASS}
-        />
-      )}
-    </div>
   );
 }

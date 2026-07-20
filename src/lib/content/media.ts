@@ -39,7 +39,11 @@ export async function getMediaLibrary(): Promise<MediaLibrary> {
   try {
     const raw = await redis.get<MediaLibrary>(MEDIA_KEY);
     if (raw && Array.isArray(raw.albums) && Array.isArray(raw.items)) {
-      return raw;
+      // Kho đã lưu từ trước có thể thiếu album mặc định mới thêm về sau
+      // (vd "Tình nguyện viên") — bù vào để chỗ nào cũng chọn được.
+      const co = new Set(raw.albums.map((a) => a.id));
+      const thieu = defaultMediaLibrary.albums.filter((a) => !co.has(a.id));
+      return thieu.length ? { ...raw, albums: [...raw.albums, ...thieu] } : raw;
     }
   } catch {
     // lỗi Redis -> dùng mặc định
@@ -54,3 +58,35 @@ export async function saveMediaLibrary(lib: MediaLibrary): Promise<void> {
 
 /** Album đích khi xoá album chứa ảnh (dồn ảnh về "Khác"). */
 export const FALLBACK_ALBUM_ID = MISC_ALBUM_ID;
+
+/**
+ * Thêm 1 ảnh vào kho — HÀM NỘI BỘ, KHÔNG kiểm tra quyền.
+ *
+ * Chỉ được gọi từ mã server đã tự chịu trách nhiệm về quyền:
+ *  - `addMediaAction` (media-actions.ts) — vẫn bắt buộc đăng nhập admin;
+ *  - `submitRegistrationAction` — khách gửi form có ô ảnh, ảnh được xếp vào
+ *    album "Tình nguyện viên". Đây là con đường DUY NHẤT khách chạm tới kho ảnh
+ *    và chỉ thêm được đúng ảnh vừa tải lên kèm đăng ký.
+ * Tuyệt đối không export hàm này ra client.
+ */
+export async function addMediaItem(input: {
+  url: string;
+  name: string;
+  albumId: string;
+}): Promise<MediaItem | null> {
+  const url = input.url.trim();
+  if (!url) return null;
+  const lib = await getMediaLibrary();
+  const albumId = lib.albums.some((a) => a.id === input.albumId)
+    ? input.albumId
+    : FALLBACK_ALBUM_ID;
+  const item: MediaItem = {
+    id: crypto.randomUUID(),
+    url,
+    name: input.name.trim() || "anh",
+    albumId,
+    addedAt: new Date().toISOString(),
+  };
+  await saveMediaLibrary({ ...lib, items: [item, ...lib.items] });
+  return item;
+}

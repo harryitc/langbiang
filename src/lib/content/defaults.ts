@@ -14,6 +14,11 @@ import {
 } from "@/lib/site";
 import { gallery2025 } from "@/lib/gallery2025";
 import { CONTENT_VERSION, type Photo, type SiteContent } from "./schema";
+import {
+  defaultEmailTemplates,
+  TEMPLATE_BAO_BTC_ID,
+  TEMPLATE_CAM_ON_ID,
+} from "./email-templates";
 
 /** Nối các đoạn văn thành HTML an toàn (body: string[] -> bodyHtml). */
 function paragraphsToHtml(paras: string[]): string {
@@ -89,83 +94,93 @@ export const defaultContent: SiteContent = {
       badgeNote: "Trở lại Langbiang với thật nhiều yêu thương.",
       ctaPrimaryLabel: "Đăng ký đồng hành 🌙",
     },
-    // Khối "Đăng ký" — giữ đúng nội dung đã hardcode trong Register.tsx.
-    register: {
-      eyebrow: "Tham gia cùng chúng mình",
-      title: "Cùng thắp sáng",
-      titleHighlight: "một mùa trăng yêu thương",
-      description:
-        "Dù bạn trực tiếp lên đường hay đồng hành từ xa, mỗi tấm lòng đều góp phần làm nên điều kỳ diệu cho các em nhỏ Langbiang.",
-      highlights: [
-        {
-          icon: "🙋",
-          title: "Tình nguyện viên",
-          desc: "Trực tiếp tham gia hành trình 26–27/9",
-        },
-        {
-          icon: "🎁",
-          title: "Nhà hảo tâm",
-          desc: "Đóng góp quà, nhu yếu phẩm & kinh phí",
-        },
-      ],
-      formTitle: "Đăng ký đồng hành",
-      fields: [
-        {
-          name: "name",
-          label: "Họ và tên",
-          type: "text",
-          placeholder: "Nguyễn Văn A",
-          required: true,
-        },
-        {
-          name: "email",
-          label: "Email",
-          type: "email",
-          placeholder: "ban@email.com",
-          required: true,
-        },
-        {
-          name: "phone",
-          label: "Số điện thoại",
-          type: "tel",
-          placeholder: "09xx xxx xxx",
-          required: true,
-        },
-        { name: "dob", label: "Ngày sinh", type: "date", required: true },
-        {
-          name: "organization",
-          label: "Đơn vị học tập / công tác",
-          type: "text",
-          placeholder: "Trường / công ty (không bắt buộc)",
-        },
-        {
-          name: "role",
-          label: "Bạn muốn tham gia với vai trò",
-          type: "select",
-          options: [
-            "Tình nguyện viên",
-            "Nhà hảo tâm / Nhà tài trợ",
-            "Cộng tác truyền thông",
-            "Khác",
-          ],
-        },
-        {
-          name: "message",
-          label: "Lời nhắn (không bắt buộc)",
-          type: "textarea",
-          placeholder: "Chia sẻ mong muốn của bạn...",
-        },
-      ],
-      submitLabel: "Gửi đăng ký 🌙",
-      successTitle: "Cảm ơn bạn rất nhiều!",
-      successNote:
-        "Ban tổ chức sẽ liên hệ với bạn trong thời gian sớm nhất qua email hoặc điện thoại.",
-      successAgainLabel: "Gửi đăng ký khác",
-      contactNote: "Hoặc liên hệ trực tiếp qua",
-      contactLinkLabel: "Fanpage Facebook",
-      // Hộp thư nhận thông báo đăng ký. Bỏ trống -> dùng tạm site.email.
-      recipientEmail: "",
-    },
+    // Form hiện ở khối "Đăng ký" ngoài trang chủ (id phải có trong registerForms).
+    activeRegisterFormId: "langbiang-2026",
+    // Danh sách form đăng ký. Form đầu tiên giữ đúng nội dung đã hardcode trong
+    // Register.tsx; mỗi form còn có đường dẫn chia sẻ riêng /dang-ky/<id>.
+    registerForms: [
+      {
+        id: "langbiang-2026",
+        name: "Langbiang 2026",
+        eyebrow: "Tham gia cùng chúng mình",
+        title: "Cùng thắp sáng",
+        titleHighlight: "một mùa trăng yêu thương",
+        description:
+          "Dù bạn trực tiếp lên đường hay đồng hành từ xa, mỗi tấm lòng đều góp phần làm nên điều kỳ diệu cho các em nhỏ Langbiang.",
+        highlights: [
+          {
+            icon: "🙋",
+            title: "Tình nguyện viên",
+            desc: "Trực tiếp tham gia hành trình 26–27/9",
+          },
+          {
+            icon: "🎁",
+            title: "Nhà hảo tâm",
+            desc: "Đóng góp quà, nhu yếu phẩm & kinh phí",
+          },
+        ],
+        formTitle: "Đăng ký đồng hành",
+        fields: [
+          {
+            name: "name",
+            label: "Họ và tên",
+            type: "text",
+            placeholder: "Nguyễn Văn A",
+            required: true,
+          },
+          {
+            name: "email",
+            label: "Email",
+            type: "email",
+            placeholder: "ban@email.com",
+            required: true,
+          },
+          {
+            name: "phone",
+            label: "Số điện thoại",
+            type: "tel",
+            placeholder: "09xx xxx xxx",
+            required: true,
+          },
+          { name: "dob", label: "Ngày sinh", type: "date", required: true },
+          {
+            name: "organization",
+            label: "Đơn vị học tập / công tác",
+            type: "text",
+            placeholder: "Trường / công ty (không bắt buộc)",
+          },
+          {
+            name: "role",
+            label: "Bạn muốn tham gia với vai trò",
+            type: "select",
+            options: [
+              "Tình nguyện viên",
+              "Nhà hảo tâm / Nhà tài trợ",
+              "Cộng tác truyền thông",
+              "Khác",
+            ],
+          },
+          {
+            name: "message",
+            label: "Lời nhắn (không bắt buộc)",
+            type: "textarea",
+            placeholder: "Chia sẻ mong muốn của bạn...",
+          },
+        ],
+        submitLabel: "Gửi đăng ký 🌙",
+        successTitle: "Cảm ơn bạn rất nhiều!",
+        successNote:
+          "Ban tổ chức sẽ liên hệ với bạn trong thời gian sớm nhất qua email hoặc điện thoại.",
+        successAgainLabel: "Gửi đăng ký khác",
+        contactNote: "Hoặc liên hệ trực tiếp qua",
+        contactLinkLabel: "Fanpage Facebook",
+        // Hộp thư nhận thông báo đăng ký. Bỏ trống -> dùng tạm site.email.
+        recipientEmail: "",
+        // Hai mẫu email dùng cho form này (sửa lời văn ở mục "Mẫu email").
+        confirmTemplateId: TEMPLATE_CAM_ON_ID,
+        notifyTemplateId: TEMPLATE_BAO_BTC_ID,
+      },
+    ],
     faqs: faqs.map((f) => ({ ...f })),
     fundraising: {
       title: fundraising.title,
@@ -209,6 +224,9 @@ export const defaultContent: SiteContent = {
       },
     },
   ],
+
+  // Mẫu email gửi tự động khi có người đăng ký (admin sửa được lời văn).
+  emailTemplates: defaultEmailTemplates.map((t) => ({ ...t })),
 
   // Tin tức — chuyển body: string[] -> bodyHtml.
   news: siteNews.map((n) => ({
