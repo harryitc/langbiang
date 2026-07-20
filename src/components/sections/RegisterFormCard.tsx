@@ -8,7 +8,7 @@
 // Khi khách bấm gửi: dữ liệu đi tới server, được lưu lại theo đúng form và gửi
 // email báo cho Ban tổ chức. Chỉ khi thật sự thành công mới hiện màn cảm ơn;
 // thất bại thì giữ nguyên chữ khách đã gõ và hiện lời nhắn lỗi.
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { submitRegistrationAction } from "@/lib/content/register-actions";
 import { uploadRegistrationPhoto } from "@/lib/content/register-upload-client";
 import type { RegisterField, RegisterForm } from "@/lib/content/schema";
@@ -35,6 +35,39 @@ const TOI = {
   viDeMo: "dark:text-ink/75",
 };
 
+/**
+ * Khoá ghi nhớ "máy này đã đăng ký form đó rồi" trong localStorage.
+ * Tách theo từng form: đăng ký đợt này không làm form đợt khác coi như đã xong.
+ */
+function khoaDaGui(formId: string): string {
+  return `tsl-da-dang-ky:${formId}`;
+}
+
+/** Đọc/ghi localStorage an toàn — chế độ ẩn danh hoặc trình duyệt chặn thì bỏ qua. */
+const nho = {
+  doc(formId: string): boolean {
+    try {
+      return !!window.localStorage.getItem(khoaDaGui(formId));
+    } catch {
+      return false;
+    }
+  },
+  ghi(formId: string) {
+    try {
+      window.localStorage.setItem(khoaDaGui(formId), new Date().toISOString());
+    } catch {
+      // không lưu được thì thôi, chỉ mất phần ghi nhớ
+    }
+  },
+  xoa(formId: string) {
+    try {
+      window.localStorage.removeItem(khoaDaGui(formId));
+    } catch {
+      // như trên
+    }
+  },
+};
+
 export default function RegisterFormCard({
   form,
   facebook,
@@ -55,6 +88,13 @@ export default function RegisterFormCard({
   // Số ảnh đang tải dở — còn ảnh nào chưa xong thì khoá nút gửi lại.
   const [uploading, setUploading] = useState(0);
 
+  // Khách đã đăng ký form này ở lần trước -> mở lại trang vẫn thấy màn cảm ơn.
+  // Phải đọc trong useEffect chứ không đọc lúc dựng: máy chủ không có
+  // localStorage, đọc sớm sẽ khiến nội dung máy chủ và trình duyệt lệch nhau.
+  useEffect(() => {
+    if (nho.doc(form.id)) setSent(true);
+  }, [form.id]);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (sending || uploading > 0) return;
@@ -71,6 +111,7 @@ export default function RegisterFormCard({
       if (res.ok) {
         el.reset();
         setPhotos({});
+        nho.ghi(form.id);
         setSent(true);
       } else {
         // Không xoá form — khách chỉ cần sửa lại rồi gửi tiếp.
@@ -96,6 +137,8 @@ export default function RegisterFormCard({
           <p className={`mt-2 text-forest/75${t(TOI.viDeMo)}`}>{form.successNote}</p>
           <button
             onClick={() => {
+              // Bấm gửi đơn khác -> quên trạng thái cũ, trả form về trống.
+              nho.xoa(form.id);
               setSent(false);
               setError(null);
             }}
