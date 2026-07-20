@@ -12,9 +12,13 @@ export default function AntdProvider({ children }: { children: ReactNode }) {
     <AntdRegistry>
       <ConfigProvider
         theme={{
-          algorithm: theme.compactAlgorithm,
+          // Không dùng compactAlgorithm: nó co cả cỡ chữ (seed 16 -> render 14px)
+          // và bóp khoảng cách, gây chật chội khi nhập liệu nhiều.
           token: {
             colorPrimary: "#2e7d32",
+            // Cỡ chữ mặc định toàn khu quản trị (antd mặc định 14px).
+            // Mọi thành phần kế thừa từ đây nên không cần chỉnh riêng lẻ.
+            fontSize: 16,
             // #2e7d32 là xanh đậm nên antd tự suy ra nền nhạt bị xám đục
             // (#b3bdb1) — chỉ định thẳng sắc xanh nhạt cho đúng tông thương hiệu.
             colorPrimaryBg: "#e6f4ea",
@@ -22,9 +26,7 @@ export default function AntdProvider({ children }: { children: ReactNode }) {
           },
           components: {
             Menu: {
-              // Chữ menu sidebar 13px — đặt qua token của antd thay vì style
-              // inline để mọi trạng thái (chọn/hover/thu gọn) đều đồng bộ.
-              fontSize: 13,
+              // Cỡ chữ kế thừa token.fontSize (13px) — không đặt lại ở đây.
               // Mục đang chọn: nền xanh nhạt + chữ xanh đậm cho dễ đọc.
               itemSelectedBg: "#e6f4ea",
               itemSelectedColor: "#1b5e20",
