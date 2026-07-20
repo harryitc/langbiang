@@ -14,10 +14,16 @@ import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
 import { getContent } from "@/lib/content/store";
 import { fillYear, eventDateLabel } from "@/lib/content/year";
+import { activeRegisterForm } from "@/lib/content/schema";
 
 export default async function Home() {
   const { main, currentYear, pastYears, news } = await getContent();
   const { site, event } = main;
+  // Form đăng ký admin chọn hiển thị ở trang chủ (id hỏng -> lùi về form đầu).
+  const registerForm = activeRegisterForm(
+    main.registerForms,
+    main.activeRegisterFormId
+  );
   // Danh mục năm đã qua cho dropdown "Năm" ở header: mới → cũ (FR4).
   const years = [...pastYears].sort((a, b) => b.year - a.year).map((y) => y.year);
 
@@ -40,7 +46,9 @@ export default async function Home() {
         <BannerSlider photos={main.gallery} />
         <News posts={news} currentYear={currentYear} carousel />
         <DonateBand />
-        <Register facebook={site.facebook} content={main.register} />
+        {registerForm ? (
+          <Register facebook={site.facebook} content={registerForm} />
+        ) : null}
         <Faq faqs={main.faqs} />
         <ExploreGrid />
       </main>

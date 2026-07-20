@@ -7,6 +7,7 @@ import { cache } from "react";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redis } from "@/lib/redis";
 import { defaultContent } from "./defaults";
+import { TEMPLATE_BAO_BTC_ID, TEMPLATE_CAM_ON_ID } from "./email-templates";
 import {
   CONTENT_TAG,
   CONTENT_VERSION,
@@ -49,9 +50,67 @@ function mergeDeep<T>(base: T, raw: unknown): T {
   return out as T;
 }
 
+/**
+ * Nâng cấp dữ liệu cũ (< v11) sang cấu trúc nhiều form đăng ký.
+ * Trước v11 chỉ có MỘT form nằm ở `main.register`; nay là danh sách
+ * `main.registerForms` + `main.activeRegisterFormId`. Bản ghi cũ được chuyển
+ * thành form đầu tiên để nội dung admin đã soạn không bị mất.
+ */
+function migrateRegisterForms(raw: unknown): unknown {
+  if (!isPlainObject(raw) || !isPlainObject(raw.main)) return raw;
+  const main = raw.main;
+  if (!isPlainObject(main.register) || Array.isArray(main.registerForms)) {
+    return raw;
+  }
+  const id = "langbiang-2026";
+  return {
+    ...raw,
+    main: {
+      ...main,
+      registerForms: [{ id, name: "Langbiang 2026", ...main.register }],
+      activeRegisterFormId: main.activeRegisterFormId ?? id,
+    },
+  };
+}
+
+/**
+ * Bù mẫu email mặc định cho form soạn từ trước khi có tính năng mẫu email (< v12).
+ *
+ * Cần bước riêng vì mergeDeep THAY nguyên mảng chứ không trộn từng phần tử:
+ * `registerForms` đã lưu trong Redis sẽ đè hẳn lên mặc định, nên form cũ không
+ * có mã mẫu nào và hệ quả là KHÔNG email nào được gửi — hỏng âm thầm.
+ *
+ * Chỉ bù khi khoá VẮNG MẶT. Chuỗi rỗng nghĩa là admin cố ý chọn "Không gửi",
+ * bù vào là tự ý bật lại thứ người ta đã tắt.
+ */
+function migrateEmailTemplates(raw: unknown): unknown {
+  if (!isPlainObject(raw) || !isPlainObject(raw.main)) return raw;
+  const forms = raw.main.registerForms;
+  if (!Array.isArray(forms)) return raw;
+
+  return {
+    ...raw,
+    main: {
+      ...raw.main,
+      registerForms: forms.map((f) =>
+        isPlainObject(f)
+          ? {
+              ...f,
+              confirmTemplateId:
+                "confirmTemplateId" in f ? f.confirmTemplateId : TEMPLATE_CAM_ON_ID,
+              notifyTemplateId:
+                "notifyTemplateId" in f ? f.notifyTemplateId : TEMPLATE_BAO_BTC_ID,
+            }
+          : f
+      ),
+    },
+  };
+}
+
 /** Chuẩn hoá dữ liệu thô từ store thành SiteContent đầy đủ. */
 export function normalize(raw: unknown): SiteContent {
-  const merged = mergeDeep(defaultContent, raw);
+  const migrated = migrateEmailTemplates(migrateRegisterForms(raw));
+  const merged = mergeDeep(defaultContent, migrated);
   return { ...merged, version: CONTENT_VERSION };
 }
 

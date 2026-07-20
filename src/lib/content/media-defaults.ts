@@ -9,6 +9,8 @@ export const GALLERY_ALBUM_ID = "alb-thu-vien";
 export const NEWS_ALBUM_ID = "alb-tin-tuc";
 export const TEAM_ALBUM_ID = "alb-ban-to-chuc";
 export const Y2025_ALBUM_ID = "alb-mua-2025";
+/** Ảnh khách tự tải lên khi điền form đăng ký (ô nhập kiểu "Ảnh"). */
+export const VOLUNTEER_ALBUM_ID = "alb-tnv";
 export const MISC_ALBUM_ID = "alb-khac";
 
 const albums: MediaAlbum[] = [
@@ -16,6 +18,7 @@ const albums: MediaAlbum[] = [
   { id: NEWS_ALBUM_ID, name: "Tin tức", system: true },
   { id: TEAM_ALBUM_ID, name: "Ban tổ chức", system: true },
   { id: Y2025_ALBUM_ID, name: "Mùa 2025", system: true },
+  { id: VOLUNTEER_ALBUM_ID, name: "Tình nguyện viên", system: true },
   { id: MISC_ALBUM_ID, name: "Khác", system: true },
 ];
 

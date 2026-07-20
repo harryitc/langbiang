@@ -4,6 +4,7 @@
 import { del } from "@vercel/blob";
 import { isAdmin } from "@/lib/admin-auth";
 import {
+  addMediaItem,
   getMediaLibrary,
   saveMediaLibrary,
   FALLBACK_ALBUM_ID,
@@ -39,19 +40,8 @@ export async function addMediaAction(input: {
   albumId: string;
 }): Promise<MediaResult<MediaItem>> {
   if (!(await guard())) return { ok: false, error: "unauthorized" };
-  if (!input.url.trim()) return { ok: false, error: "Thiếu đường dẫn ảnh." };
-  const lib = await getMediaLibrary();
-  const albumId = lib.albums.some((a) => a.id === input.albumId)
-    ? input.albumId
-    : FALLBACK_ALBUM_ID;
-  const item: MediaItem = {
-    id: crypto.randomUUID(),
-    url: input.url.trim(),
-    name: input.name.trim() || "anh",
-    albumId,
-    addedAt: new Date().toISOString(),
-  };
-  await saveMediaLibrary({ ...lib, items: [item, ...lib.items] });
+  const item = await addMediaItem(input);
+  if (!item) return { ok: false, error: "Thiếu đường dẫn ảnh." };
   return { ok: true, data: item };
 }
 

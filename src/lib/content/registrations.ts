@@ -3,7 +3,7 @@
 // liệu này ra trang công khai.
 import { redis } from "@/lib/redis";
 import {
-  REGISTRATIONS_KEY,
+  registrationsKey,
   REGISTRATIONS_LIMIT,
   type Registration,
 } from "./schema";
@@ -16,13 +16,17 @@ function laDangKy(v: unknown): v is Registration {
 }
 
 /**
- * Các lượt đăng ký, mới nhất trước.
+ * Các lượt đăng ký của MỘT form, mới nhất trước.
+ * @param formId id (slug) của form — mỗi form một danh sách riêng.
  * Lỗi Redis -> trả mảng rỗng để trang admin không vỡ.
  */
-export async function listRegistrations(): Promise<Registration[]> {
+export async function listRegistrations(
+  formId: string
+): Promise<Registration[]> {
+  if (!formId) return [];
   let raw: unknown[];
   try {
-    raw = await redis.lrange(REGISTRATIONS_KEY, 0, REGISTRATIONS_LIMIT - 1);
+    raw = await redis.lrange(registrationsKey(formId), 0, REGISTRATIONS_LIMIT - 1);
   } catch (err) {
     console.error("[dang-ky] Không đọc được danh sách đăng ký:", err);
     return [];

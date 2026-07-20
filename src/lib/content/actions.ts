@@ -12,7 +12,13 @@ export type ActionResult<T = undefined> = {
 };
 
 /** Các nhánh nội dung được phép ghi (chống ghi bừa). */
-const ALLOWED_ROOTS = ["currentYear", "main", "pastYears", "news"];
+const ALLOWED_ROOTS = [
+  "currentYear",
+  "main",
+  "pastYears",
+  "news",
+  "emailTemplates",
+];
 
 function isAllowedPath(path: string): boolean {
   if (typeof path !== "string" || path.length === 0) return false;

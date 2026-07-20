@@ -2,8 +2,10 @@
 // Website là khung mẫu; toàn bộ nội dung đọc từ store này.
 // Tái sử dụng các type sẵn có trong src/lib/site.ts để đồng bộ với dữ liệu mặc định.
 import type { Sponsor, Member } from "@/lib/site";
+import type { EmailTemplate } from "./email-templates";
 
 export type { Sponsor, Member };
+export type { EmailTemplate };
 
 /* ------------------------------------------------------------------
    Các kiểu con dùng chung
@@ -151,7 +153,9 @@ export type RegisterFieldType =
   | "tel"
   | "date"
   | "textarea"
-  | "select";
+  | "select"
+  /** Ô để khách tự chọn ảnh từ máy và tải lên (ảnh tình nguyện viên). */
+  | "photo";
 
 /** Một trường của form đăng ký. */
 export type RegisterField = {
@@ -192,6 +196,60 @@ export type RegisterSection = {
   recipientEmail?: string;
 };
 
+/**
+ * Một FORM đăng ký hoàn chỉnh. Website có thể có nhiều form song song (mỗi đợt
+ * tuyển một form), mỗi form có đường dẫn riêng để chia sẻ: `/dang-ky/<id>`.
+ * Trang chủ hiển thị đúng MỘT form — form có id trùng `activeRegisterFormId`.
+ */
+export type RegisterForm = RegisterSection & {
+  /** Slug dùng cho đường dẫn `/dang-ky/<id>` — chữ thường, số, gạch ngang; duy nhất. */
+  id: string;
+  /** Tên gọi nội bộ để admin nhận ra form, vd "Langbiang 2026". */
+  name: string;
+  /**
+   * Mẫu email CẢM ƠN gửi cho người vừa đăng ký (id trong `emailTemplates`).
+   *
+   * Ba trạng thái KHÁC NHAU, đừng gộp:
+   *  - chuỗi rỗng "" : admin CỐ Ý chọn "Không gửi" -> tôn trọng, không gửi.
+   *  - undefined     : form có từ trước khi có tính năng mẫu email -> lúc đọc
+   *                    được bù mẫu mặc định (xem migrateEmailTemplates).
+   *  - id có thật    : dùng mẫu đó.
+   */
+  confirmTemplateId?: string;
+  /**
+   * Mẫu email BÁO TIN gửi về hộp thư Ban tổ chức (`recipientEmail`).
+   * Ba trạng thái giống `confirmTemplateId`. Không gửi thì đăng ký vẫn lưu và
+   * xem được trong khu quản trị.
+   */
+  notifyTemplateId?: string;
+};
+
+/** Định dạng hợp lệ của slug form (đường dẫn chia sẻ). */
+export const REGISTER_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Đổi một chuỗi tiếng Việt bất kỳ thành slug gợi ý cho đường dẫn form. */
+export function toRegisterSlug(raw: string): string {
+  return raw
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Form đang hiển thị ở trang chủ. Id đã lưu mà không còn form nào khớp (form bị
+ * xoá/đổi slug) thì lùi về form đầu tiên để trang chủ không bao giờ trống.
+ */
+export function activeRegisterForm(
+  forms: RegisterForm[],
+  activeId: string
+): RegisterForm | undefined {
+  return forms.find((f) => f.id === activeId) ?? forms[0];
+}
+
 /* ------------------------------------------------------------------
    Một lượt đăng ký khách gửi từ form ở trang chủ
    ------------------------------------------------------------------ */
@@ -204,9 +262,12 @@ export type Registration = {
   labels: Record<string, string>;
 };
 
-/** Khoá Redis chứa danh sách đăng ký (list, mới nhất ở đầu). */
-export const REGISTRATIONS_KEY = "registrations";
-/** Chỉ giữ lại chừng này bản ghi gần nhất. */
+/**
+ * Khoá Redis chứa danh sách đăng ký của MỘT form (list, mới nhất ở đầu).
+ * Mỗi form một khoá riêng nên đơn của đợt này không lẫn sang đợt khác.
+ */
+export const registrationsKey = (formId: string) => `registrations:${formId}`;
+/** Chỉ giữ lại chừng này bản ghi gần nhất (cho mỗi form). */
 export const REGISTRATIONS_LIMIT = 500;
 
 /** Bài tin tức (nội dung dài lưu ở dạng HTML an toàn — CKEditor). */
@@ -236,8 +297,13 @@ export type MainContent = {
   aboutImage: string;
   /** Chữ của mục "Giới thiệu" ở trang chủ. */
   about: AboutSection;
-  /** Khối "Đăng ký" ở trang chủ (chữ + cấu hình form). */
-  register: RegisterSection;
+  /**
+   * Tất cả form đăng ký. Mỗi form có đường dẫn chia sẻ riêng `/dang-ky/<id>`;
+   * trang chủ chỉ hiện form được chọn ở `activeRegisterFormId`.
+   */
+  registerForms: RegisterForm[];
+  /** Id của form đang hiển thị ở khối "Đăng ký" ngoài trang chủ. */
+  activeRegisterFormId: string;
   faqs: Faq[];
   fundraising: Fundraising;
   sponsorTiers: SponsorTier[];
@@ -275,6 +341,12 @@ export type SiteContent = {
   pastYears: PastYear[];
   /** Dòng tin tức, mới nhất trước. */
   news: NewsPost[];
+  /**
+   * Kho mẫu email dùng chung cho mọi form đăng ký. Mỗi form trỏ tới mẫu nào
+   * là việc của form (`confirmTemplateId` / `notifyTemplateId`), nên sửa lời
+   * văn một lần là mọi form đang dùng mẫu đó đổi theo.
+   */
+  emailTemplates: EmailTemplate[];
 };
 
 /**
@@ -303,7 +375,15 @@ export const SLIDESHOW_LIMIT = 6;
 // và gửi email báo về hộp thư riêng của Ban tổ chức (main.register
 // .recipientEmail, khác email công khai site.email); xem lại các lượt đăng ký ở
 // mục "Đăng ký nhận được" trong khu quản trị.
-export const CONTENT_VERSION = 10;
+// v11: nhiều form đăng ký song song — main.register (một form duy nhất) đổi
+// thành main.registerForms[] + main.activeRegisterFormId (form hiện ở trang
+// chủ). Mỗi form có đường dẫn chia sẻ riêng /dang-ky/<id> và một danh sách đăng
+// ký riêng trong Redis (registrations:<id>). Thêm kiểu ô nhập "photo" để khách
+// tự tải ảnh lên; ảnh đó tự vào kho ảnh, album "Tình nguyện viên".
+// v12: mẫu email soạn được từ admin (emailTemplates). Mỗi form đăng ký chọn
+// mẫu cảm ơn gửi người đăng ký (confirmTemplateId) và mẫu báo tin gửi Ban tổ
+// chức (notifyTemplateId); nội dung email không còn nằm cứng trong code.
+export const CONTENT_VERSION = 12;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */
