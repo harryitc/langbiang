@@ -5,7 +5,6 @@ import {
   useSectionAutosave,
   SaveStatusTag,
   EditorCard,
-  ListEditor,
   Field,
   ImageField,
   RichText,
@@ -18,6 +17,7 @@ import {
   missingTierFields,
   missingSponsorFields,
 } from "./sections";
+import { ItemListEditor } from "../itemList";
 import { isValidYear } from "@/lib/content/year";
 import type { PastYear } from "@/lib/content/schema";
 
@@ -187,10 +187,23 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
         />
       ) : null}
 
-      <ListEditor<PastYear>
+      <ItemListEditor<PastYear>
         value={years}
         onChange={update}
         addLabel="Thêm năm đã qua"
+        drawerTitle="Năm đã qua"
+        getRow={(item, index) => ({
+          title: isValidYear(item.year) ? `Nhìn lại ${item.year}` : "Năm mới",
+          subtitle: item.title || undefined,
+          thumb: item.bgImage || item.gallery[0]?.src || undefined,
+          tags: [
+            { text: `${item.gallery.length} ảnh` },
+            ...(item.sponsorTiers.length
+              ? [{ text: `${item.sponsorTiers.length} hạng tài trợ` }]
+              : []),
+          ],
+          invalid: countIssues(item) > 0 || isDuplicateYear(years, index),
+        })}
         newItem={() => ({
           year: suggestYear(years),
           title: "",
@@ -202,24 +215,11 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
           sponsorTiers: [],
           spendingReport: { url: "", note: "" },
         })}
-        renderItem={(item, updateItem, index) => {
+        renderForm={(item, updateItem, index) => {
           const duplicate = isDuplicateYear(years, index);
           const issues = countIssues(item) + (duplicate ? 1 : 0);
           return (
             <Space direction="vertical" size={4} style={{ width: "100%" }}>
-              <div className="flex flex-wrap items-center gap-2">
-                <strong className="text-base">
-                  {isValidYear(item.year) ? `Nhìn lại ${item.year}` : "Năm mới"}
-                </strong>
-                {item.title.trim() ? (
-                  <span className="text-xs opacity-60">— {item.title}</span>
-                ) : null}
-                {issues > 0 ? (
-                  <Tag color="error">{issues} chỗ cần sửa</Tag>
-                ) : (
-                  <Tag color="success">Đầy đủ</Tag>
-                )}
-              </div>
 
               <Collapse
                 size="small"

@@ -6,10 +6,10 @@ import {
   useSectionAutosave,
   SaveStatusTag,
   EditorCard,
-  ListEditor,
   Field,
   ImageField,
 } from "../editorKit";
+import { ItemListEditor } from "../itemList";
 import type { Board, Member } from "@/lib/content/schema";
 
 /** Phần tử mới rỗng cho danh sách thành viên. */
@@ -111,15 +111,22 @@ export default function BoardEditor({ initial }: { initial: Board }) {
         <div>
           <p className="mb-2 text-xs opacity-60">
             Thứ tự trong danh sách chính là thứ tự hiển thị ngoài trang web.
-            Dùng nút mũi tên để sắp xếp.
+            Kéo biểu tượng ⣿ để đổi thứ tự; bấm vào dòng để sửa chi tiết.
           </p>
-          <ListEditor<Member>
-            title="Ban sáng lập"
+          <div className="mb-2 font-semibold">Ban sáng lập</div>
+          <ItemListEditor<Member>
             addLabel="Thêm người sáng lập"
             value={founders}
             onChange={(next) => update({ ...value, founders: next })}
             newItem={newMember}
-            renderItem={(item, updateItem) => (
+            getRow={(m) => ({
+              title: m.name,
+              subtitle: m.role || undefined,
+              thumb: m.photo || undefined,
+              invalid: missingFields(m).length > 0,
+            })}
+            drawerTitle="Thành viên"
+            renderForm={(item, updateItem) => (
               <MemberForm
                 item={item}
                 update={updateItem}
@@ -130,13 +137,20 @@ export default function BoardEditor({ initial }: { initial: Board }) {
         </div>
 
         <div>
-          <ListEditor<Member>
-            title="Ban tổ chức (thành viên)"
+          <div className="mb-2 font-semibold">Ban tổ chức (thành viên)</div>
+          <ItemListEditor<Member>
             addLabel="Thêm thành viên"
             value={members}
             onChange={(next) => update({ ...value, members: next })}
             newItem={newMember}
-            renderItem={(item, updateItem) => (
+            getRow={(m) => ({
+              title: m.name,
+              subtitle: m.role || undefined,
+              thumb: m.photo || undefined,
+              invalid: missingFields(m).length > 0,
+            })}
+            drawerTitle="Thành viên"
+            renderForm={(item, updateItem) => (
               <MemberForm
                 item={item}
                 update={updateItem}

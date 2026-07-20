@@ -13,23 +13,17 @@ import {
   Button,
   Card,
   Input,
-  List,
   Modal,
-  Popconfirm,
   Space,
   Spin,
   Tag,
-  Tooltip,
 } from "antd";
 import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  DeleteOutlined,
   PictureOutlined,
-  PlusOutlined,
 } from "@ant-design/icons";
 import { saveDraftAction } from "@/lib/content/actions";
 import MediaBrowser from "./MediaBrowser";
+import { SortableList } from "./itemList";
 
 /* ------------------------------------------------------------------
    Autosave theo nhánh nội dung (debounce 700ms)
@@ -139,7 +133,7 @@ export function Field({
 }
 
 /* ------------------------------------------------------------------
-   ListEditor — thêm / xoá / sắp xếp phần tử danh sách
+   ListEditor — giữ nguyên API cũ, nay chạy trên SortableList (kéo thả)
    ------------------------------------------------------------------ */
 export type ListEditorProps<T> = {
   value: T[];
@@ -152,89 +146,8 @@ export type ListEditorProps<T> = {
   addLabel?: string;
 };
 
-export function ListEditor<T>({
-  value,
-  onChange,
-  renderItem,
-  newItem,
-  title,
-  addLabel = "Thêm mục",
-}: ListEditorProps<T>) {
-  const replaceAt = (index: number, next: T) => {
-    const arr = value.slice();
-    arr[index] = next;
-    onChange(arr);
-  };
-  const removeAt = (index: number) => {
-    const arr = value.slice();
-    arr.splice(index, 1);
-    onChange(arr);
-  };
-  const move = (index: number, dir: -1 | 1) => {
-    const target = index + dir;
-    if (target < 0 || target >= value.length) return;
-    const arr = value.slice();
-    [arr[index], arr[target]] = [arr[target], arr[index]];
-    onChange(arr);
-  };
-  const add = () => onChange([...value, newItem()]);
-
-  return (
-    <div>
-      <List
-        header={
-          title ? <strong>{title}</strong> : undefined
-        }
-        locale={{ emptyText: "Chưa có mục nào" }}
-        dataSource={value}
-        renderItem={(item, index) => (
-          <List.Item
-            key={index}
-            actions={[
-              <Tooltip title="Lên" key="up">
-                <Button
-                  size="small"
-                  icon={<ArrowUpOutlined />}
-                  disabled={index === 0}
-                  onClick={() => move(index, -1)}
-                />
-              </Tooltip>,
-              <Tooltip title="Xuống" key="down">
-                <Button
-                  size="small"
-                  icon={<ArrowDownOutlined />}
-                  disabled={index === value.length - 1}
-                  onClick={() => move(index, 1)}
-                />
-              </Tooltip>,
-              <Popconfirm
-                key="del"
-                title="Xoá mục này?"
-                okText="Xoá"
-                cancelText="Huỷ"
-                onConfirm={() => removeAt(index)}
-              >
-                <Button size="small" danger icon={<DeleteOutlined />} />
-              </Popconfirm>,
-            ]}
-          >
-            <div style={{ width: "100%" }}>
-              {renderItem(item, (next) => replaceAt(index, next), index)}
-            </div>
-          </List.Item>
-        )}
-      />
-      <Button
-        type="dashed"
-        icon={<PlusOutlined />}
-        onClick={add}
-        style={{ marginTop: 12 }}
-        block
-      >
-        {addLabel}
-      </Button>
-    </div>
-  );
+export function ListEditor<T>(props: ListEditorProps<T>) {
+  return <SortableList<T> {...props} />;
 }
 
 /* ------------------------------------------------------------------

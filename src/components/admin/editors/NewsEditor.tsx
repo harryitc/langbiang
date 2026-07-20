@@ -7,11 +7,11 @@ import {
   useSectionAutosave,
   SaveStatusTag,
   EditorCard,
-  ListEditor,
   Field,
   ImageField,
   RichText,
 } from "../editorKit";
+import { ItemListEditor } from "../itemList";
 import type { NewsPost } from "@/lib/content/schema";
 
 const { Text } = Typography;
@@ -116,12 +116,27 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
           />
         ) : null}
 
-        <ListEditor<NewsPost>
+        <ItemListEditor<NewsPost>
           value={value}
           onChange={update}
           newItem={emptyPost}
           addLabel="Thêm bài tin tức"
-          renderItem={(post, setPost) => {
+          drawerTitle="Bài tin tức"
+          getRow={(post) => ({
+            title: post.title,
+            subtitle: post.excerpt || post.id,
+            thumb: post.img || undefined,
+            tags: post.tag.trim() ? [{ text: post.tag, color: "blue" }] : undefined,
+            invalid:
+              !post.id.trim() ||
+              !post.title.trim() ||
+              !post.tag.trim() ||
+              !post.excerpt.trim() ||
+              !post.img.trim() ||
+              !post.link.trim() ||
+              duplicatedIds.has(post.id.trim()),
+          })}
+          renderForm={(post, setPost) => {
             const dup = post.id.trim() !== "" && duplicatedIds.has(post.id.trim());
             return (
               <div className="w-full">
