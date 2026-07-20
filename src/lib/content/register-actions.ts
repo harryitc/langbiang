@@ -11,9 +11,9 @@
 //      mục "Đăng ký nhận được".
 //   3. Ảnh khách gửi kèm (ô nhập kiểu "Ảnh") được đưa vào kho ảnh, album
 //      "Tình nguyện viên", đặt tên theo tên người đăng ký.
-//   4. Gửi email báo tin (nếu đã cấu hình RESEND_API_KEY). Chưa cấu hình hoặc
+//   4. Gửi email (nếu đã cấu hình hộp thư gửi đi). Chưa cấu hình hoặc
 //      gửi lỗi thì vẫn coi là đăng ký THÀNH CÔNG — dữ liệu đã nằm trong Redis.
-import { Resend } from "resend";
+import { daCauHinhGuiThu, guiMotThu } from "./mailer";
 import { redis } from "@/lib/redis";
 import { getContent } from "./store";
 import { addMediaItem } from "./media";
@@ -22,31 +22,18 @@ import {
   registrationsKey,
   REGISTRATIONS_LIMIT,
   type Registration,
-  type RegisterField,
   type RegisterForm,
   type SiteContent,
 } from "./schema";
+import { renderEmailTemplate } from "./email-templates";
 import {
-  buildInfoTable,
-  renderEmailTemplate,
-  type EmailVarValues,
-} from "./email-templates";
-import { eventDateLabel } from "./year";
+  bienChoNguoiDangKy,
+  clean,
+  labelOf,
+  tenNguoiDangKy,
+} from "./email-vars";
 
 export type SubmitResult = { ok: boolean; error?: string };
-
-/** Địa chỉ người gửi mặc định của Resend (dùng được ngay, không cần domain). */
-const DEFAULT_FROM = "Trăng Sáng Langbiang <onboarding@resend.dev>";
-
-/** Cắt bớt chuỗi quá dài để không ai nhồi dữ liệu rác vào store. */
-function clean(v: unknown, max = 2000): string {
-  return typeof v === "string" ? v.trim().slice(0, max) : "";
-}
-
-/** Nhãn hiển thị của một ô nhập (thiếu nhãn thì lấy tạm mã trường). */
-function labelOf(field: RegisterField): string {
-  return field.label.trim() || field.name;
-}
 
 /**
  * Ghi nhận một lượt đăng ký.
@@ -122,18 +109,6 @@ export async function submitRegistrationAction(
 }
 
 /**
- * Tên người đăng ký — lấy từ ô chữ ngắn đầu tiên có nhãn chứa "tên", không có
- * thì lấy ô đầu tiên của form. Dùng để đặt tên cho ảnh trong kho.
- */
-function tenNguoiDangKy(form: RegisterForm, record: Registration): string {
-  const oTen =
-    form.fields.find(
-      (f) => f.type === "text" && f.label.toLowerCase().includes("tên")
-    ) ?? form.fields[0];
-  return oTen ? clean(record.values[oTen.name], 120) : "";
-}
-
-/**
  * Thêm ảnh khách gửi kèm vào kho ảnh, album "Tình nguyện viên".
  * Mọi trục trặc chỉ ghi log — đăng ký đã lưu rồi, không được làm hỏng kết quả.
  */
@@ -170,37 +145,16 @@ async function guiEmail(
   form: RegisterForm,
   content: SiteContent
 ): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  if (!daCauHinhGuiThu()) {
     console.warn(
-      "[dang-ky] Chưa cấu hình RESEND_API_KEY nên bỏ qua bước gửi email. " +
+      "[dang-ky] Chưa cấu hình hộp thư gửi đi nên bỏ qua bước gửi email. " +
         "Đăng ký vẫn được lưu, xem ở /admin/dang-ky-nhan-duoc."
     );
     return;
   }
 
   const { main } = content;
-  const tenForm = form.name.trim() || form.id;
-  const dong = Object.entries(record.labels).map(([name, label]) => ({
-    label,
-    value: record.values[name] || "(để trống)",
-  }));
-
-  const vars: EmailVarValues = {
-    ho_ten: tenNguoiDangKy(form, record),
-    email: emailNguoiDangKy(form, record),
-    ten_form: tenForm,
-    nam: String(content.currentYear),
-    thoi_diem: new Date(record.at).toLocaleString("vi-VN", {
-      timeZone: "Asia/Ho_Chi_Minh",
-    }),
-    ten_su_kien: main.site.name,
-    ngay_su_kien: eventDateLabel(main.event.dateLabel, content.currentYear),
-    dia_diem: main.event.location,
-    fanpage: main.site.facebook,
-    website: process.env.NEXT_PUBLIC_SITE_URL || "",
-    bang_thong_tin: buildInfoTable(dong),
-  };
+  const vars = bienChoNguoiDangKy(record, form, content);
 
   const timMau = (id: string | undefined) =>
     id ? content.emailTemplates.find((t) => t.id === id) : undefined;
@@ -209,7 +163,7 @@ async function guiEmail(
   const mauBao = timMau(form.notifyTemplateId);
   const hopThuBTC = clean(form.recipientEmail, 200) || clean(main.site.email, 200);
   if (mauBao && hopThuBTC) {
-    await send(apiKey, hopThuBTC, renderEmailTemplate(mauBao, vars));
+    await guiThu(hopThuBTC, renderEmailTemplate(mauBao, vars), content.emailFromName);
   } else if (mauBao && !hopThuBTC) {
     console.warn(
       "[dang-ky] Chưa có email nhận (email của form và site.email đều trống) " +
@@ -220,33 +174,15 @@ async function guiEmail(
   // Chiều 2 — cảm ơn người đăng ký (chỉ khi form có ô email và khách đã điền).
   const mauCamOn = timMau(form.confirmTemplateId);
   if (mauCamOn && vars.email) {
-    await send(apiKey, vars.email, renderEmailTemplate(mauCamOn, vars));
+    await guiThu(vars.email, renderEmailTemplate(mauCamOn, vars), content.emailFromName);
   }
 }
 
-/** Gửi 1 email qua Resend; lỗi chỉ ghi log. */
-async function send(
-  apiKey: string,
+/** Gửi 1 lá thư; lỗi chỉ ghi log (đăng ký đã lưu rồi, không được hỏng theo). */
+async function guiThu(
   to: string,
-  mail: { subject: string; html: string; text: string }
+  mail: { subject: string; html: string; text: string },
+  tenNguoiGui: string
 ): Promise<void> {
-  try {
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from: process.env.RESEND_FROM || DEFAULT_FROM,
-      to: [to],
-      subject: mail.subject,
-      text: mail.text,
-      html: mail.html,
-    });
-    if (error) console.error("[dang-ky] Resend trả về lỗi:", error);
-  } catch (err) {
-    console.error("[dang-ky] Không gửi được email:", err);
-  }
-}
-
-/** Email khách điền — lấy từ ô nhập kiểu "email" đầu tiên của form. */
-function emailNguoiDangKy(form: RegisterForm, record: Registration): string {
-  const o = form.fields.find((f) => f.type === "email");
-  return o ? clean(record.values[o.name], 200) : "";
+  await guiMotThu({ to, ...mail }, tenNguoiGui);
 }

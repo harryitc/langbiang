@@ -8,7 +8,7 @@
 //
 // Bấm "Sửa" để mở TRANG soạn mẫu riêng (/admin/mau-email/<mã mẫu>).
 import { useRouter } from "next/navigation";
-import { App, Button, Popconfirm, Space, Table, Tag, Tooltip } from "antd";
+import { App, Button, Input, Popconfirm, Space, Table, Tag, Tooltip } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -57,9 +57,12 @@ function mauMoi(dangDung: string[]): EmailTemplate {
 
 export default function EmailTemplatesEditor({
   initialTemplates,
+  initialFromName,
   forms,
 }: {
   initialTemplates: EmailTemplate[];
+  /** Tên hiện ở ô "người gửi" trong hộp thư người nhận. */
+  initialFromName: string;
   forms: FormDungMau[];
 }) {
   const { message } = App.useApp();
@@ -69,6 +72,12 @@ export default function EmailTemplatesEditor({
     update: setTemplates,
     status,
   } = useSectionAutosave<EmailTemplate[]>("emailTemplates", initialTemplates);
+
+  const {
+    value: fromName,
+    update: setFromName,
+    status: statusFromName,
+  } = useSectionAutosave<string>("emailFromName", initialFromName);
 
   /** Các form đang dùng một mẫu (để hiện ở cột cuối và để chặn xoá). */
   const formDangDung = (id: string) =>
@@ -141,6 +150,28 @@ export default function EmailTemplatesEditor({
           <strong>Ban tổ chức</strong>. Mỗi form đăng ký tự chọn dùng mẫu nào —
           chọn ở mục <strong>Form đăng ký</strong>, trong chính form đó.
         </p>
+
+        <div className="mb-5 rounded-lg border border-black/5 bg-black/[0.02] p-3">
+          <label
+            htmlFor="ten-nguoi-gui"
+            className="mb-1 block text-sm font-semibold"
+          >
+            Tên người gửi
+          </label>
+          <Input
+            id="ten-nguoi-gui"
+            value={fromName}
+            maxLength={80}
+            placeholder="Trăng Sáng Langbiang"
+            onChange={(e) => setFromName(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+          <p className="mt-1 text-xs opacity-60">
+            Tên này hiện ở ô <strong>người gửi</strong> khi thư đến hộp thư của
+            mọi người, thay cho một địa chỉ email khô khan. Bỏ trống thì dùng
+            tên chương trình. <SaveStatusTag status={statusFromName} />
+          </p>
+        </div>
 
         <Table<EmailTemplate>
           size="small"

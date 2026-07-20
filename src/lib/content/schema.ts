@@ -347,6 +347,13 @@ export type SiteContent = {
    * văn một lần là mọi form đang dùng mẫu đó đổi theo.
    */
   emailTemplates: EmailTemplate[];
+  /**
+   * TÊN người gửi hiện trong hộp thư người nhận, vd "Trăng Sáng Langbiang".
+   * Địa chỉ gửi thì lấy từ cấu hình máy chủ (GMAIL_USER) — người dùng không
+   * sửa được, vì đổi địa chỉ là phải đổi cả mật khẩu ứng dụng.
+   * Bỏ trống -> dùng tên chương trình.
+   */
+  emailFromName: string;
 };
 
 /**
@@ -383,7 +390,9 @@ export const SLIDESHOW_LIMIT = 6;
 // v12: mẫu email soạn được từ admin (emailTemplates). Mỗi form đăng ký chọn
 // mẫu cảm ơn gửi người đăng ký (confirmTemplateId) và mẫu báo tin gửi Ban tổ
 // chức (notifyTemplateId); nội dung email không còn nằm cứng trong code.
-export const CONTENT_VERSION = 12;
+// v13: tên người gửi email (emailFromName) sửa được từ admin thay vì nằm cứng
+// trong biến môi trường.
+export const CONTENT_VERSION = 13;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */
