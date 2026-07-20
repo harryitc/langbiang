@@ -163,7 +163,7 @@ async function guiEmail(
   const mauBao = timMau(form.notifyTemplateId);
   const hopThuBTC = clean(form.recipientEmail, 200) || clean(main.site.email, 200);
   if (mauBao && hopThuBTC) {
-    await guiThu(hopThuBTC, renderEmailTemplate(mauBao, vars));
+    await guiThu(hopThuBTC, renderEmailTemplate(mauBao, vars), content.emailFromName);
   } else if (mauBao && !hopThuBTC) {
     console.warn(
       "[dang-ky] Chưa có email nhận (email của form và site.email đều trống) " +
@@ -174,14 +174,15 @@ async function guiEmail(
   // Chiều 2 — cảm ơn người đăng ký (chỉ khi form có ô email và khách đã điền).
   const mauCamOn = timMau(form.confirmTemplateId);
   if (mauCamOn && vars.email) {
-    await guiThu(vars.email, renderEmailTemplate(mauCamOn, vars));
+    await guiThu(vars.email, renderEmailTemplate(mauCamOn, vars), content.emailFromName);
   }
 }
 
 /** Gửi 1 lá thư; lỗi chỉ ghi log (đăng ký đã lưu rồi, không được hỏng theo). */
 async function guiThu(
   to: string,
-  mail: { subject: string; html: string; text: string }
+  mail: { subject: string; html: string; text: string },
+  tenNguoiGui: string
 ): Promise<void> {
-  await guiMotThu({ to, ...mail });
+  await guiMotThu({ to, ...mail }, tenNguoiGui);
 }

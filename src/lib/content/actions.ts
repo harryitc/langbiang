@@ -18,6 +18,7 @@ const ALLOWED_ROOTS = [
   "pastYears",
   "news",
   "emailTemplates",
+  "emailFromName",
 ];
 
 function isAllowedPath(path: string): boolean {

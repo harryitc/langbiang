@@ -47,9 +47,13 @@ export const CHUA_CAU_HINH =
   "Chưa cấu hình hộp thư gửi đi (GMAIL_USER và GMAIL_APP_PASSWORD). " +
   "Vào phần biến môi trường của dự án để thêm, rồi thử lại.";
 
-/** Tên hiển thị của người gửi. */
-function nguoiGui(): string {
-  const ten = process.env.MAIL_FROM_NAME || "Trăng Sáng Langbiang";
+/**
+ * Dòng "người gửi" hiện trong hộp thư người nhận.
+ * TÊN do admin đặt trong CMS (truyền vào đây); ĐỊA CHỈ lấy từ cấu hình máy chủ
+ * vì đổi địa chỉ là phải đổi cả mật khẩu ứng dụng.
+ */
+function nguoiGui(tenHienThi?: string): string {
+  const ten = tenHienThi?.trim() || process.env.MAIL_FROM_NAME || "Trăng Sáng Langbiang";
   return `${ten} <${process.env.GMAIL_USER}>`;
 }
 
@@ -81,14 +85,17 @@ function layTransporter(): Transporter {
  * Gửi MỘT lá thư. Trả về lý do lỗi nếu hỏng, `null` nếu xong.
  * Không bao giờ ném lỗi ra ngoài — nơi gọi tự quyết định xử lý thế nào.
  */
-export async function guiMotThu(thu: ThuGui): Promise<string | null> {
+export async function guiMotThu(
+  thu: ThuGui,
+  tenNguoiGui?: string
+): Promise<string | null> {
   if (!daCauHinhGuiThu()) {
     console.warn("[mail] " + CHUA_CAU_HINH);
     return CHUA_CAU_HINH;
   }
   try {
     await layTransporter().sendMail({
-      from: nguoiGui(),
+      from: nguoiGui(tenNguoiGui),
       to: thu.to,
       subject: thu.subject,
       text: thu.text,
@@ -110,7 +117,10 @@ export async function guiMotThu(thu: ThuGui): Promise<string | null> {
  * Một lá hỏng cũng không dừng cả lô — trả về số thành công / số lỗi để nơi gọi
  * báo trung thực cho người dùng.
  */
-export async function guiNhieuThu(danhSach: ThuGui[]): Promise<KetQuaGui> {
+export async function guiNhieuThu(
+  danhSach: ThuGui[],
+  tenNguoiGui?: string
+): Promise<KetQuaGui> {
   if (!daCauHinhGuiThu()) {
     return {
       soThanhCong: 0,
@@ -124,7 +134,7 @@ export async function guiNhieuThu(danhSach: ThuGui[]): Promise<KetQuaGui> {
   let loiDauTien: string | undefined;
 
   for (const thu of danhSach) {
-    const loi = await guiMotThu(thu);
+    const loi = await guiMotThu(thu, tenNguoiGui);
     if (loi) {
       soLoi += 1;
       loiDauTien ??= loi;

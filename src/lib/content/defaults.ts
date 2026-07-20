@@ -235,6 +235,8 @@ export const defaultContent: SiteContent = {
 
   // Mẫu email gửi tự động khi có người đăng ký (admin sửa được lời văn).
   emailTemplates: defaultEmailTemplates.map((t) => ({ ...t })),
+  // Tên hiện ở ô "người gửi" trong hộp thư người nhận.
+  emailFromName: site.name,
 
   // Tin tức — chuyển body: string[] -> bodyHtml.
   news: siteNews.map((n) => ({

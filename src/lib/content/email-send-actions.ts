@@ -102,7 +102,7 @@ export async function guiEmailHangLoatAction(
   if (!ketQua.ok)
     return { ok: false, soThanhCong: 0, soLoi: 0, error: ketQua.error };
 
-  const { mau, nguoiNhan, tenForm } = ketQua;
+  const { mau, nguoiNhan, tenForm, tenNguoiGui } = ketQua;
   // Dựng sẵn từng lá thư — mỗi người nhận có bộ biến riêng (tên, bảng thông
   // tin đã điền...) nên nội dung không ai giống ai.
   const danhSachThu = nguoiNhan.map((n) => {
@@ -110,7 +110,7 @@ export async function guiEmailHangLoatAction(
     return { to: n.email, subject: thu.subject, html: thu.html, text: thu.text };
   });
 
-  const { soThanhCong, soLoi, loiDauTien } = await guiNhieuThu(danhSachThu);
+  const { soThanhCong, soLoi, loiDauTien } = await guiNhieuThu(danhSachThu, tenNguoiGui);
 
   await addEmailLog({
     at: new Date().toISOString(),
@@ -143,6 +143,8 @@ type KetQuaGiai =
       tenForm: string;
       nguoiNhan: NguoiNhanDayDu[];
       canhBao: string[];
+      /** Tên hiện ở ô "người gửi" — admin đặt trong mục Mẫu email. */
+      tenNguoiGui: string;
     };
 
 /**
@@ -181,7 +183,14 @@ async function giaiNguoiNhan(yeuCau: YeuCauGui): Promise<KetQuaGiai> {
     };
   }
 
-  return { ok: true, mau, tenForm, nguoiNhan, canhBao };
+  return {
+    ok: true,
+    mau,
+    tenForm,
+    nguoiNhan,
+    canhBao,
+    tenNguoiGui: content.emailFromName,
+  };
 }
 
 /**
