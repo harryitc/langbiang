@@ -75,7 +75,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             overflow: "hidden",
           }}
         >
-          {collapsed ? "TS" : "Trăng Sáng CMS"}
+          {collapsed ? "TS" : "Trăng Sáng"}
         </div>
         <Menu
           mode="inline"

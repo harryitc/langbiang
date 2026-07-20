@@ -14,6 +14,9 @@ export default function AntdProvider({ children }: { children: ReactNode }) {
         theme={{
           algorithm: theme.compactAlgorithm,
           token: { colorPrimary: "#2e7d32" },
+          // Chữ menu sidebar 13px — đặt qua token của antd thay vì style inline
+          // để mọi trạng thái (chọn/hover/thu gọn) đều đồng bộ.
+          components: { Menu: { fontSize: 13 } },
         }}
       >
         <App>{children}</App>
