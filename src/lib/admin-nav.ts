@@ -2,8 +2,6 @@
 export type AdminNavItem = {
   slug: string;
   label: string;
-  /** Emoji biểu tượng (hiển thị trước nhãn menu). */
-  icon?: string;
 };
 
 export type AdminNavGroup = {
@@ -15,34 +13,34 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     label: "Trang chính",
     items: [
-      { slug: "thuong-hieu", label: "Thương hiệu & SEO", icon: "🏷️" },
-      { slug: "hoat-dong", label: "Hoạt động", icon: "🎯" },
-      { slug: "lich-trinh", label: "Lịch trình", icon: "🗓️" },
-      { slug: "slideshow", label: "Slideshow trang chủ", icon: "🎞️" },
-      { slug: "anh-trang-chu", label: "Ảnh trang chủ (logo, Hero)", icon: "🖼️" },
-      { slug: "ly-do", label: "Lý do tham gia", icon: "💚" },
-      { slug: "faq", label: "Câu hỏi thường gặp", icon: "❓" },
-      { slug: "gay-quy", label: "Gây quỹ", icon: "🛒" },
-      { slug: "tai-tro", label: "Nhà tài trợ", icon: "🤝" },
-      { slug: "ban-to-chuc", label: "Ban tổ chức", icon: "👥" },
-      { slug: "chi-tieu", label: "Báo cáo chi tiêu", icon: "📊" },
+      { slug: "thuong-hieu", label: "Thương hiệu & SEO" },
+      { slug: "hoat-dong", label: "Hoạt động" },
+      { slug: "lich-trinh", label: "Lịch trình" },
+      { slug: "slideshow", label: "Slideshow trang chủ" },
+      { slug: "anh-trang-chu", label: "Ảnh trang chủ (logo, Hero)" },
+      { slug: "ly-do", label: "Lý do tham gia" },
+      { slug: "faq", label: "Câu hỏi thường gặp" },
+      { slug: "gay-quy", label: "Gây quỹ" },
+      { slug: "tai-tro", label: "Nhà tài trợ" },
+      { slug: "ban-to-chuc", label: "Ban tổ chức" },
+      { slug: "chi-tieu", label: "Báo cáo chi tiêu" },
     ],
   },
   {
     label: "Tài nguyên",
-    items: [{ slug: "kho-anh", label: "Kho ảnh", icon: "🗂️" }],
+    items: [{ slug: "kho-anh", label: "Kho ảnh" }],
   },
   {
     label: "Năm hiện tại",
-    items: [{ slug: "su-kien", label: "Sự kiện & số năm", icon: "📅" }],
+    items: [{ slug: "su-kien", label: "Sự kiện & số năm" }],
   },
   {
     label: "Năm đã qua",
-    items: [{ slug: "nam-da-qua", label: "Danh mục năm đã qua", icon: "📚" }],
+    items: [{ slug: "nam-da-qua", label: "Danh mục năm đã qua" }],
   },
   {
     label: "Tin tức",
-    items: [{ slug: "tin-tuc", label: "Bài tin tức", icon: "📰" }],
+    items: [{ slug: "tin-tuc", label: "Bài tin tức" }],
   },
 ];
 

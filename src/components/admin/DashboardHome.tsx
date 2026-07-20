@@ -7,6 +7,7 @@
 import Link from "next/link";
 import { Card, Col, Row, Typography } from "antd";
 import { ADMIN_NAV } from "@/lib/admin-nav";
+import { adminIcon } from "./adminIcons";
 
 export default function DashboardHome({ currentYear }: { currentYear: number }) {
   return (
@@ -25,8 +26,10 @@ export default function DashboardHome({ currentYear }: { currentYear: number }) 
               <Col key={item.slug} xs={12} sm={8} md={6}>
                 <Link href={`/admin/${item.slug}`}>
                   <Card hoverable size="small" style={{ height: "100%" }}>
-                    <div style={{ fontSize: 22 }}>{item.icon}</div>
-                    <div style={{ fontWeight: 600, marginTop: 4 }}>
+                    <div style={{ fontSize: 20, color: "#2e7d32" }}>
+                      {adminIcon(item.slug)}
+                    </div>
+                    <div style={{ fontWeight: 600, marginTop: 6 }}>
                       {item.label}
                     </div>
                   </Card>
