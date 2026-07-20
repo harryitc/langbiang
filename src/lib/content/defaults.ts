@@ -208,6 +208,16 @@ export const defaultContent: SiteContent = {
       url: "",
       note: "Toàn bộ khoản thu – chi mùa {năm} được cập nhật công khai trên Google Sheet.",
     },
+    // Chữ ở chân trang — giữ đúng nội dung đã hardcode trong Footer.tsx.
+    footer: {
+      description:
+        "Dự án tình nguyện mang Trung thu ấm áp đến các em nhỏ vùng cao Langbiang – Đà Lạt, Lâm Đồng.",
+      facebookLabel: "Theo dõi Fanpage",
+      exploreTitle: "Khám phá",
+      contactTitle: "Liên hệ",
+      copyrightNote: "Được tạo bằng tất cả yêu thương 💚",
+      bottomNote: "Langbiang · Đà Lạt · Lâm Đồng",
+    },
   },
 
   // FR4 — năm đã qua. pastYears[0] = mùa 2025 (từ /2025 + gallery2025).

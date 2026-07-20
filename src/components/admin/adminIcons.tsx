@@ -10,6 +10,7 @@ import {
   FileTextOutlined,
   FolderOpenOutlined,
   FormOutlined,
+  LayoutOutlined,
   HeartOutlined,
   HistoryOutlined,
   InboxOutlined,
@@ -44,6 +45,7 @@ export const ADMIN_ICONS: Record<string, ReactNode> = {
   "chi-tieu": <FileTextOutlined />,
   "kho-anh": <FolderOpenOutlined />,
   "su-kien": <CalendarOutlined />,
+  "chan-trang": <LayoutOutlined />,
   "nam-da-qua": <HistoryOutlined />,
   "tin-tuc": <ReadOutlined />,
 };

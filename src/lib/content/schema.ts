@@ -282,6 +282,28 @@ export type NewsPost = {
   date?: string;
 };
 
+/**
+ * Chân trang — hiện ở CUỐI MỌI TRANG.
+ *
+ * Chỉ gồm phần chữ. Danh sách liên kết "Khám phá" và các dòng địa điểm / ngày /
+ * email cố ý KHÔNG nằm ở đây: chúng sinh ra từ các trang đang có và từ mục
+ * "Sự kiện" cùng "Thương hiệu", nên sửa một chỗ là cả website đổi theo.
+ */
+export type FooterContent = {
+  /** Đoạn giới thiệu ngắn dưới tên dự án. */
+  description: string;
+  /** Chữ trên nút dẫn sang Fanpage (địa chỉ lấy ở mục Thương hiệu). */
+  facebookLabel: string;
+  /** Tiêu đề cột liên kết. */
+  exploreTitle: string;
+  /** Tiêu đề cột thông tin liên hệ. */
+  contactTitle: string;
+  /** Câu đứng sau dòng bản quyền "© {năm} {tên dự án}." */
+  copyrightNote: string;
+  /** Dòng nhỏ nằm bên phải cùng hàng với bản quyền. */
+  bottomNote: string;
+};
+
 /* ------------------------------------------------------------------
    Nội dung trang chính (một bộ duy nhất)
    ------------------------------------------------------------------ */
@@ -309,6 +331,7 @@ export type MainContent = {
   sponsorTiers: SponsorTier[];
   board: Board;
   spendingReport: SpendingReport;
+  footer: FooterContent;
 };
 
 /* ------------------------------------------------------------------
@@ -392,7 +415,9 @@ export const SLIDESHOW_LIMIT = 6;
 // chức (notifyTemplateId); nội dung email không còn nằm cứng trong code.
 // v13: tên người gửi email (emailFromName) sửa được từ admin thay vì nằm cứng
 // trong biến môi trường.
-export const CONTENT_VERSION = 13;
+// v14: chữ ở chân trang (main.footer) sửa được từ admin — đoạn giới thiệu, chữ
+// trên nút Fanpage, hai tiêu đề cột và hai dòng cuối trang.
+export const CONTENT_VERSION = 14;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */
