@@ -1,11 +1,11 @@
 "use client";
 
-// Các phần biên tập dùng chung giữa editor trang chính (Stats/Volunteers/
-// Gallery/Sponsors) và PastYearsEditor. Mỗi phần là 1 ListEditor "controlled"
-// (nhận value/onChange) + validator đi kèm — tránh lặp ~300 dòng giữa hai nơi.
-import { Input, InputNumber, Space, Switch, Tag } from "antd";
+// Các phần biên tập dùng chung giữa editor trang chính (Thư viện ảnh, Nhà tài
+// trợ) và PastYearsEditor. Mỗi phần là 1 ListEditor "controlled"
+// (nhận value/onChange) + validator đi kèm — tránh lặp code giữa hai nơi.
+import { Input, Space, Switch, Tag } from "antd";
 import { ListEditor, Field, ImageField } from "../editorKit";
-import type { Photo, Sponsor, SponsorTier, Stat, Team } from "@/lib/content/schema";
+import type { Photo, Sponsor, SponsorTier } from "@/lib/content/schema";
 
 /* ------------------------------------------------------------------
    Validators (FR2/FR4) — dùng chung
@@ -13,20 +13,6 @@ import type { Photo, Sponsor, SponsorTier, Stat, Team } from "@/lib/content/sche
 /** FR2-2.6 / FR4: bắt buộc có ảnh. */
 export function missingPhotoFields(photo: Photo): string[] {
   return photo.src.trim() ? [] : ["ảnh"];
-}
-
-/** FR2-2.10: tên ban bắt buộc + ít nhất một thành viên. */
-export function missingTeamFields(team: Team): string[] {
-  const missing: string[] = [];
-  if (!team.name.trim()) missing.push("tên ban");
-  if (team.members.filter((m) => m.trim()).length === 0)
-    missing.push("ít nhất một thành viên");
-  return missing;
-}
-
-/** FR2-2.3: nhãn con số là bắt buộc. */
-export function missingStatFields(stat: Stat): string[] {
-  return stat.label.trim() ? [] : ["nhãn"];
 }
 
 /** FR2-2.11: tên hạng bắt buộc + ít nhất một đơn vị. */
@@ -51,137 +37,6 @@ export function isValidUrl(url: string): boolean {
   } catch {
     return false;
   }
-}
-
-/* ------------------------------------------------------------------
-   Con số nổi bật — Stat[]
-   ------------------------------------------------------------------ */
-export function StatListEditor({
-  value,
-  onChange,
-}: {
-  value: Stat[];
-  onChange: (next: Stat[]) => void;
-}) {
-  return (
-    <ListEditor<Stat>
-      value={value}
-      onChange={onChange}
-      addLabel="Thêm con số"
-      newItem={() => ({ value: 0, suffix: "", label: "" })}
-      renderItem={(stat, updateStat) => {
-        const missing = missingStatFields(stat);
-        return (
-          <Space direction="vertical" size={0} style={{ width: "100%" }}>
-            <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[140px_140px_1fr]">
-              <Field label="Giá trị số">
-                <InputNumber
-                  value={stat.value}
-                  min={0}
-                  precision={0}
-                  style={{ width: "100%" }}
-                  placeholder="200"
-                  // Để trống ô số ⇒ quy về 0 (tránh NaN lọt vào bản nháp JSON).
-                  onChange={(v) =>
-                    updateStat({ ...stat, value: typeof v === "number" ? v : 0 })
-                  }
-                />
-              </Field>
-              <Field label="Hậu tố" hint='Ví dụ: "+" hoặc " ngày"'>
-                <Input
-                  value={stat.suffix}
-                  placeholder="+"
-                  onChange={(e) => updateStat({ ...stat, suffix: e.target.value })}
-                />
-              </Field>
-              <Field label="Nhãn">
-                <Input
-                  value={stat.label}
-                  placeholder="Em nhỏ nhận quà"
-                  status={stat.label.trim() ? "" : "error"}
-                  onChange={(e) => updateStat({ ...stat, label: e.target.value })}
-                />
-              </Field>
-            </div>
-            {missing.length > 0 ? (
-              <div className="text-xs text-red-500">
-                Cần điền {missing.join(", ")}.
-              </div>
-            ) : (
-              <div className="text-xs opacity-60">
-                Hiển thị: {stat.value}
-                {stat.suffix} — {stat.label}
-              </div>
-            )}
-          </Space>
-        );
-      }}
-    />
-  );
-}
-
-/* ------------------------------------------------------------------
-   Các ban tình nguyện viên — Team[]
-   ------------------------------------------------------------------ */
-export function TeamListEditor({
-  value,
-  onChange,
-}: {
-  value: Team[];
-  onChange: (next: Team[]) => void;
-}) {
-  return (
-    <ListEditor<Team>
-      value={value}
-      onChange={onChange}
-      addLabel="Thêm ban"
-      newItem={() => ({ name: "", members: [] })}
-      renderItem={(team, updateTeam) => {
-        const missing = missingTeamFields(team);
-        return (
-          <Space direction="vertical" size={4} style={{ width: "100%" }}>
-            <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_auto] sm:items-end">
-              <Field label="Tên ban">
-                <Input
-                  value={team.name}
-                  placeholder="Ban Hậu cần"
-                  status={team.name.trim() ? "" : "error"}
-                  onChange={(e) => updateTeam({ ...team, name: e.target.value })}
-                />
-              </Field>
-              <div className="mb-[14px]">
-                <Tag color="blue">{team.members.length} thành viên</Tag>
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-black/10 p-3">
-              <ListEditor<string>
-                title="Danh sách thành viên"
-                value={team.members}
-                onChange={(members) => updateTeam({ ...team, members })}
-                addLabel="Thêm thành viên"
-                newItem={() => ""}
-                renderItem={(member, updateMember, index) => (
-                  <Input
-                    value={member}
-                    placeholder={`Họ và tên thành viên ${index + 1}`}
-                    status={member.trim() ? "" : "error"}
-                    onChange={(e) => updateMember(e.target.value)}
-                  />
-                )}
-              />
-            </div>
-
-            {missing.length > 0 ? (
-              <div className="text-xs text-red-500">
-                Cần điền {missing.join(", ")}.
-              </div>
-            ) : null}
-          </Space>
-        );
-      }}
-    />
-  );
 }
 
 /* ------------------------------------------------------------------

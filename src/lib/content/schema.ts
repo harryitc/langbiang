@@ -1,15 +1,9 @@
 // Mô hình dữ liệu cho Content Store (Admin CMS).
 // Website là khung mẫu; toàn bộ nội dung đọc từ store này.
 // Tái sử dụng các type sẵn có trong src/lib/site.ts để đồng bộ với dữ liệu mặc định.
-import type {
-  Sponsor,
-  Member,
-  Donation,
-  Testimonial,
-  SpendingItem,
-} from "@/lib/site";
+import type { Sponsor, Member } from "@/lib/site";
 
-export type { Sponsor, Member, Donation, Testimonial, SpendingItem };
+export type { Sponsor, Member };
 
 /* ------------------------------------------------------------------
    Các kiểu con dùng chung
@@ -22,13 +16,6 @@ export type Photo = {
   desc?: string;
   /** Ảnh cao (chiếm 2 hàng trong lưới masonry). */
   tall?: boolean;
-};
-
-/** Con số nổi bật. */
-export type Stat = {
-  value: number;
-  suffix: string;
-  label: string;
 };
 
 /** Một hoạt động (activities) / lý do tham gia (whyJoin). */
@@ -73,12 +60,6 @@ export type Fundraising = {
   title: string;
   desc: string;
   channels: FundraisingChannel[];
-};
-
-/** Một ban tình nguyện viên (tên ban + danh sách thành viên). */
-export type Team = {
-  name: string;
-  members: string[];
 };
 
 /** Một hạng tài trợ + các đơn vị trong hạng. */
@@ -144,24 +125,19 @@ export type NewsPost = {
 export type MainContent = {
   site: SiteMeta;
   event: EventInfo;
-  stats: Stat[];
   activities: IconCard[];
   timeline: TimelineDay[];
   gallery: Photo[];
   whyJoin: IconCard[];
   faqs: Faq[];
   fundraising: Fundraising;
-  volunteerTeams: Team[];
-  volunteerCount: number;
   sponsorTiers: SponsorTier[];
   board: Board;
-  donations: Donation[];
-  testimonials: Testimonial[];
   spendingReport: SpendingReport;
 };
 
 /* ------------------------------------------------------------------
-   Một trang "Nhìn lại" (năm đã qua) — 5 phần
+   Một trang "Nhìn lại" (năm đã qua) — 3 phần
    ------------------------------------------------------------------ */
 export type PastYear = {
   /** Năm — duy nhất, là đường dẫn /{year}. */
@@ -173,8 +149,6 @@ export type PastYear = {
   /** Tổng kết — rich text (CKEditor). */
   summaryHtml: string;
   gallery: Photo[];
-  volunteerTeams: Team[];
-  stats: Stat[];
   sponsorTiers: SponsorTier[];
 };
 
@@ -197,7 +171,9 @@ export type SiteContent = {
    ------------------------------------------------------------------ */
 // v2: spendingReport đổi từ bảng {items,total,updatedNote} sang link Google Sheet
 // {url,note}; main.sponsorTiers mặc định để trống (tách khỏi dữ liệu mùa 2025).
-export const CONTENT_VERSION = 2;
+// v3: bỏ hẳn stats, volunteerTeams/volunteerCount, donations, testimonials
+// (cả ở main lẫn pastYears). Phần con người chỉ còn Ban tổ chức (main.board).
+export const CONTENT_VERSION = 3;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

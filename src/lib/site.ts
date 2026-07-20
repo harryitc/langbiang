@@ -34,13 +34,6 @@ export const site = {
   ],
 };
 
-export const stats = [
-  { value: 200, suffix: "+", label: "Em nhỏ nhận quà" },
-  { value: 40, suffix: "", label: "Tình nguyện viên" },
-  { value: 20, suffix: "+", label: "Nhà hảo tâm đồng hành" },
-  { value: 2, suffix: " ngày", label: "Hành trình yêu thương" },
-];
-
 export const activities = [
   {
     icon: "🌕",
@@ -164,35 +157,6 @@ export const fundraising = {
     },
   ],
 };
-
-/* ------------------------------------------------------------------
-   DANH SÁCH TÌNH NGUYỆN VIÊN 2025 (placeholder — thay tên thật sau)
-   ------------------------------------------------------------------ */
-export const volunteerTeams = [
-  {
-    name: "Ban Tổ chức",
-    members: ["Phan Ngọc Cường", "Lê Minh Vũ", "Nguyễn Thị Mai", "Trần Quốc Bảo"],
-  },
-  {
-    name: "Ban Chương trình",
-    members: ["Đỗ Hoàng Long", "Vũ Thảo Nhi", "Phạm Gia Hân", "Ngô Minh Khôi", "Lý Tuyết Vân"],
-  },
-  {
-    name: "Ban Hậu cần",
-    members: ["Bùi Thanh Tùng", "Hoàng Yến Nhi", "Đặng Văn Phú", "Cao Mỹ Linh", "Tạ Đức Anh"],
-  },
-  {
-    name: "Ban Truyền thông",
-    members: ["Nguyễn Hải Đăng", "Trịnh Khánh Ly", "Lê Bảo Trâm", "Võ Thành Đạt"],
-  },
-  {
-    name: "Ban Vận động tài trợ",
-    members: ["Phan Thị Kim Ngân", "Dương Quốc Huy", "Hồ Ngọc Diệp", "Đinh Tiến Dũng"],
-  },
-];
-
-// tổng số TNV hiển thị (đồng bộ với stats)
-export const volunteerCount = 80;
 
 /* ------------------------------------------------------------------
    ĐƠN VỊ TÀI TRỢ & ĐỒNG HÀNH 2025 (placeholder)
@@ -352,11 +316,6 @@ export const news: NewsPost[] = [
   },
 ];
 
-/** Tìm 1 bài viết theo slug id. */
-export function getNewsById(id: string): NewsPost | undefined {
-  return news.find((post) => post.id === id);
-}
-
 /* ------------------------------------------------------------------
    TẠI SAO NÊN THAM GIA — lý do đồng hành
    ------------------------------------------------------------------ */
@@ -412,78 +371,4 @@ export const board: { founders: Member[]; members: Member[] } = {
   ],
   // TODO: bổ sung danh sách thành viên sau
   members: [],
-};
-
-/* ------------------------------------------------------------------
-   DANH SÁCH ĐÓNG GÓP (placeholder — cập nhật thật sau mỗi đợt)
-   ------------------------------------------------------------------ */
-export type Donation = {
-  name: string;
-  amount?: string; // vd "2.000.000đ" — để trống nếu là hiện vật
-  gift?: string; // hiện vật, vd "50 phần quà"
-  date: string;
-};
-
-export const donations: Donation[] = [
-  { name: "Anh Nguyễn Văn A", amount: "5.000.000đ", date: "20/09/2025" },
-  { name: "Chị Trần Thị B", amount: "2.000.000đ", date: "18/09/2025" },
-  { name: "Gia đình cô C", gift: "80 phần quà Trung thu", date: "15/09/2025" },
-  { name: "CLB Thiện Nguyện Trẻ", amount: "3.500.000đ", date: "12/09/2025" },
-  { name: "Bạn ẩn danh", amount: "1.000.000đ", date: "10/09/2025" },
-  { name: "Nhà sách Ánh Sáng", gift: "200 quyển vở, bút", date: "08/09/2025" },
-];
-
-/* ------------------------------------------------------------------
-   CẢM NHẬN TÌNH NGUYỆN VIÊN (placeholder)
-   ------------------------------------------------------------------ */
-export type Testimonial = {
-  name: string;
-  role: string;
-  avatar?: string;
-  quote: string;
-};
-
-export const testimonials: Testimonial[] = [
-  {
-    name: "Thảo Nhi",
-    role: "TNV Ban Chương trình 2025",
-    avatar: "",
-    quote:
-      "Nhìn nụ cười của các em khi nhận lồng đèn, mình biết mọi vất vả đều xứng đáng. Một mùa trăng mình sẽ nhớ mãi.",
-  },
-  {
-    name: "Minh Khôi",
-    role: "TNV Hậu cần 2025",
-    avatar: "",
-    quote:
-      "Lần đầu đi thiện nguyện xa nhà, mình học được cách sẻ chia và trân trọng những điều nhỏ bé. Cảm ơn Langbiang!",
-  },
-  {
-    name: "Yến Nhi",
-    role: "TNV Truyền thông 2025",
-    avatar: "",
-    quote:
-      "Được ghi lại từng khoảnh khắc của hành trình là một may mắn. Ai cũng ấm áp và hết mình vì các em.",
-  },
-];
-
-/* ------------------------------------------------------------------
-   BÁO CÁO CHI (placeholder — thay số liệu thực tế sau mỗi mùa)
-   ------------------------------------------------------------------ */
-export type SpendingItem = {
-  icon: string;
-  item: string;
-  amount: string;
-  note?: string;
-};
-
-export const spendingReport: { items: SpendingItem[]; total: string; updatedNote: string } = {
-  items: [
-    { icon: "🎁", item: "Quà & nhu yếu phẩm cho các em", amount: "45.000.000đ", note: "500+ phần quà" },
-    { icon: "🏮", item: "Đêm hội & sân chơi Trung thu", amount: "25.000.000đ", note: "Sân khấu, lồng đèn, trò chơi" },
-    { icon: "📚", item: "Sách vở, học bổng, dụng cụ học tập", amount: "20.000.000đ" },
-    { icon: "🚌", item: "Hậu cần & di chuyển đoàn", amount: "10.000.000đ" },
-  ],
-  total: "100.000.000đ",
-  updatedNote: "Số liệu mang tính minh hoạ — sẽ cập nhật báo cáo thực tế sau mùa 2026.",
 };

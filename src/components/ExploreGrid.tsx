@@ -15,22 +15,10 @@ export default async function ExploreGrid() {
       desc: "Ủng hộ qua Shopee, chuyển khoản hoặc hiện vật.",
     },
     {
-      href: "/dong-gop",
-      icon: "💝",
-      title: "Danh sách đóng góp",
-      desc: "Tri ân những tấm lòng đã đồng hành cùng dự án.",
-    },
-    {
       href: "/ban-to-chuc",
       icon: "👥",
       title: "Ban sáng lập & Tổ chức",
       desc: "Những người đứng sau hành trình Trăng Sáng Langbiang.",
-    },
-    {
-      href: "/cam-nhan",
-      icon: "💬",
-      title: "Cảm nhận TNV",
-      desc: "Câu chuyện, kỷ niệm từ các tình nguyện viên.",
     },
     {
       href: "/chuong-trinh",

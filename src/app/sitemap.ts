@@ -11,9 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "", changeFrequency: "weekly", priority: 1 },
     { path: "/chuong-trinh", changeFrequency: "monthly", priority: 0.8 },
     { path: "/gay-quy", changeFrequency: "monthly", priority: 0.8 },
-    { path: "/dong-gop", changeFrequency: "monthly", priority: 0.7 },
     { path: "/ban-to-chuc", changeFrequency: "monthly", priority: 0.7 },
-    { path: "/cam-nhan", changeFrequency: "monthly", priority: 0.6 },
     { path: "/tin-tuc", changeFrequency: "weekly", priority: 0.8 },
   ];
 

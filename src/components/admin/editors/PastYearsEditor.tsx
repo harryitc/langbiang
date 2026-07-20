@@ -12,12 +12,8 @@ import {
 } from "../editorKit";
 import {
   PhotoListEditor,
-  TeamListEditor,
-  StatListEditor,
   SponsorTierListEditor,
   missingPhotoFields,
-  missingTeamFields,
-  missingStatFields,
   missingTierFields,
   missingSponsorFields,
 } from "./sections";
@@ -52,8 +48,6 @@ function countIssues(item: PastYear): number {
   return (
     missingYearFields(item).length +
     item.gallery.filter((p) => missingPhotoFields(p).length > 0).length +
-    item.volunteerTeams.filter((t) => missingTeamFields(t).length > 0).length +
-    item.stats.filter((s) => missingStatFields(s).length > 0).length +
     item.sponsorTiers.filter(
       (t) =>
         missingTierFields(t).length > 0 ||
@@ -204,8 +198,6 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
           bgImage: "",
           summaryHtml: "",
           gallery: [],
-          volunteerTeams: [],
-          stats: [],
           sponsorTiers: [],
         })}
         renderItem={(item, updateItem, index) => {
@@ -268,28 +260,6 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
                         value={item.gallery}
                         folder="past-years"
                         onChange={(gallery) => updateItem({ ...item, gallery })}
-                      />
-                    ),
-                  },
-                  {
-                    key: "teams",
-                    label: `Đại gia đình (${item.volunteerTeams.length} ban)`,
-                    children: (
-                      <TeamListEditor
-                        value={item.volunteerTeams}
-                        onChange={(volunteerTeams) =>
-                          updateItem({ ...item, volunteerTeams })
-                        }
-                      />
-                    ),
-                  },
-                  {
-                    key: "stats",
-                    label: `Những con số (${item.stats.length} mục)`,
-                    children: (
-                      <StatListEditor
-                        value={item.stats}
-                        onChange={(stats) => updateItem({ ...item, stats })}
                       />
                     ),
                   },

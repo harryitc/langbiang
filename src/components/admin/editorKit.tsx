@@ -44,7 +44,7 @@ export type SectionAutosave<T> = {
 
 /**
  * Quản lý state + tự lưu nháp cho một nhánh nội dung.
- * @param path  đường dẫn nội dung, vd 'main.stats', 'currentYear', 'news'
+ * @param path  đường dẫn nội dung, vd 'main.gallery', 'currentYear', 'news'
  * @param initial  giá trị khởi tạo (đọc từ draft ở server)
  */
 export function useSectionAutosave<T>(

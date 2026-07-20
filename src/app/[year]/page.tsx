@@ -4,8 +4,6 @@ import { notFound } from "next/navigation";
 import SubPageShell from "@/components/SubPageShell";
 import RetroSummary from "@/components/sections/RetroSummary";
 import Gallery from "@/components/sections/Gallery";
-import Volunteers from "@/components/sections/Volunteers";
-import Journey from "@/components/sections/Journey";
 import Sponsors from "@/components/sections/Sponsors";
 import { getContent } from "@/lib/content/store";
 import type { PastYear } from "@/lib/content/schema";
@@ -58,16 +56,9 @@ export default async function PastYearPage({
   const nav = [
     data.summaryHtml.trim() && { href: "#summary", label: "Tổng kết" },
     data.gallery.length > 0 && { href: "#gallery", label: "Khoảnh khắc" },
-    data.volunteerTeams.length > 0 && { href: "#team", label: "Đại gia đình" },
-    data.stats.length > 0 && { href: "#journey", label: "Những con số" },
     data.sponsorTiers.length > 0 && { href: "#sponsors", label: "Nhà tài trợ" },
   ].filter((n): n is { href: string; label: string } => Boolean(n));
 
-  // Tổng số TNV của mùa = tổng thành viên các ban.
-  const volunteerCount = data.volunteerTeams.reduce(
-    (sum, t) => sum + t.members.filter((m) => m.trim()).length,
-    0
-  );
 
   return (
     <SubPageShell
@@ -79,17 +70,6 @@ export default async function PastYearPage({
     >
       <RetroSummary html={data.summaryHtml} title={data.title} year={data.year} />
       <Gallery photos={data.gallery} year={data.year} />
-      <Volunteers
-        id="team"
-        teams={data.volunteerTeams}
-        count={volunteerCount}
-        year={data.year}
-      />
-      <Journey
-        stats={data.stats}
-        year={data.year}
-        photos={data.gallery.slice(0, 3)}
-      />
       <Sponsors tiers={data.sponsorTiers} currentYear={currentYear} />
 
       <section className="py-16 text-center sm:py-24">

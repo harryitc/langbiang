@@ -3,19 +3,14 @@
 // mọi bản đọc từ Redis đều merge-deep lên đây nên site không bao giờ "vỡ".
 import {
   site,
-  stats,
   activities,
   timeline,
   gallery,
   faqs,
   fundraising,
-  volunteerTeams,
-  volunteerCount,
   sponsorTiers,
   whyJoin,
   board,
-  donations,
-  testimonials,
   news as siteNews,
 } from "@/lib/site";
 import { gallery2025 } from "@/lib/gallery2025";
@@ -69,7 +64,6 @@ export const defaultContent: SiteContent = {
       dateEndISO: "2026-09-27",
       location: site.location,
     },
-    stats: stats.map((s) => ({ ...s })),
     activities: activities.map((a) => ({ ...a })),
     timeline: timeline.map((d) => ({
       day: d.day,
@@ -84,11 +78,6 @@ export const defaultContent: SiteContent = {
       desc: fundraising.desc,
       channels: fundraising.channels.map((c) => ({ ...c })),
     },
-    volunteerTeams: volunteerTeams.map((t) => ({
-      name: t.name,
-      members: [...t.members],
-    })),
-    volunteerCount,
     // Nhà tài trợ của MÙA HIỆN TẠI — bắt đầu trống, admin tự thêm cho năm nay.
     // (Nhà tài trợ mùa 2025 thuộc về pastYears[2025], không dùng lại ở đây.)
     sponsorTiers: [],
@@ -96,8 +85,6 @@ export const defaultContent: SiteContent = {
       founders: board.founders.map((m) => ({ ...m })),
       members: board.members.map((m) => ({ ...m })),
     },
-    donations: donations.map((d) => ({ ...d })),
-    testimonials: testimonials.map((t) => ({ ...t })),
     // Báo cáo chi tiêu: chỉ là link Google Sheet (admin dán vào), không dựng
     // bảng trên web. Bỏ trống -> phần này tự ẩn ở trang Gây quỹ.
     spendingReport: {
@@ -117,11 +104,6 @@ export const defaultContent: SiteContent = {
       bgImage: "/gallery/team.jpg",
       summaryHtml: summary2025Html,
       gallery: gallery2025Photos,
-      volunteerTeams: volunteerTeams.map((t) => ({
-        name: t.name,
-        members: [...t.members],
-      })),
-      stats: stats.map((s) => ({ ...s })),
       sponsorTiers: sponsorTiers.map((t) => ({
         tier: t.tier,
         sponsors: t.sponsors.map((s) => ({ ...s })),

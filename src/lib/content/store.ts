@@ -82,7 +82,7 @@ export async function getDraftContent(): Promise<SiteContent> {
 }
 
 /* ------------------------------------------------------------------
-   Ghi nháp theo đường dẫn (vd 'main.stats', 'currentYear', 'news')
+   Ghi nháp theo đường dẫn (vd 'main.gallery', 'currentYear', 'news')
    ------------------------------------------------------------------ */
 function setByPath(
   root: Record<string, unknown>,
