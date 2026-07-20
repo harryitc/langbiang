@@ -26,7 +26,8 @@ export default function AntdProvider({ children }: { children: ReactNode }) {
           },
           components: {
             Menu: {
-              // Cỡ chữ kế thừa token.fontSize (13px) — không đặt lại ở đây.
+              // Menu nhỏ hơn nền chung (16px) một bậc cho gọn sidebar.
+              fontSize: 14,
               // Mục đang chọn: nền xanh nhạt + chữ xanh đậm cho dễ đọc.
               itemSelectedBg: "#e6f4ea",
               itemSelectedColor: "#1b5e20",

@@ -4,7 +4,7 @@
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { App, Button, Layout, Menu, Popconfirm, Typography } from "antd";
+import { App, Breadcrumb, Button, Layout, Menu, Popconfirm } from "antd";
 import {
   CloudUploadOutlined,
   LogoutOutlined,
@@ -12,7 +12,7 @@ import {
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { ADMIN_NAV } from "@/lib/admin-nav";
+import { ADMIN_NAV, ADMIN_NAV_ITEMS, findNavGroup } from "@/lib/admin-nav";
 import { adminIcon } from "./adminIcons";
 import { publishDraftAction } from "@/lib/content/actions";
 import { logoutAction } from "@/lib/content/auth-actions";
@@ -27,6 +27,8 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
   // Slug hiện tại từ /admin/<slug>
   const current = pathname?.replace(/^\/admin\/?/, "").split("/")[0] || "";
+  const currentItem = ADMIN_NAV_ITEMS.find((it) => it.slug === current);
+  const group = findNavGroup(current);
 
   const items: MenuProps["items"] = ADMIN_NAV.map((group) => ({
     key: group.label,
@@ -126,12 +128,19 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         </Header>
 
         <Content style={{ padding: 24 }}>
-          <div style={{ maxWidth: 960, margin: "0 auto" }}>
-            <Typography.Title level={4} style={{ marginTop: 0 }}>
-              {ADMIN_NAV.flatMap((g) => g.items).find(
-                (it) => it.slug === current
-              )?.label ?? "Bảng điều khiển"}
-            </Typography.Title>
+          {/* Không bó khung 960px căn giữa: khu nhập liệu tận dụng hết chiều
+              ngang màn hình, đỡ phải cuộn dọc nhiều. */}
+          <div>
+            {/* Breadcrumb thay cho tiêu đề H4 (vốn trùng y hệt tiêu đề thẻ bên
+                dưới). Hiện thêm tên nhóm để biết mục này thuộc trang nào. */}
+            <Breadcrumb
+              style={{ marginBottom: 16 }}
+              items={[
+                { title: <Link href="/admin">Quản trị</Link> },
+                ...(group ? [{ title: group.label }] : []),
+                ...(currentItem ? [{ title: <strong>{currentItem.label}</strong> }] : []),
+              ]}
+            />
             {children}
           </div>
         </Content>

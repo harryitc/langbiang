@@ -1,7 +1,7 @@
 "use client";
 
 // Editor dùng chung cho các nhóm "thẻ có biểu tượng" (IconCard[]):
-// Hoạt động (main.activities) và Lý do tham gia (main.whyJoin) chỉ khác
+// Hiện dùng cho Hoạt động (main.activities); tách riêng để tái dùng khi cần,
 // cấu hình (đường dẫn, gợi ý emoji, nhãn, placeholder).
 import { Alert, Input, Space, Tag } from "antd";
 import {

@@ -18,7 +18,7 @@ export type Photo = {
   tall?: boolean;
 };
 
-/** Một hoạt động (activities) / lý do tham gia (whyJoin). */
+/** Một thẻ có biểu tượng (activities). */
 export type IconCard = {
   icon: string;
   title: string;
@@ -134,7 +134,6 @@ export type MainContent = {
   heroPhotos: string[];
   /** Ảnh lớn của mục "Giới thiệu" ở trang chủ. */
   aboutImage: string;
-  whyJoin: IconCard[];
   faqs: Faq[];
   fundraising: Fundraising;
   sponsorTiers: SponsorTier[];
@@ -189,7 +188,8 @@ export const SLIDESHOW_LIMIT = 6;
 // (cả ở main lẫn pastYears). Phần con người chỉ còn Ban tổ chức (main.board).
 // v4: mỗi năm đã qua có báo cáo thu – chi riêng (PastYear.spendingReport).
 // v5: logo, ảnh Hero và ảnh mục Giới thiệu quản lý được từ admin.
-export const CONTENT_VERSION = 5;
+// v6: bỏ whyJoin (không trang nào render).
+export const CONTENT_VERSION = 6;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

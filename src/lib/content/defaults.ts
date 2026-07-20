@@ -9,7 +9,6 @@ import {
   faqs,
   fundraising,
   sponsorTiers,
-  whyJoin,
   board,
   news as siteNews,
 } from "@/lib/site";
@@ -75,7 +74,6 @@ export const defaultContent: SiteContent = {
     // 4 ảnh nổi ở Hero (bố cục bay lượn giữ trong code, chỉ ảnh là đổi được).
     heroPhotos: ["/gallery/g8.jpg", "/gallery/g4.jpg", "/gallery/g2.jpg", "/gallery/g6.jpg"],
     aboutImage: "/gallery/about.jpg",
-    whyJoin: whyJoin.map((w) => ({ ...w })),
     faqs: faqs.map((f) => ({ ...f })),
     fundraising: {
       title: fundraising.title,
