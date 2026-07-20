@@ -168,6 +168,12 @@ export type SiteContent = {
   news: NewsPost[];
 };
 
+/**
+ * Số ảnh tối đa được chiếu trên slideshow trang chủ (BannerSlider).
+ * Dùng chung cho cả component hiển thị lẫn editor để hai bên không lệch nhau.
+ */
+export const SLIDESHOW_LIMIT = 6;
+
 /* ------------------------------------------------------------------
    Hằng số store
    ------------------------------------------------------------------ */
