@@ -56,6 +56,7 @@ export const defaultContent: SiteContent = {
       shopee: site.shopee,
       keywords: [...site.keywords],
       ogImage: "/og.jpg",
+      logo: "/logo-mark.png",
     },
     // Nhãn ngày dùng ký hiệu {năm} để đồng bộ theo currentYear (FR3/A2).
     event: {
@@ -71,6 +72,9 @@ export const defaultContent: SiteContent = {
       items: d.items.map((it) => ({ ...it })),
     })),
     gallery: gallery.map((g) => ({ ...g })),
+    // 4 ảnh nổi ở Hero (bố cục bay lượn giữ trong code, chỉ ảnh là đổi được).
+    heroPhotos: ["/gallery/g8.jpg", "/gallery/g4.jpg", "/gallery/g2.jpg", "/gallery/g6.jpg"],
+    aboutImage: "/gallery/about.jpg",
     whyJoin: whyJoin.map((w) => ({ ...w })),
     faqs: faqs.map((f) => ({ ...f })),
     fundraising: {

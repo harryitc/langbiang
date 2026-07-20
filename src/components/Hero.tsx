@@ -22,6 +22,8 @@ type HeroProps = {
   tagline: string;
   /** Dòng địa điểm dưới tiêu đề (site.subtitle). */
   subtitle: string;
+  /** 4 ảnh nổi quanh Hero (main.heroPhotos); thiếu thì dùng ảnh mặc định. */
+  photos?: string[];
 };
 
 /** Ảnh kỷ niệm "trôi nổi" ở hai dải trống trái/phải của Hero (chỉ màn hình lớn). */
@@ -44,7 +46,9 @@ const heroFloats: HeroFloat[] = [
   { src: "/gallery/g6.jpg", alt: "Tình nguyện viên", side: "right", top: "61%", offset: "4.5vw", width: "clamp(80px,9vw,168px)", rotate: -5, depth: -120, delay: "2.1s" },
 ];
 
-export default function Hero({ dateLabel, dateISO, tagline, subtitle }: HeroProps) {
+export default function Hero({ dateLabel, dateISO, tagline, subtitle, photos = [] }: HeroProps) {
+  // Bố cục (vị trí/nghiêng/kích thước) giữ trong code; admin chỉ đổi ảnh.
+  const floats = heroFloats.map((f, i) => ({ ...f, src: photos[i]?.trim() || f.src }));
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -137,7 +141,7 @@ export default function Hero({ dateLabel, dateISO, tagline, subtitle }: HeroProp
       <Daisy className="animate-float absolute right-[28%] top-[24%] z-10 opacity-70" size={22} />
 
       {/* Ảnh kỷ niệm trôi nổi hai bên (chỉ hiện trên màn hình lớn) */}
-      {heroFloats.map((f, i) => (
+      {floats.map((f, i) => (
         <div
           key={i}
           aria-hidden

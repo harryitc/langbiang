@@ -27,13 +27,14 @@ export default async function Home() {
       <Cursor />
       <ThemeToggle />
       <BackToTop />
-      <Header siteName={site.name} pastYears={years} />
+      <Header siteName={site.name} logo={site.logo} pastYears={years} />
       <main>
         <Hero
           dateLabel={fillYear(event.dateLabel, currentYear)}
           dateISO={event.dateISO}
           tagline={site.tagline}
           subtitle={site.subtitle}
+          photos={main.heroPhotos}
         />
         <About />
         <BannerSlider photos={main.gallery} />

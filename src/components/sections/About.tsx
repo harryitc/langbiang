@@ -4,7 +4,7 @@ import { Daisy } from "@/components/Decor";
 import { getContent } from "@/lib/content/store";
 
 export default async function About() {
-  const { currentYear, pastYears } = await getContent();
+  const { main, currentYear, pastYears } = await getContent();
   // Mùa thứ mấy = số năm đã qua + 1 (mùa đang tới).
   const seasonNo = pastYears.length + 1;
 
@@ -15,10 +15,9 @@ export default async function About() {
         {/* Ảnh */}
         <Reveal className="relative">
           <div className="relative">
-            {/* TODO(anh Vũ): thay bằng ảnh TNV áo Langbiang đang cho một bạn nhỏ
-                đồng bào ăn phở. Đặt file vào /public/gallery/about.jpg */}
+            {/* Ảnh mục Giới thiệu — đổi trong admin (Ảnh trang chủ). */}
             <Photo
-              src="/gallery/about.jpg"
+              src={main.aboutImage?.trim() || "/gallery/about.jpg"}
               alt="Tình nguyện viên Trăng Sáng Langbiang bên các em nhỏ vùng cao"
               ratio="aspect-[4/5]"
               priority

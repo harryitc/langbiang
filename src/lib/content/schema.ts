@@ -97,6 +97,8 @@ export type SiteMeta = {
   shopee: string;
   keywords: string[];
   ogImage?: string;
+  /** Logo hiển thị ở thanh menu (dùng chung toàn site). */
+  logo?: string;
 };
 
 /** Thông tin sự kiện (năm nằm trong dateLabel qua ký hiệu {năm}). */
@@ -128,6 +130,10 @@ export type MainContent = {
   activities: IconCard[];
   timeline: TimelineDay[];
   gallery: Photo[];
+  /** 4 ảnh polaroid bay quanh màn hình đầu trang (Hero) — chỉ đổi ảnh, bố cục giữ trong code. */
+  heroPhotos: string[];
+  /** Ảnh lớn của mục "Giới thiệu" ở trang chủ. */
+  aboutImage: string;
   whyJoin: IconCard[];
   faqs: Faq[];
   fundraising: Fundraising;
@@ -182,7 +188,8 @@ export const SLIDESHOW_LIMIT = 6;
 // v3: bỏ hẳn stats, volunteerTeams/volunteerCount, donations, testimonials
 // (cả ở main lẫn pastYears). Phần con người chỉ còn Ban tổ chức (main.board).
 // v4: mỗi năm đã qua có báo cáo thu – chi riêng (PastYear.spendingReport).
-export const CONTENT_VERSION = 4;
+// v5: logo, ảnh Hero và ảnh mục Giới thiệu quản lý được từ admin.
+export const CONTENT_VERSION = 5;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */
