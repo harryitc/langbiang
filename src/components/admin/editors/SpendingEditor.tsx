@@ -26,7 +26,8 @@ export default function SpendingEditor({
         Hiện ở mục &ldquo;Báo cáo thu – chi&rdquo; trên{" "}
         <strong>trang Gây quỹ</strong>. Web không trình bày bảng số liệu — chỉ
         cần dán liên kết Google Sheet để khách bấm sang xem, như vậy cập nhật số
-        liệu cũng tiện hơn. Bỏ trống liên kết thì mục này <strong>tự ẩn</strong>.
+        liệu cũng tiện hơn. Bỏ trống liên kết thì mục này vẫn hiện, kèm dòng
+        <strong> “Báo cáo đang được tổng hợp”</strong>.
         Mỗi năm đã qua có báo cáo riêng, sửa trong mục{" "}
         <strong>Danh mục năm đã qua</strong>.
       </p>
@@ -37,7 +38,7 @@ export default function SpendingEditor({
         <Alert
           type="info"
           showIcon
-          title="Chưa có liên kết — mục Báo cáo thu – chi đang ẩn trên trang Gây quỹ."
+          title="Chưa có liên kết — trang Gây quỹ đang hiện dòng “Báo cáo đang được tổng hợp”."
         />
       ) : null}
     </EditorCard>
