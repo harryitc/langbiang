@@ -4,6 +4,7 @@ import Fundraising from "@/components/sections/Fundraising";
 import Sponsors from "@/components/sections/Sponsors";
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/content/store";
+import { fillYear } from "@/lib/content/year";
 
 export const metadata: Metadata = {
   title: "Gây quỹ & Đồng hành",
@@ -76,7 +77,7 @@ export default async function FundraisingPage() {
               <span className="text-lg font-extrabold">{spendingReport.total}</span>
             </div>
             <p className="mt-4 text-center text-sm text-forest/60 dark:text-ink/60">
-              {spendingReport.updatedNote}
+              {fillYear(spendingReport.updatedNote, currentYear)}
             </p>
           </Reveal>
         </div>

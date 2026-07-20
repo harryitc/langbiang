@@ -90,10 +90,9 @@ export const defaultContent: SiteContent = {
       members: [...t.members],
     })),
     volunteerCount,
-    sponsorTiers: sponsorTiers.map((t) => ({
-      tier: t.tier,
-      sponsors: t.sponsors.map((s) => ({ ...s })),
-    })),
+    // Nhà tài trợ của MÙA HIỆN TẠI — bắt đầu trống, admin tự thêm cho năm nay.
+    // (Nhà tài trợ mùa 2025 thuộc về pastYears[2025], không dùng lại ở đây.)
+    sponsorTiers: [],
     board: {
       founders: board.founders.map((m) => ({ ...m })),
       members: board.members.map((m) => ({ ...m })),
@@ -103,7 +102,9 @@ export const defaultContent: SiteContent = {
     spendingReport: {
       items: spendingReport.items.map((i) => ({ ...i })),
       total: spendingReport.total,
-      updatedNote: spendingReport.updatedNote,
+      // Dùng ký hiệu {năm} để bám theo số năm hiện tại (FR3/A2).
+      updatedNote:
+        "Số liệu mang tính minh hoạ — sẽ cập nhật báo cáo thực tế sau mùa {năm}.",
     },
   },
 
