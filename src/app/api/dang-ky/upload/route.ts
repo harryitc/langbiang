@@ -63,7 +63,16 @@ export async function POST(request: Request): Promise<NextResponse> {
     );
   }
 
-  if (await vuotHanMuc(clientIp(request))) {
+  const body = (await request.json()) as HandleUploadBody;
+
+  // Chỉ tính lượt khi khách XIN TOKEN để tải ảnh mới.
+  // Vercel còn gọi lại chính đường này một lần nữa lúc tải xong
+  // (type = "blob.upload-completed"); tính cả lượt đó thì mỗi ảnh bị trừ hai
+  // lượt, hạn mức 5 ảnh/giờ thành ra chỉ còn 2.
+  if (
+    body?.type === "blob.generate-client-token" &&
+    (await vuotHanMuc(clientIp(request)))
+  ) {
     return NextResponse.json(
       {
         error:
@@ -72,8 +81,6 @@ export async function POST(request: Request): Promise<NextResponse> {
       { status: 429 }
     );
   }
-
-  const body = (await request.json()) as HandleUploadBody;
 
   try {
     const result = await handleUpload({
