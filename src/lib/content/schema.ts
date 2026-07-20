@@ -184,7 +184,30 @@ export type RegisterSection = {
   /** Dòng cuối form: chữ dẫn + nhãn liên kết (đích lấy từ site.facebook). */
   contactNote: string;
   contactLinkLabel: string;
+  /**
+   * Email NHẬN thông báo mỗi khi có người đăng ký (hộp thư của Ban tổ chức).
+   * Khác hẳn `site.email` — cái kia là email công khai in trên website cho
+   * khách liên hệ. Bỏ trống thì hệ thống gửi tạm về `site.email`.
+   */
+  recipientEmail?: string;
 };
+
+/* ------------------------------------------------------------------
+   Một lượt đăng ký khách gửi từ form ở trang chủ
+   ------------------------------------------------------------------ */
+export type Registration = {
+  /** Thời điểm gửi, dạng ISO. */
+  at: string;
+  /** Dữ liệu khách điền: mã trường -> nội dung. */
+  values: Record<string, string>;
+  /** Nhãn của từng trường tại thời điểm gửi (để về sau vẫn đọc hiểu được). */
+  labels: Record<string, string>;
+};
+
+/** Khoá Redis chứa danh sách đăng ký (list, mới nhất ở đầu). */
+export const REGISTRATIONS_KEY = "registrations";
+/** Chỉ giữ lại chừng này bản ghi gần nhất. */
+export const REGISTRATIONS_LIMIT = 500;
 
 /** Bài tin tức (nội dung dài lưu ở dạng HTML an toàn — CKEditor). */
 export type NewsPost = {
@@ -276,7 +299,11 @@ export const SLIDESHOW_LIMIT = 6;
 // v9: chữ mục Giới thiệu (main.about) và khối Đăng ký (main.register) quản lý
 // được từ admin — form đăng ký nay render động theo main.register.fields;
 // bỏ nút phụ "Vì sao nên tham gia?" ở mục Giới thiệu (trỏ tới khối đã xoá).
-export const CONTENT_VERSION = 9;
+// v10: form đăng ký ở trang chủ gửi thật — mỗi lượt đăng ký được lưu vào Redis
+// và gửi email báo về hộp thư riêng của Ban tổ chức (main.register
+// .recipientEmail, khác email công khai site.email); xem lại các lượt đăng ký ở
+// mục "Đăng ký nhận được" trong khu quản trị.
+export const CONTENT_VERSION = 10;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

@@ -26,6 +26,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
       { slug: "trang-chu", label: "Nội dung trang chủ" },
       { slug: "slideshow", label: "Slideshow" },
       { slug: "dang-ky", label: "Form đăng ký" },
+      { slug: "dang-ky-nhan-duoc", label: "Đăng ký nhận được" },
       { slug: "faq", label: "Câu hỏi thường gặp" },
     ],
   },

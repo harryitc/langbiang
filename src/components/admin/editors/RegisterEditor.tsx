@@ -11,6 +11,7 @@ import {
   EditorCard,
   Field,
   ListEditor,
+  LinkInput,
 } from "../editorKit";
 import type {
   RegisterField,
@@ -181,8 +182,8 @@ export default function RegisterEditor({
           <p className="mb-3 text-sm opacity-60">
             Đây là những ô mà khách phải điền khi đăng ký. Thêm, xoá hoặc kéo để
             đổi thứ tự — thay đổi hiện ngay ở khung <strong>Xem trước</strong>.
-            Lưu ý: form hiện <strong>chưa gửi về đâu cả</strong>, khách bấm gửi
-            chỉ thấy lời cảm ơn.
+            Mỗi lượt khách gửi đều được lưu lại và xem được ở mục{" "}
+            <strong>Đăng ký nhận được</strong>.
           </p>
 
           {missingLabel > 0 ? (
@@ -364,6 +365,42 @@ export default function RegisterEditor({
               </Field>
             </div>
           </div>
+        </EditorCard>
+
+        <EditorCard
+          title="Nơi nhận đăng ký"
+          extra={<SaveStatusTag status={status} />}
+        >
+          <p className="mb-3 text-sm opacity-60">
+            Khách bấm gửi xong, thông tin sẽ được <strong>lưu lại</strong> (xem
+            ở mục <strong>Đăng ký nhận được</strong>) và{" "}
+            <strong>gửi một email báo tin</strong> về địa chỉ dưới đây.
+          </p>
+          <Field
+            label="Email nhận thông báo đăng ký"
+            hint={
+              <>
+                Đây là hộp thư <strong>nội bộ của Ban tổ chức</strong> để nhận
+                tin mỗi khi có người đăng ký — <strong>khác</strong> với email
+                công khai ở mục <em>Thương hiệu &amp; SEO</em> (email đó in trên
+                website cho khách liên hệ). Bỏ trống thì hệ thống gửi tạm về
+                email công khai đó. Bấm nút cuối ô để thử soạn thư tới địa chỉ
+                này.
+              </>
+            }
+          >
+            <LinkInput
+              value={value.recipientEmail ?? ""}
+              placeholder="bantochuc@gmail.com"
+              onChange={(e) => set("recipientEmail", e.target.value)}
+            />
+          </Field>
+          <Alert
+            type="info"
+            showIcon
+            title="Không nhận được email cũng đừng lo."
+            description="Dù email có trục trặc, mọi lượt đăng ký vẫn được lưu đầy đủ trong mục “Đăng ký nhận được”."
+          />
         </EditorCard>
 
         <EditorCard
