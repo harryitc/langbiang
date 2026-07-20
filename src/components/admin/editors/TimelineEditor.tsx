@@ -9,6 +9,7 @@ import {
   ListEditor,
   Field,
 } from "../editorKit";
+import { ItemListEditor } from "../itemList";
 import type { TimelineDay, TimelineItem } from "@/lib/content/schema";
 
 const { TextArea } = Input;
@@ -114,12 +115,19 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
         />
       ) : null}
 
-      <ListEditor<TimelineDay>
+      <ItemListEditor<TimelineDay>
         value={value}
         onChange={update}
         addLabel="Thêm ngày"
+        drawerTitle="Ngày trong lịch trình"
         newItem={() => ({ day: "", date: "", items: [] })}
-        renderItem={(day, updateDay) => (
+        getRow={(day) => ({
+          title: day.day || "(chưa đặt nhãn ngày)",
+          subtitle: day.date || undefined,
+          tags: [{ text: `${day.items.length} mốc` }],
+          invalid: isBlank(day.day) || isBlank(day.date),
+        })}
+        renderForm={(day, updateDay) => (
           <div className="rounded-lg border border-black/5 bg-black/[0.02] p-3">
             <div className="grid gap-3 md:grid-cols-2">
               <Field label="Nhãn ngày">

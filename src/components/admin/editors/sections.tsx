@@ -5,6 +5,7 @@
 // (nhận value/onChange) + validator đi kèm — tránh lặp code giữa hai nơi.
 import { Input, Space, Switch, Tag } from "antd";
 import { ListEditor, Field, ImageField } from "../editorKit";
+import { ItemListEditor } from "../itemList";
 import type {
   Photo,
   Sponsor,
@@ -180,12 +181,22 @@ export function SponsorTierListEditor({
   onChange: (next: SponsorTier[]) => void;
 }) {
   return (
-    <ListEditor<SponsorTier>
+    <ItemListEditor<SponsorTier>
       value={value}
       onChange={onChange}
       addLabel="Thêm hạng tài trợ"
+      drawerTitle="Hạng tài trợ"
       newItem={() => ({ tier: "", sponsors: [] })}
-      renderItem={(tier, updateTier) => {
+      getRow={(tier) => ({
+        title: tier.tier || "(chưa đặt tên hạng)",
+        subtitle: tier.sponsors.map((s) => s.name).filter(Boolean).join(", ") || undefined,
+        thumb: tier.sponsors.find((s) => s.logo)?.logo || undefined,
+        tags: [{ text: `${tier.sponsors.length} đơn vị` }],
+        invalid:
+          missingTierFields(tier).length > 0 ||
+          tier.sponsors.some((s) => missingSponsorFields(s).length > 0),
+      })}
+      renderForm={(tier, updateTier) => {
         const missing = missingTierFields(tier);
         return (
           <Space direction="vertical" size={4} style={{ width: "100%" }}>

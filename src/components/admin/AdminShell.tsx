@@ -57,6 +57,11 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         trigger={null}
         width={240}
         theme="light"
+        // Dưới 992px: menu tự thu về dạng nổi (không chiếm chỗ), để admin dùng
+        // được trên điện thoại.
+        breakpoint="lg"
+        collapsedWidth={0}
+        onBreakpoint={(broken) => setCollapsed(broken)}
         style={{ borderRight: "1px solid rgba(0,0,0,0.06)" }}
       >
         <div
