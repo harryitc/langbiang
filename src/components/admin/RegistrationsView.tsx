@@ -106,8 +106,8 @@ export default function RegistrationsView({
             onClick={guiEmailChoNguoiDaChon}
           >
             {tichMoc.length === 0
-              ? "Gửi email — hãy tích chọn người nhận"
-              : `Gửi email cho ${tichMoc.length} người đã chọn`}
+              ? "Gửi email"
+              : `Gửi email ${tichMoc.length}`}
           </Button>
           <Button
             icon={<DownloadOutlined />}
