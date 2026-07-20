@@ -388,7 +388,7 @@ function AlbumButton({
         active ? "bg-[#2e7d32]/12 font-semibold text-[#2e7d32]" : "hover:bg-black/[0.04]"
       }`}
     >
-      <button className="flex flex-1 items-center gap-2 text-left" onClick={onClick}>
+      <button className="flex flex-1 cursor-pointer items-center gap-2 text-left" onClick={onClick}>
         <span className="truncate">{label}</span>
         <Tag className="ml-auto" bordered={false}>
           {count}
@@ -427,7 +427,7 @@ function Thumb({
 }) {
   return (
     <button
-      className={`group relative aspect-square overflow-hidden rounded-lg border-2 transition ${
+      className={`group relative aspect-square cursor-pointer overflow-hidden rounded-lg border-2 transition ${
         active ? "border-[#2e7d32]" : "border-transparent hover:border-black/20"
       }`}
       onClick={onClick}
@@ -438,7 +438,7 @@ function Thumb({
       <span
         role="button"
         aria-label="Xem ảnh chi tiết"
-        className="absolute right-1 top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-black/55 text-white opacity-0 transition hover:bg-black/80 group-hover:opacity-100"
+        className="absolute right-1 top-1 z-10 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-black/55 text-white opacity-0 transition hover:bg-black/80 group-hover:opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onPreview();

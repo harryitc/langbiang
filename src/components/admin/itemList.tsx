@@ -106,7 +106,7 @@ function SortableRow({
       <div className="flex items-center gap-2 p-2.5">
         <DragHandle attributes={attributes} listeners={listeners} />
         <button
-          className="flex min-w-0 flex-1 items-center gap-2 text-left"
+          className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-left"
           onClick={onToggle}
           title={open ? "Thu gọn" : "Mở rộng để sửa"}
         >
@@ -270,7 +270,7 @@ function CompactRow({
       ) : null}
 
       <button
-        className="min-w-0 flex-1 text-left"
+        className="min-w-0 flex-1 cursor-pointer text-left"
         onClick={onEdit}
         title="Bấm để sửa"
       >
