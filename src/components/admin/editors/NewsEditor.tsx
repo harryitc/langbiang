@@ -9,6 +9,7 @@ import {
   EditorCard,
   Field,
   ImageField,
+  LinkInput,
   RichText,
 } from "../editorKit";
 import { ItemListEditor } from "../itemList";
@@ -232,7 +233,7 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
                           label="Liên kết bài gốc"
                           hint="Dán liên kết bài đăng trên Fanpage của dự án."
                         >
-                          <Input
+                          <LinkInput
                             placeholder="https://www.facebook.com/share/p/…"
                             value={post.link}
                             status={post.link.trim() ? undefined : "error"}

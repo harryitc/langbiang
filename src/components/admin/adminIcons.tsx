@@ -8,6 +8,7 @@ import {
   AppstoreOutlined,
   CalendarOutlined,
   FileTextOutlined,
+  FontSizeOutlined,
   FolderOpenOutlined,
   HeartOutlined,
   HistoryOutlined,
@@ -25,6 +26,7 @@ import {
 export const ADMIN_ICONS: Record<string, ReactNode> = {
   "thuong-hieu": <TagsOutlined />,
   slideshow: <PlaySquareOutlined />,
+  "noi-dung-trang-chu": <FontSizeOutlined />,
   "anh-trang-chu": <PictureOutlined />,
   "hoat-dong": <AppstoreOutlined />,
   "lich-trinh": <ScheduleOutlined />,

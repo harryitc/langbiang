@@ -139,9 +139,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             {/* Breadcrumb thay cho tiêu đề H4 (vốn trùng y hệt tiêu đề thẻ bên
                 dưới). Hiện thêm tên nhóm để biết mục này thuộc trang nào. */}
             <Breadcrumb
-              // Điều hướng phụ nên nhỏ hơn chữ nội dung (16px). Breadcrumb của
-              // antd không nhận token cỡ chữ nên đặt thẳng ở đây.
-              style={{ marginBottom: 16, fontSize: 13 }}
+              style={{ marginBottom: 16 }}
               items={[
                 { title: <Link href="/admin">Quản trị</Link> },
                 ...(group ? [{ title: group.label }] : []),

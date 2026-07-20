@@ -4,7 +4,7 @@
 // trợ) và PastYearsEditor. Mỗi phần là 1 ListEditor "controlled"
 // (nhận value/onChange) + validator đi kèm — tránh lặp code giữa hai nơi.
 import { Input, Space, Switch, Tag } from "antd";
-import { ListEditor, Field, ImageField } from "../editorKit";
+import { ListEditor, Field, ImageField, LinkInput, isValidUrl } from "../editorKit";
 import { ItemListEditor } from "../itemList";
 import type {
   Photo,
@@ -34,16 +34,12 @@ export function missingSponsorFields(sponsor: Sponsor): string[] {
   return sponsor.name.trim() ? [] : ["tên đơn vị"];
 }
 
-/** Website tuỳ chọn nhưng nếu nhập thì phải là URL http/https tuyệt đối. */
-export function isValidUrl(url: string): boolean {
-  if (!url.trim()) return true; // bỏ trống là hợp lệ (trường tuỳ chọn)
-  try {
-    const parsed = new URL(url.trim());
-    return parsed.protocol === "http:" || parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
+/**
+ * Website tuỳ chọn nhưng nếu nhập thì phải là URL http/https tuyệt đối.
+ * Hàm nay ở editorKit để dùng chung; giữ lại chỗ export này cho các nơi
+ * đang import từ sections.
+ */
+export { isValidUrl };
 
 /* ------------------------------------------------------------------
    Báo cáo thu – chi (link Google Sheet) — dùng cho mùa hiện tại và từng năm
@@ -62,7 +58,7 @@ export function SpendingFields({
         label="Liên kết Google Sheet"
         hint="Khách bấm nút là mở thẳng bảng thu – chi này. Nhớ đặt quyền chia sẻ “Bất kỳ ai có đường liên kết đều xem được”, nếu không khách sẽ bị chặn."
       >
-        <Input
+        <LinkInput
           value={value.url}
           placeholder="https://docs.google.com/spreadsheets/d/..."
           status={urlOk ? "" : "error"}
@@ -249,7 +245,7 @@ export function SponsorTierListEditor({
                           label="Website"
                           hint="Tuỳ chọn. Dán đầy đủ, vd https://abc.vn — khách bấm logo sẽ mở trang này."
                         >
-                          <Input
+                          <LinkInput
                             value={url}
                             placeholder="https://abc.vn"
                             status={urlOk ? "" : "error"}

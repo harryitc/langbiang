@@ -17,8 +17,11 @@ import {
   Space,
   Spin,
   Tag,
+  Tooltip,
 } from "antd";
+import type { InputProps } from "antd";
 import {
+  ExportOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
 import { saveDraftAction } from "@/lib/content/actions";
@@ -134,6 +137,101 @@ export function Field({
 }
 
 /* ------------------------------------------------------------------
+   LinkInput — ô nhập liên kết kèm nút mở thử ở tab mới
+   ------------------------------------------------------------------ */
+
+/**
+ * Liên kết tuỳ chọn: bỏ trống vẫn hợp lệ, nhưng đã nhập thì phải là URL
+ * http/https tuyệt đối. (Dùng chung cho các ô nhập link trong khu quản trị.)
+ */
+export function isValidUrl(url: string): boolean {
+  if (!url.trim()) return true; // bỏ trống là hợp lệ (trường tuỳ chọn)
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Đổi nội dung người dùng gõ thành địa chỉ có thể mở được ở tab mới.
+ * Trả về `null` nếu chưa mở thử được (ô trống, gõ thiếu https://, hoặc chỉ là
+ * dấu neo trong trang như "#gioi-thieu").
+ * Riêng ô email: gõ "ten@gmail.com" sẽ mở trình soạn thư (mailto:).
+ */
+export function toOpenableHref(raw: string): string | null {
+  const value = (raw ?? "").trim();
+  if (!value) return null;
+  if (/^mailto:\S+@\S+/i.test(value)) return value;
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return `mailto:${value}`;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "http:" || parsed.protocol === "https:"
+      ? parsed.toString()
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+export type LinkInputProps = Omit<InputProps, "suffix">;
+
+/**
+ * Ô nhập liên kết: giống <Input> bình thường (giữ nguyên value/onChange/
+ * placeholder/status…), chỉ thêm nút mở liên kết ở cuối ô.
+ * Nút chỉ sáng khi liên kết mở được; ngược lại mờ đi kèm lời nhắc ngắn.
+ */
+export function LinkInput(props: LinkInputProps) {
+  const raw = typeof props.value === "string" ? props.value : "";
+  const href = toOpenableHref(raw);
+  const laEmail = href?.toLowerCase().startsWith("mailto:") ?? false;
+
+  const loiNhac = href
+    ? laEmail
+      ? "Mở trình soạn thư gửi tới địa chỉ này"
+      : "Mở liên kết ở tab mới"
+    : raw.trim()
+      ? "Chưa mở thử được — liên kết cần bắt đầu bằng https://"
+      : "Dán liên kết vào ô này rồi bấm để mở thử";
+
+  return (
+    <Input
+      {...props}
+      suffix={
+        <Tooltip title={loiNhac}>
+          {href ? (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={loiNhac}
+              className="cursor-pointer"
+              style={{ display: "inline-flex", color: "inherit", opacity: 0.75 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ExportOutlined />
+            </a>
+          ) : (
+            <span
+              aria-disabled
+              aria-label={loiNhac}
+              style={{
+                display: "inline-flex",
+                opacity: 0.3,
+                cursor: "not-allowed",
+              }}
+            >
+              <ExportOutlined />
+            </span>
+          )}
+        </Tooltip>
+      }
+    />
+  );
+}
+
+/* ------------------------------------------------------------------
    ListEditor — giữ nguyên API cũ, nay chạy trên SortableList (kéo thả)
    ------------------------------------------------------------------ */
 export type ListEditorProps<T> = {
@@ -204,7 +302,7 @@ export function ImageField({
           </Space>
         )}
         {urlMode && !value ? (
-          <Input
+          <LinkInput
             placeholder="Dán đường dẫn ảnh, ví dụ https://…"
             value={value}
             onChange={(e) => onChange(e.target.value)}

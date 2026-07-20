@@ -99,6 +99,11 @@ export type SiteMeta = {
   ogImage?: string;
   /** Logo hiển thị ở thanh menu (dùng chung toàn site). */
   logo?: string;
+  /**
+   * Dòng chữ nhỏ phía TRÊN tiêu đề lớn ở trang chủ.
+   * Bỏ trống -> dùng khẩu hiệu (tagline) để không phải nhập lặp.
+   */
+  heroTagline?: string;
 };
 
 /** Thông tin sự kiện (năm nằm trong dateLabel qua ký hiệu {năm}). */
@@ -198,7 +203,8 @@ export const SLIDESHOW_LIMIT = 6;
 // v6: bỏ whyJoin (không trang nào render).
 // v7: địa điểm tách riêng cho từng nơi hiển thị (chân trang / lịch trình /
 // trang Chương trình), bỏ trống thì dùng địa điểm chính.
-export const CONTENT_VERSION = 7;
+// v8: tách chữ ở trang chủ khỏi phần SEO (site.heroTagline).
+export const CONTENT_VERSION = 8;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

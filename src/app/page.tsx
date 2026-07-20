@@ -32,7 +32,7 @@ export default async function Home() {
         <Hero
           dateLabel={eventDateLabel(event.dateLabel, currentYear)}
           dateISO={event.dateISO}
-          tagline={site.tagline}
+          tagline={site.heroTagline?.trim() || site.tagline}
           subtitle={site.subtitle}
           photos={main.heroPhotos}
         />

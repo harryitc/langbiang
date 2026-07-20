@@ -56,6 +56,8 @@ export const defaultContent: SiteContent = {
       keywords: [...site.keywords],
       ogImage: "/og.jpg",
       logo: "/logo-mark.png",
+      // Chữ ở trang chủ độc lập với khẩu hiệu dùng cho SEO.
+      heroTagline: site.tagline,
     },
     // Chỉ nhập phần ngày/tháng — năm do hệ thống tự nối theo currentYear
     // (không để người dùng phải giữ ký hiệu {năm} dễ xoá nhầm).

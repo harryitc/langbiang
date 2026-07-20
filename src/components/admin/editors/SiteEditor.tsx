@@ -8,6 +8,7 @@ import {
   EditorCard,
   Field,
   ImageField,
+  LinkInput,
 } from "../editorKit";
 import type { SiteMeta } from "@/lib/content/schema";
 
@@ -125,7 +126,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               loi.tagline ? (
                 <Text type="danger">{loi.tagline}</Text>
               ) : (
-                "Câu ngắn hiện phía trên tiêu đề lớn ở trang chủ."
+                "Câu ngắn đi kèm tên dự án trên kết quả tìm kiếm Google và khi chia sẻ liên kết. Chữ hiện trên trang chủ nhập riêng ở mục Chữ ở đầu trang."
               )
             }
           >
@@ -134,17 +135,6 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               status={loi.tagline ? "error" : undefined}
               placeholder="Dự án tình nguyện"
               onChange={(e) => set("tagline", e.target.value)}
-            />
-          </Field>
-
-          <Field
-            label="Phụ đề"
-            hint="Dòng chữ nhỏ ngay dưới tiêu đề lớn ở trang chủ."
-          >
-            <Input
-              value={value.subtitle}
-              placeholder="Tại phường Langbiang – Đà Lạt, tỉnh Lâm Đồng"
-              onChange={(e) => set("subtitle", e.target.value)}
             />
           </Field>
         </div>
@@ -160,7 +150,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               )
             }
           >
-            <Input
+            <LinkInput
               value={value.email}
               status={loi.email ? "error" : undefined}
               placeholder="trangsanglangbiang@gmail.com"
@@ -178,7 +168,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               )
             }
           >
-            <Input
+            <LinkInput
               value={value.facebook}
               status={loi.facebook ? "error" : undefined}
               placeholder="https://www.facebook.com/…"
@@ -196,7 +186,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               )
             }
           >
-            <Input
+            <LinkInput
               value={value.shopee}
               status={loi.shopee ? "error" : undefined}
               placeholder="https://shopee.vn/…"

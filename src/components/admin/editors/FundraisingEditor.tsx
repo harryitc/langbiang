@@ -7,6 +7,7 @@ import {
   EditorCard,
   ListEditor,
   Field,
+  LinkInput,
 } from "../editorKit";
 import type { Fundraising, FundraisingChannel } from "@/lib/content/schema";
 
@@ -209,7 +210,7 @@ export default function FundraisingEditor({
                 label="Liên kết"
                 hint="Nơi khách được đưa tới khi bấm nút. Dán đầy đủ, bắt đầu bằng https://. Gõ dấu # nếu nút chỉ để khách xem thông tin ở phần Ghi chú."
               >
-                <Input
+                <LinkInput
                   value={item.href}
                   placeholder="https://shopee.vn/…"
                   status={errors.href ? "error" : undefined}
