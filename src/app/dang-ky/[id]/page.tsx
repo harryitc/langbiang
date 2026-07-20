@@ -1,17 +1,19 @@
 // Trang chia sẻ riêng của MỘT form đăng ký: /dang-ky/<id>.
 //
-// Cố ý dựng thật nhẹ — CHỈ có form, không Header, không Footer, không các mục
+// Nội dung cố ý gọn — CHỈ có form, không Header, không Footer, không các mục
 // khác của trang chủ — để gửi link cho tình nguyện viên là điền được ngay.
 //
-// Bố cục bám sát khối "Đăng ký" ngoài trang chủ (src/components/sections/
-// Register.tsx): màn rộng thì chữ bên trái, form bên phải; màn hẹp thì xếp dọc.
-// Hai cột không chỉ để giống — thẻ form nền kính đứng một mình giữa nền xanh sẽ
-// bị chìm, có cột chữ bên cạnh thì mắt mới bám được vào form.
+// Nền dùng ĐÚNG nền Hero trang chủ: bầu trời gradient + HeroCanvas (trăng, đom
+// đóm, lá bay) + cành lá và hoa cúc ở góc. Vì nền sáng nên chữ ở đây là chữ
+// đậm (forest/leaf-deep) chứ không phải chữ trắng như khối Đăng ký.
 //
-// Khác trang chủ đúng một điểm: KHÔNG hiện 2 ô highlights, giữ trang thật gọn.
+// Bố cục hai cột giống khối Đăng ký ở trang chủ: chữ bên trái, form bên phải;
+// màn hẹp thì xếp dọc. KHÔNG hiện 2 ô highlights, giữ trang gọn.
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import HeroCanvas from "@/components/HeroCanvas";
+import { LeafBranch, Daisy } from "@/components/Decor";
 import RegisterFormCard from "@/components/sections/RegisterFormCard";
 import { getContent } from "@/lib/content/store";
 
@@ -52,38 +54,40 @@ export default async function Page({ params }: Params) {
   if (!form) notFound();
 
   return (
-    <main className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-leaf-deep via-leaf to-grass py-16 text-white sm:py-20">
-      {/* Hoạ tiết mờ — lấy đúng của khối Đăng ký ở trang chủ. */}
-      <div className="pointer-events-none absolute inset-0 opacity-20">
-        <div className="absolute -left-10 top-10 h-64 w-64 rounded-full bg-white blur-3xl" />
-        <div className="absolute -right-10 bottom-0 h-72 w-72 rounded-full bg-sun blur-3xl" />
-      </div>
+    <main className="relative flex min-h-screen flex-col overflow-hidden py-16 sm:py-20">
+      {/* Bầu trời gradient — lấy nguyên của Hero trang chủ. */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream dark:from-[#0a1626] dark:via-[#0c1712] dark:to-[#0c1712]" />
+      <HeroCanvas />
 
-      <div className="relative mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-6 lg:grid-cols-2">
+      {/* Cành lá & hoa ở góc, như Hero. */}
+      <LeafBranch className="pointer-events-none absolute -left-6 -top-6 z-10 h-56 w-72 animate-sway opacity-90 md:h-72 md:w-96" />
+      <Daisy className="pointer-events-none absolute bottom-8 right-6 z-10 h-16 w-16 animate-float opacity-80 md:h-24 md:w-24" />
+
+      <div className="relative z-20 mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-6 lg:grid-cols-2">
         {/* Cột trái — giới thiệu */}
         <div className="text-center lg:text-left">
           <Link
             href="/"
-            className="cursor-pointer text-xs font-bold uppercase tracking-widest text-white/75 transition hover:text-white"
+            className="cursor-pointer text-xs font-bold uppercase tracking-widest text-leaf-deep/70 transition hover:text-leaf-deep dark:text-leaf-bright/70 dark:hover:text-leaf-bright"
           >
             {site.name}
           </Link>
 
           <span className="mt-4 mb-3 block">
-            <span className="inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
+            <span className="inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
               {form.eyebrow}
             </span>
           </span>
 
-          <h1 className="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
+          <h1 className="text-3xl font-extrabold leading-tight text-forest dark:text-ink sm:text-4xl md:text-5xl">
             {form.title}
             <br />
-            <span className="font-display text-4xl sm:text-5xl md:text-6xl">
+            <span className="font-display text-4xl text-leaf-deep dark:text-leaf-bright sm:text-5xl md:text-6xl">
               {form.titleHighlight}
             </span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-md text-lg text-white/85 lg:mx-0">
+          <p className="mx-auto mt-5 max-w-md text-lg text-forest/75 dark:text-ink/75 lg:mx-0">
             {form.description}
           </p>
         </div>
@@ -92,9 +96,12 @@ export default async function Page({ params }: Params) {
         <RegisterFormCard form={form} facebook={site.facebook} />
       </div>
 
-      <p className="relative mt-12 px-6 text-center text-xs text-white/70">
+      <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60 dark:text-ink/60">
         {form.name.trim() || form.formTitle} ·{" "}
-        <Link href="/" className="cursor-pointer underline">
+        <Link
+          href="/"
+          className="cursor-pointer underline hover:text-leaf-deep dark:hover:text-leaf-bright"
+        >
           Về trang chủ {site.name}
         </Link>
       </p>

@@ -166,6 +166,14 @@ export const defaultContent: SiteContent = {
             type: "textarea",
             placeholder: "Chia sẻ mong muốn của bạn...",
           },
+          {
+            // Ảnh khách tự tải lên -> vào kho ảnh, album "Tình nguyện viên",
+            // đặt tên theo tên người đăng ký.
+            name: "photo",
+            label: "Ảnh của bạn (không bắt buộc)",
+            type: "photo",
+            placeholder: "Ảnh chân dung để Ban tổ chức dễ nhận ra bạn",
+          },
         ],
         submitLabel: "Gửi đăng ký 🌙",
         successTitle: "Cảm ơn bạn rất nhiều!",
