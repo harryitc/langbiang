@@ -292,15 +292,19 @@ export default function MediaBrowser({
                     {/* Bảng thao tác gọn, nổi ngay dưới ảnh đang chọn — khỏi
                         phải cuộn lên thanh công cụ. */}
                     {selected === it.id ? (
-                      <div className="absolute left-1/2 top-full z-30 mt-1 w-52 -translate-x-1/2 rounded-lg border border-[#2e7d32]/30 bg-white p-2 shadow-lg">
+                      <div className="absolute left-1/2 top-full z-30 mt-1.5 w-56 -translate-x-1/2 rounded-lg border border-[#2e7d32]/30 bg-white p-3 shadow-lg">
                         <div className="truncate text-xs font-medium" title={it.name}>
                           {it.name}
                         </div>
-                        <div className="mb-2 truncate text-[11px] opacity-60">
-                          {albums.find((a) => a.id === it.albumId)?.name ?? "Khác"}
-                        </div>
+                        {/* Ở chế độ quản lý đã có ô chọn album bên dưới nên
+                            không lặp lại tên album ở đây. */}
+                        {!canManage ? (
+                          <div className="mt-0.5 truncate text-[11px] opacity-60">
+                            {albums.find((a) => a.id === it.albumId)?.name ?? "Khác"}
+                          </div>
+                        ) : null}
 
-                        <div className="flex items-center gap-1">
+                        <div className="mt-2.5 flex items-center gap-1.5">
                           {mode === "pick" ? (
                             <Button
                               size="small"
@@ -364,7 +368,7 @@ export default function MediaBrowser({
                           <Select
                             size="small"
                             value={it.albumId}
-                            className="mt-1.5 w-full cursor-pointer"
+                            className="mt-2 w-full cursor-pointer"
                             onChange={(v) =>
                               run(moveMediaAction(it.id, v), "Đã chuyển album.")
                             }
@@ -471,7 +475,9 @@ function Thumb({
 }) {
   return (
     <button
-      className={`group relative aspect-square cursor-pointer overflow-hidden rounded-lg border-2 transition ${
+      // block + w-full: nút nằm trong div bọc (không còn là grid item) nên phải
+      // tự chiếm hết chiều rộng, nếu không aspect-square sẽ ra kích thước 0.
+      className={`group relative block aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 transition ${
         active ? "border-[#2e7d32]" : "border-transparent hover:border-black/20"
       }`}
       onClick={onClick}

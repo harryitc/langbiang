@@ -1,8 +1,8 @@
 "use client";
 
-// Ảnh trang chủ (ngoài slideshow): logo ở thanh menu, 4 ảnh nổi ở Hero,
-// và ảnh lớn của mục Giới thiệu. Bố cục Hero giữ trong code — ở đây chỉ đổi ảnh.
-import { Alert } from "antd";
+// Nội dung trang chủ: chữ ở màn hình đầu, logo, 4 ảnh nổi quanh Hero và ảnh
+// mục Giới thiệu. Bố cục Hero giữ trong code — ở đây chỉ đổi chữ và ảnh.
+import { Alert, Input } from "antd";
 import {
   useSectionAutosave,
   SaveStatusTag,
@@ -47,8 +47,44 @@ export default function HomeImagesEditor({
     updateHero(arr);
   };
 
+  const setSite = <K extends keyof SiteMeta>(key: K, v: SiteMeta[K]) =>
+    updateSite({ ...site, [key]: v });
+
   return (
     <>
+      <EditorCard
+        title="Chữ ở màn hình đầu trang"
+        extra={<SaveStatusTag status={siteStatus} />}
+      >
+        <p className="mb-3 text-sm opacity-60">
+          Hai dòng chữ kẹp trên và dưới tên dự án ở màn hình đầu tiên. Đây là chữ{" "}
+          <strong>khách nhìn thấy</strong> — khác với phần Thương hiệu &amp; SEO
+          (thông tin gửi cho Google), nên có thể viết khác nhau.
+        </p>
+
+        <Field
+          label="Dòng chữ phía trên tên dự án"
+          hint="Câu ngắn dẫn dắt, vd: Dự án tình nguyện."
+        >
+          <Input
+            value={site.heroTagline ?? ""}
+            placeholder="Dự án tình nguyện"
+            onChange={(e) => setSite("heroTagline", e.target.value)}
+          />
+        </Field>
+
+        <Field
+          label="Dòng chữ phía dưới tên dự án"
+          hint="Thường ghi nơi tổ chức, vd: Tại phường Langbiang – Đà Lạt, tỉnh Lâm Đồng."
+        >
+          <Input
+            value={site.subtitle}
+            placeholder="Tại phường Langbiang – Đà Lạt, tỉnh Lâm Đồng"
+            onChange={(e) => setSite("subtitle", e.target.value)}
+          />
+        </Field>
+      </EditorCard>
+
       <EditorCard title="Logo" extra={<SaveStatusTag status={siteStatus} />}>
         <p className="mb-3 text-sm opacity-60">
           Logo hiển thị ở thanh menu trên cùng của <strong>mọi trang</strong>.
