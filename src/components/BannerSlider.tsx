@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import type { Photo } from "@/lib/content/schema";
+import { SLIDESHOW_LIMIT, type Photo } from "@/lib/content/schema";
 
 /**
  * Slideshow đóng khung như một chiếc TV: thân máy xanh rừng, ăng-ten, loa lưới,
@@ -12,8 +12,9 @@ import type { Photo } from "@/lib/content/schema";
  * Tôn trọng prefers-reduced-motion (tắt tự chạy).
  */
 export default function BannerSlider({ photos }: { photos: Photo[] }) {
-  // Chỉ lấy 6 ảnh đầu của thư viện trang chính cho "màn hình TV".
-  const slides = photos.slice(0, 6);
+  // Chỉ chiếu SLIDESHOW_LIMIT ảnh đầu trên "màn hình TV" (editor hiển thị đúng
+  // giới hạn này để người biên tập biết ảnh nào sẽ lên sóng).
+  const slides = photos.slice(0, SLIDESHOW_LIMIT);
 
   const autoplay = useRef(
     Autoplay({ delay: 4500, stopOnInteraction: false, stopOnMouseEnter: true })

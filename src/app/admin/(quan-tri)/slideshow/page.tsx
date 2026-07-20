@@ -1,9 +1,9 @@
-// Trang quản trị: Thư viện ảnh.
+// Trang quản trị: Slideshow trang chủ (main.gallery).
 // Đọc bản nháp ở server rồi truyền lát cắt nội dung xuống editor (client).
 import { getDraftContent } from "@/lib/content/store";
-import GalleryEditor from "@/components/admin/editors/GalleryEditor";
+import SlideshowEditor from "@/components/admin/editors/SlideshowEditor";
 
 export default async function Page() {
   const content = await getDraftContent();
-  return <GalleryEditor initial={content.main.gallery} />;
+  return <SlideshowEditor initial={content.main.gallery} />;
 }
