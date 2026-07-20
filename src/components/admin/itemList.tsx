@@ -36,6 +36,13 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 
+/**
+ * Số mục render mỗi lô. Danh sách dài (vd thư viện một năm có ~186 ảnh) mà
+ * render hết sẽ dựng bấy nhiêu hàng kèm bấy nhiêu hook kéo-thả -> nặng.
+ * Kéo-thả vẫn hoạt động trong phạm vi các mục đang hiện.
+ */
+const LIST_PAGE = 24;
+
 /* ------------------------------------------------------------------
    Hạ tầng kéo thả dùng chung
    ------------------------------------------------------------------ */
@@ -140,6 +147,8 @@ export function SortableList<T>({
 }) {
   // Mặc định thu gọn hết cho dễ nhìn tổng thể; mở từng mục khi cần sửa.
   const [openRows, setOpenRows] = useState<Set<number>>(new Set());
+  const [limit, setLimit] = useState(LIST_PAGE);
+  const shown = Math.min(value.length, limit);
   const toggle = (i: number) =>
     setOpenRows((prev) => {
       const next = new Set(prev);
@@ -153,7 +162,7 @@ export function SortableList<T>({
     setOpenRows(new Set());
     onChange(arrayMove(value, from, to));
   };
-  const { sensors, ids, onDragEnd } = useDnd(value.length, move);
+  const { sensors, ids, onDragEnd } = useDnd(shown, move);
 
   const replaceAt = (i: number, next: T) => {
     const arr = value.slice();
@@ -179,7 +188,7 @@ export function SortableList<T>({
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-            {value.map((item, i) => (
+            {value.slice(0, limit).map((item, i) => (
               <SortableRow
                 key={i}
                 id={String(i)}
@@ -205,13 +214,24 @@ export function SortableList<T>({
         </DndContext>
       )}
 
+      {value.length > limit ? (
+        <Button
+          block
+          className="mt-2 cursor-pointer"
+          onClick={() => setLimit((n) => n + LIST_PAGE)}
+        >
+          Xem thêm ({value.length - limit} mục)
+        </Button>
+      ) : null}
+
       <Button
         type="dashed"
         icon={<PlusOutlined />}
         block
         className="mt-2"
         onClick={() => {
-          // Mục mới mở sẵn để nhập luôn.
+          // Mục mới mở sẵn để nhập luôn; nhớ nới lô để thấy được mục vừa thêm.
+          setLimit((n) => Math.max(n, value.length + 1));
           setOpenRows((prev) => new Set(prev).add(value.length));
           onChange([...value, newItem()]);
         }}
@@ -331,8 +351,9 @@ export function ItemListEditor<T>({
   drawerTitle?: string;
 }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [limit, setLimit] = useState(LIST_PAGE);
   const move = (from: number, to: number) => onChange(arrayMove(value, from, to));
-  const { sensors, ids, onDragEnd } = useDnd(value.length, move);
+  const { sensors, ids, onDragEnd } = useDnd(Math.min(value.length, limit), move);
 
   const replaceAt = (i: number, next: T) => {
     const arr = value.slice();
@@ -346,6 +367,7 @@ export function ItemListEditor<T>({
     setOpenIndex(null);
   };
   const add = () => {
+    setLimit((n) => Math.max(n, value.length + 1));
     onChange([...value, newItem()]);
     // Mở luôn form của mục vừa thêm — đỡ phải đi tìm.
     setOpenIndex(value.length);
@@ -363,7 +385,7 @@ export function ItemListEditor<T>({
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-            {value.map((item, i) => (
+            {value.slice(0, limit).map((item, i) => (
               <CompactRow
                 key={i}
                 id={String(i)}
@@ -375,6 +397,16 @@ export function ItemListEditor<T>({
           </SortableContext>
         </DndContext>
       )}
+
+      {value.length > limit ? (
+        <Button
+          block
+          className="mt-2 cursor-pointer"
+          onClick={() => setLimit((n) => n + LIST_PAGE)}
+        >
+          Xem thêm ({value.length - limit} mục)
+        </Button>
+      ) : null}
 
       <Button type="dashed" icon={<PlusOutlined />} block className="mt-2" onClick={add}>
         {addLabel}
