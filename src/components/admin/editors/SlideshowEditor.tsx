@@ -66,8 +66,9 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
       }
     >
       <p className="mb-3 text-sm opacity-60">
-        Đây là dãy ảnh chạy trong khung TV ở <strong>trang chủ</strong>. Slideshow
-        chỉ chiếu <strong>{SLIDESHOW_LIMIT} ảnh đầu tiên</strong> — muốn ảnh nào
+        Đây là dãy ảnh chạy trong khung TV ở <strong>trang chủ</strong>, ngay
+        dưới mục &ldquo;Giới thiệu&rdquo;. Chỉ{" "}
+        <strong>{SLIDESHOW_LIMIT} ảnh đầu tiên</strong> được chiếu — muốn ảnh nào
         lên sóng thì dùng nút mũi tên đưa nó lên trước.
       </p>
 
@@ -76,7 +77,7 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
           type="info"
           showIcon
           className="mb-3"
-          message={`${hidden} ảnh cuối danh sách sẽ không hiển thị trên trang chủ.`}
+          title={`${hidden} ảnh cuối danh sách sẽ không hiển thị trên trang chủ.`}
           description="Đưa lên vị trí đầu để được chiếu, hoặc xoá bớt cho gọn."
         />
       ) : null}
@@ -86,7 +87,7 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
           type="warning"
           showIcon
           className="mb-3"
-          message={`Có ${missingImage} mục chưa chọn ảnh.`}
+          title={`Có ${missingImage} mục chưa chọn ảnh.`}
         />
       ) : null}
 
@@ -173,7 +174,7 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
                     checked={!!photo.tall}
                     onChange={(tall) => setAt(i, { ...photo, tall })}
                   />
-                  Ảnh cao (chiếm 2 hàng ở lưới masonry)
+                  Ảnh cao (chiếm 2 hàng trong lưới ảnh)
                 </label>
               </div>
             );

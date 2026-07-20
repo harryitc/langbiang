@@ -86,8 +86,9 @@ export function SaveStatusTag({ status }: { status: SaveStatus }) {
         <Spin size="small" /> Đang lưu…
       </Tag>
     );
-  if (status === "saved") return <Tag color="success">Đã lưu</Tag>;
-  if (status === "error") return <Tag color="error">Lưu thất bại</Tag>;
+  if (status === "saved") return <Tag color="success">Đã lưu nháp</Tag>;
+  if (status === "error")
+    return <Tag color="error">Chưa lưu được — kiểm tra mạng rồi sửa lại</Tag>;
   return <Tag>Chưa có thay đổi</Tag>;
 }
 
@@ -169,7 +170,7 @@ export function ImageField({
 
   return (
     <div>
-      <Space direction="vertical" style={{ width: "100%" }} size={8}>
+      <Space orientation="vertical" style={{ width: "100%" }} size={8}>
         {value ? (
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -198,13 +199,13 @@ export function ImageField({
               Chọn từ kho ảnh
             </Button>
             <Button type="text" size="small" onClick={() => setUrlMode((v) => !v)}>
-              Dán URL ngoài
+              Dán đường dẫn ảnh
             </Button>
           </Space>
         )}
         {urlMode && !value ? (
           <Input
-            placeholder="https://… hoặc /gallery/anh.jpg"
+            placeholder="Dán đường dẫn ảnh, ví dụ https://…"
             value={value}
             onChange={(e) => onChange(e.target.value)}
           />

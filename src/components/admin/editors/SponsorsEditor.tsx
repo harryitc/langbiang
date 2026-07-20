@@ -32,13 +32,16 @@ export default function SponsorsEditor({ initial }: { initial: SponsorTier[] }) 
           type="warning"
           showIcon
           className="mb-3"
-          message={`Có ${invalidTiers} hạng tài trợ chưa điền đủ thông tin.`}
+          title={`Có ${invalidTiers} hạng tài trợ chưa điền đủ thông tin.`}
+          description="Mỗi hạng cần có tên và ít nhất một đơn vị; mỗi đơn vị cần có tên."
         />
       ) : null}
 
       <div className="mb-3 text-xs opacity-60">
-        Đang có {totalSponsors} đơn vị trong {tiers.length} hạng tài trợ. Thứ tự
-        các hạng cũng là thứ tự hiển thị trên trang.
+        Hiện ở mục &ldquo;Cảm ơn những tấm lòng vàng&rdquo; trên{" "}
+        <strong>trang Gây quỹ</strong>. Đang có {totalSponsors} đơn vị trong{" "}
+        {tiers.length} hạng tài trợ — thứ tự các hạng ở đây cũng là thứ tự khách
+        nhìn thấy. Chưa có hạng nào thì mục này tự ẩn.
       </div>
 
       <SponsorTierListEditor value={tiers} onChange={updateTiers} />

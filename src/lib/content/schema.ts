@@ -106,7 +106,14 @@ export type EventInfo = {
   dateLabel: string;
   dateISO: string;
   dateEndISO?: string;
+  /** Địa điểm chính — dùng cho dữ liệu gửi Google và làm mặc định cho các nơi khác. */
   location: string;
+  /** Ghi đè riêng cho chân trang (bỏ trống -> dùng địa điểm chính). */
+  locationFooter?: string;
+  /** Ghi đè riêng cho mục Lịch trình. */
+  locationTimeline?: string;
+  /** Ghi đè riêng cho trang Chương trình. */
+  locationProgram?: string;
 };
 
 /** Bài tin tức (nội dung dài lưu ở dạng HTML an toàn — CKEditor). */
@@ -189,7 +196,9 @@ export const SLIDESHOW_LIMIT = 6;
 // v4: mỗi năm đã qua có báo cáo thu – chi riêng (PastYear.spendingReport).
 // v5: logo, ảnh Hero và ảnh mục Giới thiệu quản lý được từ admin.
 // v6: bỏ whyJoin (không trang nào render).
-export const CONTENT_VERSION = 6;
+// v7: địa điểm tách riêng cho từng nơi hiển thị (chân trang / lịch trình /
+// trang Chương trình), bỏ trống thì dùng địa điểm chính.
+export const CONTENT_VERSION = 7;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

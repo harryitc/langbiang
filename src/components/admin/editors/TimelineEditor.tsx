@@ -61,7 +61,7 @@ function ItemsEditor({
               onChange={(e) => update({ ...item, time: e.target.value })}
             />
           </Field>
-          <Space direction="vertical" style={{ width: "100%" }} size={0}>
+          <Space orientation="vertical" style={{ width: "100%" }} size={0}>
             <Field label="Tiêu đề">
               <Input
                 placeholder="Tập trung & khởi hành"
@@ -106,12 +106,18 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
         </Space>
       }
     >
+      <p className="mb-3 text-sm opacity-60">
+        Hiện ở mục &ldquo;Hành trình hai ngày một đêm&rdquo; trên{" "}
+        <strong>trang Chương trình</strong>. Mỗi ngày là một cột, bên trong là
+        các mốc giờ xếp từ sáng đến tối.
+      </p>
+
       {missing > 0 ? (
         <Alert
           type="warning"
           showIcon
           style={{ marginBottom: 16 }}
-          message={`Còn ${missing} trường bắt buộc chưa điền.`}
+          title={`Còn ${missing} ô chưa điền.`}
           description="Mỗi ngày cần Nhãn ngày và Ngày; mỗi mốc cần Giờ và Tiêu đề."
         />
       ) : null}
@@ -131,7 +137,7 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
         renderForm={(day, updateDay) => (
           <div className="rounded-lg border border-black/5 bg-black/[0.02] p-3">
             <div className="grid gap-3 md:grid-cols-2">
-              <Field label="Nhãn ngày">
+              <Field label="Nhãn ngày" hint="Chữ hiện ở đầu cột, vd Ngày 1.">
                 <Input
                   placeholder="Ngày 1"
                   value={day.day}
@@ -141,7 +147,7 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
               </Field>
               <Field
                 label="Ngày"
-                hint="Định dạng dd/mm/yyyy — nhớ đổi theo số năm hiện tại."
+                hint="Gõ theo dạng ngày/tháng/năm, vd 26/09/2026. Nhớ đổi năm khi sang mùa mới."
               >
                 <Input
                   placeholder="26/09/2026"

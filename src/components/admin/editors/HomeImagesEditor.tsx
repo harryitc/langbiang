@@ -63,12 +63,12 @@ export default function HomeImagesEditor({
       </EditorCard>
 
       <EditorCard
-        title="Ảnh nổi ở đầu trang (Hero)"
+        title="Ảnh nổi ở đầu trang chủ"
         extra={<SaveStatusTag status={heroStatus} />}
       >
         <p className="mb-3 text-sm opacity-60">
-          Bốn ảnh nhỏ bay lượn quanh màn hình đầu trang chủ. Vị trí, độ nghiêng
-          và kích thước do thiết kế quy định — ở đây bạn chỉ cần{" "}
+          Bốn ảnh nhỏ bay lượn quanh màn hình đầu <strong>trang chủ</strong>. Vị
+          trí, độ nghiêng và kích thước đã cố định theo thiết kế — ở đây chỉ cần{" "}
           <strong>đổi ảnh</strong>.
         </p>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -82,7 +82,7 @@ export default function HomeImagesEditor({
           <Alert
             type="info"
             showIcon
-            message="Ô ảnh để trống sẽ dùng ảnh mặc định."
+            title="Ô ảnh để trống sẽ dùng ảnh mặc định."
           />
         ) : null}
       </EditorCard>
@@ -92,8 +92,9 @@ export default function HomeImagesEditor({
         extra={<SaveStatusTag status={aboutStatus} />}
       >
         <p className="mb-3 text-sm opacity-60">
-          Ảnh lớn bên trái mục &ldquo;Giới thiệu&rdquo; ở trang chủ. Ảnh dọc
-          (tỉ lệ 4:5) sẽ hiển thị đẹp nhất.
+          Ảnh lớn bên trái mục giới thiệu dự án ở <strong>trang chủ</strong> —
+          phần &ldquo;Mang ánh trăng ấm áp đến với núi rừng&rdquo;. Ảnh chụp dọc
+          hiển thị đẹp nhất.
         </p>
         <Field label="Ảnh giới thiệu" hint="Bỏ trống sẽ dùng ảnh mặc định.">
           <ImageField value={about} onChange={updateAbout} />

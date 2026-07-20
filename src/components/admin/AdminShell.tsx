@@ -45,8 +45,13 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     setPublishing(true);
     try {
       const res = await publishDraftAction();
-      if (res.ok) message.success("Đã xuất bản.");
-      else message.error(res.error || "Xuất bản thất bại.");
+      if (res.ok)
+        message.success("Đã xuất bản. Nội dung mới đã hiện trên website.");
+      else
+        message.error(
+          res.error ||
+            "Chưa xuất bản được. Kiểm tra kết nối mạng rồi bấm Xuất bản lại."
+        );
     } finally {
       setPublishing(false);
     }
@@ -106,7 +111,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <Popconfirm
               title="Xuất bản thay đổi?"
-              description="Nội dung nháp sẽ hiển thị công khai."
+              description="Mọi chỉnh sửa đã lưu sẽ hiện lên website cho khách xem."
               okText="Xuất bản"
               cancelText="Huỷ"
               onConfirm={onPublish}
@@ -134,7 +139,9 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             {/* Breadcrumb thay cho tiêu đề H4 (vốn trùng y hệt tiêu đề thẻ bên
                 dưới). Hiện thêm tên nhóm để biết mục này thuộc trang nào. */}
             <Breadcrumb
-              style={{ marginBottom: 16 }}
+              // Điều hướng phụ nên nhỏ hơn chữ nội dung (16px). Breadcrumb của
+              // antd không nhận token cỡ chữ nên đặt thẳng ở đây.
+              style={{ marginBottom: 16, fontSize: 13 }}
               items={[
                 { title: <Link href="/admin">Quản trị</Link> },
                 ...(group ? [{ title: group.label }] : []),

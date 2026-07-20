@@ -1,6 +1,6 @@
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/content/store";
-import { fillYear, eventDateLabel } from "@/lib/content/year";
+import { fillYear, eventDateLabel, locationFor } from "@/lib/content/year";
 
 export default async function Timeline() {
   const { main, currentYear } = await getContent();
@@ -20,7 +20,7 @@ export default async function Timeline() {
             <span className="text-gradient-green">hai ngày một đêm</span>
           </h2>
           <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-            {eventDateLabel(event.dateLabel, currentYear)} tại {event.location}.
+            {eventDateLabel(event.dateLabel, currentYear)} tại {locationFor(event, "timeline")}.
           </p>
         </Reveal>
 

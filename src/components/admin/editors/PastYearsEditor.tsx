@@ -69,9 +69,12 @@ function HeaderSection({
 }) {
   const yearOk = isValidYear(item.year) && !duplicate;
   return (
-    <Space direction="vertical" size={0} style={{ width: "100%" }}>
+    <Space orientation="vertical" size={0} style={{ width: "100%" }}>
       <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[160px_1fr]">
-        <Field label="Năm" hint="Là đường dẫn trang, ví dụ /2025.">
+        <Field
+          label="Năm"
+          hint="Cũng là địa chỉ trang — điền 2025 thì trang mở tại /2025."
+        >
           <InputNumber
             value={item.year}
             min={1000}
@@ -98,14 +101,17 @@ function HeaderSection({
       </div>
 
       <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-        <Field label="Nhãn eyebrow" hint="Dòng chữ nhỏ phía trên tiêu đề (tuỳ chọn).">
+        <Field
+          label="Chữ nhỏ phía trên tiêu đề"
+          hint="Tuỳ chọn. Bỏ trống thì trang hiện chữ “Hồi ức”."
+        >
           <Input
             value={item.eyebrow ?? ""}
             placeholder="Mùa 2025"
             onChange={(e) => updateItem({ ...item, eyebrow: e.target.value })}
           />
         </Field>
-        <Field label="Phụ đề" hint="Tuỳ chọn.">
+        <Field label="Phụ đề" hint="Tuỳ chọn. Dòng chữ nhỏ ngay dưới tiêu đề.">
           <Input
             value={item.subtitle ?? ""}
             placeholder="Một mùa trăng của yêu thương"
@@ -114,7 +120,10 @@ function HeaderSection({
         </Field>
       </div>
 
-      <Field label="Ảnh nền" hint="Tuỳ chọn. Ảnh lớn hiển thị ở đầu trang.">
+      <Field
+        label="Ảnh nền"
+        hint="Tuỳ chọn. Ảnh lớn trải ngang phía sau tiêu đề ở đầu trang."
+      >
         <ImageField
           value={item.bgImage ?? ""}
           folder="past-years"
@@ -124,7 +133,7 @@ function HeaderSection({
 
       {duplicate ? (
         <div className="text-xs text-red-500">
-          Năm {item.year} đã tồn tại trong danh mục. Vui lòng đổi số năm khác.
+          Năm {item.year} đã có trong danh mục — chọn số năm khác giúp nhé.
         </div>
       ) : null}
     </Space>
@@ -163,10 +172,11 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
       }
     >
       <p className="mb-3 text-sm opacity-60">
-        Mỗi năm là một trang &ldquo;Nhìn lại&rdquo; riêng tại đường dẫn{" "}
-        <code>/{"{năm}"}</code>, và xuất hiện trong dropdown &ldquo;Năm&rdquo; ở
-        đầu trang (mới → cũ). Phần nào để trống sẽ tự ẩn trên giao diện. Danh
-        mục này độc lập với &ldquo;số năm hiện tại&rdquo;.
+        Mỗi năm ở đây là một trang &ldquo;Nhìn lại&rdquo; riêng — ví dụ năm 2025
+        mở tại địa chỉ <code>/2025</code>. Các năm cũng hiện trong menu
+        &ldquo;Năm&rdquo; ở thanh trên cùng, xếp từ mới tới cũ. Phần nào bỏ
+        trống sẽ tự ẩn trên trang. Danh mục này tách riêng với &ldquo;Số năm
+        hiện tại&rdquo; của mùa đang tổ chức.
       </p>
 
       {duplicateYears.length > 0 ? (
@@ -174,7 +184,7 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
           type="error"
           showIcon
           className="mb-3"
-          message={`Năm ${duplicateYears.join(", ")} bị trùng trong danh mục. Mỗi năm chỉ được có một trang.`}
+          title={`Năm ${duplicateYears.join(", ")} bị trùng trong danh mục. Mỗi năm chỉ được có một trang.`}
         />
       ) : null}
 
@@ -183,7 +193,8 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
           type="warning"
           showIcon
           className="mb-3"
-          message={`Có ${invalidCount} năm chưa điền đủ thông tin bắt buộc.`}
+          title={`Có ${invalidCount} năm chưa điền đủ thông tin.`}
+          description="Mỗi năm cần số năm đủ 4 chữ số và một tiêu đề; ảnh trong phần Khoảnh khắc cũng cần được chọn."
         />
       ) : null}
 
@@ -219,7 +230,7 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
           const duplicate = isDuplicateYear(years, index);
           const issues = countIssues(item) + (duplicate ? 1 : 0);
           return (
-            <Space direction="vertical" size={4} style={{ width: "100%" }}>
+            <Space orientation="vertical" size={4} style={{ width: "100%" }}>
 
               <Collapse
                 size="small"
@@ -242,7 +253,7 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
                     children: (
                       <Field
                         label="Nội dung tổng kết"
-                        hint="Để trống thì phần Tổng kết sẽ được ẩn trên trang."
+                        hint="Bài viết nhìn lại mùa đó. Bỏ trống thì mục Tổng kết tự ẩn trên trang."
                       >
                         <RichText
                           value={item.summaryHtml}

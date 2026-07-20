@@ -27,3 +27,25 @@ export function eventDateLabel(label: string, year: number): string {
 export function isValidYear(year: unknown): year is number {
   return typeof year === "number" && Number.isInteger(year) && year >= 1000 && year <= 9999;
 }
+
+/**
+ * Địa điểm hiển thị ở một vị trí cụ thể.
+ * Mỗi nơi có thể ghi khác nhau; bỏ trống thì dùng địa điểm chính.
+ */
+export function locationFor(
+  event: {
+    location: string;
+    locationFooter?: string;
+    locationTimeline?: string;
+    locationProgram?: string;
+  },
+  place: "footer" | "timeline" | "program"
+): string {
+  const override =
+    place === "footer"
+      ? event.locationFooter
+      : place === "timeline"
+      ? event.locationTimeline
+      : event.locationProgram;
+  return (override?.trim() || event.location || "").trim();
+}

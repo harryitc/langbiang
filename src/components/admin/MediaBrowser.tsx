@@ -68,7 +68,10 @@ export default function MediaBrowser({
   async function refetch(force = false) {
     const data = await loadMediaLibrary(force);
     if (data) setLib(data);
-    else message.error("Không tải được kho ảnh.");
+    else
+      message.error(
+        "Không mở được kho ảnh. Kiểm tra kết nối mạng rồi tải lại trang."
+      );
   }
   useEffect(() => {
     void refetch();
@@ -114,12 +117,20 @@ export default function MediaBrowser({
           albumId: targetAlbum,
         });
         if (res.ok) lastUrl = url;
-        else message.error(res.error || "Không thêm được ảnh vào kho.");
+        else
+          message.error(
+            res.error ||
+              `Không thêm được ảnh “${file.name}” vào kho. Thử tải lại ảnh này.`
+          );
       }
       await refetch(true);
       if (lastUrl) message.success("Đã tải ảnh lên kho.");
     } catch (err) {
-      message.error(err instanceof Error ? err.message : "Tải ảnh thất bại.");
+      message.error(
+        err instanceof Error
+          ? err.message
+          : "Tải ảnh lên không thành công. Kiểm tra kết nối mạng rồi thử lại."
+      );
     } finally {
       setUploading(false);
     }
@@ -134,7 +145,7 @@ export default function MediaBrowser({
         await refetch(true);
         if (okMsg) message.success(okMsg);
       } else {
-        message.error(res.error || "Thao tác thất bại.");
+        message.error(res.error || "Chưa thực hiện được. Vui lòng thử lại.");
       }
     } finally {
       setBusy(false);
@@ -266,7 +277,7 @@ export default function MediaBrowser({
                 message.success("Đã sao chép đường dẫn.");
               }}
             >
-              Sao chép URL
+              Sao chép đường dẫn ảnh
             </Button>
             {canManage ? (
               <>
@@ -283,8 +294,8 @@ export default function MediaBrowser({
                   title="Xoá ảnh này?"
                   description={
                     selectedItem.seeded
-                      ? "Ảnh nạp sẵn: chỉ gỡ khỏi kho."
-                      : "Xoá khỏi kho và xoá luôn file trên lưu trữ."
+                      ? "Ảnh có sẵn của dự án — chỉ gỡ khỏi kho, ảnh gốc vẫn còn."
+                      : "Ảnh sẽ mất hẳn. Chỗ nào đang dùng ảnh này sẽ bị trống."
                   }
                   okText="Xoá"
                   cancelText="Huỷ"
@@ -315,7 +326,7 @@ export default function MediaBrowser({
         {/* Lưới ảnh */}
         <Spin spinning={busy}>
           {visible.length === 0 ? (
-            <Empty description="Chưa có ảnh trong album này" />
+            <Empty description="Chưa có ảnh nào ở đây. Bấm “Tải ảnh lên” để thêm." />
           ) : (
             <>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
@@ -340,9 +351,9 @@ export default function MediaBrowser({
               <AntdImage.PreviewGroup
                 items={visible.slice(0, limit).map((it) => it.url)}
                 preview={{
-                  visible: previewOpen,
+                  open: previewOpen,
                   current: previewIndex,
-                  onVisibleChange: (v) => setPreviewOpen(v),
+                  onOpenChange: (v) => setPreviewOpen(v),
                   onChange: (c) => setPreviewIndex(c),
                 }}
               />
@@ -390,7 +401,7 @@ function AlbumButton({
     >
       <button className="flex flex-1 cursor-pointer items-center gap-2 text-left" onClick={onClick}>
         <span className="truncate">{label}</span>
-        <Tag className="ml-auto" bordered={false}>
+        <Tag className="ml-auto" variant="filled">
           {count}
         </Tag>
       </button>

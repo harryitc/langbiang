@@ -174,7 +174,7 @@ export function SortableList<T>({
       {value.length === 0 ? (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="Chưa có mục nào"
+          description="Chưa có mục nào. Bấm nút bên dưới để thêm."
         />
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -189,6 +189,7 @@ export function SortableList<T>({
                 actions={
                   <Popconfirm
                     title="Xoá mục này?"
+                    description="Mục sẽ biến mất khỏi trang web sau khi bấm Xuất bản."
                     okText="Xoá"
                     cancelText="Huỷ"
                     onConfirm={() => removeAt(i)}
@@ -299,6 +300,7 @@ function CompactRow({
       </Button>
       <Popconfirm
         title="Xoá mục này?"
+        description="Mục sẽ biến mất khỏi trang web sau khi bấm Xuất bản."
         okText="Xoá"
         cancelText="Huỷ"
         onConfirm={onDelete}
@@ -356,7 +358,7 @@ export function ItemListEditor<T>({
       {value.length === 0 ? (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="Chưa có mục nào"
+          description="Chưa có mục nào. Bấm nút bên dưới để thêm."
         />
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -381,7 +383,7 @@ export function ItemListEditor<T>({
       <Drawer
         open={openIndex !== null}
         onClose={() => setOpenIndex(null)}
-        width={Math.min(760, typeof window === "undefined" ? 760 : window.innerWidth)}
+        size={Math.min(760, typeof window === "undefined" ? 760 : window.innerWidth)}
         destroyOnHidden
         title={
           openIndex !== null

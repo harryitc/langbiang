@@ -59,8 +59,8 @@ export function SpendingFields({
   return (
     <>
       <Field
-        label="Link Google Sheet"
-        hint="Nhớ đặt quyền chia sẻ “Bất kỳ ai có đường liên kết đều xem được”."
+        label="Liên kết Google Sheet"
+        hint="Khách bấm nút là mở thẳng bảng thu – chi này. Nhớ đặt quyền chia sẻ “Bất kỳ ai có đường liên kết đều xem được”, nếu không khách sẽ bị chặn."
       >
         <Input
           value={value.url}
@@ -70,26 +70,22 @@ export function SpendingFields({
         />
         {!urlOk ? (
           <div className="mt-1 text-xs text-red-500">
-            Link phải bắt đầu bằng http:// hoặc https://.
+            Liên kết cần bắt đầu bằng https:// — chép lại từ thanh địa chỉ trình
+            duyệt.
           </div>
         ) : null}
       </Field>
 
       <Field
         label="Ghi chú ngắn"
-        hint={
-          <>
-            Hiện phía trên nút bấm. Có thể dùng ký hiệu{" "}
-            <Tag className="mx-1">{"{năm}"}</Tag> để tự thay bằng số năm tương ứng.
-          </>
-        }
+        hint="Câu giải thích hiện ngay phía trên nút bấm."
       >
         <Input.TextArea
           value={value.note ?? ""}
           rows={3}
           maxLength={300}
           showCount
-          placeholder="Toàn bộ khoản thu – chi mùa {năm} được cập nhật công khai trên Google Sheet."
+          placeholder="Toàn bộ khoản thu – chi của mùa này được cập nhật công khai trên Google Sheet."
           onChange={(e) => onChange({ ...value, note: e.target.value })}
         />
       </Field>
@@ -119,9 +115,12 @@ export function PhotoListEditor({
       renderItem={(item, updateItem, index) => {
         const missing = missingPhotoFields(item);
         return (
-          <Space direction="vertical" size={0} style={{ width: "100%" }}>
+          <Space orientation="vertical" size={0} style={{ width: "100%" }}>
             <div className="grid grid-cols-1 gap-x-4 md:grid-cols-2">
-              <Field label={`Ảnh #${index + 1}`} hint="Tải ảnh từ máy hoặc dán URL sẵn có.">
+              <Field
+                label={`Ảnh #${index + 1}`}
+                hint="Chọn ảnh từ kho ảnh, hoặc dán đường dẫn ảnh có sẵn."
+              >
                 <ImageField
                   value={item.src}
                   folder={folder}
@@ -130,7 +129,7 @@ export function PhotoListEditor({
               </Field>
 
               <div>
-                <Field label="Chú thích" hint="Dòng chữ ngắn hiện trên ảnh.">
+                <Field label="Chú thích" hint="Dòng chữ ngắn hiện đè trên ảnh.">
                   <Input
                     value={item.caption ?? ""}
                     placeholder="Đêm hội trăng rằm"
@@ -138,7 +137,10 @@ export function PhotoListEditor({
                   />
                 </Field>
 
-                <Field label="Mô tả" hint="Mô tả chi tiết hơn (tuỳ chọn).">
+                <Field
+                  label="Mô tả"
+                  hint="Tuỳ chọn. Hiện khi khách bấm vào ảnh để xem lớn."
+                >
                   <Input.TextArea
                     value={item.desc ?? ""}
                     rows={3}
@@ -147,7 +149,10 @@ export function PhotoListEditor({
                   />
                 </Field>
 
-                <Field label="Ảnh cao" hint="Ảnh chiếm 2 hàng trong lưới masonry.">
+                <Field
+                  label="Ảnh cao"
+                  hint="Cho ảnh chiếm 2 hàng trong lưới ảnh — hợp với ảnh chụp dọc."
+                >
                   <Switch
                     checked={!!item.tall}
                     onChange={(tall) => updateItem({ ...item, tall })}
@@ -200,7 +205,7 @@ export function SponsorTierListEditor({
       renderForm={(tier, updateTier) => {
         const missing = missingTierFields(tier);
         return (
-          <Space direction="vertical" size={4} style={{ width: "100%" }}>
+          <Space orientation="vertical" size={4} style={{ width: "100%" }}>
             <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_auto] sm:items-end">
               <Field label="Tên hạng tài trợ">
                 <Input
@@ -228,7 +233,7 @@ export function SponsorTierListEditor({
                   const url = sponsor.url ?? "";
                   const urlOk = isValidUrl(url);
                   return (
-                    <Space direction="vertical" size={0} style={{ width: "100%" }}>
+                    <Space orientation="vertical" size={0} style={{ width: "100%" }}>
                       <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
                         <Field label="Tên đơn vị">
                           <Input
@@ -242,7 +247,7 @@ export function SponsorTierListEditor({
                         </Field>
                         <Field
                           label="Website"
-                          hint="Tuỳ chọn. Dán đầy đủ, ví dụ https://abc.vn"
+                          hint="Tuỳ chọn. Dán đầy đủ, vd https://abc.vn — khách bấm logo sẽ mở trang này."
                         >
                           <Input
                             value={url}
@@ -266,7 +271,10 @@ export function SponsorTierListEditor({
                         />
                       </Field>
 
-                      <Field label="Giới thiệu ngắn" hint="Tuỳ chọn. Hiển thị khi người xem bấm vào logo.">
+                      <Field
+                        label="Giới thiệu ngắn"
+                        hint="Tuỳ chọn. Hiện ra khi khách bấm vào logo đơn vị."
+                      >
                         <Input.TextArea
                           value={sponsor.intro ?? ""}
                           rows={2}
@@ -281,12 +289,13 @@ export function SponsorTierListEditor({
 
                       {missingSponsor.length > 0 ? (
                         <div className="text-xs text-red-500">
-                          Cần điền {missingSponsor.join(", ")}.
+                          Còn thiếu: {missingSponsor.join(", ")}.
                         </div>
                       ) : null}
                       {!urlOk ? (
                         <div className="text-xs text-red-500">
-                          Website phải bắt đầu bằng http:// hoặc https://.
+                          Website cần bắt đầu bằng https:// — chép lại từ thanh
+                          địa chỉ trình duyệt.
                         </div>
                       ) : null}
                     </Space>
@@ -297,7 +306,7 @@ export function SponsorTierListEditor({
 
             {missing.length > 0 ? (
               <div className="text-xs text-red-500">
-                Cần điền {missing.join(", ")}.
+                Còn thiếu: {missing.join(", ")}.
               </div>
             ) : null}
           </Space>

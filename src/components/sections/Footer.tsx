@@ -1,6 +1,6 @@
 import { GrassBorder } from "@/components/Decor";
 import { getContent } from "@/lib/content/store";
-import { fillYear, eventDateLabel } from "@/lib/content/year";
+import { fillYear, eventDateLabel, locationFor } from "@/lib/content/year";
 
 export default async function Footer() {
   const { main, currentYear, pastYears } = await getContent();
@@ -69,7 +69,7 @@ export default async function Footer() {
             <ul className="mt-4 space-y-2.5 text-white/80">
               <li className="flex items-start gap-2">
                 <span>📍</span>
-                <span>{event.location}</span>
+                <span>{locationFor(event, "footer")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span>📅</span>

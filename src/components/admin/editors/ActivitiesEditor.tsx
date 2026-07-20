@@ -18,7 +18,8 @@ export default function ActivitiesEditor({ initial }: { initial: IconCard[] }) {
         defaultIcon: "🌕",
         titlePlaceholder: "Vd: Đêm hội Trăng rằm",
         descPlaceholder: "Rước đèn, phá cỗ, múa lân và những màn văn nghệ rực rỡ…",
-        descHint: "Nên giữ khoảng 1–2 câu để thẻ hoạt động cân đối.",
+        descHint:
+          "Nên giữ 1–2 câu để các thẻ trên trang Chương trình cao bằng nhau.",
       }}
     />
   );
