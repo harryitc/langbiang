@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SubPageShell from "@/components/SubPageShell";
 import Fundraising from "@/components/sections/Fundraising";
+import Sponsors from "@/components/sections/Sponsors";
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/content/store";
 
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function FundraisingPage() {
-  const { main } = await getContent();
-  const { fundraising, spendingReport } = main;
+  const { main, currentYear } = await getContent();
+  const { fundraising, spendingReport, sponsorTiers } = main;
 
   return (
     <SubPageShell
@@ -80,6 +81,9 @@ export default async function FundraisingPage() {
           </Reveal>
         </div>
       </section>
+
+      {/* Nhà tài trợ mùa hiện tại (main.sponsorTiers) — tự ẩn nếu chưa có đơn vị nào. */}
+      <Sponsors tiers={sponsorTiers} currentYear={currentYear} />
     </SubPageShell>
   );
 }
