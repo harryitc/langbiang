@@ -13,10 +13,25 @@ export default function AntdProvider({ children }: { children: ReactNode }) {
       <ConfigProvider
         theme={{
           algorithm: theme.compactAlgorithm,
-          token: { colorPrimary: "#2e7d32" },
-          // Chữ menu sidebar 13px — đặt qua token của antd thay vì style inline
-          // để mọi trạng thái (chọn/hover/thu gọn) đều đồng bộ.
-          components: { Menu: { fontSize: 13 } },
+          token: {
+            colorPrimary: "#2e7d32",
+            // #2e7d32 là xanh đậm nên antd tự suy ra nền nhạt bị xám đục
+            // (#b3bdb1) — chỉ định thẳng sắc xanh nhạt cho đúng tông thương hiệu.
+            colorPrimaryBg: "#e6f4ea",
+            colorPrimaryBgHover: "#d5eadc",
+          },
+          components: {
+            Menu: {
+              // Chữ menu sidebar 13px — đặt qua token của antd thay vì style
+              // inline để mọi trạng thái (chọn/hover/thu gọn) đều đồng bộ.
+              fontSize: 13,
+              // Mục đang chọn: nền xanh nhạt + chữ xanh đậm cho dễ đọc.
+              itemSelectedBg: "#e6f4ea",
+              itemSelectedColor: "#1b5e20",
+              itemHoverBg: "rgba(46,125,50,0.06)",
+              itemBorderRadius: 8,
+            },
+          },
         }}
       >
         <App>{children}</App>
