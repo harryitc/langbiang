@@ -1,58 +1,56 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import { getContent } from "@/lib/content/store";
 
-const items = [
-  {
-    href: "/gay-quy",
-    icon: "🛒",
-    title: "Gian hàng gây quỹ",
-    desc: "Ủng hộ qua Shopee, chuyển khoản hoặc hiện vật.",
-  },
-  {
-    href: "/dong-gop",
-    icon: "💝",
-    title: "Danh sách đóng góp",
-    desc: "Tri ân những tấm lòng đã đồng hành cùng dự án.",
-  },
-  {
-    href: "/ban-to-chuc",
-    icon: "👥",
-    title: "Ban sáng lập & Tổ chức",
-    desc: "Những người đứng sau hành trình Trăng Sáng Langbiang.",
-  },
-  {
-    href: "/cam-nhan",
-    icon: "💬",
-    title: "Cảm nhận TNV",
-    desc: "Câu chuyện, kỷ niệm từ các tình nguyện viên.",
-  },
-  {
-    href: "/chuong-trinh",
-    icon: "🗓️",
-    title: "Chương trình 2026",
-    desc: "Các hoạt động và lịch trình hai ngày một đêm.",
-  },
-  {
-    href: "/2025",
-    icon: "📸",
-    title: "Nhìn lại mùa 2025",
-    desc: "Khoảnh khắc, đội ngũ và những con số mùa đầu tiên.",
-  },
-  {
-    href: "/tin-tuc",
-    icon: "📰",
-    title: "Tin tức & Bản tin",
-    desc: "Nhật ký và tin mới nhất về dự án.",
-  },
-  {
-    href: "/gay-quy#bao-cao-chi",
-    icon: "📊",
-    title: "Báo cáo chi",
-    desc: "Minh bạch các khoản chi sau mỗi mùa dự án.",
-  },
-];
+export default async function ExploreGrid() {
+  const { currentYear, pastYears } = await getContent();
+  // Năm gần nhất trong danh mục năm đã qua (mới → cũ).
+  const latestPastYear = [...pastYears].sort((a, b) => b.year - a.year)[0];
 
-export default function ExploreGrid() {
+  const items = [
+    {
+      href: "/gay-quy",
+      icon: "🛒",
+      title: "Gian hàng gây quỹ",
+      desc: "Ủng hộ qua Shopee, chuyển khoản hoặc hiện vật.",
+    },
+    {
+      href: "/ban-to-chuc",
+      icon: "👥",
+      title: "Ban sáng lập & Tổ chức",
+      desc: "Những người đứng sau hành trình Trăng Sáng Langbiang.",
+    },
+    {
+      href: "/chuong-trinh",
+      icon: "🗓️",
+      title: `Chương trình ${currentYear}`,
+      desc: "Các hoạt động và lịch trình hai ngày một đêm.",
+    },
+    // Thẻ "Nhìn lại" chỉ hiện khi có năm đã qua (FR4).
+    ...(latestPastYear
+      ? [
+          {
+            href: `/${latestPastYear.year}`,
+            icon: "📸",
+            title: `Nhìn lại mùa ${latestPastYear.year}`,
+            desc: "Khoảnh khắc, đội ngũ và những con số của mùa đã qua.",
+          },
+        ]
+      : []),
+    {
+      href: "/tin-tuc",
+      icon: "📰",
+      title: "Tin tức & Bản tin",
+      desc: "Nhật ký và tin mới nhất về dự án.",
+    },
+    {
+      href: "/gay-quy#bao-cao-chi",
+      icon: "📊",
+      title: "Báo cáo chi",
+      desc: "Minh bạch các khoản chi sau mỗi mùa dự án.",
+    },
+  ];
+
   return (
     <section id="explore" className="relative bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6">

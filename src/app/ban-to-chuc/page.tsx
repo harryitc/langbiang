@@ -8,7 +8,7 @@ import BackToTop from "@/components/BackToTop";
 import SubPageHeader from "@/components/SubPageHeader";
 import Members from "@/components/sections/Board";
 import Footer from "@/components/sections/Footer";
-import { board } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 import FounderGallery from "./FounderGallery";
 
 export const metadata: Metadata = {
@@ -25,7 +25,9 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
-export default function BanToChucPage() {
+export default async function BanToChucPage() {
+  const { main, currentYear } = await getContent();
+  const { board } = main;
   const [lead, ...coFounders] = board.founders;
 
   return (
@@ -34,7 +36,7 @@ export default function BanToChucPage() {
       <Cursor />
       <ThemeToggle />
       <BackToTop />
-      <SubPageHeader />
+      <SubPageHeader currentYear={currentYear} />
 
       <main>
         <section className="relative min-h-[100svh] overflow-hidden bg-gradient-to-b from-sky-soft via-[#dff2e6] to-cream dark:from-[#0a1626] dark:via-night-2 dark:to-night">
@@ -78,7 +80,7 @@ export default function BanToChucPage() {
           </div>
 
           {/* Polaroid cards + lightgallery (client component) */}
-          <FounderGallery />
+          <FounderGallery founders={board.founders} />
 
           {/* Mobile — cards xếp dưới tiêu đề */}
           <div className="flex flex-col gap-4 px-6 pb-16 lg:hidden">
@@ -124,7 +126,7 @@ export default function BanToChucPage() {
         <section className="py-16 text-center sm:py-20">
           <div className="mx-auto max-w-2xl px-5 sm:px-6">
             <p className="mb-6 text-base text-forest/70 dark:text-ink/70">
-              Muốn trở thành một phần của đội ngũ mùa 2026?
+              Muốn trở thành một phần của đội ngũ mùa {currentYear}?
             </p>
             <Link
               href="/#register"

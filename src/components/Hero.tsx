@@ -12,7 +12,17 @@ if (typeof window !== "undefined") {
 
 import Countdown from "./Countdown";
 import { LeafBranch, Daisy } from "./Decor";
-import { site } from "@/lib/site";
+
+type HeroProps = {
+  /** Nhãn ngày sự kiện (đã thay {năm} theo số năm hiện tại). */
+  dateLabel: string;
+  /** Ngày bắt đầu sự kiện — nguồn cho đồng hồ đếm ngược (A3). */
+  dateISO: string;
+  /** Dòng chữ trên tiêu đề (site.tagline). */
+  tagline: string;
+  /** Dòng địa điểm dưới tiêu đề (site.subtitle). */
+  subtitle: string;
+};
 
 /** Ảnh kỷ niệm "trôi nổi" ở hai dải trống trái/phải của Hero (chỉ màn hình lớn). */
 type HeroFloat = {
@@ -34,7 +44,7 @@ const heroFloats: HeroFloat[] = [
   { src: "/gallery/g6.jpg", alt: "Tình nguyện viên", side: "right", top: "61%", offset: "4.5vw", width: "clamp(80px,9vw,168px)", rotate: -5, depth: -120, delay: "2.1s" },
 ];
 
-export default function Hero() {
+export default function Hero({ dateLabel, dateISO, tagline, subtitle }: HeroProps) {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -156,7 +166,7 @@ export default function Hero() {
       {/* Nội dung */}
       <div className="hero-content relative z-20 mx-auto max-w-4xl px-5 pb-6 pt-20 text-center sm:px-6 sm:pb-0 sm:pt-24">
         <p className="hero-eyebrow mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
-          Dự án tình nguyện
+          {tagline}
         </p>
 
         <h1 className="hero-title">
@@ -172,13 +182,11 @@ export default function Hero() {
         </h1>
 
         <p className="hero-sub mx-auto mt-6 max-w-md text-base font-semibold uppercase leading-snug tracking-wide text-sunset sm:max-w-xl sm:text-lg">
-          Tại phường Langbiang – Đà Lạt,
-          <br />
-          tỉnh Lâm Đồng
+          {subtitle}
         </p>
 
         <p className="hero-date mt-2 font-script text-3xl font-semibold uppercase text-leaf-deep sm:text-4xl dark:text-leaf-bright">
-          {site.dateLabel}
+          {dateLabel}
         </p>
 
         <div className="hero-cta mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -200,7 +208,7 @@ export default function Hero() {
           <span className="text-xs font-semibold uppercase tracking-widest text-forest/60 dark:text-ink/60">
             Đếm ngược đến ngày lên đường
           </span>
-          <Countdown />
+          <Countdown dateISO={dateISO} />
         </div>
 
         {/* Cuộn xuống — bản mobile nằm trong luồng để không đè lên đếm ngược */}

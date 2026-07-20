@@ -4,16 +4,20 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Reveal from "@/components/Reveal";
-import { news } from "@/lib/site";
+import type { NewsPost } from "@/lib/content/schema";
 
 type NewsProps = {
+  /** Dòng tin đọc từ content store (mới nhất trước). */
+  posts: NewsPost[];
+  /** Số năm hiện tại — dùng cho copy "mùa {năm}" (Phụ lục A, nhóm A1). */
+  currentYear: number;
   /** Ẩn phần tiêu đề chung (dùng khi trang phụ đã có tiêu đề riêng). */
   showHeading?: boolean;
   /** Trang chủ: hiển thị dạng carousel ngang + nút "Xem tất cả", ẩn form đăng ký bản tin. */
   carousel?: boolean;
 };
 
-function NewsCard({ post }: { post: (typeof news)[number] }) {
+function NewsCard({ post }: { post: NewsPost }) {
   return (
     <Link
       href={`/tin-tuc/${post.id}`}
@@ -50,7 +54,12 @@ function NewsCard({ post }: { post: (typeof news)[number] }) {
   );
 }
 
-export default function News({ showHeading = true, carousel = false }: NewsProps) {
+export default function News({
+  posts,
+  currentYear,
+  showHeading = true,
+  carousel = false,
+}: NewsProps) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -99,9 +108,9 @@ export default function News({ showHeading = true, carousel = false }: NewsProps
             <div className="relative mt-10 sm:mt-14">
               <div className="overflow-hidden" ref={emblaRef}>
                 <div className="-ml-5 flex touch-pan-y">
-                  {news.map((post) => (
+                  {posts.map((post) => (
                     <div
-                      key={post.title}
+                      key={post.id}
                       className="min-w-0 flex-[0_0_86%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
                     >
                       <NewsCard post={post} />
@@ -164,8 +173,8 @@ export default function News({ showHeading = true, carousel = false }: NewsProps
           </>
         ) : (
           <Reveal childrenStagger className="mt-10 grid gap-6 sm:mt-14 md:grid-cols-3">
-            {news.map((post) => (
-              <NewsCard key={post.title} post={post} />
+            {posts.map((post) => (
+              <NewsCard key={post.id} post={post} />
             ))}
           </Reveal>
         )}
@@ -179,8 +188,8 @@ export default function News({ showHeading = true, carousel = false }: NewsProps
                 <div className="max-w-md text-center md:text-left">
                   <h3 className="font-display text-3xl font-bold">Đăng ký bản tin</h3>
                   <p className="mt-1 text-white/85">
-                    Nhận thông tin mới nhất về hành trình mùa 2026 và cách bạn có thể
-                    đồng hành.
+                    Nhận thông tin mới nhất về hành trình mùa {currentYear} và cách bạn
+                    có thể đồng hành.
                   </p>
                 </div>
                 {subscribed ? (

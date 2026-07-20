@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
-import { getNewsById } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
 import { likeKey, redis } from "@/lib/redis";
+
+/** Chỉ chấp nhận id của bài tin đang có trong content store. */
+async function isKnownPost(id: string): Promise<boolean> {
+  const { news } = await getContent();
+  return news.some((post) => post.id === id);
+}
 
 // Luôn chạy động (không cache) để số like phản ánh thời gian thực.
 export const dynamic = "force-dynamic";
@@ -11,7 +17,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  if (!getNewsById(id)) {
+  if (!(await isKnownPost(id))) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
   }
   const likes = (await redis.get<number>(likeKey(id))) ?? 0;
@@ -24,7 +30,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  if (!getNewsById(id)) {
+  if (!(await isKnownPost(id))) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
   }
   const likes = await redis.incr(likeKey(id));
@@ -37,7 +43,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  if (!getNewsById(id)) {
+  if (!(await isKnownPost(id))) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
   }
   let likes = await redis.decr(likeKey(id));

@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
 import { site } from "@/lib/site";
+import { getContent } from "@/lib/content/store";
+import { fillYear } from "@/lib/content/year";
+import { absoluteUrl } from "@/lib/content/url";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -29,85 +32,89 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} — ${site.tagline} 2026`,
-    template: `%s | ${site.name}`,
-  },
-  description: site.description,
-  keywords: site.keywords,
-  authors: [{ name: site.name }],
-  creator: site.name,
-  applicationName: site.name,
-  category: "nonprofit",
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: "vi_VN",
-    url: site.url,
-    siteName: site.name,
-    title: `${site.name} — ${site.tagline} 2026`,
-    description: site.description,
-    images: [
-      {
-        url: "/og.jpg",
-        width: 1200,
-        height: 628,
-        alt: site.name,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} — ${site.tagline} 2026`,
-    description: site.description,
-    images: ["/og.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
-  icons: {
-    icon: [{ url: "/logo-mark.png", type: "image/png" }],
-    apple: "/logo-mark.png",
-  },
-};
+/** Metadata đọc từ content store (SEO + OG — FR8, số năm theo FR3). */
+export async function generateMetadata(): Promise<Metadata> {
+  const { main, currentYear } = await getContent();
+  const meta = main.site;
+  const title = `${meta.name} — ${fillYear(meta.tagline, currentYear)} ${currentYear}`;
+  const description = fillYear(meta.description, currentYear);
+  const ogImage = meta.ogImage || "/og.jpg";
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Event",
-  name: `${site.name} 2026`,
-  description: site.description,
-  startDate: "2026-09-26",
-  endDate: "2026-09-27",
-  eventStatus: "https://schema.org/EventScheduled",
-  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-  location: {
-    "@type": "Place",
-    name: "Phường Langbiang, Đà Lạt",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Đà Lạt",
-      addressRegion: "Lâm Đồng",
-      addressCountry: "VN",
+  return {
+    metadataBase: new URL(site.url),
+    title: { default: title, template: `%s | ${meta.name}` },
+    description,
+    keywords: meta.keywords.map((k) => fillYear(k, currentYear)),
+    authors: [{ name: meta.name }],
+    creator: meta.name,
+    applicationName: meta.name,
+    category: "nonprofit",
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      locale: "vi_VN",
+      url: site.url,
+      siteName: meta.name,
+      title,
+      description,
+      images: [{ url: ogImage, width: 1200, height: 628, alt: meta.name }],
     },
-  },
-  image: [`${site.url}/og.jpg`],
-  organizer: {
-    "@type": "Organization",
-    name: site.name,
-    url: site.facebook,
-  },
-  isAccessibleForFree: true,
-};
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
+    icons: {
+      icon: [{ url: "/logo-mark.png", type: "image/png" }],
+      apple: "/logo-mark.png",
+    },
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { main, currentYear } = await getContent();
+  const meta = main.site;
+  const { event } = main;
+
+  // JSON-LD sự kiện — suy từ event + currentYear (Phụ lục A, nhóm A3).
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: `${meta.name} ${currentYear}`,
+    description: fillYear(meta.description, currentYear),
+    startDate: event.dateISO,
+    endDate: event.dateEndISO || event.dateISO,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: event.location,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Đà Lạt",
+        addressRegion: "Lâm Đồng",
+        addressCountry: "VN",
+      },
+    },
+    image: [absoluteUrl(meta.ogImage || "/og.jpg")],
+    organizer: {
+      "@type": "Organization",
+      name: meta.name,
+      url: meta.facebook,
+    },
+    isAccessibleForFree: true,
+  };
+
   return (
     <html
       lang="vi"

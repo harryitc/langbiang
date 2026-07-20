@@ -5,10 +5,11 @@ import ThemeToggle from "@/components/ThemeToggle";
 import BackToTop from "@/components/BackToTop";
 import SubPageHeader from "@/components/SubPageHeader";
 import Footer from "@/components/sections/Footer";
+import { getContent } from "@/lib/content/store";
 
 type NavItem = { href: string; label: string };
 
-export default function SubPageShell({
+export default async function SubPageShell({
   eyebrow,
   title,
   subtitle,
@@ -26,6 +27,8 @@ export default function SubPageShell({
   bgImage?: string;
   children: ReactNode;
 }) {
+  const { currentYear } = await getContent();
+
   return (
     <>
       <SmoothScroll />
@@ -33,7 +36,7 @@ export default function SubPageShell({
       <ThemeToggle />
       <BackToTop />
 
-      <SubPageHeader nav={nav} />
+      <SubPageHeader nav={nav} currentYear={currentYear} />
 
       <main>
         <section className="relative flex min-h-[100svh] items-center overflow-hidden px-6 py-24 text-center sm:py-32">

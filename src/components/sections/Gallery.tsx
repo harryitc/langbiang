@@ -19,13 +19,21 @@ import "lightgallery/css/lg-share.css";
 
 import Reveal from "@/components/Reveal";
 import Photo from "@/components/Photo";
-import { gallery2025 as gallery } from "@/lib/gallery2025";
+import type { Photo as PhotoItem } from "@/lib/content/schema";
 
 // Hiện 30 ảnh ở lưới đều (ô vuông) cho cân bằng; phần còn lại xem qua lightbox.
 // 30 chia hết cho số cột 2 / 3 / 5 nên hàng luôn đầy, không trống ô.
 const VISIBLE = 30;
 
-export default function Gallery() {
+export default function Gallery({
+  photos,
+  year,
+}: {
+  photos: PhotoItem[];
+  /** Số năm của mùa đang xem (thuộc "năm đã qua" — không đổi theo năm hiện tại). */
+  year: number;
+}) {
+  const gallery = photos;
   // Instance LightGallery (chế độ dynamic) để mở lightbox theo yêu cầu.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lgRef = useRef<any>(null);
@@ -38,10 +46,13 @@ export default function Gallery() {
   const dynamicEl = gallery.map((g) => ({
     src: g.src,
     thumb: g.src,
-    subHtml: `<div class="lg-sub">${g.caption}</div>`,
+    subHtml: `<div class="lg-sub">${g.caption ?? ""}</div>`,
   }));
 
   const shown = gallery.slice(0, VISIBLE);
+
+  // Phần rỗng thì ẩn (FR4).
+  if (gallery.length === 0) return null;
 
   return (
     <section className="relative py-24 sm:py-32">
@@ -56,7 +67,7 @@ export default function Gallery() {
             <span className="text-gradient-green">nụ cười</span>
           </h2>
           <p className="mt-4 text-lg text-forest/75 dark:text-ink/75">
-            Những hình ảnh có thật từ hành trình Trăng Sáng Langbiang mùa đầu tiên.
+            Những hình ảnh có thật từ hành trình Trăng Sáng Langbiang mùa {year}.
             <span className="hidden sm:inline"> Bấm vào ảnh để xem lớn hơn.</span>
           </p>
         </Reveal>
@@ -68,10 +79,10 @@ export default function Gallery() {
                 key={g.src}
                 type="button"
                 onClick={() => openAt(i)}
-                aria-label={`Xem ảnh: ${g.caption}`}
+                aria-label={`Xem ảnh: ${g.caption ?? "khoảnh khắc"}`}
                 className="group relative block cursor-pointer rounded-3xl outline-none focus-visible:ring-4 focus-visible:ring-leaf/40"
               >
-                <Photo src={g.src} alt={g.caption} ratio="aspect-square" />
+                <Photo src={g.src} alt={g.caption ?? ""} ratio="aspect-square" />
                 {/* icon phóng to khi hover */}
                 <span className="pointer-events-none absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100">
                   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -103,7 +114,7 @@ export default function Gallery() {
         </Reveal>
       </div>
 
-      {/* LightGallery ở chế độ dynamic: chứa toàn bộ ảnh mùa 2025 */}
+      {/* LightGallery ở chế độ dynamic: chứa toàn bộ ảnh của mùa đang xem */}
       <LightGallery
         onInit={onInit}
         dynamic

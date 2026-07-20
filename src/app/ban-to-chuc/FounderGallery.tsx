@@ -12,7 +12,7 @@ import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-fullscreen.css";
 import "lightgallery/css/lg-thumbnail.css";
 
-import { board } from "@/lib/site";
+import type { Member } from "@/lib/content/schema";
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -21,13 +21,13 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
-export default function FounderGallery() {
+export default function FounderGallery({ founders }: { founders: Member[] }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lgRef = useRef<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onInit = (detail: any) => { lgRef.current = detail.instance; };
 
-  const [lead, ...coFounders] = board.founders;
+  const [lead, ...coFounders] = founders;
 
   // Chỉ đưa vào gallery những ảnh có thật
   const withPhoto = [lead, ...coFounders].filter((m) => m?.photo);
