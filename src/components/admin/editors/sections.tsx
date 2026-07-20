@@ -3,7 +3,10 @@
 // Các phần biên tập dùng chung giữa editor trang chính (Thư viện ảnh, Nhà tài
 // trợ) và PastYearsEditor. Mỗi phần là 1 ListEditor "controlled"
 // (nhận value/onChange) + validator đi kèm — tránh lặp code giữa hai nơi.
-import { Input, Space, Switch, Tag } from "antd";
+import { Button, Input, Modal, Space, Switch, Tag } from "antd";
+import { useState } from "react";
+import { PictureOutlined } from "@ant-design/icons";
+import MediaBrowser from "../MediaBrowser";
 import { ListEditor, Field, ImageField, LinkInput, isValidUrl } from "../editorKit";
 import { ItemListEditor } from "../itemList";
 import type {
@@ -101,7 +104,39 @@ export function PhotoListEditor({
   onChange: (next: Photo[]) => void;
   folder?: string;
 }) {
+  const [pickOpen, setPickOpen] = useState(false);
+
+  /** Thêm hàng loạt ảnh chọn từ kho (bỏ qua ảnh đã có trong danh sách). */
+  const addMany = (urls: string[]) => {
+    const daCo = new Set(value.map((p) => p.src));
+    const them = urls
+      .filter((u) => !daCo.has(u))
+      .map((src) => ({ src, caption: "", desc: "", tall: false }));
+    onChange([...value, ...them]);
+    setPickOpen(false);
+  };
+
   return (
+    <>
+      <Button
+        icon={<PictureOutlined />}
+        className="mb-3 cursor-pointer"
+        onClick={() => setPickOpen(true)}
+      >
+        Thêm nhiều ảnh từ kho
+      </Button>
+
+      <Modal
+        open={pickOpen}
+        onCancel={() => setPickOpen(false)}
+        width={920}
+        footer={null}
+        destroyOnHidden
+        title="Chọn ảnh từ kho — có thể chọn nhiều hoặc cả album"
+      >
+        <MediaBrowser mode="pick" multiple onPickMany={addMany} />
+      </Modal>
+
     <ListEditor<Photo>
       value={value}
       onChange={onChange}
@@ -168,7 +203,8 @@ export function PhotoListEditor({
           </Space>
         );
       }}
-    />
+      />
+    </>
   );
 }
 

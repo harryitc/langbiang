@@ -54,9 +54,14 @@ function canOptimize(url: string): boolean {
 export default function MediaBrowser({
   mode,
   onPick,
+  multiple = false,
+  onPickMany,
 }: {
   mode: "manage" | "pick";
   onPick?: (url: string) => void;
+  /** Cho chọn nhiều ảnh cùng lúc (hoặc cả album) rồi thêm một lần. */
+  multiple?: boolean;
+  onPickMany?: (urls: string[]) => void;
 }) {
   const { message, modal } = App.useApp();
   const [lib, setLib] = useState<MediaLibrary | null>(null);
@@ -68,6 +73,8 @@ export default function MediaBrowser({
   const [limit, setLimit] = useState(PAGE_SIZE);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
+  // Chế độ chọn nhiều: danh sách ảnh đang tick.
+  const [picked, setPicked] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   async function refetch(force = false) {
@@ -264,6 +271,33 @@ export default function MediaBrowser({
               : ""}
           </Button>
           <span className="text-xs opacity-60">{visible.length} ảnh</span>
+
+          {multiple ? (
+            <>
+              <Button
+                size="small"
+                className="cursor-pointer"
+                disabled={visible.length === 0}
+                onClick={() =>
+                  setPicked(Array.from(new Set(visible.map((it) => it.url))))
+                }
+              >
+                {albumId === ALL
+                  ? `Chọn tất cả đang hiển thị (${visible.length})`
+                  : `Chọn cả album (${visible.length})`}
+              </Button>
+              {picked.length > 0 ? (
+                <Button
+                  size="small"
+                  type="text"
+                  className="cursor-pointer"
+                  onClick={() => setPicked([])}
+                >
+                  Bỏ chọn
+                </Button>
+              ) : null}
+            </>
+          ) : null}
         </div>
 
         {/* Lưới ảnh */}
@@ -279,11 +313,22 @@ export default function MediaBrowser({
                     <Thumb
                       item={it}
                       active={selected === it.id}
-                      onClick={() =>
-                        setSelected((cur) => (cur === it.id ? null : it.id))
-                      }
+                      checked={multiple && picked.includes(it.url)}
+                      onClick={() => {
+                        if (multiple) {
+                          setPicked((cur) =>
+                            cur.includes(it.url)
+                              ? cur.filter((u) => u !== it.url)
+                              : [...cur, it.url]
+                          );
+                          return;
+                        }
+                        setSelected((cur) => (cur === it.id ? null : it.id));
+                      }}
                       onDoubleClick={
-                        mode === "pick" ? () => onPick?.(it.url) : undefined
+                        !multiple && mode === "pick"
+                          ? () => onPick?.(it.url)
+                          : undefined
                       }
                       onPreview={() => {
                         setPreviewIndex(idx);
@@ -293,7 +338,7 @@ export default function MediaBrowser({
 
                     {/* Bảng thao tác gọn, nổi ngay dưới ảnh đang chọn — khỏi
                         phải cuộn lên thanh công cụ. */}
-                    {selected === it.id ? (
+                    {!multiple && selected === it.id ? (
                       <div className="absolute left-1/2 top-full z-30 mt-2 w-60 -translate-x-1/2 rounded-xl border border-[#2e7d32]/30 bg-white p-2.5 shadow-lg">
                         <div
                           className="truncate text-xs font-medium leading-5"
@@ -406,6 +451,25 @@ export default function MediaBrowser({
                 }}
               />
 
+              {multiple && picked.length > 0 ? (
+                <div className="sticky bottom-0 z-20 mt-3 flex items-center gap-2 rounded-xl border border-[#2e7d32]/30 bg-white/95 p-2.5 shadow-lg backdrop-blur">
+                  <span className="text-sm">
+                    Đã chọn <strong>{picked.length}</strong> ảnh
+                  </span>
+                  <Button
+                    type="primary"
+                    className="ml-auto cursor-pointer"
+                    icon={<CheckOutlined />}
+                    onClick={() => {
+                      onPickMany?.(picked);
+                      setPicked([]);
+                    }}
+                  >
+                    Thêm {picked.length} ảnh
+                  </Button>
+                </div>
+              ) : null}
+
               {visible.length > limit ? (
                 <div className="mt-3 text-center">
                   <Button onClick={() => setLimit((n) => n + PAGE_SIZE)}>
@@ -474,12 +538,15 @@ function AlbumButton({
 function Thumb({
   item,
   active,
+  checked,
   onClick,
   onDoubleClick,
   onPreview,
 }: {
   item: MediaItem;
   active: boolean;
+  /** Đang được tick trong chế độ chọn nhiều. */
+  checked?: boolean;
   onClick: () => void;
   onDoubleClick?: () => void;
   onPreview: () => void;
@@ -489,12 +556,20 @@ function Thumb({
       // block + w-full: nút nằm trong div bọc (không còn là grid item) nên phải
       // tự chiếm hết chiều rộng, nếu không aspect-square sẽ ra kích thước 0.
       className={`group relative block aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 transition ${
-        active ? "border-[#2e7d32]" : "border-transparent hover:border-black/20"
+        checked || active
+          ? "border-[#2e7d32]"
+          : "border-transparent hover:border-black/20"
       }`}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       title={item.name}
     >
+      {checked ? (
+        <span className="absolute left-1 top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-[#2e7d32] text-white">
+          <CheckOutlined style={{ fontSize: 11 }} />
+        </span>
+      ) : null}
+
       {/* Nút phóng to ở góc phải — xem ảnh chi tiết trong lightbox. */}
       <span
         role="button"

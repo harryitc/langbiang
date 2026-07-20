@@ -27,6 +27,7 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
     initial
   );
   const [pickOpen, setPickOpen] = useState(false);
+  const [pickManyOpen, setPickManyOpen] = useState(false);
 
   const setAt = (i: number, next: Photo) => {
     const arr = value.slice();
@@ -91,14 +92,23 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
         />
       ) : null}
 
-      <Button
-        type="primary"
-        icon={<PlusOutlined />}
-        className="mb-4"
-        onClick={() => setPickOpen(true)}
-      >
-        Thêm ảnh từ kho
-      </Button>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          className="cursor-pointer"
+          onClick={() => setPickOpen(true)}
+        >
+          Thêm ảnh từ kho
+        </Button>
+        <Button
+          icon={<PictureOutlined />}
+          className="cursor-pointer"
+          onClick={() => setPickManyOpen(true)}
+        >
+          Thêm nhiều ảnh
+        </Button>
+      </div>
 
       {value.length === 0 ? (
         <div className="rounded-xl border border-dashed border-black/15 py-10 text-center text-sm opacity-60">
@@ -195,6 +205,28 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
         }
       >
         <MediaBrowser mode="pick" onPick={addPhoto} />
+      </Modal>
+
+      <Modal
+        open={pickManyOpen}
+        onCancel={() => setPickManyOpen(false)}
+        width={920}
+        footer={null}
+        destroyOnHidden
+        title="Chọn ảnh từ kho — có thể chọn nhiều hoặc cả album"
+      >
+        <MediaBrowser
+          mode="pick"
+          multiple
+          onPickMany={(urls) => {
+            const daCo = new Set(value.map((p) => p.src));
+            const them = urls
+              .filter((u) => !daCo.has(u))
+              .map((src) => ({ src, caption: "", desc: "", tall: false }));
+            update([...value, ...them]);
+            setPickManyOpen(false);
+          }}
+        />
       </Modal>
     </EditorCard>
   );
