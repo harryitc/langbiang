@@ -19,6 +19,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
       { slug: "hoat-dong", label: "Hoạt động", icon: "🎯" },
       { slug: "lich-trinh", label: "Lịch trình", icon: "🗓️" },
       { slug: "slideshow", label: "Slideshow trang chủ", icon: "🎞️" },
+      { slug: "anh-trang-chu", label: "Ảnh trang chủ (logo, Hero)", icon: "🖼️" },
       { slug: "ly-do", label: "Lý do tham gia", icon: "💚" },
       { slug: "faq", label: "Câu hỏi thường gặp", icon: "❓" },
       { slug: "gay-quy", label: "Gây quỹ", icon: "🛒" },

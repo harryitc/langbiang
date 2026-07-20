@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 type HeaderProps = {
   /** Tên dự án (dùng cho alt của logo). */
   siteName: string;
+  /** Logo từ admin; bỏ trống -> dùng logo mặc định. */
+  logo?: string;
   /** Danh mục năm đã qua, đã sắp mới → cũ (FR4). Rỗng thì ẩn dropdown "Năm". */
   pastYears: number[];
 };
@@ -17,7 +19,7 @@ const nav = [
   { href: "/tin-tuc", label: "Tin tức" },
 ];
 
-export default function Header({ siteName, pastYears }: HeaderProps) {
+export default function Header({ siteName, logo, pastYears }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [yearsOpen, setYearsOpen] = useState(false);
@@ -53,7 +55,7 @@ export default function Header({ siteName, pastYears }: HeaderProps) {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
         <a href="#top" className="flex min-w-0 items-center gap-2 sm:gap-2.5">
-          <Logo siteName={siteName} />
+          <Logo siteName={siteName} logo={logo} />
           <span className="min-w-0 leading-tight">
             <span className="block text-[10px] font-semibold uppercase tracking-wider text-leaf-deep/70 sm:text-[11px] dark:text-leaf-bright/70">
               Dự án tình nguyện
@@ -204,12 +206,12 @@ export default function Header({ siteName, pastYears }: HeaderProps) {
   );
 }
 
-function Logo({ siteName }: { siteName: string }) {
+function Logo({ siteName, logo }: { siteName: string; logo?: string }) {
   return (
     <span className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl shadow-sm ring-1 ring-white/50 dark:ring-white/10">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/logo-mark.png"
+        src={logo?.trim() || "/logo-mark.png"}
         alt={siteName}
         width={44}
         height={44}
