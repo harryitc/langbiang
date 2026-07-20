@@ -13,6 +13,7 @@ import {
 import {
   PhotoListEditor,
   SponsorTierListEditor,
+  SpendingFields,
   missingPhotoFields,
   missingTierFields,
   missingSponsorFields,
@@ -199,6 +200,7 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
           summaryHtml: "",
           gallery: [],
           sponsorTiers: [],
+          spendingReport: { url: "", note: "" },
         })}
         renderItem={(item, updateItem, index) => {
           const duplicate = isDuplicateYear(years, index);
@@ -260,6 +262,21 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
                         value={item.gallery}
                         folder="past-years"
                         onChange={(gallery) => updateItem({ ...item, gallery })}
+                      />
+                    ),
+                  },
+                  {
+                    key: "spending",
+                    label: "Báo cáo thu – chi",
+                    extra: item.spendingReport?.url?.trim() ? null : (
+                      <Tag>Đang trống</Tag>
+                    ),
+                    children: (
+                      <SpendingFields
+                        value={item.spendingReport ?? { url: "", note: "" }}
+                        onChange={(spendingReport) =>
+                          updateItem({ ...item, spendingReport })
+                        }
                       />
                     ),
                   },

@@ -108,6 +108,11 @@ export const defaultContent: SiteContent = {
         tier: t.tier,
         sponsors: t.sponsors.map((s) => ({ ...s })),
       })),
+      // Link Google Sheet báo cáo thu – chi mùa 2025 (admin dán vào sau).
+      spendingReport: {
+        url: "",
+        note: "Toàn bộ khoản thu – chi mùa {năm} được cập nhật công khai trên Google Sheet.",
+      },
     },
   ],
 

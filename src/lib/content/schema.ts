@@ -150,6 +150,8 @@ export type PastYear = {
   summaryHtml: string;
   gallery: Photo[];
   sponsorTiers: SponsorTier[];
+  /** Báo cáo thu – chi của mùa đó (link Google Sheet). Bỏ trống thì ẩn. */
+  spendingReport?: SpendingReport;
 };
 
 /* ------------------------------------------------------------------
@@ -173,7 +175,8 @@ export type SiteContent = {
 // {url,note}; main.sponsorTiers mặc định để trống (tách khỏi dữ liệu mùa 2025).
 // v3: bỏ hẳn stats, volunteerTeams/volunteerCount, donations, testimonials
 // (cả ở main lẫn pastYears). Phần con người chỉ còn Ban tổ chức (main.board).
-export const CONTENT_VERSION = 3;
+// v4: mỗi năm đã qua có báo cáo thu – chi riêng (PastYear.spendingReport).
+export const CONTENT_VERSION = 4;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

@@ -5,6 +5,7 @@ import SubPageShell from "@/components/SubPageShell";
 import RetroSummary from "@/components/sections/RetroSummary";
 import Gallery from "@/components/sections/Gallery";
 import Sponsors from "@/components/sections/Sponsors";
+import SpendingReportLink from "@/components/sections/SpendingReportLink";
 import { getContent } from "@/lib/content/store";
 import type { PastYear } from "@/lib/content/schema";
 
@@ -57,6 +58,7 @@ export default async function PastYearPage({
     data.summaryHtml.trim() && { href: "#summary", label: "Tổng kết" },
     data.gallery.length > 0 && { href: "#gallery", label: "Khoảnh khắc" },
     data.sponsorTiers.length > 0 && { href: "#sponsors", label: "Nhà tài trợ" },
+    data.spendingReport?.url?.trim() && { href: "#bao-cao-chi", label: "Báo cáo thu – chi" },
   ].filter((n): n is { href: string; label: string } => Boolean(n));
 
 
@@ -71,6 +73,7 @@ export default async function PastYearPage({
       <RetroSummary html={data.summaryHtml} title={data.title} year={data.year} />
       <Gallery photos={data.gallery} year={data.year} />
       <Sponsors tiers={data.sponsorTiers} currentYear={currentYear} />
+      <SpendingReportLink report={data.spendingReport} year={data.year} />
 
       <section className="py-16 text-center sm:py-24">
         <div className="mx-auto max-w-2xl px-5 sm:px-6">

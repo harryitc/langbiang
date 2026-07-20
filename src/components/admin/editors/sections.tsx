@@ -5,7 +5,12 @@
 // (nhận value/onChange) + validator đi kèm — tránh lặp code giữa hai nơi.
 import { Input, Space, Switch, Tag } from "antd";
 import { ListEditor, Field, ImageField } from "../editorKit";
-import type { Photo, Sponsor, SponsorTier } from "@/lib/content/schema";
+import type {
+  Photo,
+  Sponsor,
+  SponsorTier,
+  SpendingReport,
+} from "@/lib/content/schema";
 
 /* ------------------------------------------------------------------
    Validators (FR2/FR4) — dùng chung
@@ -37,6 +42,58 @@ export function isValidUrl(url: string): boolean {
   } catch {
     return false;
   }
+}
+
+/* ------------------------------------------------------------------
+   Báo cáo thu – chi (link Google Sheet) — dùng cho mùa hiện tại và từng năm
+   ------------------------------------------------------------------ */
+export function SpendingFields({
+  value,
+  onChange,
+}: {
+  value: SpendingReport;
+  onChange: (next: SpendingReport) => void;
+}) {
+  const urlOk = isValidUrl(value.url);
+  return (
+    <>
+      <Field
+        label="Link Google Sheet"
+        hint="Nhớ đặt quyền chia sẻ “Bất kỳ ai có đường liên kết đều xem được”."
+      >
+        <Input
+          value={value.url}
+          placeholder="https://docs.google.com/spreadsheets/d/..."
+          status={urlOk ? "" : "error"}
+          onChange={(e) => onChange({ ...value, url: e.target.value })}
+        />
+        {!urlOk ? (
+          <div className="mt-1 text-xs text-red-500">
+            Link phải bắt đầu bằng http:// hoặc https://.
+          </div>
+        ) : null}
+      </Field>
+
+      <Field
+        label="Ghi chú ngắn"
+        hint={
+          <>
+            Hiện phía trên nút bấm. Có thể dùng ký hiệu{" "}
+            <Tag className="mx-1">{"{năm}"}</Tag> để tự thay bằng số năm tương ứng.
+          </>
+        }
+      >
+        <Input.TextArea
+          value={value.note ?? ""}
+          rows={3}
+          maxLength={300}
+          showCount
+          placeholder="Toàn bộ khoản thu – chi mùa {năm} được cập nhật công khai trên Google Sheet."
+          onChange={(e) => onChange({ ...value, note: e.target.value })}
+        />
+      </Field>
+    </>
+  );
 }
 
 /* ------------------------------------------------------------------
