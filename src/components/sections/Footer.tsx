@@ -1,6 +1,6 @@
 import { GrassBorder } from "@/components/Decor";
 import { getContent } from "@/lib/content/store";
-import { fillYear } from "@/lib/content/year";
+import { fillYear, eventDateLabel } from "@/lib/content/year";
 
 export default async function Footer() {
   const { main, currentYear, pastYears } = await getContent();
@@ -73,7 +73,7 @@ export default async function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <span>📅</span>
-                <span>{fillYear(event.dateLabel, currentYear)}</span>
+                <span>{eventDateLabel(event.dateLabel, currentYear)}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span>✉️</span>

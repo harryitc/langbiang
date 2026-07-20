@@ -13,7 +13,7 @@ import Faq from "@/components/sections/Faq";
 import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
 import { getContent } from "@/lib/content/store";
-import { fillYear } from "@/lib/content/year";
+import { fillYear, eventDateLabel } from "@/lib/content/year";
 
 export default async function Home() {
   const { main, currentYear, pastYears, news } = await getContent();
@@ -30,7 +30,7 @@ export default async function Home() {
       <Header siteName={site.name} logo={site.logo} pastYears={years} />
       <main>
         <Hero
-          dateLabel={fillYear(event.dateLabel, currentYear)}
+          dateLabel={eventDateLabel(event.dateLabel, currentYear)}
           dateISO={event.dateISO}
           tagline={site.tagline}
           subtitle={site.subtitle}

@@ -3,7 +3,7 @@
 // Editor "Sự kiện & số năm" (FRD 2.2 + FR3).
 // Gom 2 nhánh nội dung độc lập: main.event và currentYear.
 import { useMemo, useState } from "react";
-import { Alert, DatePicker, Input, InputNumber, Space, Tag } from "antd";
+import { Alert, DatePicker, Input, InputNumber, Space } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import {
   useSectionAutosave,
@@ -11,7 +11,7 @@ import {
   EditorCard,
   Field,
 } from "../editorKit";
-import { fillYear, isValidYear } from "@/lib/content/year";
+import { eventDateLabel, isValidYear } from "@/lib/content/year";
 import type { EventInfo } from "@/lib/content/schema";
 
 /** Editor sự kiện gom 2 nhánh nội dung: main.event và currentYear (FR3). */
@@ -22,8 +22,8 @@ export type EventEditorInitial = {
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
-// isValidYear + fillYear dùng chung từ @/lib/content/year (tránh lệch hành vi
-// giữa xem trước trong admin và nội dung render thật trên trang công khai).
+// Dùng chung eventDateLabel/isValidYear từ @/lib/content/year để xem trước
+// trong admin khớp đúng nội dung render trên trang công khai.
 
 /** Chuỗi ISO 'YYYY-MM-DD' → Dayjs (null nếu trống/không hợp lệ). */
 function toDayjs(iso?: string): Dayjs | null {
@@ -71,10 +71,9 @@ export default function EventEditor({
       : "";
   const errYear = isValidYear(yearDraft) ? "" : "Số năm không hợp lệ (cần 4 chữ số).";
 
-  // Xem trước nhãn ngày sau khi thay ký hiệu {năm} bằng số năm hiện tại.
-  // Dùng chung fillYear để khớp đúng với nội dung render trên trang công khai.
+  // Xem trước đúng chuỗi khách sẽ thấy (đã tự nối số năm hiện tại).
   const dateLabelPreview = useMemo(
-    () => fillYear(event.dateLabel, year),
+    () => eventDateLabel(event.dateLabel, year),
     [event.dateLabel, year]
   );
 
@@ -129,21 +128,21 @@ export default function EventEditor({
           label="Nhãn ngày (hiển thị)"
           hint={
             <>
-              Chuỗi ngày hiển thị cho khách. Dùng ký hiệu{" "}
-              <Tag className="mx-1">{"{năm}"}</Tag> để tự thay bằng số năm hiện
-              tại — vd: <em>Ngày 26 – 27 tháng 9 năm {"{năm}"}</em>.
+              Chỉ nhập <strong>ngày và tháng</strong> — vd:{" "}
+              <em>Ngày 26 – 27 tháng 9</em>. Số năm hệ thống tự thêm theo
+              &ldquo;Số năm hiện tại&rdquo; ở trên, bạn không cần gõ.
             </>
           }
         >
           <Input
-            placeholder="Ngày 26 – 27 tháng 9 năm {năm}"
+            placeholder="Ngày 26 – 27 tháng 9"
             status={errDateLabel ? "error" : undefined}
             value={event.dateLabel}
             onChange={(e) => setField("dateLabel", e.target.value)}
           />
           {event.dateLabel.trim() ? (
             <div className="mt-2 text-xs opacity-70">
-              Xem trước: <strong>{dateLabelPreview}</strong>
+              Khách sẽ thấy: <strong>{dateLabelPreview}</strong>
             </div>
           ) : null}
         </Field>
@@ -173,7 +172,17 @@ export default function EventEditor({
           </Field>
         </Space>
 
-        <Field label="Địa điểm" hint="vd: Núi Langbiang, Lạc Dương, Lâm Đồng">
+        <Field
+          label="Địa điểm"
+          hint={
+            <>
+              Nơi tổ chức, vd: <em>Phường Langbiang, Đà Lạt, Lâm Đồng</em>. Hiện
+              ở <strong>chân trang</strong>, khối <strong>Lịch trình</strong>,
+              phụ đề trang <strong>Chương trình</strong> và dữ liệu sự kiện gửi
+              cho Google.
+            </>
+          }
+        >
           <Input
             placeholder="Nhập địa điểm tổ chức"
             status={errLocation ? "error" : undefined}

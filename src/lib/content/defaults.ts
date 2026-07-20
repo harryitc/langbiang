@@ -57,9 +57,10 @@ export const defaultContent: SiteContent = {
       ogImage: "/og.jpg",
       logo: "/logo-mark.png",
     },
-    // Nhãn ngày dùng ký hiệu {năm} để đồng bộ theo currentYear (FR3/A2).
+    // Chỉ nhập phần ngày/tháng — năm do hệ thống tự nối theo currentYear
+    // (không để người dùng phải giữ ký hiệu {năm} dễ xoá nhầm).
     event: {
-      dateLabel: "Ngày 26 – 27 tháng 9 năm {năm}",
+      dateLabel: "Ngày 26 – 27 tháng 9",
       dateISO: site.dateISO,
       dateEndISO: "2026-09-27",
       location: site.location,
