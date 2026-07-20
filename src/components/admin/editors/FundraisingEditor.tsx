@@ -118,7 +118,8 @@ export default function FundraisingEditor({
           href: "",
           highlight: false,
         })}
-        renderItem={(item, updateItem, index) => {
+        getSummary={(item) => `${item.icon ?? ""} ${item.name ?? ""}`.trim() || "(chưa có tên kênh)"}
+          renderItem={(item, updateItem, index) => {
           const errors = validateChannel(item);
           return (
             <div className="w-full">

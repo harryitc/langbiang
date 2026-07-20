@@ -50,6 +50,7 @@ function ItemsEditor({
       title="Các mốc trong ngày"
       addLabel="Thêm mốc thời gian"
       newItem={() => ({ time: "", title: "", desc: "" })}
+      getSummary={(item) => [item.time, item.title].filter(Boolean).join(" — ") || "(chưa có mốc)"}
       renderItem={(item, update) => (
         <div className="grid gap-3 md:grid-cols-[140px_1fr]">
           <Field label="Giờ">

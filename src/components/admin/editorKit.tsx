@@ -144,6 +144,8 @@ export type ListEditorProps<T> = {
   newItem: () => T;
   title?: ReactNode;
   addLabel?: string;
+  /** Dòng tóm tắt khi mục đang thu gọn. */
+  getSummary?: (item: T, index: number) => ReactNode;
 };
 
 export function ListEditor<T>(props: ListEditorProps<T>) {

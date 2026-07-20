@@ -115,6 +115,7 @@ export function PhotoListEditor({
       onChange={onChange}
       addLabel="Thêm ảnh"
       newItem={() => ({ src: "", caption: "", desc: "", tall: false })}
+      getSummary={(item, i) => item.caption?.trim() || `Ảnh #${i + 1}`}
       renderItem={(item, updateItem, index) => {
         const missing = missingPhotoFields(item);
         return (
@@ -221,6 +222,7 @@ export function SponsorTierListEditor({
                 onChange={(sponsors) => updateTier({ ...tier, sponsors })}
                 addLabel="Thêm đơn vị"
                 newItem={() => ({ name: "", logo: "", url: "", intro: "" })}
+                getSummary={(s) => s.name || "(chưa có tên đơn vị)"}
                 renderItem={(sponsor, updateSponsor) => {
                   const missingSponsor = missingSponsorFields(sponsor);
                   const url = sponsor.url ?? "";

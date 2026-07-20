@@ -28,7 +28,9 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button, Drawer, Empty, Popconfirm, Tag, Tooltip } from "antd";
 import {
   DeleteOutlined,
+  DownOutlined,
   EditOutlined,
+  RightOutlined,
   HolderOutlined,
   PlusOutlined,
   WarningOutlined,
@@ -79,10 +81,16 @@ function SortableRow({
   id,
   children,
   actions,
+  summary,
+  open,
+  onToggle,
 }: {
   id: string;
   children: ReactNode;
   actions: ReactNode;
+  summary: ReactNode;
+  open: boolean;
+  onToggle: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id });
@@ -90,15 +98,24 @@ function SortableRow({
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`mb-2 flex gap-2 rounded-xl border border-black/10 bg-white/60 p-3 ${
+      className={`mb-2 rounded-xl border border-black/10 bg-white/60 ${
         isDragging ? "z-10 shadow-lg" : ""
       }`}
     >
-      <div className="pt-1">
+      {/* Dòng đầu: kéo thả + tóm tắt + thu gọn/mở rộng + xoá */}
+      <div className="flex items-center gap-2 p-2.5">
         <DragHandle attributes={attributes} listeners={listeners} />
+        <button
+          className="flex min-w-0 flex-1 items-center gap-2 text-left"
+          onClick={onToggle}
+          title={open ? "Thu gọn" : "Mở rộng để sửa"}
+        >
+          {open ? <DownOutlined className="text-xs opacity-40" /> : <RightOutlined className="text-xs opacity-40" />}
+          <span className="truncate">{summary}</span>
+        </button>
+        {actions}
       </div>
-      <div className="min-w-0 flex-1">{children}</div>
-      <div className="flex flex-col gap-1">{actions}</div>
+      {open ? <div className="border-t border-black/5 p-3">{children}</div> : null}
     </div>
   );
 }
@@ -110,6 +127,7 @@ export function SortableList<T>({
   newItem,
   addLabel = "Thêm mục",
   title,
+  getSummary,
 }: {
   value: T[];
   onChange: (next: T[]) => void;
@@ -117,8 +135,24 @@ export function SortableList<T>({
   newItem: () => T;
   addLabel?: string;
   title?: ReactNode;
+  /** Dòng tóm tắt hiển thị khi mục đang thu gọn. */
+  getSummary?: (item: T, index: number) => ReactNode;
 }) {
-  const move = (from: number, to: number) => onChange(arrayMove(value, from, to));
+  // Mặc định thu gọn hết cho dễ nhìn tổng thể; mở từng mục khi cần sửa.
+  const [openRows, setOpenRows] = useState<Set<number>>(new Set());
+  const toggle = (i: number) =>
+    setOpenRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
+      return next;
+    });
+
+  const move = (from: number, to: number) => {
+    // Đổi thứ tự làm lệch chỉ số -> thu gọn hết cho khỏi mở nhầm mục.
+    setOpenRows(new Set());
+    onChange(arrayMove(value, from, to));
+  };
   const { sensors, ids, onDragEnd } = useDnd(value.length, move);
 
   const replaceAt = (i: number, next: T) => {
@@ -129,6 +163,7 @@ export function SortableList<T>({
   const removeAt = (i: number) => {
     const arr = value.slice();
     arr.splice(i, 1);
+    setOpenRows(new Set());
     onChange(arr);
   };
 
@@ -148,6 +183,9 @@ export function SortableList<T>({
               <SortableRow
                 key={i}
                 id={String(i)}
+                open={openRows.has(i)}
+                onToggle={() => toggle(i)}
+                summary={getSummary?.(item, i) ?? `Mục ${i + 1}`}
                 actions={
                   <Popconfirm
                     title="Xoá mục này?"
@@ -171,7 +209,11 @@ export function SortableList<T>({
         icon={<PlusOutlined />}
         block
         className="mt-2"
-        onClick={() => onChange([...value, newItem()])}
+        onClick={() => {
+          // Mục mới mở sẵn để nhập luôn.
+          setOpenRows((prev) => new Set(prev).add(value.length));
+          onChange([...value, newItem()]);
+        }}
       >
         {addLabel}
       </Button>

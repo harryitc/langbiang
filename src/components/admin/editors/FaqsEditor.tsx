@@ -50,6 +50,7 @@ export default function FaqsEditor({ initial }: { initial: Faq[] }) {
         onChange={update}
         addLabel="Thêm câu hỏi"
         newItem={() => ({ q: "", a: "" })}
+        getSummary={(item) => item.q || "(chưa có câu hỏi)"}
         renderItem={(item, updateItem, index) => {
           const errors = validate(item);
           return (

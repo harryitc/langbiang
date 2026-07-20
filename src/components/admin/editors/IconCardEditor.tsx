@@ -73,6 +73,7 @@ export default function IconCardEditor({
         onChange={update}
         addLabel={config.addLabel}
         newItem={() => ({ icon: config.defaultIcon, title: "", desc: "" })}
+        getSummary={(item) => `${item.icon} ${item.title}`.trim() || "(chưa có tiêu đề)"}
         renderItem={(item, updateItem, index) => {
           const errors = validate(item);
           return (
