@@ -5,7 +5,8 @@ import type { SpendingReport } from "@/lib/content/schema";
 /**
  * Khối "Báo cáo thu – chi" — không dựng bảng số liệu trên web, chỉ trỏ sang
  * Google Sheet. Dùng chung cho trang Gây quỹ (mùa hiện tại) và trang "Nhìn lại"
- * của từng năm đã qua. Chưa có link thì ẩn hẳn.
+ * của từng năm đã qua. Chưa có link thì vẫn hiện mục này kèm dòng "chưa có"
+ * (giữ cam kết minh bạch, thay vì để khối biến mất không dấu vết).
  */
 export default function SpendingReportLink({
   report,
@@ -16,7 +17,6 @@ export default function SpendingReportLink({
   year: number;
 }) {
   const url = report?.url?.trim();
-  if (!url) return null;
 
   return (
     <section id="bao-cao-chi" className="bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
@@ -33,6 +33,7 @@ export default function SpendingReportLink({
               {fillYear(report.note, year)}
             </p>
           ) : null}
+          {url ? (
           <a
             href={url}
             target="_blank"
@@ -44,6 +45,11 @@ export default function SpendingReportLink({
               <path d="M7 17L17 7M7 7h10v10" />
             </svg>
           </a>
+          ) : (
+            <p className="mt-7 inline-block rounded-full border border-dashed border-leaf-deep/30 px-6 py-3 text-sm font-medium text-forest/60 dark:border-leaf-bright/25 dark:text-ink/60">
+              Báo cáo đang được tổng hợp — sẽ cập nhật tại đây.
+            </p>
+          )}
         </Reveal>
       </div>
     </section>

@@ -11,7 +11,41 @@ export function fillYear(text: string, year: number): string {
   return text.replace(YEAR_TOKEN, String(year));
 }
 
+/**
+ * Nhãn ngày sự kiện + năm hiện tại.
+ * Người biên tập chỉ nhập phần ngày/tháng ("Ngày 26 – 27 tháng 9"); năm do hệ
+ * thống tự nối để không thể bị xoá nhầm. Nếu nhãn đã tự chứa số năm đó rồi
+ * (hoặc còn ký hiệu {năm} kiểu cũ) thì giữ nguyên, tránh lặp "năm 2026 năm 2026".
+ */
+export function eventDateLabel(label: string, year: number): string {
+  const filled = fillYear(label ?? "", year).trim();
+  if (!filled) return "";
+  return filled.includes(String(year)) ? filled : `${filled} năm ${year}`;
+}
+
 /** Số năm hợp lệ = số nguyên 4 chữ số (FR3-R2 / FR4-R1). */
 export function isValidYear(year: unknown): year is number {
   return typeof year === "number" && Number.isInteger(year) && year >= 1000 && year <= 9999;
+}
+
+/**
+ * Địa điểm hiển thị ở một vị trí cụ thể.
+ * Mỗi nơi có thể ghi khác nhau; bỏ trống thì dùng địa điểm chính.
+ */
+export function locationFor(
+  event: {
+    location: string;
+    locationFooter?: string;
+    locationTimeline?: string;
+    locationProgram?: string;
+  },
+  place: "footer" | "timeline" | "program"
+): string {
+  const override =
+    place === "footer"
+      ? event.locationFooter
+      : place === "timeline"
+      ? event.locationTimeline
+      : event.locationProgram;
+  return (override?.trim() || event.location || "").trim();
 }

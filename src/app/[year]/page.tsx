@@ -58,7 +58,7 @@ export default async function PastYearPage({
     data.summaryHtml.trim() && { href: "#summary", label: "Tổng kết" },
     data.gallery.length > 0 && { href: "#gallery", label: "Khoảnh khắc" },
     data.sponsorTiers.length > 0 && { href: "#sponsors", label: "Nhà tài trợ" },
-    data.spendingReport?.url?.trim() && { href: "#bao-cao-chi", label: "Báo cáo thu – chi" },
+    { href: "#bao-cao-chi", label: "Báo cáo thu – chi" },
   ].filter((n): n is { href: string; label: string } => Boolean(n));
 
 

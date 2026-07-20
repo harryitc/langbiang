@@ -13,8 +13,8 @@ import type { Faq } from "@/lib/content/schema";
 /** Kiểm tra trường bắt buộc của một câu hỏi (FR2-R3). */
 function validate(item: Faq) {
   return {
-    q: item.q.trim() ? "" : "Vui lòng nhập câu hỏi.",
-    a: item.a.trim() ? "" : "Vui lòng nhập câu trả lời.",
+    q: item.q.trim() ? "" : "Chưa nhập câu hỏi.",
+    a: item.a.trim() ? "" : "Chưa nhập câu trả lời.",
   };
 }
 
@@ -35,13 +35,19 @@ export default function FaqsEditor({ initial }: { initial: Faq[] }) {
       title="Câu hỏi thường gặp"
       extra={<SaveStatusTag status={status} />}
     >
+      <p className="mb-3 text-sm opacity-60">
+        Hiện ở mục &ldquo;Câu hỏi thường gặp&rdquo; gần cuối{" "}
+        <strong>trang chủ</strong>. Kéo để đổi thứ tự — câu hay được hỏi nhất
+        nên để lên đầu.
+      </p>
+
       {invalidCount > 0 ? (
         <Alert
           className="mb-4"
           type="warning"
           showIcon
-          message={`Có ${invalidCount} câu hỏi chưa điền đủ trường bắt buộc.`}
-          description="Câu hỏi thiếu nội dung hỏi hoặc câu trả lời sẽ không hiển thị đúng trên trang chính."
+          title={`Có ${invalidCount} câu hỏi chưa điền đủ.`}
+          description="Câu hỏi thiếu phần hỏi hoặc phần trả lời sẽ hiển thị lệch lạc trên trang chủ."
         />
       ) : null}
 
@@ -50,6 +56,7 @@ export default function FaqsEditor({ initial }: { initial: Faq[] }) {
         onChange={update}
         addLabel="Thêm câu hỏi"
         newItem={() => ({ q: "", a: "" })}
+        getSummary={(item) => item.q || "(chưa có câu hỏi)"}
         renderItem={(item, updateItem, index) => {
           const errors = validate(item);
           return (

@@ -23,10 +23,13 @@ export default function SpendingEditor({
       extra={<SaveStatusTag status={status} />}
     >
       <p className="mb-3 text-sm opacity-60">
-        Không trình bày bảng số liệu trên web — chỉ dán link Google Sheet để
-        khách bấm sang xem, cho tiện cập nhật. Bỏ trống link thì phần này{" "}
-        <strong>tự ẩn</strong> ở trang Gây quỹ. Mỗi năm đã qua có báo cáo riêng,
-        sửa trong mục <strong>Danh mục năm đã qua</strong>.
+        Hiện ở mục &ldquo;Báo cáo thu – chi&rdquo; trên{" "}
+        <strong>trang Gây quỹ</strong>. Web không trình bày bảng số liệu — chỉ
+        cần dán liên kết Google Sheet để khách bấm sang xem, như vậy cập nhật số
+        liệu cũng tiện hơn. Bỏ trống liên kết thì mục này vẫn hiện, kèm dòng
+        <strong> “Báo cáo đang được tổng hợp”</strong>.
+        Mỗi năm đã qua có báo cáo riêng, sửa trong mục{" "}
+        <strong>Danh mục năm đã qua</strong>.
       </p>
 
       <SpendingFields value={value} onChange={update} />
@@ -35,7 +38,7 @@ export default function SpendingEditor({
         <Alert
           type="info"
           showIcon
-          message="Chưa có link — phần Báo cáo thu – chi đang ẩn trên trang Gây quỹ."
+          title="Chưa có liên kết — trang Gây quỹ đang hiện dòng “Báo cáo đang được tổng hợp”."
         />
       ) : null}
     </EditorCard>

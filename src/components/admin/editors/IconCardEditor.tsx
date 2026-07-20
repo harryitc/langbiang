@@ -1,7 +1,7 @@
 "use client";
 
 // Editor dùng chung cho các nhóm "thẻ có biểu tượng" (IconCard[]):
-// Hoạt động (main.activities) và Lý do tham gia (main.whyJoin) chỉ khác
+// Hiện dùng cho Hoạt động (main.activities); tách riêng để tái dùng khi cần,
 // cấu hình (đường dẫn, gợi ý emoji, nhãn, placeholder).
 import { Alert, Input, Space, Tag } from "antd";
 import {
@@ -63,8 +63,8 @@ export default function IconCardEditor({
           className="mb-4"
           type="warning"
           showIcon
-          message={`Có ${invalidCount} ${config.noun} chưa điền đủ trường bắt buộc.`}
-          description={`${config.itemLabel} thiếu biểu tượng, tiêu đề hoặc mô tả sẽ không hiển thị đúng trên trang chính.`}
+          title={`Có ${invalidCount} ${config.noun} chưa điền đủ thông tin.`}
+          description={`${config.itemLabel} thiếu biểu tượng, tiêu đề hoặc mô tả sẽ hiển thị lệch lạc trên trang web.`}
         />
       ) : null}
 
@@ -73,6 +73,7 @@ export default function IconCardEditor({
         onChange={update}
         addLabel={config.addLabel}
         newItem={() => ({ icon: config.defaultIcon, title: "", desc: "" })}
+        getSummary={(item) => `${item.icon} ${item.title}`.trim() || "(chưa có tiêu đề)"}
         renderItem={(item, updateItem, index) => {
           const errors = validate(item);
           return (
@@ -82,10 +83,10 @@ export default function IconCardEditor({
               </div>
 
               <Field
-                label="Biểu tượng (emoji)"
-                hint="Dán một emoji, hoặc bấm chọn từ gợi ý bên dưới."
+                label="Biểu tượng"
+                hint="Hình vui nhỏ hiện phía trên tiêu đề. Bấm chọn một gợi ý bên dưới cho nhanh."
               >
-                <Space direction="vertical" size={8} className="w-full">
+                <Space orientation="vertical" size={8} className="w-full">
                   <Input
                     value={item.icon}
                     maxLength={4}

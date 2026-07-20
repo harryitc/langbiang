@@ -316,26 +316,6 @@ export const news: NewsPost[] = [
   },
 ];
 
-/* ------------------------------------------------------------------
-   TẠI SAO NÊN THAM GIA — lý do đồng hành
-   ------------------------------------------------------------------ */
-export const whyJoin = [
-  {
-    icon: "🤝",
-    title: "Kết nối những trái tim",
-    desc: "Gặp gỡ, đồng hành cùng những người trẻ giàu nhiệt huyết và tấm lòng thiện nguyện.",
-  },
-  {
-    icon: "🌱",
-    title: "Trưởng thành & sẻ chia",
-    desc: "Rèn kỹ năng tổ chức, làm việc nhóm và lan toả giá trị tốt đẹp đến cộng đồng.",
-  },
-  {
-    icon: "💚",
-    title: "Minh bạch & tin cậy",
-    desc: "Mọi đóng góp đều được công khai, sử dụng đúng mục đích và báo cáo sau mỗi mùa.",
-  },
-];
 
 /* ------------------------------------------------------------------
    BAN SÁNG LẬP & BAN TỔ CHỨC (placeholder — thay ảnh + tiểu sử thật)

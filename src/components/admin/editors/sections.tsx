@@ -3,8 +3,11 @@
 // Các phần biên tập dùng chung giữa editor trang chính (Thư viện ảnh, Nhà tài
 // trợ) và PastYearsEditor. Mỗi phần là 1 ListEditor "controlled"
 // (nhận value/onChange) + validator đi kèm — tránh lặp code giữa hai nơi.
-import { Input, Space, Switch, Tag } from "antd";
-import { ListEditor, Field, ImageField } from "../editorKit";
+import { Button, Input, Modal, Space, Switch, Tag } from "antd";
+import { useState } from "react";
+import { PictureOutlined } from "@ant-design/icons";
+import MediaBrowser from "../MediaBrowser";
+import { ListEditor, Field, ImageField, LinkInput, isValidUrl } from "../editorKit";
 import { ItemListEditor } from "../itemList";
 import type {
   Photo,
@@ -34,16 +37,12 @@ export function missingSponsorFields(sponsor: Sponsor): string[] {
   return sponsor.name.trim() ? [] : ["tên đơn vị"];
 }
 
-/** Website tuỳ chọn nhưng nếu nhập thì phải là URL http/https tuyệt đối. */
-export function isValidUrl(url: string): boolean {
-  if (!url.trim()) return true; // bỏ trống là hợp lệ (trường tuỳ chọn)
-  try {
-    const parsed = new URL(url.trim());
-    return parsed.protocol === "http:" || parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
+/**
+ * Website tuỳ chọn nhưng nếu nhập thì phải là URL http/https tuyệt đối.
+ * Hàm nay ở editorKit để dùng chung; giữ lại chỗ export này cho các nơi
+ * đang import từ sections.
+ */
+export { isValidUrl };
 
 /* ------------------------------------------------------------------
    Báo cáo thu – chi (link Google Sheet) — dùng cho mùa hiện tại và từng năm
@@ -59,10 +58,10 @@ export function SpendingFields({
   return (
     <>
       <Field
-        label="Link Google Sheet"
-        hint="Nhớ đặt quyền chia sẻ “Bất kỳ ai có đường liên kết đều xem được”."
+        label="Liên kết Google Sheet"
+        hint="Khách bấm nút là mở thẳng bảng thu – chi này. Nhớ đặt quyền chia sẻ “Bất kỳ ai có đường liên kết đều xem được”, nếu không khách sẽ bị chặn."
       >
-        <Input
+        <LinkInput
           value={value.url}
           placeholder="https://docs.google.com/spreadsheets/d/..."
           status={urlOk ? "" : "error"}
@@ -70,26 +69,22 @@ export function SpendingFields({
         />
         {!urlOk ? (
           <div className="mt-1 text-xs text-red-500">
-            Link phải bắt đầu bằng http:// hoặc https://.
+            Liên kết cần bắt đầu bằng https:// — chép lại từ thanh địa chỉ trình
+            duyệt.
           </div>
         ) : null}
       </Field>
 
       <Field
         label="Ghi chú ngắn"
-        hint={
-          <>
-            Hiện phía trên nút bấm. Có thể dùng ký hiệu{" "}
-            <Tag className="mx-1">{"{năm}"}</Tag> để tự thay bằng số năm tương ứng.
-          </>
-        }
+        hint="Câu giải thích hiện ngay phía trên nút bấm."
       >
         <Input.TextArea
           value={value.note ?? ""}
           rows={3}
           maxLength={300}
           showCount
-          placeholder="Toàn bộ khoản thu – chi mùa {năm} được cập nhật công khai trên Google Sheet."
+          placeholder="Toàn bộ khoản thu – chi của mùa này được cập nhật công khai trên Google Sheet."
           onChange={(e) => onChange({ ...value, note: e.target.value })}
         />
       </Field>
@@ -109,18 +104,54 @@ export function PhotoListEditor({
   onChange: (next: Photo[]) => void;
   folder?: string;
 }) {
+  const [pickOpen, setPickOpen] = useState(false);
+
+  /** Thêm hàng loạt ảnh chọn từ kho (bỏ qua ảnh đã có trong danh sách). */
+  const addMany = (urls: string[]) => {
+    const daCo = new Set(value.map((p) => p.src));
+    const them = urls
+      .filter((u) => !daCo.has(u))
+      .map((src) => ({ src, caption: "", desc: "", tall: false }));
+    onChange([...value, ...them]);
+    setPickOpen(false);
+  };
+
   return (
+    <>
+      <Button
+        icon={<PictureOutlined />}
+        className="mb-3 cursor-pointer"
+        onClick={() => setPickOpen(true)}
+      >
+        Thêm nhiều ảnh từ kho
+      </Button>
+
+      <Modal
+        open={pickOpen}
+        onCancel={() => setPickOpen(false)}
+        width={920}
+        footer={null}
+        destroyOnHidden
+        title="Chọn ảnh từ kho — có thể chọn nhiều hoặc cả album"
+      >
+        <MediaBrowser mode="pick" multiple onPickMany={addMany} />
+      </Modal>
+
     <ListEditor<Photo>
       value={value}
       onChange={onChange}
       addLabel="Thêm ảnh"
       newItem={() => ({ src: "", caption: "", desc: "", tall: false })}
+      getSummary={(item, i) => item.caption?.trim() || `Ảnh #${i + 1}`}
       renderItem={(item, updateItem, index) => {
         const missing = missingPhotoFields(item);
         return (
-          <Space direction="vertical" size={0} style={{ width: "100%" }}>
+          <Space orientation="vertical" size={0} style={{ width: "100%" }}>
             <div className="grid grid-cols-1 gap-x-4 md:grid-cols-2">
-              <Field label={`Ảnh #${index + 1}`} hint="Tải ảnh từ máy hoặc dán URL sẵn có.">
+              <Field
+                label={`Ảnh #${index + 1}`}
+                hint="Chọn ảnh từ kho ảnh, hoặc dán đường dẫn ảnh có sẵn."
+              >
                 <ImageField
                   value={item.src}
                   folder={folder}
@@ -129,7 +160,7 @@ export function PhotoListEditor({
               </Field>
 
               <div>
-                <Field label="Chú thích" hint="Dòng chữ ngắn hiện trên ảnh.">
+                <Field label="Chú thích" hint="Dòng chữ ngắn hiện đè trên ảnh.">
                   <Input
                     value={item.caption ?? ""}
                     placeholder="Đêm hội trăng rằm"
@@ -137,7 +168,10 @@ export function PhotoListEditor({
                   />
                 </Field>
 
-                <Field label="Mô tả" hint="Mô tả chi tiết hơn (tuỳ chọn).">
+                <Field
+                  label="Mô tả"
+                  hint="Tuỳ chọn. Hiện khi khách bấm vào ảnh để xem lớn."
+                >
                   <Input.TextArea
                     value={item.desc ?? ""}
                     rows={3}
@@ -146,7 +180,10 @@ export function PhotoListEditor({
                   />
                 </Field>
 
-                <Field label="Ảnh cao" hint="Ảnh chiếm 2 hàng trong lưới masonry.">
+                <Field
+                  label="Ảnh cao"
+                  hint="Cho ảnh chiếm 2 hàng trong lưới ảnh — hợp với ảnh chụp dọc."
+                >
                   <Switch
                     checked={!!item.tall}
                     onChange={(tall) => updateItem({ ...item, tall })}
@@ -166,7 +203,8 @@ export function PhotoListEditor({
           </Space>
         );
       }}
-    />
+      />
+    </>
   );
 }
 
@@ -199,7 +237,7 @@ export function SponsorTierListEditor({
       renderForm={(tier, updateTier) => {
         const missing = missingTierFields(tier);
         return (
-          <Space direction="vertical" size={4} style={{ width: "100%" }}>
+          <Space orientation="vertical" size={4} style={{ width: "100%" }}>
             <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_auto] sm:items-end">
               <Field label="Tên hạng tài trợ">
                 <Input
@@ -221,12 +259,13 @@ export function SponsorTierListEditor({
                 onChange={(sponsors) => updateTier({ ...tier, sponsors })}
                 addLabel="Thêm đơn vị"
                 newItem={() => ({ name: "", logo: "", url: "", intro: "" })}
+                getSummary={(s) => s.name || "(chưa có tên đơn vị)"}
                 renderItem={(sponsor, updateSponsor) => {
                   const missingSponsor = missingSponsorFields(sponsor);
                   const url = sponsor.url ?? "";
                   const urlOk = isValidUrl(url);
                   return (
-                    <Space direction="vertical" size={0} style={{ width: "100%" }}>
+                    <Space orientation="vertical" size={0} style={{ width: "100%" }}>
                       <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
                         <Field label="Tên đơn vị">
                           <Input
@@ -240,9 +279,9 @@ export function SponsorTierListEditor({
                         </Field>
                         <Field
                           label="Website"
-                          hint="Tuỳ chọn. Dán đầy đủ, ví dụ https://abc.vn"
+                          hint="Tuỳ chọn. Dán đầy đủ, vd https://abc.vn — khách bấm logo sẽ mở trang này."
                         >
-                          <Input
+                          <LinkInput
                             value={url}
                             placeholder="https://abc.vn"
                             status={urlOk ? "" : "error"}
@@ -264,7 +303,10 @@ export function SponsorTierListEditor({
                         />
                       </Field>
 
-                      <Field label="Giới thiệu ngắn" hint="Tuỳ chọn. Hiển thị khi người xem bấm vào logo.">
+                      <Field
+                        label="Giới thiệu ngắn"
+                        hint="Tuỳ chọn. Hiện ra khi khách bấm vào logo đơn vị."
+                      >
                         <Input.TextArea
                           value={sponsor.intro ?? ""}
                           rows={2}
@@ -279,12 +321,13 @@ export function SponsorTierListEditor({
 
                       {missingSponsor.length > 0 ? (
                         <div className="text-xs text-red-500">
-                          Cần điền {missingSponsor.join(", ")}.
+                          Còn thiếu: {missingSponsor.join(", ")}.
                         </div>
                       ) : null}
                       {!urlOk ? (
                         <div className="text-xs text-red-500">
-                          Website phải bắt đầu bằng http:// hoặc https://.
+                          Website cần bắt đầu bằng https:// — chép lại từ thanh
+                          địa chỉ trình duyệt.
                         </div>
                       ) : null}
                     </Space>
@@ -295,7 +338,7 @@ export function SponsorTierListEditor({
 
             {missing.length > 0 ? (
               <div className="text-xs text-red-500">
-                Cần điền {missing.join(", ")}.
+                Còn thiếu: {missing.join(", ")}.
               </div>
             ) : null}
           </Space>

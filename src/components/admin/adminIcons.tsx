@@ -9,6 +9,7 @@ import {
   CalendarOutlined,
   FileTextOutlined,
   FolderOpenOutlined,
+  FormOutlined,
   HeartOutlined,
   HistoryOutlined,
   PictureOutlined,
@@ -25,7 +26,8 @@ import {
 export const ADMIN_ICONS: Record<string, ReactNode> = {
   "thuong-hieu": <TagsOutlined />,
   slideshow: <PlaySquareOutlined />,
-  "anh-trang-chu": <PictureOutlined />,
+  "trang-chu": <PictureOutlined />,
+  "dang-ky": <FormOutlined />,
   "hoat-dong": <AppstoreOutlined />,
   "lich-trinh": <ScheduleOutlined />,
   "ly-do": <HeartOutlined />,

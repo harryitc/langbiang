@@ -13,9 +13,9 @@ export default function DashboardHome({ currentYear }: { currentYear: number }) 
   return (
     <>
       <Typography.Paragraph type="secondary">
-        Đang biên tập nội dung mùa <strong>{currentYear}</strong>. Mọi thay đổi
-        được lưu nháp tự động; bấm <strong>Xuất bản</strong> ở thanh trên để
-        hiển thị công khai.
+        Đang biên tập nội dung mùa <strong>{currentYear}</strong>. Chọn một mục
+        bên dưới để sửa. Nội dung được lưu lại tự động, nhưng khách chỉ thấy sau
+        khi bấm <strong>Xuất bản</strong> ở thanh trên cùng.
       </Typography.Paragraph>
 
       {ADMIN_NAV.map((group) => (

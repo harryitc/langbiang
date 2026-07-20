@@ -3,7 +3,7 @@
 // Editor "Sự kiện & số năm" (FRD 2.2 + FR3).
 // Gom 2 nhánh nội dung độc lập: main.event và currentYear.
 import { useMemo, useState } from "react";
-import { Alert, DatePicker, Input, InputNumber, Space, Tag } from "antd";
+import { Alert, DatePicker, Input, InputNumber, Space } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import {
   useSectionAutosave,
@@ -11,7 +11,7 @@ import {
   EditorCard,
   Field,
 } from "../editorKit";
-import { fillYear, isValidYear } from "@/lib/content/year";
+import { eventDateLabel, isValidYear } from "@/lib/content/year";
 import type { EventInfo } from "@/lib/content/schema";
 
 /** Editor sự kiện gom 2 nhánh nội dung: main.event và currentYear (FR3). */
@@ -22,8 +22,8 @@ export type EventEditorInitial = {
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
-// isValidYear + fillYear dùng chung từ @/lib/content/year (tránh lệch hành vi
-// giữa xem trước trong admin và nội dung render thật trên trang công khai).
+// Dùng chung eventDateLabel/isValidYear từ @/lib/content/year để xem trước
+// trong admin khớp đúng nội dung render trên trang công khai.
 
 /** Chuỗi ISO 'YYYY-MM-DD' → Dayjs (null nếu trống/không hợp lệ). */
 function toDayjs(iso?: string): Dayjs | null {
@@ -62,19 +62,26 @@ export default function EventEditor({
   const endDate = toDayjs(event.dateEndISO);
 
   // Kiểm tra trường bắt buộc (FR2-R3).
-  const errDateLabel = event.dateLabel.trim() ? "" : "Cần điền Nhãn ngày.";
-  const errDateISO = event.dateISO.trim() ? "" : "Cần chọn Ngày bắt đầu.";
-  const errLocation = event.location.trim() ? "" : "Cần điền Địa điểm.";
+  const errDateLabel = event.dateLabel.trim()
+    ? ""
+    : "Chưa điền Nhãn ngày — nhập ngày và tháng, vd: Ngày 26 – 27 tháng 9.";
+  const errDateISO = event.dateISO.trim()
+    ? ""
+    : "Chưa chọn Ngày bắt đầu — bấm vào ô để chọn trên lịch.";
+  const errLocation = event.location.trim()
+    ? ""
+    : "Chưa điền Địa điểm tổ chức.";
   const errDateEnd =
     startDate && endDate && endDate.isBefore(startDate, "day")
-      ? "Ngày kết thúc phải sau hoặc bằng ngày bắt đầu."
+      ? "Ngày kết thúc đang sớm hơn ngày bắt đầu — chọn lại giúp nhé."
       : "";
-  const errYear = isValidYear(yearDraft) ? "" : "Số năm không hợp lệ (cần 4 chữ số).";
+  const errYear = isValidYear(yearDraft)
+    ? ""
+    : "Số năm chưa đúng — nhập đủ 4 chữ số, vd 2026.";
 
-  // Xem trước nhãn ngày sau khi thay ký hiệu {năm} bằng số năm hiện tại.
-  // Dùng chung fillYear để khớp đúng với nội dung render trên trang công khai.
+  // Xem trước đúng chuỗi khách sẽ thấy (đã tự nối số năm hiện tại).
   const dateLabelPreview = useMemo(
-    () => fillYear(event.dateLabel, year),
+    () => eventDateLabel(event.dateLabel, year),
     [event.dateLabel, year]
   );
 
@@ -88,9 +95,9 @@ export default function EventEditor({
           label="Số năm hiện tại"
           hint={
             <>
-              Số năm dùng chung cho toàn giao diện (tiêu đề trang, nút đăng ký,
-              chân trang…). Đổi ở đây rồi <strong>Xuất bản</strong> là mọi nơi
-              cập nhật theo.
+              Số năm của mùa đang tổ chức. Nó hiện ở tiêu đề trang chủ, nút đăng
+              ký, chân trang và các lời mời tham gia. Đổi ở đây rồi bấm{" "}
+              <strong>Xuất bản</strong> là mọi nơi tự cập nhật theo.
             </>
           }
         >
@@ -117,7 +124,7 @@ export default function EventEditor({
           />
         </Field>
         {errYear ? (
-          <Alert type="warning" showIcon message={errYear} className="mt-1" />
+          <Alert type="warning" showIcon title={errYear} className="mt-1" />
         ) : null}
       </EditorCard>
 
@@ -129,21 +136,22 @@ export default function EventEditor({
           label="Nhãn ngày (hiển thị)"
           hint={
             <>
-              Chuỗi ngày hiển thị cho khách. Dùng ký hiệu{" "}
-              <Tag className="mx-1">{"{năm}"}</Tag> để tự thay bằng số năm hiện
-              tại — vd: <em>Ngày 26 – 27 tháng 9 năm {"{năm}"}</em>.
+              Dòng ngày hiện dưới tiêu đề lớn ở <strong>trang chủ</strong>. Chỉ
+              nhập <strong>ngày và tháng</strong> — vd:{" "}
+              <em>Ngày 26 – 27 tháng 9</em>. Số năm được thêm tự động theo
+              &ldquo;Số năm hiện tại&rdquo; ở trên, không cần gõ.
             </>
           }
         >
           <Input
-            placeholder="Ngày 26 – 27 tháng 9 năm {năm}"
+            placeholder="Ngày 26 – 27 tháng 9"
             status={errDateLabel ? "error" : undefined}
             value={event.dateLabel}
             onChange={(e) => setField("dateLabel", e.target.value)}
           />
           {event.dateLabel.trim() ? (
             <div className="mt-2 text-xs opacity-70">
-              Xem trước: <strong>{dateLabelPreview}</strong>
+              Khách sẽ thấy: <strong>{dateLabelPreview}</strong>
             </div>
           ) : null}
         </Field>
@@ -151,7 +159,7 @@ export default function EventEditor({
         <Space size={16} wrap align="start">
           <Field
             label="Ngày bắt đầu"
-            hint="Dùng cho đồng hồ đếm ngược và dữ liệu sự kiện (JSON-LD)."
+            hint="Dùng cho đồng hồ đếm ngược ở trang chủ và thông tin sự kiện gửi cho Google."
           >
             <DatePicker
               format={DATE_FORMAT}
@@ -162,7 +170,10 @@ export default function EventEditor({
             />
           </Field>
 
-          <Field label="Ngày kết thúc" hint="Có thể bỏ trống nếu sự kiện 1 ngày.">
+          <Field
+            label="Ngày kết thúc"
+            hint="Bỏ trống nếu chương trình chỉ diễn ra trong một ngày."
+          >
             <DatePicker
               format={DATE_FORMAT}
               placeholder="Chọn ngày kết thúc"
@@ -173,7 +184,16 @@ export default function EventEditor({
           </Field>
         </Space>
 
-        <Field label="Địa điểm" hint="vd: Núi Langbiang, Lạc Dương, Lâm Đồng">
+        <Field
+          label="Địa điểm chính"
+          hint={
+            <>
+              Nơi tổ chức, vd: <em>Phường Langbiang, Đà Lạt, Lâm Đồng</em>. Dùng
+              cho thông tin sự kiện gửi cho Google, và là mặc định cho ba nơi
+              bên dưới.
+            </>
+          }
+        >
           <Input
             placeholder="Nhập địa điểm tổ chức"
             status={errLocation ? "error" : undefined}
@@ -182,11 +202,53 @@ export default function EventEditor({
           />
         </Field>
 
+        <div className="mb-3 rounded-lg border border-black/10 bg-black/[0.02] p-3">
+          <div className="mb-1 font-semibold">Ghi riêng cho từng nơi</div>
+          <p className="mb-3 text-sm opacity-60">
+            Ba ô dưới đây đều <strong>không bắt buộc</strong>. Bỏ trống thì nơi
+            đó dùng luôn địa điểm chính ở trên. Chỉ điền khi muốn chỗ đó ghi
+            khác đi — ví dụ chân trang cần ngắn gọn hơn.
+          </p>
+
+          <Field
+            label="Ở chân trang"
+            hint="Dòng địa chỉ nhỏ cuối mỗi trang. Thường viết ngắn."
+          >
+            <Input
+              placeholder={event.location || "Bỏ trống để dùng địa điểm chính"}
+              value={event.locationFooter ?? ""}
+              onChange={(e) => setField("locationFooter", e.target.value)}
+            />
+          </Field>
+
+          <Field
+            label="Ở mục Lịch trình"
+            hint="Câu “… tại <địa điểm>.” ngay dưới tiêu đề khối Lịch trình."
+          >
+            <Input
+              placeholder={event.location || "Bỏ trống để dùng địa điểm chính"}
+              value={event.locationTimeline ?? ""}
+              onChange={(e) => setField("locationTimeline", e.target.value)}
+            />
+          </Field>
+
+          <Field
+            label="Ở trang Chương trình"
+            hint="Phụ đề đầu trang Chương trình và mô tả trang đó khi chia sẻ."
+          >
+            <Input
+              placeholder={event.location || "Bỏ trống để dùng địa điểm chính"}
+              value={event.locationProgram ?? ""}
+              onChange={(e) => setField("locationProgram", e.target.value)}
+            />
+          </Field>
+        </div>
+
         {errDateLabel || errDateISO || errLocation || errDateEnd ? (
           <Alert
             type="warning"
             showIcon
-            message="Còn trường cần kiểm tra"
+            title="Còn vài ô cần điền lại"
             description={
               <ul className="m-0 list-disc pl-4">
                 {[errDateLabel, errDateISO, errLocation, errDateEnd]

@@ -18,7 +18,7 @@ export type Photo = {
   tall?: boolean;
 };
 
-/** Một hoạt động (activities) / lý do tham gia (whyJoin). */
+/** Một thẻ có biểu tượng (activities). */
 export type IconCard = {
   icon: string;
   title: string;
@@ -99,6 +99,11 @@ export type SiteMeta = {
   ogImage?: string;
   /** Logo hiển thị ở thanh menu (dùng chung toàn site). */
   logo?: string;
+  /**
+   * Dòng chữ nhỏ phía TRÊN tiêu đề lớn ở trang chủ.
+   * Bỏ trống -> dùng khẩu hiệu (tagline) để không phải nhập lặp.
+   */
+  heroTagline?: string;
 };
 
 /** Thông tin sự kiện (năm nằm trong dateLabel qua ký hiệu {năm}). */
@@ -106,7 +111,79 @@ export type EventInfo = {
   dateLabel: string;
   dateISO: string;
   dateEndISO?: string;
+  /** Địa điểm chính — dùng cho dữ liệu gửi Google và làm mặc định cho các nơi khác. */
   location: string;
+  /** Ghi đè riêng cho chân trang (bỏ trống -> dùng địa điểm chính). */
+  locationFooter?: string;
+  /** Ghi đè riêng cho mục Lịch trình. */
+  locationTimeline?: string;
+  /** Ghi đè riêng cho trang Chương trình. */
+  locationProgram?: string;
+};
+
+/** Mục "Giới thiệu" ở trang chủ (chữ; ảnh nằm ở main.aboutImage). */
+export type AboutSection = {
+  /** Nhãn nhỏ phía trên tiêu đề. */
+  eyebrow: string;
+  /** Nửa đầu tiêu đề (chữ thường). */
+  title: string;
+  /** Nửa sau tiêu đề — được tô màu gradient xanh. */
+  titleHighlight: string;
+  /** Các đoạn văn giới thiệu, hiển thị theo đúng thứ tự. */
+  paragraphs: string[];
+  /** Dòng nhỏ trong ô kính trên ảnh (dòng "Mùa N · năm" phía trên tự tính). */
+  badgeNote: string;
+  /** Chữ trên nút chính (luôn trỏ xuống khối Đăng ký). */
+  ctaPrimaryLabel: string;
+};
+
+/** Một thẻ nhỏ giới thiệu vai trò ở khối Đăng ký. */
+export type RegisterHighlight = {
+  icon: string;
+  title: string;
+  desc: string;
+};
+
+/** Kiểu ô nhập của một trường trong form đăng ký. */
+export type RegisterFieldType =
+  | "text"
+  | "email"
+  | "tel"
+  | "date"
+  | "textarea"
+  | "select";
+
+/** Một trường của form đăng ký. */
+export type RegisterField = {
+  /** Mã trường (name của ô nhập) — không hiển thị cho khách. */
+  name: string;
+  label: string;
+  type: RegisterFieldType;
+  placeholder?: string;
+  required?: boolean;
+  /** Danh sách lựa chọn — chỉ dùng khi type = "select". */
+  options?: string[];
+};
+
+/** Khối "Đăng ký" ở trang chủ. */
+export type RegisterSection = {
+  eyebrow: string;
+  title: string;
+  /** Dòng thứ hai của tiêu đề — in bằng phông chữ viết tay, cỡ lớn hơn. */
+  titleHighlight: string;
+  description: string;
+  highlights: RegisterHighlight[];
+  /** Tiêu đề phía trên form. */
+  formTitle: string;
+  fields: RegisterField[];
+  submitLabel: string;
+  /** Màn cảm ơn sau khi gửi. */
+  successTitle: string;
+  successNote: string;
+  successAgainLabel: string;
+  /** Dòng cuối form: chữ dẫn + nhãn liên kết (đích lấy từ site.facebook). */
+  contactNote: string;
+  contactLinkLabel: string;
 };
 
 /** Bài tin tức (nội dung dài lưu ở dạng HTML an toàn — CKEditor). */
@@ -134,7 +211,10 @@ export type MainContent = {
   heroPhotos: string[];
   /** Ảnh lớn của mục "Giới thiệu" ở trang chủ. */
   aboutImage: string;
-  whyJoin: IconCard[];
+  /** Chữ của mục "Giới thiệu" ở trang chủ. */
+  about: AboutSection;
+  /** Khối "Đăng ký" ở trang chủ (chữ + cấu hình form). */
+  register: RegisterSection;
   faqs: Faq[];
   fundraising: Fundraising;
   sponsorTiers: SponsorTier[];
@@ -189,7 +269,14 @@ export const SLIDESHOW_LIMIT = 6;
 // (cả ở main lẫn pastYears). Phần con người chỉ còn Ban tổ chức (main.board).
 // v4: mỗi năm đã qua có báo cáo thu – chi riêng (PastYear.spendingReport).
 // v5: logo, ảnh Hero và ảnh mục Giới thiệu quản lý được từ admin.
-export const CONTENT_VERSION = 5;
+// v6: bỏ whyJoin (không trang nào render).
+// v7: địa điểm tách riêng cho từng nơi hiển thị (chân trang / lịch trình /
+// trang Chương trình), bỏ trống thì dùng địa điểm chính.
+// v8: tách chữ ở trang chủ khỏi phần SEO (site.heroTagline).
+// v9: chữ mục Giới thiệu (main.about) và khối Đăng ký (main.register) quản lý
+// được từ admin — form đăng ký nay render động theo main.register.fields;
+// bỏ nút phụ "Vì sao nên tham gia?" ở mục Giới thiệu (trỏ tới khối đã xoá).
+export const CONTENT_VERSION = 9;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

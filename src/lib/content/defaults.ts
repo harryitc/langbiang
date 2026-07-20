@@ -9,7 +9,6 @@ import {
   faqs,
   fundraising,
   sponsorTiers,
-  whyJoin,
   board,
   news as siteNews,
 } from "@/lib/site";
@@ -57,10 +56,13 @@ export const defaultContent: SiteContent = {
       keywords: [...site.keywords],
       ogImage: "/og.jpg",
       logo: "/logo-mark.png",
+      // Chữ ở trang chủ độc lập với khẩu hiệu dùng cho SEO.
+      heroTagline: site.tagline,
     },
-    // Nhãn ngày dùng ký hiệu {năm} để đồng bộ theo currentYear (FR3/A2).
+    // Chỉ nhập phần ngày/tháng — năm do hệ thống tự nối theo currentYear
+    // (không để người dùng phải giữ ký hiệu {năm} dễ xoá nhầm).
     event: {
-      dateLabel: "Ngày 26 – 27 tháng 9 năm {năm}",
+      dateLabel: "Ngày 26 – 27 tháng 9",
       dateISO: site.dateISO,
       dateEndISO: "2026-09-27",
       location: site.location,
@@ -75,7 +77,93 @@ export const defaultContent: SiteContent = {
     // 4 ảnh nổi ở Hero (bố cục bay lượn giữ trong code, chỉ ảnh là đổi được).
     heroPhotos: ["/gallery/g8.jpg", "/gallery/g4.jpg", "/gallery/g2.jpg", "/gallery/g6.jpg"],
     aboutImage: "/gallery/about.jpg",
-    whyJoin: whyJoin.map((w) => ({ ...w })),
+    // Chữ mục "Giới thiệu" — giữ đúng nội dung đã hardcode trong About.tsx.
+    about: {
+      eyebrow: "Về dự án",
+      title: "Mang ánh trăng ấm áp",
+      titleHighlight: "đến với núi rừng",
+      paragraphs: [
+        "Trăng sáng Langbiang là dự án tình nguyện phi lợi nhuận, mang một mùa Trung thu trọn vẹn đến các em nhỏ vùng cao tại phường Langbiang – Đà Lạt, tỉnh Lâm Đồng.",
+        "Năm trước, chúng mình đã cùng nhau thắp sáng những nụ cười trong đêm hội Trăng rằm. Năm nay, hành trình yêu thương ấy tiếp tục — với những phần quà, sân chơi và cả những ước mơ được chắp cánh.",
+      ],
+      badgeNote: "Trở lại Langbiang với thật nhiều yêu thương.",
+      ctaPrimaryLabel: "Đăng ký đồng hành 🌙",
+    },
+    // Khối "Đăng ký" — giữ đúng nội dung đã hardcode trong Register.tsx.
+    register: {
+      eyebrow: "Tham gia cùng chúng mình",
+      title: "Cùng thắp sáng",
+      titleHighlight: "một mùa trăng yêu thương",
+      description:
+        "Dù bạn trực tiếp lên đường hay đồng hành từ xa, mỗi tấm lòng đều góp phần làm nên điều kỳ diệu cho các em nhỏ Langbiang.",
+      highlights: [
+        {
+          icon: "🙋",
+          title: "Tình nguyện viên",
+          desc: "Trực tiếp tham gia hành trình 26–27/9",
+        },
+        {
+          icon: "🎁",
+          title: "Nhà hảo tâm",
+          desc: "Đóng góp quà, nhu yếu phẩm & kinh phí",
+        },
+      ],
+      formTitle: "Đăng ký đồng hành",
+      fields: [
+        {
+          name: "name",
+          label: "Họ và tên",
+          type: "text",
+          placeholder: "Nguyễn Văn A",
+          required: true,
+        },
+        {
+          name: "email",
+          label: "Email",
+          type: "email",
+          placeholder: "ban@email.com",
+          required: true,
+        },
+        {
+          name: "phone",
+          label: "Số điện thoại",
+          type: "tel",
+          placeholder: "09xx xxx xxx",
+          required: true,
+        },
+        { name: "dob", label: "Ngày sinh", type: "date", required: true },
+        {
+          name: "organization",
+          label: "Đơn vị học tập / công tác",
+          type: "text",
+          placeholder: "Trường / công ty (không bắt buộc)",
+        },
+        {
+          name: "role",
+          label: "Bạn muốn tham gia với vai trò",
+          type: "select",
+          options: [
+            "Tình nguyện viên",
+            "Nhà hảo tâm / Nhà tài trợ",
+            "Cộng tác truyền thông",
+            "Khác",
+          ],
+        },
+        {
+          name: "message",
+          label: "Lời nhắn (không bắt buộc)",
+          type: "textarea",
+          placeholder: "Chia sẻ mong muốn của bạn...",
+        },
+      ],
+      submitLabel: "Gửi đăng ký 🌙",
+      successTitle: "Cảm ơn bạn rất nhiều!",
+      successNote:
+        "Ban tổ chức sẽ liên hệ với bạn trong thời gian sớm nhất qua email hoặc điện thoại.",
+      successAgainLabel: "Gửi đăng ký khác",
+      contactNote: "Hoặc liên hệ trực tiếp qua",
+      contactLinkLabel: "Fanpage Facebook",
+    },
     faqs: faqs.map((f) => ({ ...f })),
     fundraising: {
       title: fundraising.title,

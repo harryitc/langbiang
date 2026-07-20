@@ -4,16 +4,16 @@ import SubPageShell from "@/components/SubPageShell";
 import Activities from "@/components/sections/Activities";
 import Timeline from "@/components/sections/Timeline";
 import { getContent } from "@/lib/content/store";
-import { fillYear } from "@/lib/content/year";
+import { fillYear, eventDateLabel, locationFor } from "@/lib/content/year";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { main, currentYear } = await getContent();
   return {
     title: `Chương trình ${currentYear}`,
-    description: `Chương trình Trăng Sáng Langbiang ${currentYear}: các hoạt động chính và lịch trình chi tiết hai ngày một đêm — ${fillYear(
+    description: `Chương trình Trăng Sáng Langbiang ${currentYear}: các hoạt động chính và lịch trình chi tiết hai ngày một đêm — ${eventDateLabel(
       main.event.dateLabel,
       currentYear
-    )} tại ${main.event.location}.`,
+    )} tại ${locationFor(main.event, "program")}.`,
     alternates: { canonical: "/chuong-trinh" },
   };
 }
@@ -31,10 +31,10 @@ export default async function ChuongTrinhPage() {
     <SubPageShell
       eyebrow={`Chương trình ${currentYear}`}
       title="Hai ngày một đêm yêu thương"
-      subtitle={`Toàn bộ hoạt động và lịch trình mùa Trăng Sáng Langbiang ${currentYear} — ${fillYear(
+      subtitle={`Toàn bộ hoạt động và lịch trình mùa Trăng Sáng Langbiang ${currentYear} — ${eventDateLabel(
         event.dateLabel,
         currentYear
-      )} tại ${event.location}.`}
+      )} tại ${locationFor(event, "program")}.`}
       nav={nav}
     >
       <Activities />

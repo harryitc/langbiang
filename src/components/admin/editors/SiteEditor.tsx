@@ -8,6 +8,7 @@ import {
   EditorCard,
   Field,
   ImageField,
+  LinkInput,
 } from "../editorKit";
 import type { SiteMeta } from "@/lib/content/schema";
 
@@ -31,16 +32,19 @@ type Loi = Partial<Record<keyof SiteMeta, string>>;
 
 function kiemTra(value: SiteMeta): Loi {
   const loi: Loi = {};
-  if (!value.name.trim()) loi.name = "Cần điền Tên dự án.";
-  if (!value.shortName.trim()) loi.shortName = "Cần điền Tên rút gọn.";
-  if (!value.tagline.trim()) loi.tagline = "Cần điền Khẩu hiệu.";
-  if (!value.description.trim()) loi.description = "Cần điền Mô tả.";
-  if (!value.email.trim()) loi.email = "Cần điền Email liên hệ.";
-  else if (!laEmailHopLe(value.email)) loi.email = "Email chưa đúng định dạng.";
+  if (!value.name.trim()) loi.name = "Chưa điền Tên dự án.";
+  if (!value.shortName.trim()) loi.shortName = "Chưa điền Tên rút gọn.";
+  if (!value.tagline.trim()) loi.tagline = "Chưa điền Khẩu hiệu.";
+  if (!value.description.trim()) loi.description = "Chưa điền Mô tả.";
+  if (!value.email.trim()) loi.email = "Chưa điền Email liên hệ.";
+  else if (!laEmailHopLe(value.email))
+    loi.email = "Email chưa đúng — cần có dạng tenmail@gmail.com.";
   if (value.facebook.trim() && !laUrlHopLe(value.facebook))
-    loi.facebook = "Liên kết phải bắt đầu bằng http:// hoặc https://";
+    loi.facebook =
+      "Liên kết cần bắt đầu bằng https:// — chép lại từ thanh địa chỉ trình duyệt.";
   if (value.shopee.trim() && !laUrlHopLe(value.shopee))
-    loi.shopee = "Liên kết phải bắt đầu bằng http:// hoặc https://";
+    loi.shopee =
+      "Liên kết cần bắt đầu bằng https:// — chép lại từ thanh địa chỉ trình duyệt.";
   return loi;
 }
 
@@ -70,8 +74,8 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
           className="mb-4"
           type="warning"
           showIcon
-          message="Còn trường bắt buộc chưa hợp lệ"
-          description="Nội dung vẫn được lưu nháp, nhưng hãy điền đủ trước khi xuất bản."
+          title="Còn vài ô cần điền lại"
+          description="Nội dung vẫn được lưu, nhưng nên điền đủ trước khi bấm Xuất bản."
         />
       ) : null}
 
@@ -82,7 +86,13 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
         <div className="grid gap-x-4 md:grid-cols-2">
           <Field
             label="Tên dự án *"
-            hint={loi.name ? <Text type="danger">{loi.name}</Text> : "Tên đầy đủ, dùng cho tiêu đề trang."}
+            hint={
+              loi.name ? (
+                <Text type="danger">{loi.name}</Text>
+              ) : (
+                "Tên đầy đủ của dự án. Hiện ở tên tab trình duyệt và chân trang."
+              )
+            }
           >
             <Input
               value={value.name}
@@ -98,7 +108,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               loi.shortName ? (
                 <Text type="danger">{loi.shortName}</Text>
               ) : (
-                "Dùng ở header, footer và tên ứng dụng."
+                "Hiện ở thanh menu trên cùng và chân trang của mọi trang."
               )
             }
           >
@@ -111,12 +121,12 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
           </Field>
 
           <Field
-            label="Khẩu hiệu (tagline) *"
+            label="Khẩu hiệu *"
             hint={
               loi.tagline ? (
                 <Text type="danger">{loi.tagline}</Text>
               ) : (
-                "Có thể dùng ký hiệu {năm} để tự thay theo số năm hiện tại."
+                "Câu ngắn đi kèm tên dự án trên kết quả tìm kiếm Google và khi chia sẻ liên kết. Chữ hiện trên trang chủ nhập riêng ở mục Chữ ở đầu trang."
               )
             }
           >
@@ -127,25 +137,30 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               onChange={(e) => set("tagline", e.target.value)}
             />
           </Field>
-
-          <Field
-            label="Phụ đề"
-            hint="Dòng mô tả ngắn dưới khẩu hiệu. Có thể dùng {năm}."
-          >
-            <Input
-              value={value.subtitle}
-              placeholder="Tại phường Langbiang – Đà Lạt, tỉnh Lâm Đồng"
-              onChange={(e) => set("subtitle", e.target.value)}
-            />
-          </Field>
         </div>
+
+        <Field
+          label="Logo"
+          hint="Ảnh logo ở thanh menu trên cùng của mọi trang. Nên dùng ảnh nền trong suốt (PNG). Bỏ trống sẽ dùng logo mặc định."
+        >
+          <ImageField
+            value={value.logo ?? ""}
+            onChange={(logo) => set("logo", logo)}
+          />
+        </Field>
 
         <div className="grid gap-x-4 md:grid-cols-3">
           <Field
             label="Email liên hệ *"
-            hint={loi.email ? <Text type="danger">{loi.email}</Text> : undefined}
+            hint={
+              loi.email ? (
+                <Text type="danger">{loi.email}</Text>
+              ) : (
+                "Hiện ở chân trang để khách liên hệ với Ban Tổ chức."
+              )
+            }
           >
-            <Input
+            <LinkInput
               value={value.email}
               status={loi.email ? "error" : undefined}
               placeholder="trangsanglangbiang@gmail.com"
@@ -159,11 +174,11 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               loi.facebook ? (
                 <Text type="danger">{loi.facebook}</Text>
               ) : (
-                "Liên kết trang Facebook của dự án."
+                "Fanpage của dự án. Hiện ở chân trang và nút đăng ký tham gia ở trang chủ."
               )
             }
           >
-            <Input
+            <LinkInput
               value={value.facebook}
               status={loi.facebook ? "error" : undefined}
               placeholder="https://www.facebook.com/…"
@@ -177,11 +192,11 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               loi.shopee ? (
                 <Text type="danger">{loi.shopee}</Text>
               ) : (
-                "Liên kết gian hàng gây quỹ (để trống nếu chưa có)."
+                "Gian hàng gây quỹ. Hiện ở trang chủ và trang Gây quỹ. Bỏ trống thì phần này tự ẩn."
               )
             }
           >
-            <Input
+            <LinkInput
               value={value.shopee}
               status={loi.shopee ? "error" : undefined}
               placeholder="https://shopee.vn/…"
@@ -192,7 +207,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
       </EditorCard>
 
       <EditorCard
-        title="SEO & chia sẻ mạng xã hội"
+        title="Hiển thị trên Google & khi chia sẻ liên kết"
         extra={<SaveStatusTag status={status} />}
       >
         <Field
@@ -205,7 +220,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
                 Mô tả dài hơn {DESC_MAX_GOI_Y} ký tự — Google có thể cắt bớt.
               </Text>
             ) : (
-              "Mô tả ngắn cho tìm kiếm & khi chia sẻ liên kết. Có thể dùng {năm}."
+              "Đoạn giới thiệu khách thấy khi tìm dự án trên Google, hoặc khi ai đó chia sẻ liên kết lên Facebook."
             )
           }
         >
@@ -222,8 +237,8 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
         </Field>
 
         <Field
-          label="Từ khoá SEO"
-          hint="Gõ từ khoá rồi nhấn Enter để thêm; bấm dấu × trên thẻ để xoá."
+          label="Từ khoá tìm kiếm"
+          hint="Những cụm từ khách có thể gõ để tìm ra dự án. Gõ một cụm rồi nhấn Enter để thêm; bấm dấu × trên thẻ để xoá."
         >
           <Select
             mode="tags"
@@ -246,8 +261,8 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
         </Field>
 
         <Field
-          label="Ảnh chia sẻ (OG)"
-          hint="Ảnh hiển thị khi chia sẻ liên kết. Khuyến nghị 1200×630px. Để trống sẽ dùng ảnh mặc định."
+          label="Ảnh khi chia sẻ liên kết"
+          hint="Ảnh hiện kèm khi ai đó dán liên kết website lên Facebook, Zalo. Ảnh ngang cỡ 1200×630 là đẹp nhất. Bỏ trống thì dùng ảnh mặc định."
         >
           <ImageField
             value={value.ogImage ?? ""}

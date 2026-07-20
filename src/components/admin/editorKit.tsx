@@ -10,18 +10,25 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import {
+  App,
   Button,
   Card,
   Input,
   Modal,
+  Popconfirm,
   Space,
   Spin,
   Tag,
+  Tooltip,
 } from "antd";
+import type { InputProps } from "antd";
 import {
+  ExportOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
 import { saveDraftAction } from "@/lib/content/actions";
+import { uploadImage } from "@/lib/content/upload-client";
+import { addMediaAction } from "@/lib/content/media-actions";
 import MediaBrowser from "./MediaBrowser";
 import { SortableList } from "./itemList";
 
@@ -86,8 +93,9 @@ export function SaveStatusTag({ status }: { status: SaveStatus }) {
         <Spin size="small" /> Đang lưu…
       </Tag>
     );
-  if (status === "saved") return <Tag color="success">Đã lưu</Tag>;
-  if (status === "error") return <Tag color="error">Lưu thất bại</Tag>;
+  if (status === "saved") return <Tag color="success">Đã lưu nháp</Tag>;
+  if (status === "error")
+    return <Tag color="error">Chưa lưu được — kiểm tra mạng rồi sửa lại</Tag>;
   return <Tag>Chưa có thay đổi</Tag>;
 }
 
@@ -133,6 +141,101 @@ export function Field({
 }
 
 /* ------------------------------------------------------------------
+   LinkInput — ô nhập liên kết kèm nút mở thử ở tab mới
+   ------------------------------------------------------------------ */
+
+/**
+ * Liên kết tuỳ chọn: bỏ trống vẫn hợp lệ, nhưng đã nhập thì phải là URL
+ * http/https tuyệt đối. (Dùng chung cho các ô nhập link trong khu quản trị.)
+ */
+export function isValidUrl(url: string): boolean {
+  if (!url.trim()) return true; // bỏ trống là hợp lệ (trường tuỳ chọn)
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Đổi nội dung người dùng gõ thành địa chỉ có thể mở được ở tab mới.
+ * Trả về `null` nếu chưa mở thử được (ô trống, gõ thiếu https://, hoặc chỉ là
+ * dấu neo trong trang như "#gioi-thieu").
+ * Riêng ô email: gõ "ten@gmail.com" sẽ mở trình soạn thư (mailto:).
+ */
+export function toOpenableHref(raw: string): string | null {
+  const value = (raw ?? "").trim();
+  if (!value) return null;
+  if (/^mailto:\S+@\S+/i.test(value)) return value;
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return `mailto:${value}`;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "http:" || parsed.protocol === "https:"
+      ? parsed.toString()
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+export type LinkInputProps = Omit<InputProps, "suffix">;
+
+/**
+ * Ô nhập liên kết: giống <Input> bình thường (giữ nguyên value/onChange/
+ * placeholder/status…), chỉ thêm nút mở liên kết ở cuối ô.
+ * Nút chỉ sáng khi liên kết mở được; ngược lại mờ đi kèm lời nhắc ngắn.
+ */
+export function LinkInput(props: LinkInputProps) {
+  const raw = typeof props.value === "string" ? props.value : "";
+  const href = toOpenableHref(raw);
+  const laEmail = href?.toLowerCase().startsWith("mailto:") ?? false;
+
+  const loiNhac = href
+    ? laEmail
+      ? "Mở trình soạn thư gửi tới địa chỉ này"
+      : "Mở liên kết ở tab mới"
+    : raw.trim()
+      ? "Chưa mở thử được — liên kết cần bắt đầu bằng https://"
+      : "Dán liên kết vào ô này rồi bấm để mở thử";
+
+  return (
+    <Input
+      {...props}
+      suffix={
+        <Tooltip title={loiNhac}>
+          {href ? (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={loiNhac}
+              className="cursor-pointer"
+              style={{ display: "inline-flex", color: "inherit", opacity: 0.75 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ExportOutlined />
+            </a>
+          ) : (
+            <span
+              aria-disabled
+              aria-label={loiNhac}
+              style={{
+                display: "inline-flex",
+                opacity: 0.3,
+                cursor: "not-allowed",
+              }}
+            >
+              <ExportOutlined />
+            </span>
+          )}
+        </Tooltip>
+      }
+    />
+  );
+}
+
+/* ------------------------------------------------------------------
    ListEditor — giữ nguyên API cũ, nay chạy trên SortableList (kéo thả)
    ------------------------------------------------------------------ */
 export type ListEditorProps<T> = {
@@ -144,6 +247,8 @@ export type ListEditorProps<T> = {
   newItem: () => T;
   title?: ReactNode;
   addLabel?: string;
+  /** Dòng tóm tắt khi mục đang thu gọn. */
+  getSummary?: (item: T, index: number) => ReactNode;
 };
 
 export function ListEditor<T>(props: ListEditorProps<T>) {
@@ -153,6 +258,12 @@ export function ListEditor<T>(props: ListEditorProps<T>) {
 /* ------------------------------------------------------------------
    ImageField — chọn ảnh từ KHO ẢNH tập trung (hoặc dán URL ngoài)
    ------------------------------------------------------------------ */
+/** Tên tệp lấy từ đường dẫn ảnh (để biết đang dùng ảnh nào). */
+function fileNameFromUrl(url: string): string {
+  const clean = url.split("?")[0];
+  return decodeURIComponent(clean.substring(clean.lastIndexOf("/") + 1)) || url;
+}
+
 export function ImageField({
   value,
   onChange,
@@ -162,52 +273,153 @@ export function ImageField({
   /** Giữ để tương thích call-site cũ; ảnh nay đi qua kho ảnh chung. */
   folder?: string;
 }) {
+  const { message } = App.useApp();
   const [open, setOpen] = useState(false);
   const [urlMode, setUrlMode] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [broken, setBroken] = useState(false);
+
+  /** Kéo ảnh từ máy thả vào -> tải lên kho rồi gán luôn. */
+  async function handleDrop(file: File) {
+    if (!file.type.startsWith("image/")) {
+      message.error("Tệp này không phải ảnh. Hãy thả tệp ảnh (jpg, png, webp…).");
+      return;
+    }
+    setUploading(true);
+    try {
+      const url = await uploadImage(file, "kho");
+      await addMediaAction({ url, name: file.name, albumId: "alb-khac" }).catch(
+        () => {}
+      );
+      setBroken(false);
+      onChange(url);
+      message.success("Đã tải ảnh lên kho và dùng cho mục này.");
+    } catch (err) {
+      message.error(
+        err instanceof Error
+          ? err.message
+          : "Tải ảnh lên không thành công. Thử lại hoặc chọn từ kho ảnh."
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <div>
-      <Space direction="vertical" style={{ width: "100%" }} size={8}>
+      <div
+        // Kéo ảnh từ máy thả thẳng vào khung này.
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          const f = e.dataTransfer.files?.[0];
+          if (f) void handleDrop(f);
+        }}
+        // Không ép khung: ảnh giữ đúng tỉ lệ gốc, chỉ giới hạn chiều cao 96px
+        // như bản đầu. Khung trống mới cần kích thước cố định cho dòng gợi ý.
+        className={`relative inline-block h-24 overflow-hidden rounded-lg border-2 border-dashed align-top transition ${
+          value ? "" : "w-44"
+        } ${
+          dragging
+            ? "border-[#2e7d32] bg-[#2e7d32]/[0.06]"
+            : value
+            ? "border-transparent"
+            : "border-black/15 hover:border-black/30"
+        }`}
+      >
         {value ? (
-          <div>
+          <div className="relative h-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={value}
               alt="Xem trước"
-              style={{
-                maxHeight: 96,
-                maxWidth: "100%",
-                borderRadius: 8,
-                border: "1px solid rgba(0,0,0,0.1)",
-              }}
+              onError={() => setBroken(true)}
+              onLoad={() => setBroken(false)}
+              className="h-full w-auto max-w-[280px] object-contain"
             />
-            <div>
-              <Button size="small" icon={<PictureOutlined />} onClick={() => setOpen(true)}>
-                Đổi ảnh
-              </Button>
-              <Button size="small" type="link" danger onClick={() => onChange("")}>
-                Xoá ảnh
-              </Button>
-            </div>
+            {broken ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-red-50/90 px-3 text-center text-xs text-red-600">
+                Không tải được ảnh — đường dẫn có thể đã hỏng.
+              </div>
+            ) : null}
           </div>
         ) : (
-          <Space wrap>
-            <Button icon={<PictureOutlined />} onClick={() => setOpen(true)}>
-              Chọn từ kho ảnh
-            </Button>
-            <Button type="text" size="small" onClick={() => setUrlMode((v) => !v)}>
-              Dán URL ngoài
-            </Button>
-          </Space>
+          <button
+            className="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1 px-2 text-center"
+            onClick={() => setOpen(true)}
+          >
+            {uploading ? (
+              <Spin />
+            ) : (
+              <>
+                <PictureOutlined className="text-xl opacity-40" />
+                <span className="text-[11px] leading-tight opacity-60">
+                  Kéo ảnh vào đây
+                  <br />
+                  hoặc bấm để chọn từ kho
+                </span>
+              </>
+            )}
+          </button>
         )}
-        {urlMode && !value ? (
-          <Input
-            placeholder="https://… hoặc /gallery/anh.jpg"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        ) : null}
-      </Space>
+      </div>
+
+      {value ? (
+        <div className="mt-1.5 max-w-[220px]">
+          <div className="truncate text-xs opacity-60" title={value}>
+            {fileNameFromUrl(value)}
+          </div>
+          <div className="mt-1 flex items-center gap-1">
+            <Button
+              size="small"
+              className="cursor-pointer"
+              icon={<PictureOutlined />}
+              loading={uploading}
+              onClick={() => setOpen(true)}
+            >
+              Đổi ảnh
+            </Button>
+            <Popconfirm
+              title="Bỏ ảnh khỏi mục này?"
+              description="Ảnh vẫn còn trong kho, có thể chọn lại sau."
+              okText="Bỏ ảnh"
+              cancelText="Huỷ"
+              onConfirm={() => {
+                setBroken(false);
+                onChange("");
+              }}
+            >
+              <Button size="small" type="text" danger className="cursor-pointer">
+                Bỏ ảnh
+              </Button>
+            </Popconfirm>
+          </div>
+        </div>
+      ) : (
+        <Button
+          type="text"
+          size="small"
+          className="mt-1 cursor-pointer"
+          onClick={() => setUrlMode((v) => !v)}
+        >
+          Dán đường dẫn ảnh
+        </Button>
+      )}
+
+      {urlMode && !value ? (
+        <LinkInput
+          className="mt-1 max-w-[260px]"
+          placeholder="Dán đường dẫn ảnh, ví dụ https://…"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      ) : null}
 
       <Modal
         open={open}
@@ -220,6 +432,7 @@ export function ImageField({
         <MediaBrowser
           mode="pick"
           onPick={(url) => {
+            setBroken(false);
             onChange(url);
             setOpen(false);
           }}

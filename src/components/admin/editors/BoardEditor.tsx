@@ -57,14 +57,20 @@ function MemberForm({
           />
         </Field>
       </div>
-      <Field label="Ảnh" hint="Bỏ trống sẽ hiển thị avatar chữ cái đầu.">
+      <Field
+        label="Ảnh"
+        hint="Ảnh chân dung. Bỏ trống thì trang hiện vòng tròn chữ cái đầu của tên."
+      >
         <ImageField
           value={item.photo ?? ""}
           onChange={(url) => update({ ...item, photo: url })}
           folder={folder}
         />
       </Field>
-      <Field label="Giới thiệu">
+      <Field
+        label="Giới thiệu"
+        hint="Vài dòng về thành viên, hiện ra khi khách bấm vào ảnh."
+      >
         <Input.TextArea
           placeholder="Vài dòng giới thiệu về thành viên…"
           autoSize={{ minRows: 2, maxRows: 6 }}
@@ -77,7 +83,7 @@ function MemberForm({
         <Alert
           type="warning"
           showIcon
-          message={`Cần điền ${missing.join(", ")}.`}
+          title={`Còn thiếu: ${missing.join(", ")}.`}
         />
       ) : null}
     </div>
@@ -98,22 +104,25 @@ export default function BoardEditor({ initial }: { initial: Board }) {
 
   return (
     <EditorCard title="Ban tổ chức" extra={<SaveStatusTag status={status} />}>
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space orientation="vertical" size={16} style={{ width: "100%" }}>
         {totalMissing > 0 ? (
           <Alert
             type="warning"
             showIcon
-            message={`Có ${totalMissing} thành viên còn thiếu trường bắt buộc.`}
-            description="Hãy điền đủ họ tên, vai trò và giới thiệu trước khi xuất bản."
+            title={`Có ${totalMissing} thành viên chưa điền đủ thông tin.`}
+            description="Mỗi người cần đủ họ tên, vai trò và giới thiệu trước khi xuất bản."
           />
         ) : null}
 
         <div>
           <p className="mb-2 text-xs opacity-60">
-            Thứ tự trong danh sách chính là thứ tự hiển thị ngoài trang web.
-            Kéo biểu tượng ⣿ để đổi thứ tự; bấm vào dòng để sửa chi tiết.
+            Hai danh sách này hiện ở <strong>trang Ban tổ chức</strong>. Thứ tự
+            xếp ở đây cũng là thứ tự khách nhìn thấy. Kéo biểu tượng ⣿ để đổi
+            thứ tự; bấm vào một dòng để sửa chi tiết.
           </p>
-          <div className="mb-2 font-semibold">Ban sáng lập</div>
+          <div className="mb-2 font-semibold">
+            Ban sáng lập — hiện ở đầu trang
+          </div>
           <ItemListEditor<Member>
             addLabel="Thêm người sáng lập"
             value={founders}
@@ -137,7 +146,9 @@ export default function BoardEditor({ initial }: { initial: Board }) {
         </div>
 
         <div>
-          <div className="mb-2 font-semibold">Ban tổ chức (thành viên)</div>
+          <div className="mb-2 font-semibold">
+            Các thành viên — mục riêng bên dưới, để trống thì mục này tự ẩn
+          </div>
           <ItemListEditor<Member>
             addLabel="Thêm thành viên"
             value={members}

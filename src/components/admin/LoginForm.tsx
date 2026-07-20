@@ -42,7 +42,7 @@ export default function LoginForm() {
           {state.error ? (
             <Alert
               type="error"
-              message={state.error}
+              title={state.error}
               showIcon
               style={{ marginTop: 12 }}
             />

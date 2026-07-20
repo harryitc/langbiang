@@ -10,6 +10,7 @@ export default async function Page() {
         site: main.site,
         heroPhotos: main.heroPhotos,
         aboutImage: main.aboutImage,
+        about: main.about,
       }}
     />
   );

@@ -7,6 +7,7 @@ import {
   EditorCard,
   ListEditor,
   Field,
+  LinkInput,
 } from "../editorKit";
 import type { Fundraising, FundraisingChannel } from "@/lib/content/schema";
 
@@ -16,18 +17,18 @@ const ICON_SUGGESTIONS = ["🛒", "💳", "🎁", "🏦", "📦", "🤝", "💝"
 /** Kiểm tra trường bắt buộc của khối gây quỹ (FR2-R3). */
 function validateBlock(value: Fundraising) {
   return {
-    title: value.title.trim() ? "" : "Vui lòng nhập tiêu đề.",
-    desc: value.desc.trim() ? "" : "Vui lòng nhập mô tả.",
+    title: value.title.trim() ? "" : "Chưa nhập tiêu đề.",
+    desc: value.desc.trim() ? "" : "Chưa nhập mô tả.",
   };
 }
 
 /** Kiểm tra trường bắt buộc của một kênh gây quỹ (FR2-R3). */
 function validateChannel(item: FundraisingChannel) {
   return {
-    icon: item.icon.trim() ? "" : "Vui lòng nhập biểu tượng.",
-    name: item.name.trim() ? "" : "Vui lòng nhập tên kênh.",
-    cta: item.cta.trim() ? "" : "Vui lòng nhập nhãn nút.",
-    href: item.href.trim() ? "" : "Vui lòng nhập liên kết.",
+    icon: item.icon.trim() ? "" : "Chưa chọn biểu tượng.",
+    name: item.name.trim() ? "" : "Chưa nhập tên kênh.",
+    cta: item.cta.trim() ? "" : "Chưa nhập chữ trên nút.",
+    href: item.href.trim() ? "" : "Chưa nhập liên kết.",
   };
 }
 
@@ -60,8 +61,8 @@ export default function FundraisingEditor({
           className="mb-4"
           type="warning"
           showIcon
-          message={`Có ${invalidCount} kênh gây quỹ chưa điền đủ trường bắt buộc.`}
-          description="Kênh thiếu biểu tượng, tên, nhãn nút hoặc liên kết sẽ không hiển thị đúng trên trang chính."
+          title={`Có ${invalidCount} kênh gây quỹ chưa điền đủ thông tin.`}
+          description="Kênh thiếu biểu tượng, tên, chữ trên nút hoặc liên kết sẽ hiển thị lệch lạc trên trang Gây quỹ."
         />
       ) : null}
 
@@ -70,12 +71,15 @@ export default function FundraisingEditor({
           className="mb-4"
           type="info"
           showIcon
-          message={`Đang có ${highlightCount} kênh được đánh dấu nổi bật.`}
+          title={`Đang có ${highlightCount} kênh được đánh dấu nổi bật.`}
           description="Nên chỉ để một kênh nổi bật để lời kêu gọi ủng hộ rõ ràng hơn."
         />
       ) : null}
 
-      <Field label="Tiêu đề khối">
+      <Field
+        label="Tiêu đề khối"
+        hint="Hiện làm tiêu đề lớn ở đầu trang Gây quỹ."
+      >
         <Input
           value={value.title}
           placeholder="Vd: Gian hàng gây quỹ"
@@ -89,7 +93,7 @@ export default function FundraisingEditor({
 
       <Field
         label="Mô tả"
-        hint="Nên giữ 1–2 câu giới thiệu vì sao nên ủng hộ dự án."
+        hint="Hiện ngay dưới tiêu đề trang Gây quỹ. Nên 1–2 câu nói vì sao nên ủng hộ dự án."
       >
         <Input.TextArea
           value={value.desc}
@@ -118,7 +122,8 @@ export default function FundraisingEditor({
           href: "",
           highlight: false,
         })}
-        renderItem={(item, updateItem, index) => {
+        getSummary={(item) => `${item.icon ?? ""} ${item.name ?? ""}`.trim() || "(chưa có tên kênh)"}
+          renderItem={(item, updateItem, index) => {
           const errors = validateChannel(item);
           return (
             <div className="w-full">
@@ -130,10 +135,10 @@ export default function FundraisingEditor({
               </div>
 
               <Field
-                label="Biểu tượng (emoji)"
-                hint="Dán một emoji, hoặc bấm chọn từ gợi ý bên dưới."
+                label="Biểu tượng"
+                hint="Hình vui nhỏ hiện trên thẻ kênh. Bấm chọn một gợi ý bên dưới cho nhanh."
               >
-                <Space direction="vertical" size={8} className="w-full">
+                <Space orientation="vertical" size={8} className="w-full">
                   <Input
                     value={item.icon}
                     maxLength={4}
@@ -188,7 +193,7 @@ export default function FundraisingEditor({
                 />
               </Field>
 
-              <Field label="Nhãn nút">
+              <Field label="Chữ trên nút">
                 <Input
                   value={item.cta}
                   maxLength={40}
@@ -203,9 +208,9 @@ export default function FundraisingEditor({
 
               <Field
                 label="Liên kết"
-                hint="Dán URL đầy đủ (https://…). Dùng “#” nếu nút chỉ để sao chép thông tin."
+                hint="Nơi khách được đưa tới khi bấm nút. Dán đầy đủ, bắt đầu bằng https://. Gõ dấu # nếu nút chỉ để khách xem thông tin ở phần Ghi chú."
               >
-                <Input
+                <LinkInput
                   value={item.href}
                   placeholder="https://shopee.vn/…"
                   status={errors.href ? "error" : undefined}
@@ -218,7 +223,7 @@ export default function FundraisingEditor({
 
               <Field
                 label="Nổi bật"
-                hint="Kênh nổi bật được làm nổi trong khối gây quỹ trên trang chính."
+                hint="Kênh bật mục này được tô nổi hơn các kênh khác trên trang Gây quỹ."
               >
                 <Switch
                   checked={item.highlight}

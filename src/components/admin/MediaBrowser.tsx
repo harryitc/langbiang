@@ -15,13 +15,16 @@ import {
   Select,
   Spin,
   Tag,
+  Tooltip,
 } from "antd";
 import {
+  CheckOutlined,
+  CloseOutlined,
   CopyOutlined,
   DeleteOutlined,
   EditOutlined,
+  ExpandOutlined,
   FolderAddOutlined,
-  PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import { uploadImage } from "@/lib/content/upload-client";
@@ -37,6 +40,8 @@ import { loadMediaLibrary } from "@/lib/content/media-cache";
 import type { MediaItem, MediaLibrary } from "@/lib/content/media";
 
 const ALL = "all";
+/** Nút biểu tượng trong bảng thao tác: ô vuông đều nhau để hàng nút thẳng hàng. */
+const ICON_BTN = "flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center !px-0";
 const MISC_ALBUM_ID = "alb-khac";
 /** Số ảnh render mỗi lô (phân trang lưới, tránh dựng hàng trăm node cùng lúc). */
 const PAGE_SIZE = 48;
@@ -49,9 +54,14 @@ function canOptimize(url: string): boolean {
 export default function MediaBrowser({
   mode,
   onPick,
+  multiple = false,
+  onPickMany,
 }: {
   mode: "manage" | "pick";
   onPick?: (url: string) => void;
+  /** Cho chọn nhiều ảnh cùng lúc (hoặc cả album) rồi thêm một lần. */
+  multiple?: boolean;
+  onPickMany?: (urls: string[]) => void;
 }) {
   const { message, modal } = App.useApp();
   const [lib, setLib] = useState<MediaLibrary | null>(null);
@@ -63,12 +73,17 @@ export default function MediaBrowser({
   const [limit, setLimit] = useState(PAGE_SIZE);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
+  // Chế độ chọn nhiều: danh sách ảnh đang tick.
+  const [picked, setPicked] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   async function refetch(force = false) {
     const data = await loadMediaLibrary(force);
     if (data) setLib(data);
-    else message.error("Không tải được kho ảnh.");
+    else
+      message.error(
+        "Không mở được kho ảnh. Kiểm tra kết nối mạng rồi tải lại trang."
+      );
   }
   useEffect(() => {
     void refetch();
@@ -97,8 +112,6 @@ export default function MediaBrowser({
     );
   }, [items, albumId, query]);
 
-  const selectedItem = items.find((i) => i.id === selected) ?? null;
-
   /* ----------------------------- Upload ----------------------------- */
   async function handleFiles(files: FileList) {
     const targetAlbum = albumId === ALL ? MISC_ALBUM_ID : albumId;
@@ -114,12 +127,20 @@ export default function MediaBrowser({
           albumId: targetAlbum,
         });
         if (res.ok) lastUrl = url;
-        else message.error(res.error || "Không thêm được ảnh vào kho.");
+        else
+          message.error(
+            res.error ||
+              `Không thêm được ảnh “${file.name}” vào kho. Thử tải lại ảnh này.`
+          );
       }
       await refetch(true);
       if (lastUrl) message.success("Đã tải ảnh lên kho.");
     } catch (err) {
-      message.error(err instanceof Error ? err.message : "Tải ảnh thất bại.");
+      message.error(
+        err instanceof Error
+          ? err.message
+          : "Tải ảnh lên không thành công. Kiểm tra kết nối mạng rồi thử lại."
+      );
     } finally {
       setUploading(false);
     }
@@ -134,7 +155,7 @@ export default function MediaBrowser({
         await refetch(true);
         if (okMsg) message.success(okMsg);
       } else {
-        message.error(res.error || "Thao tác thất bại.");
+        message.error(res.error || "Chưa thực hiện được. Vui lòng thử lại.");
       }
     } finally {
       setBusy(false);
@@ -250,89 +271,172 @@ export default function MediaBrowser({
               : ""}
           </Button>
           <span className="text-xs opacity-60">{visible.length} ảnh</span>
-        </div>
 
-        {/* Thanh thao tác cho ảnh đang chọn */}
-        {selectedItem ? (
-          <div className="flex flex-wrap items-center gap-2 rounded-lg bg-black/[0.03] p-2">
-            <span className="max-w-[200px] truncate text-xs font-medium">
-              {selectedItem.name}
-            </span>
-            <Button
-              size="small"
-              icon={<CopyOutlined />}
-              onClick={() => {
-                void navigator.clipboard?.writeText(selectedItem.url);
-                message.success("Đã sao chép đường dẫn.");
-              }}
-            >
-              Sao chép URL
-            </Button>
-            {canManage ? (
-              <>
-                <Select
-                  size="small"
-                  value={selectedItem.albumId}
-                  style={{ minWidth: 160 }}
-                  onChange={(v) =>
-                    run(moveMediaAction(selectedItem.id, v), "Đã chuyển album.")
-                  }
-                  options={albums.map((a) => ({ value: a.id, label: a.name }))}
-                />
-                <Popconfirm
-                  title="Xoá ảnh này?"
-                  description={
-                    selectedItem.seeded
-                      ? "Ảnh nạp sẵn: chỉ gỡ khỏi kho."
-                      : "Xoá khỏi kho và xoá luôn file trên lưu trữ."
-                  }
-                  okText="Xoá"
-                  cancelText="Huỷ"
-                  onConfirm={() =>
-                    run(deleteMediaAction(selectedItem.id), "Đã xoá ảnh.").then(
-                      () => setSelected(null)
-                    )
-                  }
-                >
-                  <Button size="small" danger icon={<DeleteOutlined />}>
-                    Xoá
-                  </Button>
-                </Popconfirm>
-              </>
-            ) : null}
-            {mode === "pick" ? (
+          {multiple ? (
+            <>
               <Button
                 size="small"
-                type="primary"
-                onClick={() => onPick?.(selectedItem.url)}
+                className="cursor-pointer"
+                disabled={visible.length === 0}
+                onClick={() =>
+                  setPicked(Array.from(new Set(visible.map((it) => it.url))))
+                }
               >
-                Chọn ảnh này
+                {albumId === ALL
+                  ? `Chọn tất cả đang hiển thị (${visible.length})`
+                  : `Chọn cả album (${visible.length})`}
               </Button>
-            ) : null}
-          </div>
-        ) : null}
+              {picked.length > 0 ? (
+                <Button
+                  size="small"
+                  type="text"
+                  className="cursor-pointer"
+                  onClick={() => setPicked([])}
+                >
+                  Bỏ chọn
+                </Button>
+              ) : null}
+            </>
+          ) : null}
+        </div>
 
         {/* Lưới ảnh */}
         <Spin spinning={busy}>
           {visible.length === 0 ? (
-            <Empty description="Chưa có ảnh trong album này" />
+            <Empty description="Chưa có ảnh nào ở đây. Bấm “Tải ảnh lên” để thêm." />
           ) : (
             <>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
                 {visible.slice(0, limit).map((it, idx) => (
-                  <Thumb
-                    key={it.id}
-                    item={it}
-                    active={selected === it.id}
-                    onClick={() => setSelected(it.id)}
-                    onDoubleClick={
-                      mode === "pick" ? () => onPick?.(it.url) : undefined
-                    }
-                    onPreview={() => {
-                      setPreviewIndex(idx);
-                      setPreviewOpen(true);
-                    }}
-                  />
+                  // relative để bảng thao tác neo tuyệt đối ngay dưới ảnh.
+                  <div key={it.id} className="relative">
+                    <Thumb
+                      item={it}
+                      active={selected === it.id}
+                      checked={multiple && picked.includes(it.url)}
+                      onClick={() => {
+                        if (multiple) {
+                          setPicked((cur) =>
+                            cur.includes(it.url)
+                              ? cur.filter((u) => u !== it.url)
+                              : [...cur, it.url]
+                          );
+                          return;
+                        }
+                        setSelected((cur) => (cur === it.id ? null : it.id));
+                      }}
+                      onDoubleClick={
+                        !multiple && mode === "pick"
+                          ? () => onPick?.(it.url)
+                          : undefined
+                      }
+                      onPreview={() => {
+                        setPreviewIndex(idx);
+                        setPreviewOpen(true);
+                      }}
+                    />
+
+                    {/* Bảng thao tác gọn, nổi ngay dưới ảnh đang chọn — khỏi
+                        phải cuộn lên thanh công cụ. */}
+                    {!multiple && selected === it.id ? (
+                      <div className="absolute left-1/2 top-full z-30 mt-2 w-60 -translate-x-1/2 rounded-xl border border-[#2e7d32]/30 bg-white p-2.5 shadow-lg">
+                        <div
+                          className="truncate text-xs font-medium leading-5"
+                          title={it.name}
+                        >
+                          {it.name}
+                        </div>
+                        {/* Ở chế độ quản lý đã có ô chọn album bên dưới nên
+                            không lặp lại tên album ở đây. */}
+                        {!canManage ? (
+                          <div className="truncate text-[11px] leading-4 opacity-60">
+                            {albums.find((a) => a.id === it.albumId)?.name ?? "Khác"}
+                          </div>
+                        ) : null}
+
+                        {/* Hàng nút — kẻ mảnh tách khỏi phần tên cho đỡ dồn cục. */}
+                        <div className="mt-2 flex items-center justify-end gap-1 border-t border-black/5 pt-2">
+                          {mode === "pick" ? (
+                            <Button
+                              size="small"
+                              type="primary"
+                              className="!h-7 flex-1 cursor-pointer"
+                              icon={<CheckOutlined />}
+                              onClick={() => onPick?.(it.url)}
+                            >
+                              Chọn
+                            </Button>
+                          ) : null}
+                          {/* Nhóm nút biểu tượng luôn dồn về phải, cách đều nhau. */}
+                          <Tooltip title="Sao chép đường dẫn ảnh">
+                            <Button
+                              size="small"
+                              type="text"
+                              className={ICON_BTN}
+                              icon={<CopyOutlined />}
+                              onClick={() => {
+                                void navigator.clipboard?.writeText(it.url);
+                                message.success("Đã sao chép đường dẫn.");
+                              }}
+                            />
+                          </Tooltip>
+                          {canManage ? (
+                            <Popconfirm
+                              title="Xoá ảnh này?"
+                              description={
+                                it.seeded
+                                  ? "Ảnh có sẵn của dự án — chỉ gỡ khỏi kho, ảnh gốc vẫn còn."
+                                  : "Ảnh sẽ mất hẳn. Chỗ nào đang dùng ảnh này sẽ bị trống."
+                              }
+                              okText="Xoá"
+                              cancelText="Huỷ"
+                              onConfirm={() =>
+                                run(deleteMediaAction(it.id), "Đã xoá ảnh.").then(
+                                  () => setSelected(null)
+                                )
+                              }
+                            >
+                              <Tooltip title="Xoá ảnh khỏi kho">
+                                {/* type="text" + danger: vẫn đỏ để nhận ra là
+                                    hành động nguy hiểm nhưng không lấn át. */}
+                                <Button
+                                  size="small"
+                                  type="text"
+                                  danger
+                                  className={ICON_BTN}
+                                  icon={<DeleteOutlined />}
+                                />
+                              </Tooltip>
+                            </Popconfirm>
+                          ) : null}
+                          <Tooltip title="Đóng">
+                            <Button
+                              size="small"
+                              type="text"
+                              className={ICON_BTN}
+                              icon={<CloseOutlined />}
+                              onClick={() => setSelected(null)}
+                            />
+                          </Tooltip>
+                        </div>
+
+                        {canManage ? (
+                          <Select
+                            size="small"
+                            value={it.albumId}
+                            className="mt-2 w-full cursor-pointer"
+                            onChange={(v) =>
+                              run(moveMediaAction(it.id, v), "Đã chuyển album.")
+                            }
+                            options={albums.map((a) => ({
+                              value: a.id,
+                              label: a.name,
+                            }))}
+                          />
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </div>
                 ))}
               </div>
 
@@ -340,12 +444,31 @@ export default function MediaBrowser({
               <AntdImage.PreviewGroup
                 items={visible.slice(0, limit).map((it) => it.url)}
                 preview={{
-                  visible: previewOpen,
+                  open: previewOpen,
                   current: previewIndex,
-                  onVisibleChange: (v) => setPreviewOpen(v),
+                  onOpenChange: (v) => setPreviewOpen(v),
                   onChange: (c) => setPreviewIndex(c),
                 }}
               />
+
+              {multiple && picked.length > 0 ? (
+                <div className="sticky bottom-0 z-20 mt-3 flex items-center gap-2 rounded-xl border border-[#2e7d32]/30 bg-white/95 p-2.5 shadow-lg backdrop-blur">
+                  <span className="text-sm">
+                    Đã chọn <strong>{picked.length}</strong> ảnh
+                  </span>
+                  <Button
+                    type="primary"
+                    className="ml-auto cursor-pointer"
+                    icon={<CheckOutlined />}
+                    onClick={() => {
+                      onPickMany?.(picked);
+                      setPicked([]);
+                    }}
+                  >
+                    Thêm {picked.length} ảnh
+                  </Button>
+                </div>
+              ) : null}
 
               {visible.length > limit ? (
                 <div className="mt-3 text-center">
@@ -388,9 +511,9 @@ function AlbumButton({
         active ? "bg-[#2e7d32]/12 font-semibold text-[#2e7d32]" : "hover:bg-black/[0.04]"
       }`}
     >
-      <button className="flex flex-1 items-center gap-2 text-left" onClick={onClick}>
+      <button className="flex flex-1 cursor-pointer items-center gap-2 text-left" onClick={onClick}>
         <span className="truncate">{label}</span>
-        <Tag className="ml-auto" bordered={false}>
+        <Tag className="ml-auto" variant="filled">
           {count}
         </Tag>
       </button>
@@ -415,36 +538,50 @@ function AlbumButton({
 function Thumb({
   item,
   active,
+  checked,
   onClick,
   onDoubleClick,
   onPreview,
 }: {
   item: MediaItem;
   active: boolean;
+  /** Đang được tick trong chế độ chọn nhiều. */
+  checked?: boolean;
   onClick: () => void;
   onDoubleClick?: () => void;
   onPreview: () => void;
 }) {
   return (
     <button
-      className={`group relative aspect-square overflow-hidden rounded-lg border-2 transition ${
-        active ? "border-[#2e7d32]" : "border-transparent hover:border-black/20"
+      // block + w-full: nút nằm trong div bọc (không còn là grid item) nên phải
+      // tự chiếm hết chiều rộng, nếu không aspect-square sẽ ra kích thước 0.
+      className={`group relative block aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 transition ${
+        checked || active
+          ? "border-[#2e7d32]"
+          : "border-transparent hover:border-black/20"
       }`}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       title={item.name}
     >
-      {/* Nút ＋ ở góc phải — xem ảnh chi tiết trong lightbox. */}
+      {checked ? (
+        <span className="absolute left-1 top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-[#2e7d32] text-white">
+          <CheckOutlined style={{ fontSize: 11 }} />
+        </span>
+      ) : null}
+
+      {/* Nút phóng to ở góc phải — xem ảnh chi tiết trong lightbox. */}
       <span
         role="button"
-        aria-label="Xem ảnh chi tiết"
-        className="absolute right-1 top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-black/55 text-white opacity-0 transition hover:bg-black/80 group-hover:opacity-100"
+        aria-label="Xem ảnh lớn"
+        title="Xem ảnh lớn"
+        className="absolute right-1 top-1 z-10 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-black/55 text-white opacity-0 transition hover:bg-black/80 group-hover:opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onPreview();
         }}
       >
-        <PlusOutlined style={{ fontSize: 11 }} />
+        <ExpandOutlined style={{ fontSize: 11 }} />
       </span>
       {canOptimize(item.url) ? (
         // next/image tự phục vụ ảnh thu nhỏ (giảm băng thông so với ảnh gốc).

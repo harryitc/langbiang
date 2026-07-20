@@ -9,6 +9,7 @@ import {
   EditorCard,
   Field,
   ImageField,
+  LinkInput,
   RichText,
 } from "../editorKit";
 import { ItemListEditor } from "../itemList";
@@ -89,21 +90,22 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
       }
       extra={<SaveStatusTag status={status} />}
     >
-      <Space direction="vertical" size={12} className="w-full">
+      <Space orientation="vertical" size={12} className="w-full">
         <Text type="secondary" className="text-xs">
-          Danh sách xếp từ mới nhất tới cũ nhất. Định danh (slug) chính là đường
-          dẫn bài viết: <code>/tin-tuc/&#123;định-danh&#125;</code> — phải duy
-          nhất. Để trống nội dung chi tiết thì bài sẽ hiển thị theo tóm tắt.
+          Các bài này hiện ở mục &ldquo;Câu chuyện từ hành trình&rdquo; trên{" "}
+          <strong>trang chủ</strong> và ở <strong>trang Tin tức</strong>. Danh
+          sách xếp từ mới nhất tới cũ nhất — kéo để đổi thứ tự. Mỗi bài cần một
+          đường dẫn riêng, không trùng với bài khác.
         </Text>
 
         {duplicatedIds.size > 0 ? (
           <Alert
             type="error"
             showIcon
-            message="Định danh bị trùng"
-            description={`Các định danh sau đang bị trùng, vui lòng đổi lại: ${Array.from(
+            title="Có bài đang trùng đường dẫn"
+            description={`Đường dẫn sau đang bị dùng cho nhiều bài: ${Array.from(
               duplicatedIds
-            ).join(", ")}`}
+            ).join(", ")}. Mỗi bài cần một đường dẫn riêng — hãy đổi lại.`}
           />
         ) : null}
 
@@ -111,8 +113,8 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
           <Alert
             type="warning"
             showIcon
-            message={`Có ${invalidCount} bài còn thiếu trường bắt buộc.`}
-            description="Cần điền đủ: định danh, nhãn, tiêu đề, tóm tắt, ảnh và liên kết bài gốc."
+            title={`Có ${invalidCount} bài chưa điền đủ thông tin.`}
+            description="Mỗi bài cần đủ: đường dẫn bài viết, nhãn, tiêu đề, tóm tắt, ảnh đại diện và liên kết bài gốc."
           />
         ) : null}
 
@@ -145,7 +147,10 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
                   <Col xs={24} md={16}>
                     <Row gutter={12}>
                       <Col xs={24} sm={8}>
-                        <Field label="Nhãn (tag)" hint="VD: Tổng kết, Hoạt động">
+                        <Field
+                          label="Nhãn"
+                          hint="Chữ nhỏ hiện trên thẻ tin. Vd: Tổng kết, Hoạt động."
+                        >
                           <Input
                             placeholder="Hoạt động"
                             value={post.tag}
@@ -171,11 +176,18 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
                     </Row>
 
                     <Field
-                      label="Định danh (slug)"
+                      label="Đường dẫn bài viết"
                       hint={
-                        dup
-                          ? "Định danh này đã được dùng ở bài khác — vui lòng đổi."
-                          : "Chỉ dùng chữ thường, số và dấu gạch ngang."
+                        dup ? (
+                          "Đường dẫn này đã dùng cho bài khác — hãy đổi thành chữ khác."
+                        ) : (
+                          <>
+                            Phần đuôi địa chỉ khi khách mở bài, vd{" "}
+                            <code>/tin-tuc/tong-ket-mua-trang</code>. Chỉ dùng
+                            chữ thường không dấu, số và dấu gạch ngang. Bấm
+                            &ldquo;Tạo từ tiêu đề&rdquo; là xong.
+                          </>
+                        )
                       }
                     >
                       <Space.Compact className="w-full">
@@ -200,7 +212,10 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
                       </Space.Compact>
                     </Field>
 
-                    <Field label="Tóm tắt" hint="Hiển thị ở thẻ tin và dùng cho SEO.">
+                    <Field
+                      label="Tóm tắt"
+                      hint="Vài dòng hiện trên thẻ tin và trong kết quả tìm kiếm Google."
+                    >
                       <Input.TextArea
                         rows={3}
                         placeholder="Tóm tắt ngắn gọn nội dung bài."
@@ -214,8 +229,11 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
 
                     <Row gutter={12}>
                       <Col xs={24} sm={16}>
-                        <Field label="Liên kết bài gốc" hint="Link bài trên Fanpage.">
-                          <Input
+                        <Field
+                          label="Liên kết bài gốc"
+                          hint="Dán liên kết bài đăng trên Fanpage của dự án."
+                        >
+                          <LinkInput
                             placeholder="https://www.facebook.com/share/p/…"
                             value={post.link}
                             status={post.link.trim() ? undefined : "error"}
@@ -226,7 +244,10 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
                         </Field>
                       </Col>
                       <Col xs={24} sm={8}>
-                        <Field label="Ngày đăng (tuỳ chọn)" hint="Định dạng YYYY-MM-DD.">
+                        <Field
+                          label="Ngày đăng (tuỳ chọn)"
+                          hint="Gõ theo dạng năm-tháng-ngày, vd 2025-09-20."
+                        >
                           <Input
                             placeholder="2025-09-20"
                             value={post.date ?? ""}
@@ -253,7 +274,7 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
 
                 <Field
                   label="Nội dung chi tiết"
-                  hint="Để trống nếu chỉ muốn hiển thị tóm tắt."
+                  hint="Nội dung khách đọc khi bấm vào bài. Bỏ trống thì bài chỉ hiện phần tóm tắt."
                 >
                   <RichText
                     folder="tintuc"

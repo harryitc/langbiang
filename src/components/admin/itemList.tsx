@@ -28,11 +28,20 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button, Drawer, Empty, Popconfirm, Tag, Tooltip } from "antd";
 import {
   DeleteOutlined,
+  DownOutlined,
   EditOutlined,
+  RightOutlined,
   HolderOutlined,
   PlusOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
+
+/**
+ * Số mục render mỗi lô. Danh sách dài (vd thư viện một năm có ~186 ảnh) mà
+ * render hết sẽ dựng bấy nhiêu hàng kèm bấy nhiêu hook kéo-thả -> nặng.
+ * Kéo-thả vẫn hoạt động trong phạm vi các mục đang hiện.
+ */
+const LIST_PAGE = 24;
 
 /* ------------------------------------------------------------------
    Hạ tầng kéo thả dùng chung
@@ -79,10 +88,16 @@ function SortableRow({
   id,
   children,
   actions,
+  summary,
+  open,
+  onToggle,
 }: {
   id: string;
   children: ReactNode;
   actions: ReactNode;
+  summary: ReactNode;
+  open: boolean;
+  onToggle: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id });
@@ -90,15 +105,24 @@ function SortableRow({
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`mb-2 flex gap-2 rounded-xl border border-black/10 bg-white/60 p-3 ${
+      className={`mb-2 rounded-xl border border-black/10 bg-white/60 ${
         isDragging ? "z-10 shadow-lg" : ""
       }`}
     >
-      <div className="pt-1">
+      {/* Dòng đầu: kéo thả + tóm tắt + thu gọn/mở rộng + xoá */}
+      <div className="flex items-center gap-2 p-2.5">
         <DragHandle attributes={attributes} listeners={listeners} />
+        <button
+          className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-left"
+          onClick={onToggle}
+          title={open ? "Thu gọn" : "Mở rộng để sửa"}
+        >
+          {open ? <DownOutlined className="text-xs opacity-40" /> : <RightOutlined className="text-xs opacity-40" />}
+          <span className="truncate">{summary}</span>
+        </button>
+        {actions}
       </div>
-      <div className="min-w-0 flex-1">{children}</div>
-      <div className="flex flex-col gap-1">{actions}</div>
+      {open ? <div className="border-t border-black/5 p-3">{children}</div> : null}
     </div>
   );
 }
@@ -110,6 +134,7 @@ export function SortableList<T>({
   newItem,
   addLabel = "Thêm mục",
   title,
+  getSummary,
 }: {
   value: T[];
   onChange: (next: T[]) => void;
@@ -117,9 +142,27 @@ export function SortableList<T>({
   newItem: () => T;
   addLabel?: string;
   title?: ReactNode;
+  /** Dòng tóm tắt hiển thị khi mục đang thu gọn. */
+  getSummary?: (item: T, index: number) => ReactNode;
 }) {
-  const move = (from: number, to: number) => onChange(arrayMove(value, from, to));
-  const { sensors, ids, onDragEnd } = useDnd(value.length, move);
+  // Mặc định thu gọn hết cho dễ nhìn tổng thể; mở từng mục khi cần sửa.
+  const [openRows, setOpenRows] = useState<Set<number>>(new Set());
+  const [limit, setLimit] = useState(LIST_PAGE);
+  const shown = Math.min(value.length, limit);
+  const toggle = (i: number) =>
+    setOpenRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
+      return next;
+    });
+
+  const move = (from: number, to: number) => {
+    // Đổi thứ tự làm lệch chỉ số -> thu gọn hết cho khỏi mở nhầm mục.
+    setOpenRows(new Set());
+    onChange(arrayMove(value, from, to));
+  };
+  const { sensors, ids, onDragEnd } = useDnd(shown, move);
 
   const replaceAt = (i: number, next: T) => {
     const arr = value.slice();
@@ -129,6 +172,7 @@ export function SortableList<T>({
   const removeAt = (i: number) => {
     const arr = value.slice();
     arr.splice(i, 1);
+    setOpenRows(new Set());
     onChange(arr);
   };
 
@@ -139,18 +183,22 @@ export function SortableList<T>({
       {value.length === 0 ? (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="Chưa có mục nào"
+          description="Chưa có mục nào. Bấm nút bên dưới để thêm."
         />
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-            {value.map((item, i) => (
+            {value.slice(0, limit).map((item, i) => (
               <SortableRow
                 key={i}
                 id={String(i)}
+                open={openRows.has(i)}
+                onToggle={() => toggle(i)}
+                summary={getSummary?.(item, i) ?? `Mục ${i + 1}`}
                 actions={
                   <Popconfirm
                     title="Xoá mục này?"
+                    description="Mục sẽ biến mất khỏi trang web sau khi bấm Xuất bản."
                     okText="Xoá"
                     cancelText="Huỷ"
                     onConfirm={() => removeAt(i)}
@@ -166,12 +214,27 @@ export function SortableList<T>({
         </DndContext>
       )}
 
+      {value.length > limit ? (
+        <Button
+          block
+          className="mt-2 cursor-pointer"
+          onClick={() => setLimit((n) => n + LIST_PAGE)}
+        >
+          Xem thêm ({value.length - limit} mục)
+        </Button>
+      ) : null}
+
       <Button
         type="dashed"
         icon={<PlusOutlined />}
         block
         className="mt-2"
-        onClick={() => onChange([...value, newItem()])}
+        onClick={() => {
+          // Mục mới mở sẵn để nhập luôn; nhớ nới lô để thấy được mục vừa thêm.
+          setLimit((n) => Math.max(n, value.length + 1));
+          setOpenRows((prev) => new Set(prev).add(value.length));
+          onChange([...value, newItem()]);
+        }}
       >
         {addLabel}
       </Button>
@@ -228,7 +291,7 @@ function CompactRow({
       ) : null}
 
       <button
-        className="min-w-0 flex-1 text-left"
+        className="min-w-0 flex-1 cursor-pointer text-left"
         onClick={onEdit}
         title="Bấm để sửa"
       >
@@ -257,6 +320,7 @@ function CompactRow({
       </Button>
       <Popconfirm
         title="Xoá mục này?"
+        description="Mục sẽ biến mất khỏi trang web sau khi bấm Xuất bản."
         okText="Xoá"
         cancelText="Huỷ"
         onConfirm={onDelete}
@@ -287,8 +351,9 @@ export function ItemListEditor<T>({
   drawerTitle?: string;
 }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [limit, setLimit] = useState(LIST_PAGE);
   const move = (from: number, to: number) => onChange(arrayMove(value, from, to));
-  const { sensors, ids, onDragEnd } = useDnd(value.length, move);
+  const { sensors, ids, onDragEnd } = useDnd(Math.min(value.length, limit), move);
 
   const replaceAt = (i: number, next: T) => {
     const arr = value.slice();
@@ -302,6 +367,7 @@ export function ItemListEditor<T>({
     setOpenIndex(null);
   };
   const add = () => {
+    setLimit((n) => Math.max(n, value.length + 1));
     onChange([...value, newItem()]);
     // Mở luôn form của mục vừa thêm — đỡ phải đi tìm.
     setOpenIndex(value.length);
@@ -314,12 +380,12 @@ export function ItemListEditor<T>({
       {value.length === 0 ? (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="Chưa có mục nào"
+          description="Chưa có mục nào. Bấm nút bên dưới để thêm."
         />
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-            {value.map((item, i) => (
+            {value.slice(0, limit).map((item, i) => (
               <CompactRow
                 key={i}
                 id={String(i)}
@@ -332,6 +398,16 @@ export function ItemListEditor<T>({
         </DndContext>
       )}
 
+      {value.length > limit ? (
+        <Button
+          block
+          className="mt-2 cursor-pointer"
+          onClick={() => setLimit((n) => n + LIST_PAGE)}
+        >
+          Xem thêm ({value.length - limit} mục)
+        </Button>
+      ) : null}
+
       <Button type="dashed" icon={<PlusOutlined />} block className="mt-2" onClick={add}>
         {addLabel}
       </Button>
@@ -339,7 +415,7 @@ export function ItemListEditor<T>({
       <Drawer
         open={openIndex !== null}
         onClose={() => setOpenIndex(null)}
-        width={Math.min(760, typeof window === "undefined" ? 760 : window.innerWidth)}
+        size={Math.min(760, typeof window === "undefined" ? 760 : window.innerWidth)}
         destroyOnHidden
         title={
           openIndex !== null

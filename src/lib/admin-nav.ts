@@ -1,4 +1,6 @@
 // Cấu trúc menu khu quản trị. Mỗi item tương ứng route /admin/<slug>.
+// Nhóm theo ĐÚNG TRANG trên website để người biên tập biết ngay "sửa mục này
+// thì đổi chỗ nào ngoài web", thay vì nhóm theo cấu trúc dữ liệu.
 export type AdminNavItem = {
   slug: string;
   label: string;
@@ -11,36 +13,53 @@ export type AdminNavGroup = {
 
 export const ADMIN_NAV: AdminNavGroup[] = [
   {
-    label: "Trang chính",
+    // Áp dụng cho mọi trang: tên dự án, SEO, logo, số năm hiện tại.
+    label: "Chung cả website",
     items: [
       { slug: "thuong-hieu", label: "Thương hiệu & SEO" },
-      { slug: "hoat-dong", label: "Hoạt động" },
-      { slug: "lich-trinh", label: "Lịch trình" },
-      { slug: "slideshow", label: "Slideshow trang chủ" },
-      { slug: "anh-trang-chu", label: "Ảnh trang chủ (logo, Hero)" },
-      { slug: "ly-do", label: "Lý do tham gia" },
-      { slug: "faq", label: "Câu hỏi thường gặp" },
-      { slug: "gay-quy", label: "Gây quỹ" },
-      { slug: "tai-tro", label: "Nhà tài trợ" },
-      { slug: "ban-to-chuc", label: "Ban tổ chức" },
-      { slug: "chi-tieu", label: "Báo cáo chi tiêu" },
+      { slug: "su-kien", label: "Sự kiện & số năm" },
     ],
   },
   {
-    label: "Tài nguyên",
+    label: "Trang chủ",
+    items: [
+      { slug: "trang-chu", label: "Nội dung trang chủ" },
+      { slug: "slideshow", label: "Slideshow" },
+      { slug: "dang-ky", label: "Form đăng ký" },
+      { slug: "faq", label: "Câu hỏi thường gặp" },
+    ],
+  },
+  {
+    label: "Trang Chương trình",
+    items: [
+      { slug: "hoat-dong", label: "Hoạt động" },
+      { slug: "lich-trinh", label: "Lịch trình" },
+    ],
+  },
+  {
+    label: "Trang Gây quỹ",
+    items: [
+      { slug: "gay-quy", label: "Kênh gây quỹ" },
+      { slug: "tai-tro", label: "Nhà tài trợ" },
+      { slug: "chi-tieu", label: "Báo cáo thu – chi" },
+    ],
+  },
+  {
+    label: "Trang Ban tổ chức",
+    items: [{ slug: "ban-to-chuc", label: "Thành viên" }],
+  },
+  {
+    label: "Trang Tin tức",
+    items: [{ slug: "tin-tuc", label: "Bài viết" }],
+  },
+  {
+    label: "Các năm đã qua",
+    items: [{ slug: "nam-da-qua", label: "Danh mục năm" }],
+  },
+  {
+    // Không hiển thị trực tiếp trên web — kho dùng chung cho mọi trường ảnh.
+    label: "Công cụ",
     items: [{ slug: "kho-anh", label: "Kho ảnh" }],
-  },
-  {
-    label: "Năm hiện tại",
-    items: [{ slug: "su-kien", label: "Sự kiện & số năm" }],
-  },
-  {
-    label: "Năm đã qua",
-    items: [{ slug: "nam-da-qua", label: "Danh mục năm đã qua" }],
-  },
-  {
-    label: "Tin tức",
-    items: [{ slug: "tin-tuc", label: "Bài tin tức" }],
   },
 ];
 
@@ -48,3 +67,8 @@ export const ADMIN_NAV: AdminNavGroup[] = [
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = ADMIN_NAV.flatMap(
   (g) => g.items
 );
+
+/** Nhóm chứa slug (dùng cho breadcrumb). */
+export function findNavGroup(slug: string): AdminNavGroup | undefined {
+  return ADMIN_NAV.find((g) => g.items.some((it) => it.slug === slug));
+}
