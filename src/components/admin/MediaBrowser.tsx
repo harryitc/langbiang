@@ -40,6 +40,8 @@ import { loadMediaLibrary } from "@/lib/content/media-cache";
 import type { MediaItem, MediaLibrary } from "@/lib/content/media";
 
 const ALL = "all";
+/** Nút biểu tượng trong bảng thao tác: ô vuông đều nhau để hàng nút thẳng hàng. */
+const ICON_BTN = "flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center !px-0";
 const MISC_ALBUM_ID = "alb-khac";
 /** Số ảnh render mỗi lô (phân trang lưới, tránh dựng hàng trăm node cùng lúc). */
 const PAGE_SIZE = 48;
@@ -292,34 +294,40 @@ export default function MediaBrowser({
                     {/* Bảng thao tác gọn, nổi ngay dưới ảnh đang chọn — khỏi
                         phải cuộn lên thanh công cụ. */}
                     {selected === it.id ? (
-                      <div className="absolute left-1/2 top-full z-30 mt-1.5 w-56 -translate-x-1/2 rounded-lg border border-[#2e7d32]/30 bg-white p-3 shadow-lg">
-                        <div className="truncate text-xs font-medium" title={it.name}>
+                      <div className="absolute left-1/2 top-full z-30 mt-2 w-60 -translate-x-1/2 rounded-xl border border-[#2e7d32]/30 bg-white p-2.5 shadow-lg">
+                        <div
+                          className="truncate text-xs font-medium leading-5"
+                          title={it.name}
+                        >
                           {it.name}
                         </div>
                         {/* Ở chế độ quản lý đã có ô chọn album bên dưới nên
                             không lặp lại tên album ở đây. */}
                         {!canManage ? (
-                          <div className="mt-0.5 truncate text-[11px] opacity-60">
+                          <div className="truncate text-[11px] leading-4 opacity-60">
                             {albums.find((a) => a.id === it.albumId)?.name ?? "Khác"}
                           </div>
                         ) : null}
 
-                        <div className="mt-2.5 flex items-center gap-1.5">
+                        {/* Hàng nút — kẻ mảnh tách khỏi phần tên cho đỡ dồn cục. */}
+                        <div className="mt-2 flex items-center justify-end gap-1 border-t border-black/5 pt-2">
                           {mode === "pick" ? (
                             <Button
                               size="small"
                               type="primary"
-                              className="flex-1 cursor-pointer"
+                              className="!h-7 flex-1 cursor-pointer"
                               icon={<CheckOutlined />}
                               onClick={() => onPick?.(it.url)}
                             >
                               Chọn
                             </Button>
                           ) : null}
+                          {/* Nhóm nút biểu tượng luôn dồn về phải, cách đều nhau. */}
                           <Tooltip title="Sao chép đường dẫn ảnh">
                             <Button
                               size="small"
-                              className="cursor-pointer"
+                              type="text"
+                              className={ICON_BTN}
                               icon={<CopyOutlined />}
                               onClick={() => {
                                 void navigator.clipboard?.writeText(it.url);
@@ -344,10 +352,13 @@ export default function MediaBrowser({
                               }
                             >
                               <Tooltip title="Xoá ảnh khỏi kho">
+                                {/* type="text" + danger: vẫn đỏ để nhận ra là
+                                    hành động nguy hiểm nhưng không lấn át. */}
                                 <Button
                                   size="small"
+                                  type="text"
                                   danger
-                                  className="cursor-pointer"
+                                  className={ICON_BTN}
                                   icon={<DeleteOutlined />}
                                 />
                               </Tooltip>
@@ -357,7 +368,7 @@ export default function MediaBrowser({
                             <Button
                               size="small"
                               type="text"
-                              className="cursor-pointer"
+                              className={ICON_BTN}
                               icon={<CloseOutlined />}
                               onClick={() => setSelected(null)}
                             />

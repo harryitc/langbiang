@@ -1,9 +1,22 @@
 "use client";
 
+// Khối "Đăng ký" ở trang chủ. Toàn bộ chữ và danh sách trường của form đều do
+// admin cấu hình (main.register) — form không có backend, gửi xong chỉ hiện
+// màn cảm ơn như trước.
 import { useState } from "react";
 import Reveal from "@/components/Reveal";
+import type { RegisterField, RegisterSection } from "@/lib/content/schema";
 
-export default function Register({ facebook }: { facebook: string }) {
+const INPUT_CLASS =
+  "w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition placeholder:text-forest/40 focus:border-leaf focus:ring-2 focus:ring-leaf/30";
+
+export default function Register({
+  facebook,
+  content,
+}: {
+  facebook: string;
+  content: RegisterSection;
+}) {
   const [sent, setSent] = useState(false);
 
   return (
@@ -19,29 +32,25 @@ export default function Register({ facebook }: { facebook: string }) {
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-2">
         <Reveal childrenStagger>
           <span className="mb-3 inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
-            Tham gia cùng chúng mình
+            {content.eyebrow}
           </span>
           <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
-            Cùng thắp sáng
+            {content.title}
             <br />
             <span className="font-display text-4xl sm:text-5xl md:text-6xl">
-              một mùa trăng yêu thương
+              {content.titleHighlight}
             </span>
           </h2>
           <p className="mt-5 max-w-md text-lg text-white/85">
-            Dù bạn trực tiếp lên đường hay đồng hành từ xa, mỗi tấm lòng đều góp
-            phần làm nên điều kỳ diệu cho các em nhỏ Langbiang.
+            {content.description}
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {[
-              ["🙋", "Tình nguyện viên", "Trực tiếp tham gia hành trình 26–27/9"],
-              ["🎁", "Nhà hảo tâm", "Đóng góp quà, nhu yếu phẩm & kinh phí"],
-            ].map(([icon, t, d]) => (
-              <div key={t} className="glass rounded-2xl p-4 text-forest">
-                <span className="text-2xl">{icon}</span>
-                <p className="mt-1 font-bold">{t}</p>
-                <p className="text-sm text-forest/70">{d}</p>
+            {content.highlights.map((h, i) => (
+              <div key={i} className="glass rounded-2xl p-4 text-forest">
+                <span className="text-2xl">{h.icon}</span>
+                <p className="mt-1 font-bold">{h.title}</p>
+                <p className="text-sm text-forest/70">{h.desc}</p>
               </div>
             ))}
           </div>
@@ -53,17 +62,14 @@ export default function Register({ facebook }: { facebook: string }) {
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <span className="text-6xl">💚</span>
                 <h3 className="mt-4 text-2xl font-bold text-leaf-deep">
-                  Cảm ơn bạn rất nhiều!
+                  {content.successTitle}
                 </h3>
-                <p className="mt-2 text-forest/75">
-                  Ban tổ chức sẽ liên hệ với bạn trong thời gian sớm nhất qua
-                  email hoặc điện thoại.
-                </p>
+                <p className="mt-2 text-forest/75">{content.successNote}</p>
                 <button
                   onClick={() => setSent(false)}
-                  className="mt-6 rounded-full border-2 border-leaf/30 px-6 py-2.5 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10"
+                  className="mt-6 cursor-pointer rounded-full border-2 border-leaf/30 px-6 py-2.5 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10"
                 >
-                  Gửi đăng ký khác
+                  {content.successAgainLabel}
                 </button>
               </div>
             ) : (
@@ -75,78 +81,28 @@ export default function Register({ facebook }: { facebook: string }) {
                 className="space-y-4"
               >
                 <h3 className="text-2xl font-bold text-leaf-deep">
-                  Đăng ký đồng hành
+                  {content.formTitle}
                 </h3>
-                <Field label="Họ và tên" name="name" placeholder="Nguyễn Văn A" required />
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field
-                    label="Email"
-                    name="email"
-                    type="email"
-                    placeholder="ban@email.com"
-                    required
-                  />
-                  <Field
-                    label="Số điện thoại"
-                    name="phone"
-                    type="tel"
-                    placeholder="09xx xxx xxx"
-                    required
-                  />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field
-                    label="Ngày sinh"
-                    name="dob"
-                    type="date"
-                    required
-                  />
-                  <Field
-                    label="Đơn vị học tập / công tác"
-                    name="organization"
-                    placeholder="Trường / công ty (không bắt buộc)"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-forest/80">
-                    Bạn muốn tham gia với vai trò
-                  </label>
-                  <select
-                    name="role"
-                    className="w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/30"
-                  >
-                    <option>Tình nguyện viên</option>
-                    <option>Nhà hảo tâm / Nhà tài trợ</option>
-                    <option>Cộng tác truyền thông</option>
-                    <option>Khác</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-forest/80">
-                    Lời nhắn (không bắt buộc)
-                  </label>
-                  <textarea
-                    name="message"
-                    rows={3}
-                    placeholder="Chia sẻ mong muốn của bạn..."
-                    className="w-full resize-none rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/30"
-                  />
-                </div>
+
+                {content.fields.map((field, i) => (
+                  <RegisterFieldView key={field.name || i} field={field} />
+                ))}
+
                 <button
                   type="submit"
-                  className="w-full rounded-full bg-gradient-to-r from-leaf-deep to-leaf py-3.5 text-base font-semibold text-white shadow-soft transition hover:brightness-110"
+                  className="w-full cursor-pointer rounded-full bg-gradient-to-r from-leaf-deep to-leaf py-3.5 text-base font-semibold text-white shadow-soft transition hover:brightness-110"
                 >
-                  Gửi đăng ký 🌙
+                  {content.submitLabel}
                 </button>
                 <p className="text-center text-xs text-forest/60">
-                  Hoặc liên hệ trực tiếp qua{" "}
+                  {content.contactNote}{" "}
                   <a
                     href={facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-semibold text-leaf-deep underline"
+                    className="cursor-pointer font-semibold text-leaf-deep underline"
                   >
-                    Fanpage Facebook
+                    {content.contactLinkLabel}
                   </a>
                 </p>
               </form>
@@ -158,32 +114,42 @@ export default function Register({ facebook }: { facebook: string }) {
   );
 }
 
-function Field({
-  label,
-  name,
-  type = "text",
-  placeholder,
-  required,
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-}) {
+/** Một trường của form, dựng theo cấu hình trong admin. */
+function RegisterFieldView({ field }: { field: RegisterField }) {
   return (
     <div>
       <label className="mb-1.5 block text-sm font-semibold text-forest/80">
-        {label}
-        {required && <span className="text-sunset"> *</span>}
+        {field.label}
+        {field.required && <span className="text-sunset"> *</span>}
       </label>
-      <input
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        required={required}
-        className="w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition placeholder:text-forest/40 focus:border-leaf focus:ring-2 focus:ring-leaf/30"
-      />
+
+      {field.type === "textarea" ? (
+        <textarea
+          name={field.name}
+          rows={3}
+          placeholder={field.placeholder}
+          required={field.required}
+          className={`${INPUT_CLASS} resize-none`}
+        />
+      ) : field.type === "select" ? (
+        <select
+          name={field.name}
+          required={field.required}
+          className="w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/30"
+        >
+          {(field.options ?? []).map((opt, i) => (
+            <option key={i}>{opt}</option>
+          ))}
+        </select>
+      ) : (
+        <input
+          name={field.name}
+          type={field.type}
+          placeholder={field.placeholder}
+          required={field.required}
+          className={INPUT_CLASS}
+        />
+      )}
     </div>
   );
 }

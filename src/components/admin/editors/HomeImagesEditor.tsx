@@ -9,8 +9,9 @@ import {
   EditorCard,
   Field,
   ImageField,
+  ListEditor,
 } from "../editorKit";
-import type { SiteMeta } from "@/lib/content/schema";
+import type { AboutSection, SiteMeta } from "@/lib/content/schema";
 
 /** Vị trí của 4 ảnh nổi trên Hero — mô tả cho người biên tập dễ hình dung. */
 const HERO_SLOTS = [
@@ -24,6 +25,7 @@ export type HomeImagesInitial = {
   site: SiteMeta;
   heroPhotos: string[];
   aboutImage: string;
+  about: AboutSection;
 };
 
 export default function HomeImagesEditor({
@@ -38,6 +40,16 @@ export default function HomeImagesEditor({
     useSectionAutosave<string[]>("main.heroPhotos", initial.heroPhotos);
   const { value: about, update: updateAbout, status: aboutStatus } =
     useSectionAutosave<string>("main.aboutImage", initial.aboutImage);
+  const {
+    value: aboutText,
+    update: updateAboutText,
+    status: aboutTextStatus,
+  } = useSectionAutosave<AboutSection>("main.about", initial.about);
+
+  const setAboutText = <K extends keyof AboutSection>(
+    key: K,
+    v: AboutSection[K]
+  ) => updateAboutText({ ...aboutText, [key]: v });
 
   /** Đảm bảo luôn đủ 4 ô ảnh Hero. */
   const heroSlots = Array.from({ length: 4 }, (_, i) => hero[i] ?? "");
@@ -134,6 +146,104 @@ export default function HomeImagesEditor({
         </p>
         <Field label="Ảnh giới thiệu" hint="Bỏ trống sẽ dùng ảnh mặc định.">
           <ImageField value={about} onChange={updateAbout} />
+        </Field>
+      </EditorCard>
+
+      <EditorCard
+        title="Chữ mục Giới thiệu"
+        extra={<SaveStatusTag status={aboutTextStatus} />}
+      >
+        <p className="mb-3 text-sm opacity-60">
+          Phần chữ nằm bên phải ảnh giới thiệu ở <strong>trang chủ</strong> —
+          khối &ldquo;Mang ánh trăng ấm áp đến với núi rừng&rdquo;.
+        </p>
+
+        <Field
+          label="Nhãn nhỏ phía trên tiêu đề"
+          hint="Dòng chữ in hoa trong viên thuốc màu xanh, vd: Về dự án."
+        >
+          <Input
+            value={aboutText.eyebrow}
+            placeholder="Về dự án"
+            onChange={(e) => setAboutText("eyebrow", e.target.value)}
+          />
+        </Field>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field
+            label="Tiêu đề — phần đầu"
+            hint="Phần chữ màu đen bình thường."
+          >
+            <Input
+              value={aboutText.title}
+              placeholder="Mang ánh trăng ấm áp"
+              onChange={(e) => setAboutText("title", e.target.value)}
+            />
+          </Field>
+          <Field
+            label="Tiêu đề — phần được tô màu"
+            hint="Phần này hiện với màu xanh chuyển sắc, nối ngay sau phần đầu."
+          >
+            <Input
+              value={aboutText.titleHighlight}
+              placeholder="đến với núi rừng"
+              onChange={(e) => setAboutText("titleHighlight", e.target.value)}
+            />
+          </Field>
+        </div>
+
+        <Field
+          label="Các đoạn giới thiệu"
+          hint="Mỗi mục là một đoạn văn. Kéo biểu tượng bên trái để đổi thứ tự."
+        >
+          <ListEditor<string>
+            value={aboutText.paragraphs}
+            onChange={(paragraphs) => setAboutText("paragraphs", paragraphs)}
+            addLabel="Thêm đoạn văn"
+            newItem={() => ""}
+            getSummary={(item, i) =>
+              item.trim()
+                ? item.length > 70
+                  ? `${item.slice(0, 70)}…`
+                  : item
+                : `(đoạn ${i + 1} chưa có nội dung)`
+            }
+            renderItem={(item, updateItem, index) => (
+              <Field label={`Đoạn ${index + 1}`}>
+                <Input.TextArea
+                  value={item}
+                  rows={4}
+                  showCount
+                  maxLength={600}
+                  placeholder="Trăng sáng Langbiang là dự án tình nguyện phi lợi nhuận…"
+                  status={item.trim() ? undefined : "error"}
+                  onChange={(e) => updateItem(e.target.value)}
+                />
+              </Field>
+            )}
+          />
+        </Field>
+
+        <Field
+          label="Dòng chữ trong ô kính trên ảnh"
+          hint="Dòng nhỏ nằm dưới dòng “Mùa … · năm”. Dòng “Mùa … · năm” do hệ thống tự tính nên không sửa được ở đây."
+        >
+          <Input
+            value={aboutText.badgeNote}
+            placeholder="Trở lại Langbiang với thật nhiều yêu thương."
+            onChange={(e) => setAboutText("badgeNote", e.target.value)}
+          />
+        </Field>
+
+        <Field
+          label="Chữ trên nút bấm"
+          hint="Nút xanh cuối mục, bấm vào sẽ cuộn xuống khối Đăng ký ở cùng trang."
+        >
+          <Input
+            value={aboutText.ctaPrimaryLabel}
+            placeholder="Đăng ký đồng hành 🌙"
+            onChange={(e) => setAboutText("ctaPrimaryLabel", e.target.value)}
+          />
         </Field>
       </EditorCard>
     </>

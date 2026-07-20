@@ -121,6 +121,71 @@ export type EventInfo = {
   locationProgram?: string;
 };
 
+/** Mục "Giới thiệu" ở trang chủ (chữ; ảnh nằm ở main.aboutImage). */
+export type AboutSection = {
+  /** Nhãn nhỏ phía trên tiêu đề. */
+  eyebrow: string;
+  /** Nửa đầu tiêu đề (chữ thường). */
+  title: string;
+  /** Nửa sau tiêu đề — được tô màu gradient xanh. */
+  titleHighlight: string;
+  /** Các đoạn văn giới thiệu, hiển thị theo đúng thứ tự. */
+  paragraphs: string[];
+  /** Dòng nhỏ trong ô kính trên ảnh (dòng "Mùa N · năm" phía trên tự tính). */
+  badgeNote: string;
+  /** Chữ trên nút chính (luôn trỏ xuống khối Đăng ký). */
+  ctaPrimaryLabel: string;
+};
+
+/** Một thẻ nhỏ giới thiệu vai trò ở khối Đăng ký. */
+export type RegisterHighlight = {
+  icon: string;
+  title: string;
+  desc: string;
+};
+
+/** Kiểu ô nhập của một trường trong form đăng ký. */
+export type RegisterFieldType =
+  | "text"
+  | "email"
+  | "tel"
+  | "date"
+  | "textarea"
+  | "select";
+
+/** Một trường của form đăng ký. */
+export type RegisterField = {
+  /** Mã trường (name của ô nhập) — không hiển thị cho khách. */
+  name: string;
+  label: string;
+  type: RegisterFieldType;
+  placeholder?: string;
+  required?: boolean;
+  /** Danh sách lựa chọn — chỉ dùng khi type = "select". */
+  options?: string[];
+};
+
+/** Khối "Đăng ký" ở trang chủ. */
+export type RegisterSection = {
+  eyebrow: string;
+  title: string;
+  /** Dòng thứ hai của tiêu đề — in bằng phông chữ viết tay, cỡ lớn hơn. */
+  titleHighlight: string;
+  description: string;
+  highlights: RegisterHighlight[];
+  /** Tiêu đề phía trên form. */
+  formTitle: string;
+  fields: RegisterField[];
+  submitLabel: string;
+  /** Màn cảm ơn sau khi gửi. */
+  successTitle: string;
+  successNote: string;
+  successAgainLabel: string;
+  /** Dòng cuối form: chữ dẫn + nhãn liên kết (đích lấy từ site.facebook). */
+  contactNote: string;
+  contactLinkLabel: string;
+};
+
 /** Bài tin tức (nội dung dài lưu ở dạng HTML an toàn — CKEditor). */
 export type NewsPost = {
   id: string;
@@ -146,6 +211,10 @@ export type MainContent = {
   heroPhotos: string[];
   /** Ảnh lớn của mục "Giới thiệu" ở trang chủ. */
   aboutImage: string;
+  /** Chữ của mục "Giới thiệu" ở trang chủ. */
+  about: AboutSection;
+  /** Khối "Đăng ký" ở trang chủ (chữ + cấu hình form). */
+  register: RegisterSection;
   faqs: Faq[];
   fundraising: Fundraising;
   sponsorTiers: SponsorTier[];
@@ -204,7 +273,10 @@ export const SLIDESHOW_LIMIT = 6;
 // v7: địa điểm tách riêng cho từng nơi hiển thị (chân trang / lịch trình /
 // trang Chương trình), bỏ trống thì dùng địa điểm chính.
 // v8: tách chữ ở trang chủ khỏi phần SEO (site.heroTagline).
-export const CONTENT_VERSION = 8;
+// v9: chữ mục Giới thiệu (main.about) và khối Đăng ký (main.register) quản lý
+// được từ admin — form đăng ký nay render động theo main.register.fields;
+// bỏ nút phụ "Vì sao nên tham gia?" ở mục Giới thiệu (trỏ tới khối đã xoá).
+export const CONTENT_VERSION = 9;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

@@ -40,7 +40,7 @@ export default async function Home() {
         <BannerSlider photos={main.gallery} />
         <News posts={news} currentYear={currentYear} carousel />
         <DonateBand />
-        <Register facebook={site.facebook} />
+        <Register facebook={site.facebook} content={main.register} />
         <Faq faqs={main.faqs} />
         <ExploreGrid />
       </main>
