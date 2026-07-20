@@ -25,7 +25,7 @@ export default function LoginForm() {
     >
       <Card style={{ width: "100%", maxWidth: 380 }}>
         <Typography.Title level={4} style={{ marginTop: 0, color: "#2e7d32" }}>
-          🌙 Trăng Sáng CMS
+          Trăng Sáng CMS
         </Typography.Title>
         <Typography.Paragraph type="secondary" style={{ fontSize: 13 }}>
           Khu quản trị nội dung dành cho Ban Tổ chức.

@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { ADMIN_NAV } from "@/lib/admin-nav";
+import { adminIcon } from "./adminIcons";
 import { publishDraftAction } from "@/lib/content/actions";
 import { logoutAction } from "@/lib/content/auth-actions";
 
@@ -33,7 +34,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     label: group.label,
     children: group.items.map((it) => ({
       key: it.slug,
-      icon: it.icon ? <span>{it.icon}</span> : undefined,
+      icon: adminIcon(it.slug),
       label: <Link href={`/admin/${it.slug}`}>{it.label}</Link>,
     })),
   }));
@@ -74,7 +75,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             overflow: "hidden",
           }}
         >
-          {collapsed ? "🌙" : "🌙 Trăng Sáng CMS"}
+          {collapsed ? "TS" : "Trăng Sáng CMS"}
         </div>
         <Menu
           mode="inline"
