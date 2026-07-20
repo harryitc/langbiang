@@ -92,8 +92,9 @@ export default async function Page({ params }: Params) {
           </p>
         </div>
 
-        {/* Cột phải — form */}
-        <RegisterFormCard form={form} facebook={site.facebook} />
+        {/* Cột phải — form. adaptive: nền trang này tối đi ở chế độ tối nên
+            thẻ form phải tối theo (khác trang chủ, nền xanh lá cố định). */}
+        <RegisterFormCard form={form} facebook={site.facebook} adaptive />
       </div>
 
       <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60 dark:text-ink/60">
