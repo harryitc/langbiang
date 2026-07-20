@@ -163,6 +163,8 @@ export const defaultContent: SiteContent = {
       successAgainLabel: "Gửi đăng ký khác",
       contactNote: "Hoặc liên hệ trực tiếp qua",
       contactLinkLabel: "Fanpage Facebook",
+      // Hộp thư nhận thông báo đăng ký. Bỏ trống -> dùng tạm site.email.
+      recipientEmail: "",
     },
     faqs: faqs.map((f) => ({ ...f })),
     fundraising: {
