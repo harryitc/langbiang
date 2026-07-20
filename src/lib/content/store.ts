@@ -58,9 +58,11 @@ export function normalize(raw: unknown): SiteContent {
 /* ------------------------------------------------------------------
    Đọc nội dung công khai (khách xem)
    ------------------------------------------------------------------ */
+// Khoá cache có kèm CONTENT_VERSION: đổi cấu trúc nội dung (schema) là cache
+// cũ tự vô hiệu, tránh phục vụ dữ liệu sai shape từ .next/cache.
 const cachedPublished = unstable_cache(
   async () => normalize(await readKey(PUBLISHED_KEY)),
-  ["content-published"],
+  ["content-published", String(CONTENT_VERSION)],
   { tags: [CONTENT_TAG] }
 );
 

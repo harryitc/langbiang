@@ -1,137 +1,91 @@
 "use client";
 
-import { Input, Alert, Space } from "antd";
+import { Alert, Input, Tag } from "antd";
 import {
   useSectionAutosave,
   SaveStatusTag,
   EditorCard,
-  ListEditor,
   Field,
 } from "../editorKit";
-import type { SpendingReport, SpendingItem } from "@/lib/content/schema";
+import type { SpendingReport } from "@/lib/content/schema";
 
-const { TextArea } = Input;
-
-/**
- * FR2-2.15: mỗi khoản mục cần biểu tượng, tên khoản và số tiền;
- * ghi chú là tuỳ chọn.
- */
-function missingFields(item: SpendingItem): string[] {
-  const missing: string[] = [];
-  if (!item.icon.trim()) missing.push("biểu tượng");
-  if (!item.item.trim()) missing.push("tên khoản");
-  if (!item.amount.trim()) missing.push("số tiền");
-  return missing;
+/** Link báo cáo phải là URL http/https nếu có nhập. */
+function isValidUrl(url: string): boolean {
+  if (!url.trim()) return true; // bỏ trống là hợp lệ (phần này sẽ tự ẩn)
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
-// Báo cáo chi tiêu — main.spendingReport
-export default function SpendingEditor({ initial }: { initial: SpendingReport }) {
+// Báo cáo thu – chi — main.spendingReport (chỉ là link Google Sheet)
+export default function SpendingEditor({
+  initial,
+}: {
+  initial: SpendingReport;
+}) {
   const { value, update, status } = useSectionAutosave<SpendingReport>(
     "main.spendingReport",
     initial
   );
 
-  // Tổng hợp cảnh báo cho toàn danh sách khoản mục (hiện ở đầu thẻ).
-  const invalidCount = value.items.filter(
-    (it) => missingFields(it).length > 0
-  ).length;
+  const urlOk = isValidUrl(value.url);
 
   return (
-    <EditorCard title="Báo cáo chi tiêu" extra={<SaveStatusTag status={status} />}>
-      {invalidCount > 0 ? (
-        <Alert
-          type="warning"
-          showIcon
-          className="mb-3"
-          message={`Có ${invalidCount} khoản mục chưa điền đủ thông tin.`}
+    <EditorCard
+      title="Báo cáo thu – chi"
+      extra={<SaveStatusTag status={status} />}
+    >
+      <p className="mb-3 text-sm opacity-60">
+        Không trình bày bảng số liệu trên web nữa — chỉ dán link Google Sheet để
+        khách bấm sang xem, cho tiện cập nhật. Bỏ trống link thì phần này{" "}
+        <strong>tự ẩn</strong> ở trang Gây quỹ.
+      </p>
+
+      <Field
+        label="Link Google Sheet"
+        hint="Nhớ đặt quyền chia sẻ “Bất kỳ ai có đường liên kết đều xem được”."
+      >
+        <Input
+          value={value.url}
+          placeholder="https://docs.google.com/spreadsheets/d/..."
+          status={urlOk ? "" : "error"}
+          onChange={(e) => update({ ...value, url: e.target.value })}
         />
-      ) : null}
+        {!urlOk ? (
+          <div className="mt-1 text-xs text-red-500">
+            Link phải bắt đầu bằng http:// hoặc https://.
+          </div>
+        ) : null}
+      </Field>
 
-      <ListEditor<SpendingItem>
-        value={value.items}
-        onChange={(items) => update({ ...value, items })}
-        title="Các khoản mục"
-        addLabel="Thêm khoản mục"
-        newItem={() => ({ icon: "🎁", item: "", amount: "", note: "" })}
-        renderItem={(item, updateItem) => {
-          const missing = missingFields(item);
-          return (
-            <Space direction="vertical" size={0} style={{ width: "100%" }}>
-              <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[90px_1fr_170px]">
-                <Field label="Biểu tượng" hint="Một emoji">
-                  <Input
-                    value={item.icon}
-                    placeholder="🎁"
-                    maxLength={4}
-                    status={item.icon.trim() ? "" : "error"}
-                    onChange={(e) => updateItem({ ...item, icon: e.target.value })}
-                  />
-                </Field>
-                <Field label="Tên khoản">
-                  <Input
-                    value={item.item}
-                    placeholder="Quà & nhu yếu phẩm cho các em"
-                    status={item.item.trim() ? "" : "error"}
-                    onChange={(e) => updateItem({ ...item, item: e.target.value })}
-                  />
-                </Field>
-                <Field label="Số tiền" hint="Nhập kèm đơn vị, ví dụ 45.000.000đ">
-                  <Input
-                    value={item.amount}
-                    placeholder="45.000.000đ"
-                    status={item.amount.trim() ? "" : "error"}
-                    onChange={(e) =>
-                      updateItem({ ...item, amount: e.target.value })
-                    }
-                  />
-                </Field>
-              </div>
-              <Field label="Ghi chú (tuỳ chọn)">
-                <Input
-                  value={item.note ?? ""}
-                  placeholder="500+ phần quà"
-                  onChange={(e) => updateItem({ ...item, note: e.target.value })}
-                />
-              </Field>
-              {missing.length > 0 ? (
-                <div className="text-xs text-red-500">
-                  Cần điền {missing.join(", ")}.
-                </div>
-              ) : (
-                <div className="text-xs opacity-60">
-                  Hiển thị: {item.icon} {item.item} — {item.amount}
-                  {item.note?.trim() ? ` (${item.note})` : ""}
-                </div>
-              )}
-            </Space>
-          );
-        }}
-      />
+      <Field
+        label="Ghi chú ngắn"
+        hint={
+          <>
+            Hiện phía trên nút bấm. Có thể dùng ký hiệu{" "}
+            <Tag className="mx-1">{"{năm}"}</Tag> để tự thay bằng số năm hiện tại.
+          </>
+        }
+      >
+        <Input.TextArea
+          value={value.note ?? ""}
+          rows={3}
+          maxLength={300}
+          showCount
+          placeholder="Toàn bộ khoản thu – chi mùa {năm} được cập nhật công khai trên Google Sheet."
+          onChange={(e) => update({ ...value, note: e.target.value })}
+        />
+      </Field>
 
-      <div className="mt-4 grid grid-cols-1 gap-x-3 sm:grid-cols-[220px_1fr]">
-        <Field label="Tổng cộng" hint="Nhập kèm đơn vị, ví dụ 100.000.000đ">
-          <Input
-            value={value.total}
-            placeholder="100.000.000đ"
-            status={value.total.trim() ? "" : "error"}
-            onChange={(e) => update({ ...value, total: e.target.value })}
-          />
-        </Field>
-        <Field
-          label="Ghi chú cập nhật"
-          hint="Dòng chú thích hiển thị dưới bảng chi tiêu."
-        >
-          <TextArea
-            value={value.updatedNote}
-            rows={3}
-            placeholder="Số liệu mang tính minh hoạ — sẽ cập nhật báo cáo thực tế sau mùa."
-            onChange={(e) => update({ ...value, updatedNote: e.target.value })}
-          />
-        </Field>
-      </div>
-
-      {!value.total.trim() ? (
-        <div className="text-xs text-red-500">Cần điền tổng cộng.</div>
+      {!value.url.trim() ? (
+        <Alert
+          type="info"
+          showIcon
+          message="Chưa có link — phần Báo cáo thu – chi đang ẩn trên trang Gây quỹ."
+        />
       ) : null}
     </EditorCard>
   );

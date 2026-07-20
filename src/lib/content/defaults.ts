@@ -16,7 +16,6 @@ import {
   board,
   donations,
   testimonials,
-  spendingReport,
   news as siteNews,
 } from "@/lib/site";
 import { gallery2025 } from "@/lib/gallery2025";
@@ -99,12 +98,11 @@ export const defaultContent: SiteContent = {
     },
     donations: donations.map((d) => ({ ...d })),
     testimonials: testimonials.map((t) => ({ ...t })),
+    // Báo cáo chi tiêu: chỉ là link Google Sheet (admin dán vào), không dựng
+    // bảng trên web. Bỏ trống -> phần này tự ẩn ở trang Gây quỹ.
     spendingReport: {
-      items: spendingReport.items.map((i) => ({ ...i })),
-      total: spendingReport.total,
-      // Dùng ký hiệu {năm} để bám theo số năm hiện tại (FR3/A2).
-      updatedNote:
-        "Số liệu mang tính minh hoạ — sẽ cập nhật báo cáo thực tế sau mùa {năm}.",
+      url: "",
+      note: "Toàn bộ khoản thu – chi mùa {năm} được cập nhật công khai trên Google Sheet.",
     },
   },
 

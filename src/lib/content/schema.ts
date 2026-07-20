@@ -93,11 +93,15 @@ export type Board = {
   members: Member[];
 };
 
-/** Báo cáo chi tiêu. */
+/**
+ * Báo cáo chi tiêu — không trình bày bảng trên web nữa, chỉ trỏ sang
+ * Google Sheet cho tiện cập nhật. Bỏ trống `url` thì phần này tự ẩn.
+ */
 export type SpendingReport = {
-  items: SpendingItem[];
-  total: string;
-  updatedNote: string;
+  /** Link Google Sheet báo cáo chi tiêu. */
+  url: string;
+  /** Ghi chú ngắn hiển thị cạnh nút (tuỳ chọn). Hỗ trợ ký hiệu {năm}. */
+  note?: string;
 };
 
 /** Thông tin thương hiệu + liên hệ + SEO/OG. */
@@ -191,7 +195,9 @@ export type SiteContent = {
 /* ------------------------------------------------------------------
    Hằng số store
    ------------------------------------------------------------------ */
-export const CONTENT_VERSION = 1;
+// v2: spendingReport đổi từ bảng {items,total,updatedNote} sang link Google Sheet
+// {url,note}; main.sponsorTiers mặc định để trống (tách khỏi dữ liệu mùa 2025).
+export const CONTENT_VERSION = 2;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

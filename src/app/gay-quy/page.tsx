@@ -29,59 +29,38 @@ export default async function FundraisingPage() {
     >
       <Fundraising showHeading={false} bg={false} />
 
-      {/* Báo cáo chi (thay cho "Quỹ dùng để làm gì?") */}
-      <section id="bao-cao-chi" className="bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
-        <div className="mx-auto max-w-4xl px-5 sm:px-6">
-          <Reveal className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
-            <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
-              Minh bạch
-            </span>
-            <h2 className="text-2xl font-extrabold text-forest sm:text-4xl dark:text-ink">
-              Báo cáo chi
-            </h2>
-            <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
-              Mọi đóng góp đều được sử dụng đúng mục đích và công khai sau mỗi mùa
-              dự án.
-            </p>
-          </Reveal>
-
-          <Reveal childrenStagger className="space-y-3">
-            {spendingReport.items.map((it) => (
-              <div
-                key={it.item}
-                className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-2xl bg-white/85 px-5 py-4 shadow-sm ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10"
+      {/* Báo cáo chi — chỉ trỏ sang Google Sheet; tự ẩn nếu chưa có link.
+          Dùng optional chaining phòng dữ liệu cũ (trước khi đổi sang link). */}
+      {spendingReport?.url?.trim() ? (
+        <section id="bao-cao-chi" className="bg-[#eef8ea] py-16 dark:bg-night-2 sm:py-24">
+          <div className="mx-auto max-w-2xl px-5 text-center sm:px-6">
+            <Reveal>
+              <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
+                Minh bạch
+              </span>
+              <h2 className="text-2xl font-extrabold text-forest sm:text-4xl dark:text-ink">
+                Báo cáo thu – chi
+              </h2>
+              {spendingReport.note?.trim() ? (
+                <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
+                  {fillYear(spendingReport.note, currentYear)}
+                </p>
+              ) : null}
+              <a
+                href={spendingReport.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-7 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-7 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:brightness-110"
               >
-                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-leaf/15 to-sun/15 text-2xl">
-                  {it.icon}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block font-semibold text-forest dark:text-ink">
-                    {it.item}
-                  </span>
-                  {it.note && (
-                    <span className="block text-xs text-forest/55 dark:text-ink/50">
-                      {it.note}
-                    </span>
-                  )}
-                </span>
-                <span className="font-bold text-leaf-deep dark:text-leaf-bright">
-                  {it.amount}
-                </span>
-              </div>
-            ))}
-          </Reveal>
-
-          <Reveal className="mt-5">
-            <div className="flex items-center justify-between rounded-2xl bg-gradient-to-r from-leaf-deep to-leaf px-5 py-4 text-white shadow-soft">
-              <span className="font-bold uppercase tracking-wide">Tổng chi</span>
-              <span className="text-lg font-extrabold">{spendingReport.total}</span>
-            </div>
-            <p className="mt-4 text-center text-sm text-forest/60 dark:text-ink/60">
-              {fillYear(spendingReport.updatedNote, currentYear)}
-            </p>
-          </Reveal>
-        </div>
-      </section>
+                Xem báo cáo chi tiết
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17L17 7M7 7h10v10" />
+                </svg>
+              </a>
+            </Reveal>
+          </div>
+        </section>
+      ) : null}
 
       {/* Nhà tài trợ mùa hiện tại (main.sponsorTiers) — tự ẩn nếu chưa có đơn vị nào. */}
       <Sponsors tiers={sponsorTiers} currentYear={currentYear} />
