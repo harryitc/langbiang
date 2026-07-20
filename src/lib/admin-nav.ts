@@ -28,6 +28,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
       { slug: "dang-ky", label: "Form đăng ký" },
       { slug: "dang-ky-nhan-duoc", label: "Đăng ký nhận được" },
       { slug: "mau-email", label: "Mẫu email" },
+      { slug: "gui-email", label: "Gửi email" },
       { slug: "faq", label: "Câu hỏi thường gặp" },
     ],
   },

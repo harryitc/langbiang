@@ -3,11 +3,16 @@
 // Bảng "Đăng ký nhận được" — liệt kê các lượt khách gửi MỘT form đăng ký,
 // mới nhất trước, kèm nút tải về file CSV để mở bằng Excel / Google Sheet.
 // Mỗi form có danh sách riêng; đổi form bằng ô chọn ở đầu trang.
+//
+// Tích chọn vài dòng rồi bấm "Gửi email…" để sang màn hình gửi thư cho đúng
+// những người đó.
+import type { Key } from "react";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Alert, Button, Card, Empty, Image, Select, Space, Table, Tag } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined, MailOutlined } from "@ant-design/icons";
 import type { Registration, RegisterFieldType } from "@/lib/content/schema";
+import { KHOA_CHON_TAM } from "./GuiEmailView";
 
 type Cot = { name: string; label: string; type?: RegisterFieldType };
 type FormItem = { id: string; name: string };
@@ -30,6 +35,10 @@ export default function RegistrationsView({
   const router = useRouter();
   const [dangChuyen, startChuyen] = useTransition();
   const [xemAnh, setXemAnh] = useState<string | null>(null);
+  // Các dòng đang tích: giữ cả khoá dòng (để bảng hiện dấu tích) lẫn mốc thời
+  // gian (để báo cho màn hình gửi email biết là những lượt đăng ký nào).
+  const [tichKeys, setTichKeys] = useState<Key[]>([]);
+  const [tichMoc, setTichMoc] = useState<string[]>([]);
 
   // Cột hiện theo thứ tự ô nhập đang cấu hình; những trường cũ (đã đổi/xoá
   // trong form) vẫn hiện ở sau để không mất dữ liệu đã nhận.
@@ -68,26 +77,55 @@ export default function RegistrationsView({
     URL.revokeObjectURL(url);
   };
 
+  /**
+   * Sang màn hình gửi email với đúng những dòng đang tích.
+   * Danh sách có thể rất dài nên gửi qua bộ nhớ phiên của trình duyệt thay vì
+   * nhét vào địa chỉ trang. Đây chỉ là gợi ý — máy chủ vẫn tự tra lại địa chỉ
+   * email từ dữ liệu gốc.
+   */
+  const guiEmailChoNguoiDaChon = () => {
+    sessionStorage.setItem(
+      KHOA_CHON_TAM,
+      JSON.stringify({ formId: currentFormId, moc: tichMoc })
+    );
+    startChuyen(() =>
+      router.push(`/admin/gui-email?form=${currentFormId}`)
+    );
+  };
+
   return (
     <Card
       title="Đăng ký nhận được"
       extra={
-        <Button
-          icon={<DownloadOutlined />}
-          className="cursor-pointer"
-          disabled={items.length === 0}
-          onClick={taiCsv}
-        >
-          Tải về file CSV
-        </Button>
+        <Space orientation="horizontal" size="small" wrap>
+          <Button
+            type="primary"
+            icon={<MailOutlined />}
+            className="cursor-pointer"
+            disabled={tichMoc.length === 0}
+            onClick={guiEmailChoNguoiDaChon}
+          >
+            {tichMoc.length === 0
+              ? "Gửi email — hãy tích chọn người nhận"
+              : `Gửi email cho ${tichMoc.length} người đã chọn`}
+          </Button>
+          <Button
+            icon={<DownloadOutlined />}
+            className="cursor-pointer"
+            disabled={items.length === 0}
+            onClick={taiCsv}
+          >
+            Tải về file CSV
+          </Button>
+        </Space>
       }
       styles={{ body: { paddingTop: 12 } }}
     >
       <p className="mb-3 text-sm opacity-60">
         Mỗi dòng là một lượt khách bấm gửi ở form đăng ký, mới nhất nằm trên
-        cùng. Mỗi form có danh sách riêng — chọn form bên dưới để xem. Trang này{" "}
-        <strong>chỉ để xem</strong>. Hệ thống giữ lại 500 lượt gần nhất cho mỗi
-        form.
+        cùng. Mỗi form có danh sách riêng — chọn form bên dưới để xem. Không sửa
+        hay xoá được ở đây; tích chọn vài dòng thì gửi email cho đúng những
+        người đó được. Hệ thống giữ lại 500 lượt gần nhất cho mỗi form.
       </p>
 
       <Space orientation="horizontal" size="small" wrap className="mb-3">
@@ -98,9 +136,12 @@ export default function RegistrationsView({
           style={{ minWidth: 260 }}
           className="cursor-pointer"
           options={forms.map((f) => ({ value: f.id, label: f.name }))}
-          onChange={(id) =>
-            startChuyen(() => router.push(`/admin/dang-ky-nhan-duoc?form=${id}`))
-          }
+          onChange={(id) => {
+            // Đổi form thì bỏ hết dấu tích cũ — chúng thuộc danh sách khác.
+            setTichKeys([]);
+            setTichMoc([]);
+            startChuyen(() => router.push(`/admin/dang-ky-nhan-duoc?form=${id}`));
+          }}
         />
       </Space>
 
@@ -131,6 +172,13 @@ export default function RegistrationsView({
           dataSource={items}
           scroll={{ x: "max-content" }}
           pagination={{ pageSize: 20, showSizeChanger: true }}
+          rowSelection={{
+            selectedRowKeys: tichKeys,
+            onChange: (keys, rows) => {
+              setTichKeys(keys);
+              setTichMoc(rows.map((r) => r.at));
+            },
+          }}
           columns={[
             {
               title: "Thời điểm gửi",
