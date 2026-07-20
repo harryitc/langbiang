@@ -107,7 +107,7 @@ export default function RegistrationsView({
           >
             {tichMoc.length === 0
               ? "Gửi email"
-              : `Gửi email ${tichMoc.length}`}
+              : `Gửi email (${tichMoc.length})`}
           </Button>
           <Button
             icon={<DownloadOutlined />}
