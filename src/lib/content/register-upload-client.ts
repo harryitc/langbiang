@@ -27,14 +27,45 @@ export async function uploadRegistrationPhoto(file: File): Promise<string> {
   try {
     const blob = await upload(`tnv/${safeName(file.name)}`, file, {
       access: "public",
-      handleUploadUrl: "/api/dang-ky/upload",
+      handleUploadUrl: UPLOAD_URL,
     });
     return blob.url;
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "";
-    if (msg.includes("BLOB_READ_WRITE_TOKEN") || msg.includes("Chưa bật lưu trữ ảnh")) {
-      throw new Error("Hiện chưa gửi kèm ảnh được. Bạn cứ điền các ô còn lại nhé.");
-    }
-    throw new Error(msg || "Tải ảnh lên không được. Bạn thử lại giúp nhé.");
+    throw new Error(await loiDeHieu(error));
   }
+}
+
+const UPLOAD_URL = "/api/dang-ky/upload";
+
+/**
+ * Đổi lỗi của thư viện thành câu khách đọc hiểu.
+ *
+ * Khi máy chủ từ chối, @vercel/blob chỉ ném "Failed to retrieve the client
+ * token" — nuốt mất lý do thật (chưa bật lưu trữ ảnh, quá hạn mức...). Nên
+ * hỏi lại máy chủ đúng một lần để lấy câu giải thích tiếng Việt.
+ */
+async function loiDeHieu(error: unknown): Promise<string> {
+  const goc = error instanceof Error ? error.message : "";
+  const MAC_DINH = "Tải ảnh lên không được. Bạn thử lại giúp nhé.";
+
+  // Lỗi đã rõ ràng rồi (vd quá dung lượng) thì dùng luôn.
+  if (goc && !goc.includes("client token")) return goc;
+
+  try {
+    const res = await fetch(UPLOAD_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      // Cố ý gửi thân rỗng: chỉ cần chạm tới các bước kiểm TRƯỚC khi cấp token
+      // (thiếu cấu hình / quá hạn mức) để đọc câu báo lỗi.
+      body: "{}",
+    });
+    const data = (await res.json()) as { error?: string };
+    if (res.status === 501) {
+      return "Hiện chưa gửi kèm ảnh được. Bạn cứ điền các ô còn lại rồi gửi nhé.";
+    }
+    if (data?.error) return data.error;
+  } catch {
+    // không hỏi được thì thôi, dùng câu mặc định
+  }
+  return MAC_DINH;
 }

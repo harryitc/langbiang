@@ -65,6 +65,17 @@ body {
 }
 
 /* ---------- Dark mode base ---------- */
+/* Báo cho trình duyệt biết trang đang ở tông nào, để các điều khiển do HỆ
+   THỐNG vẽ cũng đổi theo: danh sách xổ của <select>, lịch của <input
+   type="date">, thanh cuộn... Thiếu dòng này thì danh sách xổ vẫn nền trắng
+   chữ nhạt trong chế độ tối — chữ gần như không đọc được. */
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
 .dark body {
   color: var(--color-ink);
   background: var(--color-night);
