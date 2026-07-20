@@ -18,6 +18,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     items: [
       { slug: "thuong-hieu", label: "Thương hiệu & SEO" },
       { slug: "su-kien", label: "Sự kiện & số năm" },
+      { slug: "chan-trang", label: "Chân trang" },
     ],
   },
   {

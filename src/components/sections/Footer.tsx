@@ -5,7 +5,7 @@ import { fillYear, eventDateLabel, locationFor } from "@/lib/content/year";
 export default async function Footer() {
   const { main, currentYear, pastYears } = await getContent();
   const meta = main.site;
-  const { event } = main;
+  const { event, footer } = main;
   const latestPastYear = [...pastYears].sort((a, b) => b.year - a.year)[0];
 
   const links: [string, string][] = [
@@ -30,9 +30,8 @@ export default async function Footer() {
             <p className="font-display text-3xl font-bold text-white">
               {meta.name}
             </p>
-            <p className="mt-3 max-w-sm text-white/70">
-              Dự án tình nguyện mang Trung thu ấm áp đến các em nhỏ vùng cao
-              Langbiang – Đà Lạt, Lâm Đồng.
+            <p className="mt-3 max-w-sm whitespace-pre-line text-white/70">
+              {footer.description}
             </p>
             <a
               href={meta.facebook}
@@ -43,13 +42,13 @@ export default async function Footer() {
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
                 <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z" />
               </svg>
-              Theo dõi Fanpage
+              {footer.facebookLabel}
             </a>
           </div>
 
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-white/60">
-              Khám phá
+              {footer.exploreTitle}
             </h3>
             <ul className="mt-4 space-y-2.5 text-white/80">
               {links.map(([h, l]) => (
@@ -64,7 +63,7 @@ export default async function Footer() {
 
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-white/60">
-              Liên hệ
+              {footer.contactTitle}
             </h3>
             <ul className="mt-4 space-y-2.5 text-white/80">
               <li className="flex items-start gap-2">
@@ -87,9 +86,9 @@ export default async function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60 sm:flex-row">
           <p>
-            © {currentYear} {meta.name}. Được tạo bằng tất cả yêu thương 💚
+            © {currentYear} {meta.name}. {footer.copyrightNote}
           </p>
-          <p>Langbiang · Đà Lạt · Lâm Đồng</p>
+          <p>{footer.bottomNote}</p>
         </div>
       </div>
     </footer>
