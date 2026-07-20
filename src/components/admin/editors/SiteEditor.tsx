@@ -139,6 +139,16 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
           </Field>
         </div>
 
+        <Field
+          label="Logo"
+          hint="Ảnh logo ở thanh menu trên cùng của mọi trang. Nên dùng ảnh nền trong suốt (PNG). Bỏ trống sẽ dùng logo mặc định."
+        >
+          <ImageField
+            value={value.logo ?? ""}
+            onChange={(logo) => set("logo", logo)}
+          />
+        </Field>
+
         <div className="grid gap-x-4 md:grid-cols-3">
           <Field
             label="Email liên hệ *"

@@ -65,8 +65,13 @@ export default function HomeImagesEditor({
   return (
     <>
       <EditorCard
-        title="Chữ ở màn hình đầu trang"
-        extra={<SaveStatusTag status={siteStatus} />}
+        title="Màn hình đầu trang"
+        extra={
+          <span className="flex items-center gap-2">
+            <SaveStatusTag status={siteStatus} />
+            <SaveStatusTag status={heroStatus} />
+          </span>
+        }
       >
         <p className="mb-3 text-sm opacity-60">
           Hai dòng chữ kẹp trên và dưới tên dự án ở màn hình đầu tiên. Đây là chữ{" "}
@@ -95,64 +100,45 @@ export default function HomeImagesEditor({
             onChange={(e) => setSite("subtitle", e.target.value)}
           />
         </Field>
-      </EditorCard>
 
-      <EditorCard title="Logo" extra={<SaveStatusTag status={siteStatus} />}>
-        <p className="mb-3 text-sm opacity-60">
-          Logo hiển thị ở thanh menu trên cùng của <strong>mọi trang</strong>.
-          Nên dùng ảnh nền trong suốt (PNG) cho đẹp.
-        </p>
-        <Field label="Ảnh logo" hint="Bỏ trống sẽ dùng logo mặc định của dự án.">
-          <ImageField
-            value={site.logo ?? ""}
-            onChange={(logo) => updateSite({ ...site, logo })}
-          />
-        </Field>
-      </EditorCard>
-
-      <EditorCard
-        title="Ảnh nổi ở đầu trang chủ"
-        extra={<SaveStatusTag status={heroStatus} />}
-      >
-        <p className="mb-3 text-sm opacity-60">
-          Bốn ảnh nhỏ bay lượn quanh màn hình đầu <strong>trang chủ</strong>. Vị
-          trí, độ nghiêng và kích thước đã cố định theo thiết kế — ở đây chỉ cần{" "}
-          <strong>đổi ảnh</strong>.
-        </p>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {heroSlots.map((src, i) => (
-            <Field key={i} label={`Ảnh ${i + 1} — ${HERO_SLOTS[i]}`}>
-              <ImageField value={src} onChange={(v) => setHeroAt(i, v)} />
-            </Field>
-          ))}
+        <div className="mt-4 border-t border-black/5 pt-4">
+          <div className="mb-1 font-semibold">Bốn ảnh nhỏ bay quanh</div>
+          <p className="mb-3 text-sm opacity-60">
+            Vị trí, độ nghiêng và kích thước đã cố định theo thiết kế — ở đây chỉ
+            cần đổi ảnh. Ô để trống sẽ dùng ảnh mặc định.
+          </p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {heroSlots.map((src, i) => (
+              <Field key={i} label={`Ảnh ${i + 1} — ${HERO_SLOTS[i]}`}>
+                <ImageField
+                  value={src}
+                  onChange={(v) => setHeroAt(i, v)}
+                />
+              </Field>
+            ))}
+          </div>
         </div>
-        {heroSlots.some((s) => !s.trim()) ? (
-          <Alert
-            type="info"
-            showIcon
-            title="Ô ảnh để trống sẽ dùng ảnh mặc định."
-          />
-        ) : null}
       </EditorCard>
 
+
+
+
       <EditorCard
-        title="Ảnh mục Giới thiệu"
-        extra={<SaveStatusTag status={aboutStatus} />}
+        title="Mục Giới thiệu"
+        extra={
+          <span className="flex items-center gap-2">
+            <SaveStatusTag status={aboutStatus} />
+            <SaveStatusTag status={aboutTextStatus} />
+          </span>
+        }
       >
-        <p className="mb-3 text-sm opacity-60">
-          Ảnh lớn bên trái mục giới thiệu dự án ở <strong>trang chủ</strong> —
-          phần &ldquo;Mang ánh trăng ấm áp đến với núi rừng&rdquo;. Ảnh chụp dọc
-          hiển thị đẹp nhất.
-        </p>
-        <Field label="Ảnh giới thiệu" hint="Bỏ trống sẽ dùng ảnh mặc định.">
+        <Field
+          label="Ảnh lớn bên trái"
+          hint="Ảnh chụp dọc hiển thị đẹp nhất. Bỏ trống sẽ dùng ảnh mặc định."
+        >
           <ImageField value={about} onChange={updateAbout} />
         </Field>
-      </EditorCard>
 
-      <EditorCard
-        title="Chữ mục Giới thiệu"
-        extra={<SaveStatusTag status={aboutTextStatus} />}
-      >
         <p className="mb-3 text-sm opacity-60">
           Phần chữ nằm bên phải ảnh giới thiệu ở <strong>trang chủ</strong> —
           khối &ldquo;Mang ánh trăng ấm áp đến với núi rừng&rdquo;.

@@ -10,10 +10,12 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import {
+  App,
   Button,
   Card,
   Input,
   Modal,
+  Popconfirm,
   Space,
   Spin,
   Tag,
@@ -25,6 +27,8 @@ import {
   PictureOutlined,
 } from "@ant-design/icons";
 import { saveDraftAction } from "@/lib/content/actions";
+import { uploadImage } from "@/lib/content/upload-client";
+import { addMediaAction } from "@/lib/content/media-actions";
 import MediaBrowser from "./MediaBrowser";
 import { SortableList } from "./itemList";
 
@@ -254,6 +258,12 @@ export function ListEditor<T>(props: ListEditorProps<T>) {
 /* ------------------------------------------------------------------
    ImageField — chọn ảnh từ KHO ẢNH tập trung (hoặc dán URL ngoài)
    ------------------------------------------------------------------ */
+/** Tên tệp lấy từ đường dẫn ảnh (để biết đang dùng ảnh nào). */
+function fileNameFromUrl(url: string): string {
+  const clean = url.split("?")[0];
+  return decodeURIComponent(clean.substring(clean.lastIndexOf("/") + 1)) || url;
+}
+
 export function ImageField({
   value,
   onChange,
@@ -263,52 +273,153 @@ export function ImageField({
   /** Giữ để tương thích call-site cũ; ảnh nay đi qua kho ảnh chung. */
   folder?: string;
 }) {
+  const { message } = App.useApp();
   const [open, setOpen] = useState(false);
   const [urlMode, setUrlMode] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [broken, setBroken] = useState(false);
+
+  /** Kéo ảnh từ máy thả vào -> tải lên kho rồi gán luôn. */
+  async function handleDrop(file: File) {
+    if (!file.type.startsWith("image/")) {
+      message.error("Tệp này không phải ảnh. Hãy thả tệp ảnh (jpg, png, webp…).");
+      return;
+    }
+    setUploading(true);
+    try {
+      const url = await uploadImage(file, "kho");
+      await addMediaAction({ url, name: file.name, albumId: "alb-khac" }).catch(
+        () => {}
+      );
+      setBroken(false);
+      onChange(url);
+      message.success("Đã tải ảnh lên kho và dùng cho mục này.");
+    } catch (err) {
+      message.error(
+        err instanceof Error
+          ? err.message
+          : "Tải ảnh lên không thành công. Thử lại hoặc chọn từ kho ảnh."
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <div>
-      <Space orientation="vertical" style={{ width: "100%" }} size={8}>
+      <div
+        // Kéo ảnh từ máy thả thẳng vào khung này.
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          const f = e.dataTransfer.files?.[0];
+          if (f) void handleDrop(f);
+        }}
+        // Không ép khung: ảnh giữ đúng tỉ lệ gốc, chỉ giới hạn chiều cao 96px
+        // như bản đầu. Khung trống mới cần kích thước cố định cho dòng gợi ý.
+        className={`relative inline-block h-24 overflow-hidden rounded-lg border-2 border-dashed align-top transition ${
+          value ? "" : "w-44"
+        } ${
+          dragging
+            ? "border-[#2e7d32] bg-[#2e7d32]/[0.06]"
+            : value
+            ? "border-transparent"
+            : "border-black/15 hover:border-black/30"
+        }`}
+      >
         {value ? (
-          <div>
+          <div className="relative h-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={value}
               alt="Xem trước"
-              style={{
-                maxHeight: 96,
-                maxWidth: "100%",
-                borderRadius: 8,
-                border: "1px solid rgba(0,0,0,0.1)",
-              }}
+              onError={() => setBroken(true)}
+              onLoad={() => setBroken(false)}
+              className="h-full w-auto max-w-[280px] object-contain"
             />
-            <div>
-              <Button size="small" icon={<PictureOutlined />} onClick={() => setOpen(true)}>
-                Đổi ảnh
-              </Button>
-              <Button size="small" type="link" danger onClick={() => onChange("")}>
-                Xoá ảnh
-              </Button>
-            </div>
+            {broken ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-red-50/90 px-3 text-center text-xs text-red-600">
+                Không tải được ảnh — đường dẫn có thể đã hỏng.
+              </div>
+            ) : null}
           </div>
         ) : (
-          <Space wrap>
-            <Button icon={<PictureOutlined />} onClick={() => setOpen(true)}>
-              Chọn từ kho ảnh
-            </Button>
-            <Button type="text" size="small" onClick={() => setUrlMode((v) => !v)}>
-              Dán đường dẫn ảnh
-            </Button>
-          </Space>
+          <button
+            className="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1 px-2 text-center"
+            onClick={() => setOpen(true)}
+          >
+            {uploading ? (
+              <Spin />
+            ) : (
+              <>
+                <PictureOutlined className="text-xl opacity-40" />
+                <span className="text-[11px] leading-tight opacity-60">
+                  Kéo ảnh vào đây
+                  <br />
+                  hoặc bấm để chọn từ kho
+                </span>
+              </>
+            )}
+          </button>
         )}
-        {urlMode && !value ? (
-          <LinkInput
-            placeholder="Dán đường dẫn ảnh, ví dụ https://…"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        ) : null}
-      </Space>
+      </div>
+
+      {value ? (
+        <div className="mt-1.5 max-w-[220px]">
+          <div className="truncate text-xs opacity-60" title={value}>
+            {fileNameFromUrl(value)}
+          </div>
+          <div className="mt-1 flex items-center gap-1">
+            <Button
+              size="small"
+              className="cursor-pointer"
+              icon={<PictureOutlined />}
+              loading={uploading}
+              onClick={() => setOpen(true)}
+            >
+              Đổi ảnh
+            </Button>
+            <Popconfirm
+              title="Bỏ ảnh khỏi mục này?"
+              description="Ảnh vẫn còn trong kho, có thể chọn lại sau."
+              okText="Bỏ ảnh"
+              cancelText="Huỷ"
+              onConfirm={() => {
+                setBroken(false);
+                onChange("");
+              }}
+            >
+              <Button size="small" type="text" danger className="cursor-pointer">
+                Bỏ ảnh
+              </Button>
+            </Popconfirm>
+          </div>
+        </div>
+      ) : (
+        <Button
+          type="text"
+          size="small"
+          className="mt-1 cursor-pointer"
+          onClick={() => setUrlMode((v) => !v)}
+        >
+          Dán đường dẫn ảnh
+        </Button>
+      )}
+
+      {urlMode && !value ? (
+        <LinkInput
+          className="mt-1 max-w-[260px]"
+          placeholder="Dán đường dẫn ảnh, ví dụ https://…"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      ) : null}
 
       <Modal
         open={open}
@@ -321,6 +432,7 @@ export function ImageField({
         <MediaBrowser
           mode="pick"
           onPick={(url) => {
+            setBroken(false);
             onChange(url);
             setOpen(false);
           }}
