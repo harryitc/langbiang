@@ -182,6 +182,28 @@ export function normalize(raw: unknown): SiteContent {
     migrateEmailTemplates(migrateRegisterForms(raw))
   );
   const merged = mergeDeep(defaultContent, migrated);
+
+  // Đồng bộ link Shopee 2 chiều giữa main.site.shopee và kênh gây quỹ Shopee
+  const shopeeChannel = merged.main.fundraising?.channels?.find(
+    (c) => c.icon === "🛒" || c.name?.toLowerCase().includes("shopee")
+  );
+  const shopeeUrl =
+    merged.main.site.shopee?.trim() || shopeeChannel?.href?.trim() || "";
+
+  if (shopeeUrl) {
+    merged.main.site.shopee = shopeeUrl;
+    if (Array.isArray(merged.main.fundraising?.channels)) {
+      merged.main.fundraising.channels = merged.main.fundraising.channels.map(
+        (c) => {
+          if (c.icon === "🛒" || c.name?.toLowerCase().includes("shopee")) {
+            return { ...c, href: shopeeUrl };
+          }
+          return c;
+        }
+      );
+    }
+  }
+
   return { ...merged, version: CONTENT_VERSION };
 }
 
