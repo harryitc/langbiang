@@ -100,11 +100,18 @@ export const defaultContent: SiteContent = {
     },
     // Chỉ nhập phần ngày/tháng — năm do hệ thống tự nối theo currentYear
     // (không để người dùng phải giữ ký hiệu {năm} dễ xoá nhầm).
+    // Các khoá không bắt buộc vẫn PHẢI có mặt ở đây, kể cả để chuỗi rỗng:
+    // normalize() trộn nội dung theo đúng danh sách khoá của bản mặc định này,
+    // khoá nào vắng mặt ở đây thì chữ admin nhập vào sẽ bị bỏ lúc đọc ra.
     event: {
       dateLabel: "Ngày 26 – 27 tháng 9",
       dateISO: site.dateISO,
       dateEndISO: "2026-09-27",
+      countdownLabel: "",
       location: site.location,
+      locationFooter: "",
+      locationTimeline: "",
+      locationProgram: "",
     },
     activities: activities.map((a) => ({ ...a })),
     timeline: timeline.map((d) => ({

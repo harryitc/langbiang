@@ -113,6 +113,11 @@ export type EventInfo = {
   dateLabel: string;
   dateISO: string;
   dateEndISO?: string;
+  /**
+   * Dòng chữ nhỏ phía trên đồng hồ đếm ngược ở trang chủ.
+   * Bỏ trống -> dùng câu mặc định (COUNTDOWN_LABEL_MAC_DINH).
+   */
+  countdownLabel?: string;
   /** Địa điểm chính — dùng cho dữ liệu gửi Google và làm mặc định cho các nơi khác. */
   location: string;
   /** Ghi đè riêng cho chân trang (bỏ trống -> dùng địa điểm chính). */
@@ -122,6 +127,13 @@ export type EventInfo = {
   /** Ghi đè riêng cho trang Chương trình. */
   locationProgram?: string;
 };
+
+/**
+ * Câu mặc định trên đồng hồ đếm ngược, dùng khi admin để trống
+ * `EventInfo.countdownLabel`. Để ở đây (không nằm cứng trong Hero) để cả trang
+ * chủ lẫn ô nhập trong admin cùng lấy một chỗ, không lệch nhau.
+ */
+export const COUNTDOWN_LABEL_MAC_DINH = "Đếm ngược ngày khởi hành";
 
 /** Mục "Giới thiệu" ở trang chủ (chữ; ảnh nằm ở main.aboutImage). */
 export type AboutSection = {
@@ -452,7 +464,11 @@ export const SLIDESHOW_LIMIT = 6;
 // danh sách rời nhau nên luôn lệch; nay chung `registerForms[].roles`. Thêm kiểu
 // ô nhập "roles": hiện đúng lưới thẻ như ngoài trang chủ và cho khách tích
 // NHIỀU vai trò (lưu chung một ô, ngăn nhau bằng ", ").
-export const CONTENT_VERSION = 15;
+// v16: chữ trên đồng hồ đếm ngược sửa được từ admin (main.event.countdownLabel).
+// Nhân tiện bù ba khoá địa điểm ghi riêng (locationFooter/Timeline/Program) vào
+// bản mặc định — chúng vốn thiếu ở đó nên normalize() sẽ bỏ mất chữ admin nhập,
+// lỗi chưa lộ ra chỉ vì chưa ai điền ba ô ấy.
+export const CONTENT_VERSION = 16;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

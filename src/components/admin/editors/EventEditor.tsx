@@ -12,7 +12,10 @@ import {
   Field,
 } from "../editorKit";
 import { eventDateLabel, isValidYear } from "@/lib/content/year";
-import type { EventInfo } from "@/lib/content/schema";
+import {
+  COUNTDOWN_LABEL_MAC_DINH,
+  type EventInfo,
+} from "@/lib/content/schema";
 
 /** Editor sự kiện gom 2 nhánh nội dung: main.event và currentYear (FR3). */
 export type EventEditorInitial = {
@@ -183,6 +186,23 @@ export default function EventEditor({
             />
           </Field>
         </Space>
+
+        <Field
+          label="Chữ trên đồng hồ đếm ngược"
+          hint={
+            <>
+              Dòng chữ nhỏ nằm ngay trên đồng hồ đếm ngược ở{" "}
+              <strong>trang chủ</strong>. Bỏ trống thì hiện câu mặc định{" "}
+              <em>{COUNTDOWN_LABEL_MAC_DINH}</em>.
+            </>
+          }
+        >
+          <Input
+            placeholder={COUNTDOWN_LABEL_MAC_DINH}
+            value={event.countdownLabel ?? ""}
+            onChange={(e) => setField("countdownLabel", e.target.value)}
+          />
+        </Field>
 
         <Field
           label="Địa điểm chính"

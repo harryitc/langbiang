@@ -18,6 +18,8 @@ type HeroProps = {
   dateLabel: string;
   /** Ngày bắt đầu sự kiện — nguồn cho đồng hồ đếm ngược (A3). */
   dateISO: string;
+  /** Dòng chữ nhỏ trên đồng hồ đếm ngược (main.event.countdownLabel). */
+  countdownLabel: string;
   /** Dòng chữ trên tiêu đề (site.tagline). */
   tagline: string;
   /** Dòng địa điểm dưới tiêu đề (site.subtitle). */
@@ -46,7 +48,14 @@ const heroFloats: HeroFloat[] = [
   { src: "/gallery/g6.jpg", alt: "Tình nguyện viên", side: "right", top: "61%", offset: "4.5vw", width: "clamp(80px,9vw,168px)", rotate: -5, depth: -120, delay: "2.1s" },
 ];
 
-export default function Hero({ dateLabel, dateISO, tagline, subtitle, photos = [] }: HeroProps) {
+export default function Hero({
+  dateLabel,
+  dateISO,
+  countdownLabel,
+  tagline,
+  subtitle,
+  photos = [],
+}: HeroProps) {
   // Bố cục (vị trí/nghiêng/kích thước) giữ trong code; admin chỉ đổi ảnh.
   const floats = heroFloats.map((f, i) => ({ ...f, src: photos[i]?.trim() || f.src }));
   const root = useRef<HTMLDivElement>(null);
@@ -189,7 +198,7 @@ export default function Hero({ dateLabel, dateISO, tagline, subtitle, photos = [
           {subtitle}
         </p>
 
-        <p className="hero-date mt-2 font-script text-3xl font-semibold uppercase text-leaf-deep sm:text-4xl dark:text-leaf-bright">
+        <p className="hero-date mt-2 text-xl font-bold uppercase tracking-wide text-leaf-deep sm:text-2xl dark:text-leaf-bright">
           {dateLabel}
         </p>
 
@@ -210,7 +219,7 @@ export default function Hero({ dateLabel, dateISO, tagline, subtitle, photos = [
 
         <div className="hero-count mt-10 flex flex-col items-center gap-3">
           <span className="text-xs font-semibold uppercase tracking-widest text-forest/60 dark:text-ink/60">
-            Đếm ngược đến ngày lên đường
+            {countdownLabel}
           </span>
           <Countdown dateISO={dateISO} />
         </div>

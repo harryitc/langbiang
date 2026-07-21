@@ -14,7 +14,10 @@ import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
 import { getContent } from "@/lib/content/store";
 import { eventDateLabel } from "@/lib/content/year";
-import { activeRegisterForm } from "@/lib/content/schema";
+import {
+  activeRegisterForm,
+  COUNTDOWN_LABEL_MAC_DINH,
+} from "@/lib/content/schema";
 
 export default async function Home() {
   const { main, currentYear, pastYears, news } = await getContent();
@@ -38,6 +41,9 @@ export default async function Home() {
         <Hero
           dateLabel={eventDateLabel(event.dateLabel, currentYear)}
           dateISO={event.dateISO}
+          countdownLabel={
+            event.countdownLabel?.trim() || COUNTDOWN_LABEL_MAC_DINH
+          }
           tagline={site.heroTagline?.trim() || site.tagline}
           subtitle={site.subtitle}
           photos={main.heroPhotos}
