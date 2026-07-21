@@ -11,6 +11,7 @@ export default async function Page() {
         heroPhotos: main.heroPhotos,
         aboutImage: main.aboutImage,
         about: main.about,
+        donateBand: main.donateBand,
       }}
     />
   );

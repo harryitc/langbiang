@@ -64,6 +64,24 @@ export type Fundraising = {
   channels: FundraisingChannel[];
 };
 
+/**
+ * Dải "Gian hàng quyên góp" màu cam ở trang chủ.
+ *
+ * Đường dẫn của hai nút KHÔNG nằm ở đây: nút chính luôn trỏ tới gian hàng
+ * Shopee (`site.shopee`, sửa ở mục Thương hiệu & SEO), nút phụ luôn trỏ tới
+ * trang Gây quỹ của chính website. Ở đây chỉ đổi chữ.
+ */
+export type DonateBand = {
+  /** Nhãn nhỏ trong ô bo tròn, phía trên tiêu đề. */
+  eyebrow: string;
+  title: string;
+  desc: string;
+  /** Chữ trên nút trắng (dẫn sang gian hàng Shopee). */
+  primaryLabel: string;
+  /** Chữ trên nút viền (dẫn sang trang Gây quỹ). */
+  secondaryLabel: string;
+};
+
 /** Một hạng tài trợ + các đơn vị trong hạng. */
 export type SponsorTier = {
   tier: string;
@@ -369,6 +387,8 @@ export type MainContent = {
   /** Id của form đang hiển thị ở khối "Đăng ký" ngoài trang chủ. */
   activeRegisterFormId: string;
   faqs: Faq[];
+  /** Chữ trên dải "Gian hàng quyên góp" ở trang chủ. */
+  donateBand: DonateBand;
   fundraising: Fundraising;
   sponsorTiers: SponsorTier[];
   board: Board;
@@ -468,7 +488,9 @@ export const SLIDESHOW_LIMIT = 6;
 // Nhân tiện bù ba khoá địa điểm ghi riêng (locationFooter/Timeline/Program) vào
 // bản mặc định — chúng vốn thiếu ở đó nên normalize() sẽ bỏ mất chữ admin nhập,
 // lỗi chưa lộ ra chỉ vì chưa ai điền ba ô ấy.
-export const CONTENT_VERSION = 16;
+// v17: chữ trên dải "Gian hàng quyên góp" ở trang chủ (main.donateBand) sửa
+// được từ admin thay vì nằm cứng trong DonateBand.tsx.
+export const CONTENT_VERSION = 17;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

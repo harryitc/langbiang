@@ -5,9 +5,14 @@ import { getContent } from "@/lib/content/store";
 /**
  * Gian hàng quyên góp — dải CTA nổi bật, "nháy nháy" thu hút (anh Vũ yêu cầu).
  * Responsive: 1 cột trên mobile, 2 cột từ md.
+ *
+ * Chữ do admin soạn (main.donateBand, mục "Nội dung trang chủ"). Đường dẫn hai
+ * nút thì không: nút chính luôn trỏ tới gian hàng Shopee ở mục Thương hiệu &
+ * SEO, nút phụ luôn trỏ tới trang Gây quỹ của chính website.
  */
 export default async function DonateBand() {
   const { main } = await getContent();
+  const band = main.donateBand;
   return (
     <section id="donate" className="relative py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
@@ -20,14 +25,13 @@ export default async function DonateBand() {
               <div className="max-w-xl">
                 <span className="animate-blink inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
                   <span className="block h-2 w-2 rounded-full bg-white" />
-                  Gian hàng quyên góp
+                  {band.eyebrow}
                 </span>
                 <h2 className="mt-3 text-2xl font-extrabold leading-tight sm:text-3xl md:text-4xl">
-                  Mua sắm cũng là sẻ chia 🛒
+                  {band.title}
                 </h2>
                 <p className="mt-2 text-sm text-white/90 sm:text-base">
-                  Mỗi sản phẩm bạn mua tại gian hàng Shopee của dự án là một phần
-                  quà Trung thu gửi đến các em nhỏ Langbiang.
+                  {band.desc}
                 </p>
               </div>
 
@@ -38,13 +42,13 @@ export default async function DonateBand() {
                   rel="noopener noreferrer"
                   className="animate-pulse-glow flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-bold text-[#ee4d2d] transition hover:scale-[1.03]"
                 >
-                  Ghé gian hàng Shopee
+                  {band.primaryLabel}
                 </a>
                 <Link
                   href="/gay-quy"
                   className="rounded-full border-2 border-white/60 px-7 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/15"
                 >
-                  Cách khác để đóng góp
+                  {band.secondaryLabel}
                 </Link>
               </div>
             </div>

@@ -11,7 +11,11 @@ import {
   ImageField,
   ListEditor,
 } from "../editorKit";
-import type { AboutSection, SiteMeta } from "@/lib/content/schema";
+import type {
+  AboutSection,
+  DonateBand,
+  SiteMeta,
+} from "@/lib/content/schema";
 
 /** Vị trí của 4 ảnh nổi trên Hero — mô tả cho người biên tập dễ hình dung. */
 const HERO_SLOTS = [
@@ -26,6 +30,7 @@ export type HomeImagesInitial = {
   heroPhotos: string[];
   aboutImage: string;
   about: AboutSection;
+  donateBand: DonateBand;
 };
 
 export default function HomeImagesEditor({
@@ -45,6 +50,14 @@ export default function HomeImagesEditor({
     update: updateAboutText,
     status: aboutTextStatus,
   } = useSectionAutosave<AboutSection>("main.about", initial.about);
+  const {
+    value: band,
+    update: updateBand,
+    status: bandStatus,
+  } = useSectionAutosave<DonateBand>("main.donateBand", initial.donateBand);
+
+  const setBand = <K extends keyof DonateBand>(key: K, v: DonateBand[K]) =>
+    updateBand({ ...band, [key]: v });
 
   const setAboutText = <K extends keyof AboutSection>(
     key: K,
@@ -229,6 +242,64 @@ export default function HomeImagesEditor({
             value={aboutText.ctaPrimaryLabel}
             placeholder="Đăng ký đồng hành 🌙"
             onChange={(e) => setAboutText("ctaPrimaryLabel", e.target.value)}
+          />
+        </Field>
+      </EditorCard>
+
+      <EditorCard
+        title="Dải “Gian hàng quyên góp”"
+        extra={<SaveStatusTag status={bandStatus} />}
+      >
+        <p className="mb-3 text-sm opacity-60">
+          Dải màu cam nằm giữa trang chủ, mời mọi người mua ủng hộ. Ở đây chỉ đổi{" "}
+          <strong>chữ</strong>. Đường dẫn của hai nút không sửa ở đây: nút trắng
+          luôn dẫn sang gian hàng Shopee (đổi địa chỉ ở mục{" "}
+          <em>Thương hiệu &amp; SEO</em>), nút viền luôn dẫn sang trang Gây quỹ.
+        </p>
+
+        <Field
+          label="Nhãn nhỏ phía trên"
+          hint="Chữ trong ô bo tròn nhấp nháy, viết ngắn."
+        >
+          <Input
+            value={band.eyebrow}
+            placeholder="Gian hàng quyên góp"
+            onChange={(e) => setBand("eyebrow", e.target.value)}
+          />
+        </Field>
+
+        <Field label="Tiêu đề" hint="Dòng chữ to nhất. Thêm emoji cũng được.">
+          <Input
+            value={band.title}
+            placeholder="Mua sắm cũng là sẻ chia 🛒"
+            onChange={(e) => setBand("title", e.target.value)}
+          />
+        </Field>
+
+        <Field label="Đoạn giới thiệu ngắn" hint="1–2 dòng là vừa đẹp.">
+          <Input.TextArea
+            value={band.desc}
+            rows={2}
+            showCount
+            maxLength={300}
+            placeholder="Mỗi sản phẩm bạn mua tại gian hàng Shopee của dự án…"
+            onChange={(e) => setBand("desc", e.target.value)}
+          />
+        </Field>
+
+        <Field label="Chữ trên nút trắng" hint="Nút dẫn sang gian hàng Shopee.">
+          <Input
+            value={band.primaryLabel}
+            placeholder="Ghé gian hàng Shopee"
+            onChange={(e) => setBand("primaryLabel", e.target.value)}
+          />
+        </Field>
+
+        <Field label="Chữ trên nút viền" hint="Nút dẫn sang trang Gây quỹ.">
+          <Input
+            value={band.secondaryLabel}
+            placeholder="Cách khác để đóng góp"
+            onChange={(e) => setBand("secondaryLabel", e.target.value)}
           />
         </Field>
       </EditorCard>
