@@ -73,7 +73,7 @@ export default function Sponsors({
     <section className="relative py-16 sm:py-24">
       <span id="sponsors" aria-hidden className="block" />
       <div className="mx-auto max-w-7xl px-5 sm:px-6">
-        <Reveal className="mx-auto max-w-2xl text-center">
+        <Reveal className="mx-auto max-w-3xl text-center">
           <span className="mb-3 inline-block rounded-full bg-sun/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-sunset">
             Đơn vị đồng hành
           </span>
@@ -105,7 +105,7 @@ export default function Sponsors({
           ))}
         </div>
 
-        <Reveal className="mt-14 text-center">
+        {/* <Reveal className="mt-14 text-center">
           <div className="inline-flex flex-col items-center gap-3 rounded-3xl bg-leaf/5 px-6 py-7 ring-1 ring-leaf/15 dark:bg-white/[0.03] dark:ring-leaf-bright/10 sm:px-8">
             <p className="text-lg font-semibold text-forest dark:text-ink">
               Trở thành đơn vị đồng hành mùa {currentYear}?
@@ -121,7 +121,7 @@ export default function Sponsors({
               Liên hệ tài trợ ✨
             </a>
           </div>
-        </Reveal>
+        </Reveal> */}
       </div>
 
       {/* Modal giới thiệu đơn vị */}

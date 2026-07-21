@@ -9,6 +9,7 @@ import News from "@/components/sections/News";
 import About from "@/components/sections/About";
 import DonateBand from "@/components/DonateBand";
 import Register from "@/components/sections/Register";
+import Sponsors from "@/components/sections/Sponsors";
 import Faq from "@/components/sections/Faq";
 import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
@@ -21,7 +22,7 @@ import {
 
 export default async function Home() {
   const { main, currentYear, pastYears, news } = await getContent();
-  const { site, event } = main;
+  const { site, event, sponsorTiers } = main;
   // Form đăng ký admin chọn hiển thị ở trang chủ (id hỏng -> lùi về form đầu).
   const registerForm = activeRegisterForm(
     main.registerForms,
@@ -55,6 +56,7 @@ export default async function Home() {
         {registerForm ? (
           <Register facebook={site.facebook} content={registerForm} />
         ) : null}
+        <Sponsors tiers={sponsorTiers} currentYear={currentYear} />
         <Faq faqs={main.faqs} />
         <ExploreGrid />
       </main>
