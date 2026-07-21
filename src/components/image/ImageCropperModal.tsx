@@ -91,7 +91,7 @@ export default function ImageCropperModal({
       // thành mảng đen khi xuất WebP.
       const canvas = cropperRef.current?.getCanvas({
         maxArea: MAX_AREA,
-        fillColor: "#ffffff",
+        // fillColor: "#ffffff",
         imageSmoothingQuality: "high",
       });
       if (!canvas) throw new Error("Ảnh chưa sẵn sàng, bạn đợi một chút rồi thử lại.");
@@ -138,11 +138,10 @@ export default function ImageCropperModal({
                     setTuNhap(false);
                     setTuChon(t.gt);
                   }}
-                  className={`${NUT} ${
-                    !tuNhap && tuChon === t.gt
+                  className={`${NUT} ${!tuNhap && tuChon === t.gt
                       ? "border-[#2e7d32] bg-[#2e7d32]/10 text-[#2e7d32]"
                       : "border-black/15 hover:border-black/35"
-                  }`}
+                    }`}
                 >
                   {t.nhan}
                 </button>
@@ -150,11 +149,10 @@ export default function ImageCropperModal({
               <button
                 type="button"
                 onClick={() => setTuNhap(true)}
-                className={`${NUT} ${
-                  tuNhap
+                className={`${NUT} ${tuNhap
                     ? "border-[#2e7d32] bg-[#2e7d32]/10 text-[#2e7d32]"
                     : "border-black/15 hover:border-black/35"
-                }`}
+                  }`}
               >
                 Tự nhập
               </button>
