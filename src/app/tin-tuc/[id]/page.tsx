@@ -135,7 +135,8 @@ export default async function NewsDetailPage({
             <span className="inline-block rounded-full bg-leaf/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wide text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
               {post.tag}
             </span>
-            <h1 className="mt-4 font-display text-3xl font-bold leading-tight text-forest sm:text-4xl md:text-5xl dark:text-ink">
+            {/* Font thường (không dùng font-display) cho khớp tiêu đề trên thẻ tin. */}
+            <h1 className="mt-4 text-3xl font-bold leading-tight text-forest sm:text-4xl md:text-5xl dark:text-ink">
               {post.title}
             </h1>
           </header>
