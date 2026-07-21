@@ -177,7 +177,7 @@ export const defaultContent: SiteContent = {
             name: "organization",
             label: "Đơn vị học tập / công tác",
             type: "text",
-            placeholder: "Trường / công ty (không bắt buộc)",
+            placeholder: "Trường / công ty",
           },
           {
             name: "role",
@@ -187,7 +187,7 @@ export const defaultContent: SiteContent = {
           },
           {
             name: "message",
-            label: "Lời nhắn (không bắt buộc)",
+            label: "Lời nhắn",
             type: "textarea",
             placeholder: "Chia sẻ mong muốn của bạn...",
           },
@@ -195,7 +195,7 @@ export const defaultContent: SiteContent = {
             // Ảnh khách tự tải lên -> vào kho ảnh, album "Tình nguyện viên",
             // đặt tên theo tên người đăng ký.
             name: "photo",
-            label: "Ảnh của bạn (không bắt buộc)",
+            label: "Ảnh của bạn",
             type: "photo",
             placeholder: "Ảnh chân dung để Ban tổ chức dễ nhận ra bạn",
           },

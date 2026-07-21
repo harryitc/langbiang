@@ -236,6 +236,27 @@ export default function RegisterFormCard({
   );
 }
 
+/**
+ * Ghi chú "không bắt buộc" nay nằm TRONG ô nhập chứ không treo ở nhãn, cho
+ * hàng nhãn gọn và mắt khách đọc thẳng một mạch từ trên xuống.
+ *
+ * Cắt ngay lúc hiển thị (không chỉ sửa ở defaults.ts) vì cấu hình form đã lưu
+ * trong Redis từ trước — sửa mỗi defaults thì form đang chạy không đổi.
+ */
+const GHI_CHU_TUY_CHON = /\s*\((?:không bắt buộc|tuỳ chọn|tùy chọn)\)\s*$/i;
+const KHONG_BAT_BUOC = "không bắt buộc";
+
+function nhanGon(label: string): string {
+  return label.replace(GHI_CHU_TUY_CHON, "").trim();
+}
+
+/** Gợi ý trong ô, có kèm "(không bắt buộc)" nếu ô đó bỏ trống được. */
+function goiY(field: RegisterField, macDinh = ""): string {
+  const goc = (field.placeholder ?? "").replace(GHI_CHU_TUY_CHON, "").trim() || macDinh;
+  if (field.required) return goc;
+  return goc ? `${goc} (${KHONG_BAT_BUOC})` : `Không bắt buộc`;
+}
+
 /** Nhãn phía trên một ô nhập (kèm dấu * nếu bắt buộc). */
 function FieldLabel({
   field,
@@ -246,7 +267,7 @@ function FieldLabel({
     <label
       className="mb-1.5 block text-sm font-semibold text-forest/80"
     >
-      {field.label}
+      {nhanGon(field.label)}
       {field.required && <span className="text-sunset"> *</span>}
     </label>
   );
@@ -267,7 +288,7 @@ function RegisterFieldView({
         <textarea
           name={field.name}
           rows={3}
-          placeholder={field.placeholder}
+          placeholder={goiY(field)}
           required={field.required}
           className={`${o} resize-none`}
         />
@@ -285,7 +306,7 @@ function RegisterFieldView({
         <input
           name={field.name}
           type={field.type}
-          placeholder={field.placeholder}
+          placeholder={goiY(field)}
           required={field.required}
           className={o}
         />
@@ -420,8 +441,7 @@ function PhotoFieldView({
             {busy ? "Đang tải lên…" : value ? "Chọn ảnh khác" : "Chọn ảnh"}
           </button>
           <p className="mt-1 text-xs text-forest/60">
-            {field.placeholder?.trim() ||
-              "Ảnh jpg, png hoặc webp, nhẹ hơn 5MB."}
+            {goiY(field, "Ảnh jpg, png hoặc webp, nhẹ hơn 5MB.")}
           </p>
         </div>
       </div>
