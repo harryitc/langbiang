@@ -90,7 +90,7 @@ export default function News({
         {showHeading && (
           <Reveal className="mx-auto max-w-2xl text-center">
             <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
-              Tin tức & Bản tin
+              Bản tin
             </span>
             <h2 className="text-2xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
               Câu chuyện từ{" "}

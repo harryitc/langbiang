@@ -40,7 +40,7 @@ export default async function ExploreGrid() {
     {
       href: "/tin-tuc",
       icon: "📰",
-      title: "Tin tức & Bản tin",
+      title: "Bản tin",
       desc: "Nhật ký và tin mới nhất về dự án.",
     },
     {

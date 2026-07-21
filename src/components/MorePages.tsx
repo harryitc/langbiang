@@ -14,7 +14,7 @@ const cards = [
   {
     href: "/tin-tuc",
     icon: "📰",
-    eyebrow: "Tin tức & Bản tin",
+    eyebrow: "Bản tin",
     title: "Câu chuyện hành trình",
     desc: "Nhật ký, hình ảnh và tin mới nhất về dự án. Đăng ký bản tin nhé!",
     cta: "Đọc tin tức",
