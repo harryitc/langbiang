@@ -74,6 +74,9 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: [{ url: "/logo-mark.png", type: "image/png" }],
       apple: "/logo-mark.png",
     },
+    verification: {
+      google: "XOGtXG7k4uoGXRpKkNHEx8MO0pZh5VieLL3V_7AO8JY",
+    },
   };
 }
 
