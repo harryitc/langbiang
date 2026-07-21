@@ -332,6 +332,8 @@ export type Member = {
   role: string;
   photo?: string; // ảnh thật; bỏ trống -> hiện avatar chữ cái
   bio: string;
+  isLeader?: boolean; // Đánh dấu Trưởng ban để hiện ngôi sao ở góc trái trên ảnh
+  facebook?: string; // Đường dẫn Facebook cá nhân
 };
 
 export const board: { founders: Member[]; members: Member[] } = {
@@ -341,6 +343,7 @@ export const board: { founders: Member[]; members: Member[] } = {
       role: "Trưởng ban sáng lập",
       photo: "/team/le-minh-vu.jpg",
       bio: "Người dẫn dắt Trăng Sáng Langbiang — định hướng dự án và kết nối nguồn lực để mang một mùa Trung thu trọn vẹn đến trẻ em vùng cao.",
+      isLeader: true,
     },
     {
       name: "Phạm Minh Phát",

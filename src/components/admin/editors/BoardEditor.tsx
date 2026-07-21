@@ -1,7 +1,7 @@
 "use client";
 
 // Trình biên tập Ban tổ chức (main.board) — 2 danh sách: Sáng lập & Thành viên.
-import { Alert, Input, Space } from "antd";
+import { Alert, Input, Space, Switch } from "antd";
 import {
   useSectionAutosave,
   SaveStatusTag,
@@ -14,15 +14,13 @@ import type { Board, Member } from "@/lib/content/schema";
 
 /** Phần tử mới rỗng cho danh sách thành viên. */
 function newMember(): Member {
-  return { name: "", role: "", photo: "", bio: "" };
+  return { name: "", role: "", photo: "", bio: "", isLeader: false, facebook: "" };
 }
 
 /** Danh sách trường bắt buộc còn trống của một thành viên (FR2-R3). */
 function missingFields(m: Member): string[] {
   const missing: string[] = [];
   if (!m.name.trim()) missing.push("họ tên");
-  if (!m.role.trim()) missing.push("vai trò");
-  if (!m.bio.trim()) missing.push("giới thiệu");
   return missing;
 }
 
@@ -40,7 +38,7 @@ function MemberForm({
   return (
     <div className="w-full">
       <div className="grid gap-x-4 md:grid-cols-2">
-        <Field label="Họ tên">
+        <Field label="Họ tên *">
           <Input
             placeholder="Vd: Lê Minh Vũ"
             value={item.name}
@@ -48,17 +46,38 @@ function MemberForm({
             onChange={(e) => update({ ...item, name: e.target.value })}
           />
         </Field>
-        <Field label="Vai trò">
+        <Field label="Vai trò (tùy chọn)">
           <Input
             placeholder="Vd: Trưởng ban sáng lập"
-            value={item.role}
-            status={item.role.trim() ? undefined : "error"}
+            value={item.role ?? ""}
             onChange={(e) => update({ ...item, role: e.target.value })}
           />
         </Field>
       </div>
+
+      <div className="grid gap-x-4 md:grid-cols-2">
+        <Field label="Link Facebook (tùy chọn)" hint="Đường dẫn trang Facebook cá nhân">
+          <Input
+            placeholder="https://facebook.com/..."
+            value={item.facebook ?? ""}
+            onChange={(e) => update({ ...item, facebook: e.target.value })}
+          />
+        </Field>
+        <Field label="Trưởng ban (tùy chọn)" hint="Hiển thị ngôi sao ⭐ ở góc trên bên trái ảnh (dành cho Ban sáng lập)">
+          <div className="flex items-center gap-2 pt-1">
+            <Switch
+              checked={item.isLeader ?? false}
+              onChange={(checked) => update({ ...item, isLeader: checked })}
+            />
+            <span className="text-xs text-gray-500">
+              {item.isLeader ? "Có (Hiển thị ngôi sao ⭐)" : "Không"}
+            </span>
+          </div>
+        </Field>
+      </div>
+
       <Field
-        label="Ảnh"
+        label="Ảnh (tùy chọn)"
         hint="Ảnh chân dung. Bỏ trống thì trang hiện vòng tròn chữ cái đầu của tên."
       >
         <ImageField
@@ -70,14 +89,13 @@ function MemberForm({
         />
       </Field>
       <Field
-        label="Giới thiệu"
-        hint="Vài dòng về thành viên, hiện ra khi khách bấm vào ảnh."
+        label="Giới thiệu / Nội dung (tùy chọn)"
+        hint="Vài dòng giới thiệu hoặc nội dung hiển thị bên dưới thành viên."
       >
         <Input.TextArea
           placeholder="Vài dòng giới thiệu về thành viên…"
           autoSize={{ minRows: 2, maxRows: 6 }}
-          value={item.bio}
-          status={item.bio.trim() ? undefined : "error"}
+          value={item.bio ?? ""}
           onChange={(e) => update({ ...item, bio: e.target.value })}
         />
       </Field>
@@ -85,7 +103,7 @@ function MemberForm({
         <Alert
           type="warning"
           showIcon
-          title={`Còn thiếu: ${missing.join(", ")}.`}
+          title="Vui lòng nhập Họ tên cho thành viên."
         />
       ) : null}
     </div>
@@ -111,8 +129,8 @@ export default function BoardEditor({ initial }: { initial: Board }) {
           <Alert
             type="warning"
             showIcon
-            title={`Có ${totalMissing} thành viên chưa điền đủ thông tin.`}
-            description="Mỗi người cần đủ họ tên, vai trò và giới thiệu trước khi xuất bản."
+            title={`Có ${totalMissing} thành viên chưa nhập họ tên.`}
+            description="Mỗi người cần điền họ tên trước khi xuất bản."
           />
         ) : null}
 
