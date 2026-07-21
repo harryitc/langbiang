@@ -41,14 +41,27 @@ export default function About() {
             <span className="text-gradient-green">đến với núi rừng</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-forest/80 dark:text-ink/80">
-            <strong>Trăng sáng Langbiang</strong> là dự án tình nguyện phi lợi
-            nhuận, mang một mùa Trung thu trọn vẹn đến các em nhỏ vùng cao tại
-            phường Langbiang – Đà Lạt, tỉnh Lâm Đồng.
+            <strong>Trăng Sáng Langbiang</strong> là dự án thiện nguyện phi lợi nhuận
+            hướng về trẻ em vùng cao, được khởi xướng bởi những cá nhân trưởng thành từ
+            phong trào Đoàn - Hội. Dự án luôn được tổ chức bài bản bởi các cơ sở Đoàn -
+            Hội đăng cai, với kế hoạch triển khai được phối hợp, chấp thuận và giám sát
+            chặt chẽ từ chính quyền địa phương cùng các đơn vị liên quan.
           </p>
+
           <p className="mt-4 text-lg leading-relaxed text-forest/80 dark:text-ink/80">
-            Năm trước, chúng mình đã cùng nhau thắp sáng những nụ cười trong đêm
-            hội Trăng rằm. Năm nay, hành trình yêu thương ấy tiếp tục — với những
-            phần quà, sân chơi và cả những ước mơ được chắp cánh.
+            Vượt lên trên ý nghĩa của một chương trình trao quà thiện nguyện thông
+            thường, chúng mình mang đến những sân chơi và không gian sinh hoạt bổ ích cho
+            các em nhỏ. Thông qua đó, dự án còn lồng ghép nhiều hoạt động giáo dục nhằm
+            nuôi dưỡng tình yêu quê hương, bồi đắp lòng tự hào dân tộc và tôn vinh những
+            giá trị văn hóa Việt Nam trong tâm hồn các em.
+          </p>
+
+          <p className="mt-4 text-lg leading-relaxed text-forest/80 dark:text-ink/80">
+            Bên cạnh đó, hành trình này còn là môi trường thực tiễn để các bạn sinh
+            viên và thanh niên trực tiếp dấn thân, cống hiến cho cộng đồng. Qua từng hoạt
+            động, mỗi người trẻ không chỉ được rèn luyện kỹ năng tổ chức, làm việc nhóm
+            và lãnh đạo, mà còn có cơ hội nuôi dưỡng, lan tỏa tình yêu thương, góp phần
+            xây dựng một thế hệ sống trách nhiệm, nhân ái và sẵn sàng phụng sự xã hội.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
