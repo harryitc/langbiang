@@ -55,7 +55,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
           onClick={() => openAt(lead)}
         >
           <div
-            className="relative rounded-3xl bg-gradient-to-br from-[#c8e6c0] to-[#a5d6a7] shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-leaf/30 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.22)]"
+            className="group relative rounded-3xl bg-gradient-to-br from-[#c8e6c0] to-[#a5d6a7] shadow-[0_12px_48px_rgba(0,0,0,0.18)] ring-1 ring-leaf/30 transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_60px_rgba(0,0,0,0.22)]"
             style={{ padding: "clamp(10px, 0.8vw, 16px)" }}
           >
             {/* Ngôi sao vẽ tay góc trái */}
@@ -71,7 +71,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
               style={{ height: "clamp(240px, 22vw, 420px)", fontSize: "clamp(1.2rem, 2vw, 2rem)" }}
             >
               {lead.photo ? (
-                <Image src={lead.photo} alt={lead.name} fill className="object-cover" />
+                <Image src={lead.photo} alt={lead.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(lead.name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(8px, 0.6vw, 14px)" }}>
@@ -91,7 +91,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
           onClick={() => openAt(coFounders[0])}
         >
           <div
-            className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
+            className="group rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
             style={{ padding: "clamp(8px, 0.6vw, 14px)" }}
           >
             <div
@@ -99,7 +99,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[0].photo ? (
-                <Image src={coFounders[0].photo} alt={coFounders[0].name} fill className="object-cover" />
+                <Image src={coFounders[0].photo} alt={coFounders[0].name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[0].name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>
@@ -118,7 +118,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
           onClick={() => openAt(coFounders[1])}
         >
           <div
-            className="rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
+            className="group rounded-3xl bg-gradient-to-br from-[#e8f5e3] to-[#d4edda] shadow-[0_10px_36px_rgba(0,0,0,0.14)] ring-1 ring-leaf/20 transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_48px_rgba(0,0,0,0.18)]"
             style={{ padding: "clamp(8px, 0.6vw, 14px)" }}
           >
             <div
@@ -126,7 +126,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
               style={{ height: "clamp(180px, 16vw, 300px)", fontSize: "clamp(1rem, 1.5vw, 1.5rem)" }}
             >
               {coFounders[1].photo ? (
-                <Image src={coFounders[1].photo} alt={coFounders[1].name} fill className="object-cover" />
+                <Image src={coFounders[1].photo} alt={coFounders[1].name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
               ) : <span className="flex h-full w-full items-center justify-center">{initials(coFounders[1].name)}</span>}
             </div>
             <div className="pb-1 text-center" style={{ paddingTop: "clamp(6px, 0.5vw, 10px)" }}>

@@ -85,11 +85,11 @@ export default async function BanToChucPage() {
           {/* Mobile — cards xếp dưới tiêu đề */}
           <div className="flex flex-col gap-4 px-6 pb-16 lg:hidden">
             {lead && (
-              <div className="rounded-3xl bg-gradient-to-br from-leaf/12 to-sun/12 p-5 ring-1 ring-leaf/25 dark:from-leaf-bright/10 dark:to-sun/5 dark:ring-leaf-bright/20">
+              <div className="group rounded-3xl bg-gradient-to-br from-leaf/12 to-sun/12 p-5 ring-1 ring-leaf/25 transition duration-300 hover:-translate-y-1.5 hover:shadow-soft dark:from-leaf-bright/10 dark:to-sun/5 dark:ring-leaf-bright/20">
                 <div className="flex items-start gap-4">
                   <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass ring-2 ring-white/60 dark:ring-white/10">
                     {lead.photo ? (
-                      <Image src={lead.photo} alt={lead.name} fill sizes="96px" className="object-cover" />
+                      <Image src={lead.photo} alt={lead.name} fill sizes="96px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                     ) : <span className="flex h-full w-full items-center justify-center text-xl font-bold text-white">{initials(lead.name)}</span>}
                   </div>
                   <div>
@@ -104,10 +104,10 @@ export default async function BanToChucPage() {
               </div>
             )}
             {coFounders.map((m) => (
-              <div key={m.name} className="flex items-start gap-4 rounded-3xl bg-white/80 p-5 ring-1 ring-leaf/10 dark:bg-white/[0.04] dark:ring-leaf-bright/10">
+              <div key={m.name} className="group flex items-start gap-4 rounded-3xl bg-white/80 p-5 shadow-sm ring-1 ring-leaf/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-soft dark:bg-white/[0.04] dark:ring-leaf-bright/10">
                 <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass ring-2 ring-white/60 dark:ring-white/10">
                   {m.photo ? (
-                    <Image src={m.photo} alt={m.name} fill sizes="80px" className="object-cover" />
+                    <Image src={m.photo} alt={m.name} fill sizes="80px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : <span className="flex h-full w-full items-center justify-center text-lg font-bold text-white">{initials(m.name)}</span>}
                 </div>
                 <div>

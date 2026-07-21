@@ -11,11 +11,11 @@ function initials(name: string) {
 
 function MemberCard({ m }: { m: Member }) {
   return (
-    <div className="flex h-full items-start gap-4 rounded-3xl bg-white/80 p-5 shadow-sm ring-1 ring-leaf/10 transition duration-300 hover:-translate-y-1 hover:shadow-soft dark:bg-white/[0.04] dark:ring-leaf-bright/10 sm:gap-5 sm:p-6">
+    <div className="group flex h-full items-start gap-4 rounded-3xl bg-white/80 p-5 shadow-sm ring-1 ring-leaf/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-soft dark:bg-white/[0.04] dark:ring-leaf-bright/10 sm:gap-5 sm:p-6">
       <span className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-leaf to-grass text-lg font-bold text-white ring-2 ring-white/60 dark:ring-white/10 sm:h-20 sm:w-20 sm:text-xl">
         {m.photo ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={m.photo} alt={m.name} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+          <img src={m.photo} alt={m.name} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           initials(m.name)
         )}
