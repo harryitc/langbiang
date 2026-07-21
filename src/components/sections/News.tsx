@@ -15,6 +15,8 @@ type NewsProps = {
   showHeading?: boolean;
   /** Trang chủ: hiển thị dạng carousel ngang + nút "Xem tất cả", ẩn form đăng ký bản tin. */
   carousel?: boolean;
+  /** Giới hạn số lượng tin hiển thị. */
+  limit?: number;
 };
 
 function NewsCard({ post }: { post: NewsPost }) {
@@ -59,7 +61,10 @@ export default function News({
   currentYear,
   showHeading = true,
   carousel = false,
+  limit,
 }: NewsProps) {
+  const maxPosts = limit ?? (carousel ? 5 : undefined);
+  const displayedPosts = maxPosts ? posts.slice(0, maxPosts) : posts;
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -108,7 +113,7 @@ export default function News({
             <div className="relative mt-10 sm:mt-14">
               <div className="overflow-hidden" ref={emblaRef}>
                 <div className="-ml-5 flex touch-pan-y">
-                  {posts.map((post) => (
+                  {displayedPosts.map((post) => (
                     <div
                       key={post.id}
                       className="min-w-0 flex-[0_0_86%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
@@ -173,7 +178,7 @@ export default function News({
           </>
         ) : (
           <Reveal childrenStagger className="mt-10 grid gap-6 sm:mt-14 md:grid-cols-3">
-            {posts.map((post) => (
+            {displayedPosts.map((post) => (
               <NewsCard key={post.id} post={post} />
             ))}
           </Reveal>

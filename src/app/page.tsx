@@ -51,7 +51,7 @@ export default async function Home() {
         />
         <About />
         <BannerSlider photos={main.gallery} />
-        <News posts={news} currentYear={currentYear} carousel />
+        <News posts={news} currentYear={currentYear} carousel limit={5} />
         <DonateBand />
         {registerForm ? (
           <Register facebook={site.facebook} content={registerForm} />
