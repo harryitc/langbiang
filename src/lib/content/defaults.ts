@@ -286,6 +286,9 @@ export const defaultContent: SiteContent = {
   news: siteNews.map((n) => ({
     id: n.id,
     img: n.img,
+    // Để trống -> trang chi tiết dùng lại ảnh thumbnail. Khoá không bắt buộc
+    // vẫn phải có mặt ở đây, xem ghi chú về normalize() phía trên.
+    coverImg: "",
     tag: n.tag,
     title: n.title,
     excerpt: n.excerpt,

@@ -335,7 +335,13 @@ export const REGISTRATIONS_LIMIT = 500;
 /** Bài tin tức (nội dung dài lưu ở dạng HTML an toàn — CKEditor). */
 export type NewsPost = {
   id: string;
+  /** Ảnh thumbnail trên thẻ tin (khung 16:10). */
   img: string;
+  /**
+   * Ảnh bìa đầu trang chi tiết (khung 16:9, rộng hơn thumbnail).
+   * Bỏ trống thì dùng lại ảnh thumbnail.
+   */
+  coverImg?: string;
   tag: string;
   title: string;
   excerpt: string;

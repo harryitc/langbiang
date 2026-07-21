@@ -35,6 +35,7 @@ function emptyPost(): NewsPost {
   return {
     id: "",
     img: "",
+    coverImg: "",
     tag: "",
     title: "",
     excerpt: "",
@@ -260,15 +261,28 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
                     </Row>
                   </Col>
 
-                  {/* Cột phải: ảnh đại diện */}
+                  {/* Cột phải: ảnh thumbnail + ảnh bìa */}
                   <Col xs={24} md={8}>
-                    <Field label="Ảnh đại diện">
+                    <Field
+                      label="Ảnh thumbnail"
+                      hint="Ảnh trên thẻ tin ở trang chủ và danh sách tin. Khung ngang 16:10."
+                    >
                       <ImageField
-                        /* Thẻ tin trên trang chủ cắt theo khung 16:10. */
                         aspect={16 / 10}
                         folder="tintuc"
                         value={post.img}
                         onChange={(url) => setPost({ ...post, img: url })}
+                      />
+                    </Field>
+                    <Field
+                      label="Ảnh bìa trang chi tiết"
+                      hint="Khung 16:9, rộng hơn thumbnail nên cắt riêng cho khỏi hụt trên dưới. Bỏ trống thì dùng lại ảnh thumbnail."
+                    >
+                      <ImageField
+                        aspect={16 / 9}
+                        folder="tintuc"
+                        value={post.coverImg ?? ""}
+                        onChange={(url) => setPost({ ...post, coverImg: url })}
                       />
                     </Field>
                   </Col>

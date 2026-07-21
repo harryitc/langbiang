@@ -13,8 +13,17 @@ import { getContent } from "@/lib/content/store";
 import { sanitizeHtml } from "@/lib/content/html";
 import { absoluteUrl } from "@/lib/content/url";
 import { site } from "@/lib/site";
+import type { NewsPost } from "@/lib/content/schema";
 
 type Params = { id: string };
+
+/**
+ * Ảnh bìa của bài: khung 16:9 nên cắt riêng, bài nào chưa đặt thì dùng lại
+ * ảnh thumbnail (khung 16:10 — hụt nhẹ trên dưới nhưng vẫn dùng được).
+ */
+function anhBia(post: NewsPost): string {
+  return post.coverImg?.trim() || post.img;
+}
 
 export async function generateStaticParams(): Promise<Params[]> {
   const { news } = await getContent();
@@ -50,13 +59,13 @@ export async function generateMetadata({
       siteName: main.site.name,
       type: "article",
       locale: "vi_VN",
-      images: [{ url: post.img, alt: post.title }],
+      images: [{ url: anhBia(post), alt: post.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: [post.img],
+      images: [anhBia(post)],
     },
   };
 }
@@ -82,7 +91,7 @@ export default async function NewsDetailPage({
     "@type": "NewsArticle",
     headline: post.title,
     description: post.excerpt,
-    image: absoluteUrl(post.img),
+    image: absoluteUrl(anhBia(post)),
     articleSection: post.tag,
     mainEntityOfPage: `${site.url}/tin-tuc/${post.id}`,
     datePublished: post.date,
@@ -135,7 +144,7 @@ export default async function NewsDetailPage({
           <div className="mt-8 overflow-hidden rounded-3xl shadow-soft ring-1 ring-leaf/10 dark:ring-leaf-bright/10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={post.img}
+              src={anhBia(post)}
               alt={post.title}
               className="aspect-[16/9] w-full object-cover"
             />
