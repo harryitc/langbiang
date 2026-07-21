@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Cropper, type CropperRef } from "react-advanced-cropper";
 import "react-advanced-cropper/dist/style.css";
-import { MAX_EDGE, canvasThanhFile } from "@/lib/image/crop";
+import { MAX_AREA, canvasThanhFile } from "@/lib/image/crop";
 
 /** Tỉ lệ khung cho sẵn; `undefined` = kéo tự do. */
 const TY_LE: { nhan: string; gt: number | undefined }[] = [
@@ -86,11 +86,11 @@ export default function ImageCropperModal({
     setDangCat(true);
     setLoi("");
     try {
-      // Thư viện tự lo xoay/lật/thu nhỏ; nền trắng để phần tràn ra ngoài mép
-      // ảnh không thành mảng đen khi xuất WebP.
+      // Giữ nguyên độ phân giải vùng đã cắt — không thu nhỏ. Chỉ chặn ngưỡng
+      // an toàn của Safari. Nền trắng để phần tràn ra ngoài mép ảnh không
+      // thành mảng đen khi xuất WebP.
       const canvas = cropperRef.current?.getCanvas({
-        maxWidth: MAX_EDGE,
-        maxHeight: MAX_EDGE,
+        maxArea: MAX_AREA,
         fillColor: "#ffffff",
         imageSmoothingQuality: "high",
       });
