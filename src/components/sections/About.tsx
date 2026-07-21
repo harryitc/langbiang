@@ -29,7 +29,7 @@ export default async function About() {
             />
             <div className="glass glass-adaptive absolute -bottom-6 -right-4 max-w-[220px] rounded-2xl p-4 shadow-soft sm:-right-8">
               <p className="font-display text-3xl font-bold text-leaf-deep dark:text-leaf-bright">
-                Mùa {seasonNo} · {currentYear}
+                {about.badgeTitle?.trim() || `Mùa ${seasonNo} · ${currentYear}`}
               </p>
               <p className="mt-1 text-sm text-forest/75 dark:text-ink/75">
                 {about.badgeNote}

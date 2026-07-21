@@ -224,8 +224,19 @@ export default function HomeImagesEditor({
         </Field>
 
         <Field
-          label="Dòng chữ trong ô kính trên ảnh"
-          hint="Dòng nhỏ nằm dưới dòng “Mùa … · năm”. Dòng “Mùa … · năm” do hệ thống tự tính nên không sửa được ở đây."
+          label="Dòng đậm trong ô kính trên ảnh"
+          hint="Bỏ trống thì hệ thống tự điền “Mùa … · năm” theo số mùa đã qua và năm đang chạy."
+        >
+          <Input
+            value={aboutText.badgeTitle ?? ""}
+            placeholder="Bỏ trống — hệ thống tự điền “Mùa … · năm”"
+            onChange={(e) => setAboutText("badgeTitle", e.target.value)}
+          />
+        </Field>
+
+        <Field
+          label="Dòng nhỏ trong ô kính trên ảnh"
+          hint="Dòng chữ nhạt nằm ngay dưới dòng đậm."
         >
           <Input
             value={aboutText.badgeNote}

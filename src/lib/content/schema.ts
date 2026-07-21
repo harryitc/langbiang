@@ -163,7 +163,9 @@ export type AboutSection = {
   titleHighlight: string;
   /** Các đoạn văn giới thiệu, hiển thị theo đúng thứ tự. */
   paragraphs: string[];
-  /** Dòng nhỏ trong ô kính trên ảnh (dòng "Mùa N · năm" phía trên tự tính). */
+  /** Dòng đậm trong ô kính trên ảnh. Bỏ trống thì tự tính "Mùa N · năm". */
+  badgeTitle?: string;
+  /** Dòng nhỏ trong ô kính trên ảnh, nằm dưới dòng đậm. */
   badgeNote: string;
   /** Chữ trên nút chính (luôn trỏ xuống khối Đăng ký). */
   ctaPrimaryLabel: string;

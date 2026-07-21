@@ -132,6 +132,8 @@ export const defaultContent: SiteContent = {
         "Trăng sáng Langbiang là dự án tình nguyện phi lợi nhuận, mang một mùa Trung thu trọn vẹn đến các em nhỏ vùng cao tại phường Langbiang – Đà Lạt, tỉnh Lâm Đồng.",
         "Năm trước, chúng mình đã cùng nhau thắp sáng những nụ cười trong đêm hội Trăng rằm. Năm nay, hành trình yêu thương ấy tiếp tục — với những phần quà, sân chơi và cả những ước mơ được chắp cánh.",
       ],
+      // Để trống -> tự tính "Mùa N · năm". Xem ghi chú về khoá không bắt buộc ở trên.
+      badgeTitle: "",
       badgeNote: "Trở lại Langbiang với thật nhiều yêu thương.",
       ctaPrimaryLabel: "Đăng ký đồng hành 🌙",
     },
