@@ -45,7 +45,30 @@ export default function SponsorsEditor({
   return (
     <>
       <EditorCard
-        title="Tiêu đề & Mô tả mục Nhà tài trợ (Trang chủ & Gây quỹ)"
+        title="Danh sách Nhà tài trợ"
+        extra={<SaveStatusTag status={tiersStatus} />}
+      >
+        {invalidTiers > 0 ? (
+          <Alert
+            type="warning"
+            showIcon
+            className="mb-3"
+            title={`Có ${invalidTiers} hạng tài trợ chưa điền đủ thông tin.`}
+            description="Mỗi hạng cần có tên và ít nhất một đơn vị; mỗi đơn vị cần có tên."
+          />
+        ) : null}
+
+        <div className="mb-3 text-xs opacity-60">
+          Hiện ở mục Nhà tài trợ trên <strong>trang Gây quỹ và Trang chủ</strong>. Đang có {totalSponsors} đơn vị trong{" "}
+          {tiers.length} hạng tài trợ — thứ tự các hạng ở đây cũng là thứ tự khách
+          nhìn thấy. Chưa có hạng nào thì mục này tự ẩn.
+        </div>
+
+        <SponsorTierListEditor value={tiers} onChange={updateTiers} />
+      </EditorCard>
+
+      <EditorCard
+        title="Nội dung mô tả"
         extra={<SaveStatusTag status={headerStatus} />}
       >
         <Field label="Nhãn phụ" hint="Chữ nhỏ in hoa màu cam phía trên tiêu đề lớn. Vd: Đơn vị đồng hành">
@@ -82,29 +105,6 @@ export default function SponsorsEditor({
             onChange={(e) => updateHeader({ ...header, desc: e.target.value })}
           />
         </Field>
-      </EditorCard>
-
-      <EditorCard
-        title="Danh sách Hạng tài trợ"
-        extra={<SaveStatusTag status={tiersStatus} />}
-      >
-        {invalidTiers > 0 ? (
-          <Alert
-            type="warning"
-            showIcon
-            className="mb-3"
-            title={`Có ${invalidTiers} hạng tài trợ chưa điền đủ thông tin.`}
-            description="Mỗi hạng cần có tên và ít nhất một đơn vị; mỗi đơn vị cần có tên."
-          />
-        ) : null}
-
-        <div className="mb-3 text-xs opacity-60">
-          Hiện ở mục Nhà tài trợ trên <strong>trang Gây quỹ và Trang chủ</strong>. Đang có {totalSponsors} đơn vị trong{" "}
-          {tiers.length} hạng tài trợ — thứ tự các hạng ở đây cũng là thứ tự khách
-          nhìn thấy. Chưa có hạng nào thì mục này tự ẩn.
-        </div>
-
-        <SponsorTierListEditor value={tiers} onChange={updateTiers} />
       </EditorCard>
     </>
   );
