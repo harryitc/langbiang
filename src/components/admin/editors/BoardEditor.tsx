@@ -62,6 +62,8 @@ function MemberForm({
         hint="Ảnh chân dung. Bỏ trống thì trang hiện vòng tròn chữ cái đầu của tên."
       >
         <ImageField
+          /* Ảnh chân dung hiện trong vòng tròn nên cắt vuông. */
+          aspect={1}
           value={item.photo ?? ""}
           onChange={(url) => update({ ...item, photo: url })}
           folder={folder}

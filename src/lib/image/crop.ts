@@ -72,36 +72,48 @@ export async function cutAnh(
   { rotation = 0 }: { rotation?: number } = {}
 ): Promise<File> {
   const anh = await docAnh(file);
+  const goc = { w: anh.width, h: anh.height };
 
-  // Khung sau khi cắt, thu nhỏ nếu vượt cạnh tối đa.
+  // Bước 1: xoay cả ảnh vào một khung vừa khít.
+  // react-easy-crop trả toạ độ vùng cắt theo ảnh ĐÃ XOAY, nên phải xoay trước
+  // rồi mới cắt — cắt trước xoay sau sẽ lệch.
+  const rad = (rotation * Math.PI) / 180;
+  const khungW = Math.abs(Math.cos(rad)) * goc.w + Math.abs(Math.sin(rad)) * goc.h;
+  const khungH = Math.abs(Math.sin(rad)) * goc.w + Math.abs(Math.cos(rad)) * goc.h;
+
+  const daXoay = document.createElement("canvas");
+  daXoay.width = Math.round(khungW);
+  daXoay.height = Math.round(khungH);
+  const ctxXoay = daXoay.getContext("2d");
+  if (!ctxXoay) throw new Error("Trình duyệt không hỗ trợ cắt ảnh.");
+  ctxXoay.translate(khungW / 2, khungH / 2);
+  ctxXoay.rotate(rad);
+  ctxXoay.drawImage(anh, -goc.w / 2, -goc.h / 2);
+  if ("close" in anh) anh.close();
+
+  // Bước 2: cắt vùng đã chọn, thu nhỏ luôn nếu vượt cạnh tối đa.
   const tyLe = Math.min(1, MAX_EDGE / Math.max(area.width, area.height));
   const w = Math.max(1, Math.round(area.width * tyLe));
   const h = Math.max(1, Math.round(area.height * tyLe));
 
   const canvas = document.createElement("canvas");
-  const xoayDoc = rotation === 90 || rotation === 270;
-  canvas.width = xoayDoc ? h : w;
-  canvas.height = xoayDoc ? w : h;
-
+  canvas.width = w;
+  canvas.height = h;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Trình duyệt không hỗ trợ cắt ảnh.");
 
   const mime = file.type === "image/png" ? "image/png" : "image/webp";
   if (mime !== "image/png") {
-    // WebP có kênh trong suốt; nền trắng cho ảnh chụp khỏi bị viền đen khi
-    // vùng cắt lỡ tràn ra ngoài mép ảnh.
+    // WebP cũng có kênh trong suốt; tô nền trắng để phần tràn ra ngoài mép ảnh
+    // (khi thu nhỏ quá khung) không thành mảng đen.
     ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, w, h);
   }
-
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.rotate((rotation * Math.PI) / 180);
-  ctx.drawImage(anh, area.x, area.y, area.width, area.height, -w / 2, -h / 2, w, h);
+  ctx.drawImage(daXoay, area.x, area.y, area.width, area.height, 0, 0, w, h);
 
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, mime, mime === "image/webp" ? WEBP_QUALITY : undefined)
   );
-  if ("close" in anh) anh.close();
   if (!blob) throw new Error("Không lưu được ảnh sau khi cắt.");
 
   return new File([blob], doiDuoi(file.name, mime), { type: mime });

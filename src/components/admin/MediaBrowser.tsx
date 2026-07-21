@@ -25,9 +25,12 @@ import {
   EditOutlined,
   ExpandOutlined,
   FolderAddOutlined,
+  ScissorOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import dynamic from "next/dynamic";
 import { uploadImage } from "@/lib/content/upload-client";
+import { canCrop, taiVeDeCat } from "@/lib/image/crop";
 import {
   addMediaAction,
   deleteMediaAction,
@@ -38,6 +41,11 @@ import {
 } from "@/lib/content/media-actions";
 import { loadMediaLibrary } from "@/lib/content/media-cache";
 import type { MediaItem, MediaLibrary } from "@/lib/content/media";
+
+const ImageCropperModal = dynamic(
+  () => import("@/components/image/ImageCropperModal"),
+  { ssr: false }
+);
 
 const ALL = "all";
 /** Nút biểu tượng trong bảng thao tác: ô vuông đều nhau để hàng nút thẳng hàng. */
@@ -75,6 +83,8 @@ export default function MediaBrowser({
   const [previewIndex, setPreviewIndex] = useState(0);
   // Chế độ chọn nhiều: danh sách ảnh đang tick.
   const [picked, setPicked] = useState<string[]>([]);
+  // Ảnh đang chờ cắt: mới chọn từ máy, hoặc ảnh trong kho lấy về để cắt lại.
+  const [cropping, setCropping] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   async function refetch(force = false) {
@@ -113,12 +123,25 @@ export default function MediaBrowser({
   }, [items, albumId, query]);
 
   /* ----------------------------- Upload ----------------------------- */
-  async function handleFiles(files: FileList) {
+  /**
+   * Chọn 1 ảnh thì mở hộp cắt trước; chọn nhiều ảnh thì tải thẳng — bắt cắt
+   * lần lượt 20 ảnh thì quá phiền, cần cắt cái nào thì bấm "Cắt ảnh" sau.
+   */
+  function handleChosen(files: FileList) {
+    const list = Array.from(files);
+    if (list.length === 1 && canCrop(list[0].type)) {
+      setCropping(list[0]);
+      return;
+    }
+    void handleFiles(list);
+  }
+
+  async function handleFiles(files: File[]) {
     const targetAlbum = albumId === ALL ? MISC_ALBUM_ID : albumId;
     setUploading(true);
     let lastUrl = "";
     try {
-      for (const file of Array.from(files)) {
+      for (const file of files) {
         if (!file.type.startsWith("image/")) continue;
         const url = await uploadImage(file, "kho");
         const res = await addMediaAction({
@@ -143,6 +166,18 @@ export default function MediaBrowser({
       );
     } finally {
       setUploading(false);
+    }
+  }
+
+  /** Lấy ảnh trong kho về để cắt lại. Bản cắt lưu thành ảnh MỚI, ảnh gốc còn nguyên. */
+  async function catLai(it: MediaItem) {
+    setBusy(true);
+    try {
+      setCropping(await taiVeDeCat(it.url, it.name));
+    } catch (err) {
+      message.error(err instanceof Error ? err.message : "Không cắt lại được ảnh này.");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -255,7 +290,7 @@ export default function MediaBrowser({
             multiple
             style={{ display: "none" }}
             onChange={(e) => {
-              if (e.target.files?.length) void handleFiles(e.target.files);
+              if (e.target.files?.length) handleChosen(e.target.files);
               e.target.value = "";
             }}
           />
@@ -381,6 +416,17 @@ export default function MediaBrowser({
                             />
                           </Tooltip>
                           {canManage ? (
+                            <Tooltip title="Cắt / thu phóng — lưu thành ảnh mới">
+                              <Button
+                                size="small"
+                                type="text"
+                                className={ICON_BTN}
+                                icon={<ScissorOutlined />}
+                                onClick={() => void catLai(it)}
+                              />
+                            </Tooltip>
+                          ) : null}
+                          {canManage ? (
                             <Popconfirm
                               title="Xoá ảnh này?"
                               description={
@@ -481,6 +527,15 @@ export default function MediaBrowser({
           )}
         </Spin>
       </div>
+
+      <ImageCropperModal
+        file={cropping}
+        onCancel={() => setCropping(null)}
+        onDone={(f) => {
+          setCropping(null);
+          void handleFiles([f]);
+        }}
+      />
     </div>
   );
 }

@@ -24,10 +24,12 @@ import type { InputProps } from "antd";
 import {
   ExportOutlined,
   PictureOutlined,
+  ScissorOutlined,
 } from "@ant-design/icons";
 import { saveDraftAction } from "@/lib/content/actions";
 import { uploadImage } from "@/lib/content/upload-client";
 import { addMediaAction } from "@/lib/content/media-actions";
+import { canCrop, taiVeDeCat } from "@/lib/image/crop";
 import MediaBrowser from "./MediaBrowser";
 import { SortableList } from "./itemList";
 
@@ -266,11 +268,14 @@ function fileNameFromUrl(url: string): string {
 export function ImageField({
   value,
   onChange,
+  aspect,
 }: {
   value: string;
   onChange: (url: string) => void;
   /** Giữ để tương thích call-site cũ; ảnh nay đi qua kho ảnh chung. */
   folder?: string;
+  /** Ép tỉ lệ khi cắt (vd 16/9 cho ảnh tin tức); bỏ trống thì cho tự chọn. */
+  aspect?: number;
 }) {
   const { message } = App.useApp();
   const [open, setOpen] = useState(false);
@@ -278,13 +283,32 @@ export function ImageField({
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [broken, setBroken] = useState(false);
+  // Ảnh đang chờ cắt (kéo thả vào, hoặc lấy lại ảnh đang dùng để cắt lại).
+  const [cropping, setCropping] = useState<File | null>(null);
 
-  /** Kéo ảnh từ máy thả vào -> tải lên kho rồi gán luôn. */
-  async function handleDrop(file: File) {
+  /** Ảnh kéo vào: cắt được thì mở hộp cắt trước, không thì tải thẳng. */
+  function handleDrop(file: File) {
     if (!file.type.startsWith("image/")) {
       message.error("Tệp này không phải ảnh. Hãy thả tệp ảnh (jpg, png, webp…).");
       return;
     }
+    if (canCrop(file.type)) setCropping(file);
+    else void taiLen(file);
+  }
+
+  /** Lấy ảnh đang dùng về để cắt lại — bản cắt lưu thành ảnh MỚI, giữ ảnh gốc. */
+  async function catLai() {
+    setUploading(true);
+    try {
+      setCropping(await taiVeDeCat(value, fileNameFromUrl(value)));
+    } catch (err) {
+      message.error(err instanceof Error ? err.message : "Không cắt lại được ảnh này.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function taiLen(file: File) {
     setUploading(true);
     try {
       const url = await uploadImage(file, "kho");
@@ -318,7 +342,7 @@ export function ImageField({
           e.preventDefault();
           setDragging(false);
           const f = e.dataTransfer.files?.[0];
-          if (f) void handleDrop(f);
+          if (f) handleDrop(f);
         }}
         // Không ép khung: ảnh giữ đúng tỉ lệ gốc, chỉ giới hạn chiều cao 96px
         // như bản đầu. Khung trống mới cần kích thước cố định cho dòng gợi ý.
@@ -384,6 +408,15 @@ export function ImageField({
             >
               Đổi ảnh
             </Button>
+            <Button
+              size="small"
+              className="cursor-pointer"
+              icon={<ScissorOutlined />}
+              loading={uploading}
+              onClick={() => void catLai()}
+            >
+              Cắt ảnh
+            </Button>
             <Popconfirm
               title="Bỏ ảnh khỏi mục này?"
               description="Ảnh vẫn còn trong kho, có thể chọn lại sau."
@@ -437,6 +470,16 @@ export function ImageField({
           }}
         />
       </Modal>
+
+      <ImageCropperModal
+        file={cropping}
+        aspect={aspect}
+        onCancel={() => setCropping(null)}
+        onDone={(f) => {
+          setCropping(null);
+          void taiLen(f);
+        }}
+      />
     </div>
   );
 }
@@ -444,6 +487,11 @@ export function ImageField({
 /* ------------------------------------------------------------------
    RichText — bọc CKEditor (dynamic, ssr:false)
    ------------------------------------------------------------------ */
+const ImageCropperModal = dynamic(
+  () => import("@/components/image/ImageCropperModal"),
+  { ssr: false }
+);
+
 const RichTextClient = dynamic(() => import("./RichTextClient"), {
   ssr: false,
   loading: () => <Spin />,

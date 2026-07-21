@@ -265,6 +265,8 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
           hint="Ảnh hiện kèm khi ai đó dán liên kết website lên Facebook, Zalo. Ảnh ngang cỡ 1200×630 là đẹp nhất. Bỏ trống thì dùng ảnh mặc định."
         >
           <ImageField
+            /* Khung ảnh chia sẻ chuẩn của Facebook/Zalo: 1200×630. */
+            aspect={1200 / 630}
             value={value.ogImage ?? ""}
             onChange={(url) => set("ogImage", url || undefined)}
             folder="seo"

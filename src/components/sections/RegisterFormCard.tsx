@@ -9,8 +9,10 @@
 // email báo cho Ban tổ chức. Chỉ khi thật sự thành công mới hiện màn cảm ơn;
 // thất bại thì giữ nguyên chữ khách đã gõ và hiện lời nhắn lỗi.
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { submitRegistrationAction } from "@/lib/content/register-actions";
 import { uploadRegistrationPhoto } from "@/lib/content/register-upload-client";
+import { canCrop } from "@/lib/image/crop";
 import RoleCards from "./RoleCards";
 import {
   ROLE_SEPARATOR,
@@ -18,6 +20,13 @@ import {
   type RegisterField,
   type RegisterForm,
 } from "@/lib/content/schema";
+
+// Hộp cắt ảnh chỉ tải về khi khách thật sự chọn ảnh — trang chủ không phải
+// gánh thêm thư viện cắt ảnh ngay từ đầu.
+const ImageCropperModal = dynamic(
+  () => import("@/components/image/ImageCropperModal"),
+  { ssr: false }
+);
 
 const INPUT_CLASS =
   "w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition placeholder:text-forest/40 focus:border-leaf focus:ring-2 focus:ring-leaf/30";
@@ -354,9 +363,11 @@ function PhotoFieldView({
   onError: (msg: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
+  // Ảnh vừa chọn, đang chờ khách cắt. Cắt xong mới tải lên.
+  const [dangCat, setDangCat] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  async function chonAnh(file: File) {
+  async function taiLen(file: File) {
     setBusy(true);
     onUploadingChange(true);
     try {
@@ -370,6 +381,12 @@ function PhotoFieldView({
       setBusy(false);
       onUploadingChange(false);
     }
+  }
+
+  /** Ảnh cắt được thì mở hộp cắt trước; SVG/GIF thì tải thẳng. */
+  function chonAnh(file: File) {
+    if (canCrop(file.type)) setDangCat(file);
+    else void taiLen(file);
   }
 
   return (
@@ -418,7 +435,20 @@ function PhotoFieldView({
           const f = e.target.files?.[0];
           // Xoá giá trị để chọn lại đúng tệp cũ vẫn kích hoạt onChange.
           e.target.value = "";
-          if (f) void chonAnh(f);
+          if (f) chonAnh(f);
+        }}
+      />
+
+      {/* Ảnh chân dung nên ép vuông 1:1 cho khớp ô xem trước và khung ảnh
+          tình nguyện viên trên trang. */}
+      <ImageCropperModal
+        file={dangCat}
+        aspect={1}
+        title="Cắt ảnh của bạn"
+        onCancel={() => setDangCat(null)}
+        onDone={(f) => {
+          setDangCat(null);
+          void taiLen(f);
         }}
       />
     </div>

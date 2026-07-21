@@ -264,6 +264,8 @@ export default function NewsEditor({ initial }: { initial: NewsPost[] }) {
                   <Col xs={24} md={8}>
                     <Field label="Ảnh đại diện">
                       <ImageField
+                        /* Thẻ tin trên trang chủ cắt theo khung 16:10. */
+                        aspect={16 / 10}
                         folder="tintuc"
                         value={post.img}
                         onChange={(url) => setPost({ ...post, img: url })}
