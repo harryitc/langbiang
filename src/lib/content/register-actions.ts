@@ -204,3 +204,63 @@ async function guiThu(
 ): Promise<void> {
   await guiMotThu({ to, ...mail }, tenNguoiGui);
 }
+
+/**
+ * Xoá một hoặc nhiều lượt đăng ký khỏi Redis.
+ * CHỈ dùng cho admin đã đăng nhập.
+ */
+export async function deleteRegistrationsAction(
+  formId: string,
+  timestamps: string[]
+): Promise<{ ok: boolean; error?: string }> {
+  const { isAdmin } = await import("@/lib/admin-auth");
+  if (!(await isAdmin())) {
+    return { ok: false, error: "Bạn chưa đăng nhập quản trị." };
+  }
+
+  if (!formId || !timestamps || timestamps.length === 0) {
+    return { ok: false, error: "Vui lòng chọn lượt đăng ký cần xoá." };
+  }
+
+  try {
+    const key = registrationsKey(formId);
+    const rawList: unknown[] = await redis.lrange(key, 0, -1);
+    if (!rawList || rawList.length === 0) {
+      return { ok: true };
+    }
+
+    const timestampSet = new Set(timestamps);
+    const remaining: string[] = [];
+
+    for (const item of rawList) {
+      let strVal = typeof item === "string" ? item : JSON.stringify(item);
+      let parsed: unknown = null;
+      try {
+        parsed = typeof item === "string" ? JSON.parse(item) : item;
+      } catch {
+        parsed = null;
+      }
+
+      if (parsed && typeof parsed === "object" && typeof (parsed as { at?: string }).at === "string") {
+        if (timestampSet.has((parsed as { at: string }).at)) {
+          continue; // Xoá lượt đăng ký này
+        }
+      }
+      remaining.push(strVal);
+    }
+
+    // Xoá key cũ và đẩy lại các bản ghi còn lại
+    await redis.del(key);
+    if (remaining.length > 0) {
+      await redis.rpush(key, ...remaining);
+    }
+
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/admin/dang-ky-nhan-duoc");
+
+    return { ok: true };
+  } catch (err) {
+    console.error("[dang-ky] Lỗi khi xoá đăng ký:", err);
+    return { ok: false, error: "Không xoá được dữ liệu. Bạn thử lại nhé." };
+  }
+}

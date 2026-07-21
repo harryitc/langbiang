@@ -4,18 +4,34 @@
 // mới nhất trước, kèm nút tải về file CSV để mở bằng Excel / Google Sheet.
 // Mỗi form có danh sách riêng; đổi form bằng ô chọn ở đầu trang.
 //
-// Tích chọn vài dòng rồi bấm "Gửi email…" để sang màn hình gửi thư cho đúng
-// những người đó.
+// Tích chọn vài dòng rồi bấm "Gửi email…" hoặc bấm "Xoá đã chọn" để xoá bớt.
 import type { Key } from "react";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Alert, Button, Card, Empty, Image, Select, Space, Table, Tag } from "antd";
-import { DownloadOutlined, MailOutlined } from "@ant-design/icons";
+import {
+  Alert,
+  Button,
+  Card,
+  Empty,
+  Image,
+  message,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  Tag,
+} from "antd";
+import {
+  DeleteOutlined,
+  DownloadOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
 import {
   parseRoles,
   type Registration,
   type RegisterFieldType,
 } from "@/lib/content/schema";
+import { deleteRegistrationsAction } from "@/lib/content/register-actions";
 import { KHOA_CHON_TAM } from "./GuiEmailView";
 
 type Cot = { name: string; label: string; type?: RegisterFieldType };
@@ -38,14 +54,13 @@ export default function RegistrationsView({
 }) {
   const router = useRouter();
   const [dangChuyen, startChuyen] = useTransition();
+  const [dangXoa, setDangXoa] = useState(false);
   const [xemAnh, setXemAnh] = useState<string | null>(null);
-  // Các dòng đang tích: giữ cả khoá dòng (để bảng hiện dấu tích) lẫn mốc thời
-  // gian (để báo cho màn hình gửi email biết là những lượt đăng ký nào).
+  // Các dòng đang tích
   const [tichKeys, setTichKeys] = useState<Key[]>([]);
   const [tichMoc, setTichMoc] = useState<string[]>([]);
 
-  // Cột hiện theo thứ tự ô nhập đang cấu hình; những trường cũ (đã đổi/xoá
-  // trong form) vẫn hiện ở sau để không mất dữ liệu đã nhận.
+  // Cột hiện theo thứ tự ô nhập đang cấu hình
   const cot = useMemo<Cot[]>(() => {
     const daCo = new Set(fields.map((f) => f.name));
     const them: Cot[] = [];
@@ -69,8 +84,7 @@ export default function RegistrationsView({
     const csv = [header, ...rows]
       .map((r) => r.map(oCsv).join(","))
       .join("\r\n");
-    // ﻿ (BOM) để Excel đọc đúng tiếng Việt có dấu.
-    const blob = new Blob(["﻿" + csv], {
+    const blob = new Blob(["\uFEFF" + csv], {
       type: "text/csv;charset=utf-8;",
     });
     const url = URL.createObjectURL(blob);
@@ -81,12 +95,6 @@ export default function RegistrationsView({
     URL.revokeObjectURL(url);
   };
 
-  /**
-   * Sang màn hình gửi email với đúng những dòng đang tích.
-   * Danh sách có thể rất dài nên gửi qua bộ nhớ phiên của trình duyệt thay vì
-   * nhét vào địa chỉ trang. Đây chỉ là gợi ý — máy chủ vẫn tự tra lại địa chỉ
-   * email từ dữ liệu gốc.
-   */
   const guiEmailChoNguoiDaChon = () => {
     sessionStorage.setItem(
       KHOA_CHON_TAM,
@@ -95,6 +103,35 @@ export default function RegistrationsView({
     startChuyen(() =>
       router.push(`/admin/gui-email?form=${currentFormId}`)
     );
+  };
+
+  const xoaCacLuotDaChon = async () => {
+    if (tichMoc.length === 0) return;
+    setDangXoa(true);
+    const res = await deleteRegistrationsAction(currentFormId, tichMoc);
+    setDangXoa(false);
+    if (res.ok) {
+      message.success(`Đã xoá ${tichMoc.length} lượt đăng ký thành công!`);
+      setTichKeys([]);
+      setTichMoc([]);
+      router.refresh();
+    } else {
+      message.error(res.error || "Không xoá được lượt đăng ký.");
+    }
+  };
+
+  const xoaMotLuot = async (timestamp: string) => {
+    setDangXoa(true);
+    const res = await deleteRegistrationsAction(currentFormId, [timestamp]);
+    setDangXoa(false);
+    if (res.ok) {
+      message.success("Đã xoá lượt đăng ký thành công!");
+      setTichKeys((prev) => prev.filter((k) => !String(k).startsWith(timestamp)));
+      setTichMoc((prev) => prev.filter((m) => m !== timestamp));
+      router.refresh();
+    } else {
+      message.error(res.error || "Không xoá được lượt đăng ký.");
+    }
   };
 
   return (
@@ -113,6 +150,27 @@ export default function RegistrationsView({
               ? "Gửi email"
               : `Gửi email (${tichMoc.length})`}
           </Button>
+
+          <Popconfirm
+            title={`Xoá ${tichMoc.length} lượt đăng ký đã chọn?`}
+            description="Dữ liệu đã xoá không thể khôi phục lại."
+            okText="Xoá"
+            cancelText="Huỷ"
+            onConfirm={xoaCacLuotDaChon}
+          >
+            <Button
+              danger
+              icon={<DeleteOutlined />}
+              disabled={tichMoc.length === 0}
+              loading={dangXoa}
+              className="cursor-pointer"
+            >
+              {tichMoc.length === 0
+                ? "Xoá đã chọn"
+                : `Xoá đã chọn (${tichMoc.length})`}
+            </Button>
+          </Popconfirm>
+
           <Button
             icon={<DownloadOutlined />}
             className="cursor-pointer"
@@ -127,9 +185,8 @@ export default function RegistrationsView({
     >
       <p className="mb-3 text-sm opacity-60">
         Mỗi dòng là một lượt khách bấm gửi ở form đăng ký, mới nhất nằm trên
-        cùng. Mỗi form có danh sách riêng — chọn form bên dưới để xem. Không sửa
-        hay xoá được ở đây; tích chọn vài dòng thì gửi email cho đúng những
-        người đó được. Hệ thống giữ lại 500 lượt gần nhất cho mỗi form.
+        cùng. Chọn form bên dưới để xem. Bạn có thể chọn gửi email hoặc bấm xoá
+        bớt các đơn không cần thiết.
       </p>
 
       <Space orientation="horizontal" size="small" wrap className="mb-3">
@@ -141,7 +198,6 @@ export default function RegistrationsView({
           className="cursor-pointer"
           options={forms.map((f) => ({ value: f.id, label: f.name }))}
           onChange={(id) => {
-            // Đổi form thì bỏ hết dấu tích cũ — chúng thuộc danh sách khác.
             setTichKeys([]);
             setTichMoc([]);
             startChuyen(() => router.push(`/admin/dang-ky-nhan-duoc?form=${id}`));
@@ -212,8 +268,6 @@ export default function RegistrationsView({
                     />
                   );
                 }
-                // Ô vai trò chứa NHIỀU giá trị nối bằng dấu phẩy — tách ra
-                // thành từng thẻ cho dễ đọc và dễ đếm.
                 if (c.type === "roles") {
                   return (
                     <Space size={[4, 4]} wrap>
@@ -228,6 +282,29 @@ export default function RegistrationsView({
                 return <span className="whitespace-pre-wrap">{v}</span>;
               },
             })),
+            {
+              title: "Thao tác",
+              key: "actions",
+              width: 80,
+              fixed: "right",
+              render: (_: unknown, r: Registration) => (
+                <Popconfirm
+                  title="Xoá lượt đăng ký này?"
+                  description="Dữ liệu sẽ bị xoá vĩnh viễn khỏi Redis."
+                  okText="Xoá"
+                  cancelText="Huỷ"
+                  onConfirm={() => xoaMotLuot(r.at)}
+                >
+                  <Button
+                    size="small"
+                    danger
+                    icon={<DeleteOutlined />}
+                    loading={dangXoa}
+                    title="Xoá đơn đăng ký này"
+                  />
+                </Popconfirm>
+              ),
+            },
           ]}
         />
       )}

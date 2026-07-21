@@ -339,6 +339,7 @@ export function ItemListEditor<T>({
   renderForm,
   addLabel = "Thêm mục",
   drawerTitle = "Chỉnh sửa",
+  hideAddButton = false,
 }: {
   value: T[];
   onChange: (next: T[]) => void;
@@ -349,6 +350,7 @@ export function ItemListEditor<T>({
   renderForm: (item: T, update: (next: T) => void, index: number) => ReactNode;
   addLabel?: string;
   drawerTitle?: string;
+  hideAddButton?: boolean;
 }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [limit, setLimit] = useState(LIST_PAGE);
@@ -380,7 +382,7 @@ export function ItemListEditor<T>({
       {value.length === 0 ? (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="Chưa có mục nào. Bấm nút bên dưới để thêm."
+          description="Chưa có mục nào. Bấm nút phía trên để thêm."
         />
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -408,9 +410,11 @@ export function ItemListEditor<T>({
         </Button>
       ) : null}
 
-      <Button type="dashed" icon={<PlusOutlined />} block className="mt-2" onClick={add}>
-        {addLabel}
-      </Button>
+      {!hideAddButton && (
+        <Button type="dashed" icon={<PlusOutlined />} block className="mt-2" onClick={add}>
+          {addLabel}
+        </Button>
+      )}
 
       <Drawer
         open={openIndex !== null}
