@@ -63,6 +63,10 @@ export type FundraisingChannel = {
   accountNumber?: string;
   /** Tên chủ tài khoản (tuỳ chọn) */
   accountName?: string;
+  /** Ghi chú hiển thị trong Pop-up (tách biệt hoàn toàn với ghi chú ngoài) */
+  modalNote?: string;
+  /** Cú pháp / ghi chú chuyển khoản trong Pop-up */
+  transferNote?: string;
 };
 
 /** Khối gây quỹ (đơn + danh sách kênh). */

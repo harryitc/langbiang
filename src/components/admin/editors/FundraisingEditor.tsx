@@ -181,15 +181,15 @@ export default function FundraisingEditor({
               </Field>
 
               <Field
-                label="Ghi chú"
-                hint="Không bắt buộc. Vd: số tài khoản, hoặc mô tả ngắn cách ủng hộ."
+                label="Ghi chú (hiển thị ngoài thẻ kênh)"
+                hint="Mô tả ngắn hiển thị trên thẻ ngoài trang Gây quỹ. Vd: Ủng hộ trực tiếp vào tài khoản ngân hàng của dự án."
               >
                 <Input.TextArea
                   value={item.note}
                   rows={2}
                   showCount
                   maxLength={160}
-                  placeholder="Ủng hộ qua mua sắm sản phẩm gây quỹ"
+                  placeholder="Vd: Ủng hộ trực tiếp vào tài khoản ngân hàng của dự án."
                   onChange={(e) => updateItem({ ...item, note: e.target.value })}
                 />
               </Field>
@@ -262,6 +262,26 @@ export default function FundraisingEditor({
                   value={item.accountName ?? ""}
                   placeholder="Vd: TRANG SANG LANGBIANG"
                   onChange={(e) => updateItem({ ...item, accountName: e.target.value })}
+                />
+              </Field>
+
+              <Field
+                label="Ghi chú (hiển thị trong Pop-up)"
+                hint="Nội dung ghi chú / cú pháp chuyển khoản hiển thị độc lập bên trong Pop-up. Không dùng chung với ghi chú ngoài thẻ."
+              >
+                <Input.TextArea
+                  value={item.modalNote ?? item.transferNote ?? ""}
+                  rows={2}
+                  showCount
+                  maxLength={200}
+                  placeholder="Vd: Cú pháp chuyển khoản: TLS [Họ và tên] [Số điện thoại]"
+                  onChange={(e) =>
+                    updateItem({
+                      ...item,
+                      modalNote: e.target.value,
+                      transferNote: e.target.value,
+                    })
+                  }
                 />
               </Field>
 

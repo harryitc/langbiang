@@ -149,6 +149,8 @@ export const fundraising = {
       bankName: "Vietcombank",
       accountNumber: "0123456789",
       accountName: "TRANG SANG LANGBIANG",
+      modalNote: "Cú pháp chuyển khoản: TLS [Họ và tên] [Số điện thoại]",
+      transferNote: "TLS [Họ và tên] [Số điện thoại]",
       qrImage: "",
     },
     {
