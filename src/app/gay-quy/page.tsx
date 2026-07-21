@@ -21,7 +21,8 @@ export default async function FundraisingPage() {
       eyebrow="Chung tay gây quỹ"
       title={
         <>
-          {fundraising.title} <span className="text-gradient-sun">Trăng Sáng</span>
+          {fundraising.title}
+          {/* <span className="text-gradient-sun">Trăng Sáng</span> */}
         </>
       }
       subtitle={fundraising.desc}
