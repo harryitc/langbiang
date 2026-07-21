@@ -115,11 +115,10 @@ export default function FundraisingQrModal({
                   </span>
                   <button
                     onClick={handleCopy}
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-soft transition cursor-pointer ${
-                      copied
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-soft transition cursor-pointer ${copied
                         ? "bg-emerald-600 text-white"
                         : "bg-gradient-to-r from-sunset to-sun text-white hover:brightness-105"
-                    }`}
+                      }`}
                   >
                     {copied ? (
                       <>
@@ -155,7 +154,7 @@ export default function FundraisingQrModal({
             {modalNote && (
               <div className="border-t border-leaf/10 pt-3 dark:border-white/10">
                 <span className="text-xs font-bold uppercase tracking-wider text-leaf-deep dark:text-leaf-bright">
-                  Ghi chú trong Pop-up
+                  Ghi chú
                 </span>
                 <p className="mt-1 rounded-lg bg-sun/10 p-2 text-xs font-medium leading-relaxed text-forest dark:bg-sun/15 dark:text-ink">
                   {modalNote}
