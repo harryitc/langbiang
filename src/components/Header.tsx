@@ -87,7 +87,7 @@ export default function Header({ siteName, logo, pastYears }: HeaderProps) {
                 aria-haspopup="menu"
                 className="flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium text-forest/80 transition hover:bg-leaf/15 hover:text-leaf-deep dark:text-ink/80 dark:hover:bg-leaf-bright/10 dark:hover:text-leaf-bright"
               >
-                Năm
+                Ký ức
                 <svg
                   viewBox="0 0 24 24"
                   className={`h-3.5 w-3.5 transition-transform ${yearsOpen ? "rotate-180" : ""}`}
