@@ -52,89 +52,71 @@ export default function FundraisingQrModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 z-[9999] overflow-y-auto p-4 sm:p-6 flex items-center justify-center min-h-screen"
       role="dialog"
       aria-modal="true"
       aria-label={`Thông tin chuyển khoản ${channel.name}`}
       onClick={onClose}
     >
-      {/* Lớp phủ nền tối mờ */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      {/* Lớp nền tối mờ cổ điển */}
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-xs" />
 
-      {/* Khung Pop-up chính */}
+      {/* Card Modal Cổ Điển / Đơn Giản - Trải dài tự nhiên không cuộn bên trong */}
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-cream p-6 shadow-2xl dark:bg-night-2 sm:p-8 border border-leaf/15 dark:border-leaf-bright/15 transition-all"
+        className="relative my-auto w-full max-w-xl rounded-2xl bg-white p-6 shadow-xl dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Nút đóng X góc trên phải */}
+        {/* Nút đóng X */}
         <button
           onClick={onClose}
           aria-label="Đóng"
-          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-forest/10 text-forest transition hover:bg-forest/20 dark:bg-white/10 dark:text-ink cursor-pointer"
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition cursor-pointer"
         >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M6 6l12 12M18 6L6 18" />
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
-        {/* Tiêu đề Pop-up */}
-        <div className="flex items-center gap-3 border-b border-forest/10 pb-4 dark:border-white/10">
-          <span className="text-3xl">{channel.icon || "💳"}</span>
-          <div>
-            <h3 className="text-xl font-bold text-forest dark:text-ink">
-              {channel.name || "Thông tin Chuyển khoản"}
-            </h3>
-            <p className="text-xs text-forest/70 dark:text-ink/70">
-              Quét mã QR hoặc chuyển khoản trực tiếp
-            </p>
-          </div>
+        {/* Tiêu đề Đơn giản */}
+        <div className="border-b border-gray-100 pb-4 dark:border-zinc-800">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <span>{channel.icon || "💳"}</span>
+            <span>{channel.name || "Thông tin chuyển khoản"}</span>
+          </h3>
         </div>
 
-        {/* Bố cục 2 Cột */}
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 items-center">
-          {/* CỘT BÊN TRÁI: Thông tin ngân hàng */}
-          <div className="flex flex-col gap-4 rounded-2xl bg-white/80 p-5 ring-1 ring-leaf/15 dark:bg-white/5 dark:ring-white/10">
+        {/* Bố cục 2 cột đơn giản */}
+        <div className="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
+          {/* CỘT BÊN TRÁI: Danh sách thông tin dạng classic */}
+          <div className="space-y-4">
             <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-forest/60 dark:text-ink/60">
+              <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
                 Ngân hàng thụ hưởng
               </div>
-              <div className="mt-1 text-base font-bold text-forest dark:text-ink">
-                🏦 {bankName}
+              <div className="mt-0.5 text-base font-semibold text-gray-900 dark:text-white">
+                {bankName}
               </div>
             </div>
 
             {accountNumber && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-forest/60 dark:text-ink/60">
+                <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
                   Số tài khoản
                 </div>
-                <div className="mt-1 flex items-center justify-between gap-2 rounded-xl bg-leaf/5 px-3.5 py-2 dark:bg-white/10">
-                  <span className="font-mono text-lg font-bold tracking-wider text-sunset">
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="font-mono text-lg font-bold text-gray-900 dark:text-white tracking-wide">
                     {accountNumber}
                   </span>
                   <button
                     onClick={handleCopy}
-                    className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold shadow-soft transition cursor-pointer ${
+                    className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
                       copied
                         ? "bg-emerald-600 text-white"
-                        : "bg-gradient-to-r from-sunset to-sun text-white hover:brightness-105"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
                     }`}
                   >
                     {copied ? (
-                      <>
-                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Đã chép!</span>
-                      </>
+                      <span>Đã chép!</span>
                     ) : (
                       <>
                         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -150,37 +132,37 @@ export default function FundraisingQrModal({
 
             {accountName && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-forest/60 dark:text-ink/60">
+                <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
                   Chủ tài khoản
                 </div>
-                <div className="mt-1 text-sm font-bold text-forest dark:text-ink">
+                <div className="mt-0.5 text-sm font-semibold text-gray-900 dark:text-white">
                   {accountName}
                 </div>
               </div>
             )}
 
             {modalNote && (
-              <div className="border-t border-forest/10 pt-3 dark:border-white/10">
-                <div className="text-xs font-bold uppercase tracking-wider text-forest/60 dark:text-ink/60">
+              <div className="pt-2 border-t border-gray-100 dark:border-zinc-800">
+                <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
                   Ghi chú
                 </div>
-                <div className="mt-1.5 rounded-xl bg-sun/10 p-2.5 text-xs font-medium leading-relaxed text-forest dark:bg-sun/15 dark:text-ink">
+                <div className="mt-1 rounded-lg bg-gray-50 p-2.5 text-xs text-gray-800 dark:bg-zinc-800/60 dark:text-zinc-200 border border-gray-100 dark:border-zinc-800/80 leading-relaxed">
                   {modalNote}
                 </div>
               </div>
             )}
           </div>
 
-          {/* CỘT BÊN PHẢI: Hình ảnh Mã QR Code */}
+          {/* CỘT BÊN PHẢI: Hình ảnh Mã QR */}
           <div className="flex flex-col items-center justify-center text-center">
             {qrImage ? (
               <div className="flex w-full flex-col items-center">
-                <div className="max-w-[210px] overflow-hidden rounded-2xl bg-white p-2.5 shadow-md border border-leaf/15 dark:bg-white dark:border-white/20">
+                <div className="p-2 bg-white rounded-xl border border-gray-200 dark:border-zinc-700 shadow-xs">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={qrImage}
                     alt={`Mã QR ${bankName}`}
-                    className="max-h-[280px] w-auto max-w-full rounded-xl object-contain"
+                    className="max-h-[250px] w-auto max-w-full rounded-lg object-contain"
                   />
                 </div>
 
@@ -189,21 +171,19 @@ export default function FundraisingQrModal({
                   download={`Ma-QR-Chuyen-Khoan-${bankName}.jpg`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-6 py-2.5 text-xs font-semibold text-white shadow-soft transition hover:brightness-110 active:scale-95"
+                  className="mt-3.5 inline-flex items-center justify-center gap-1.5 rounded-lg bg-gray-900 px-4 py-2 text-xs font-medium text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 transition shadow-xs cursor-pointer"
                 >
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
                   <span>Tải mã QR về máy</span>
                 </a>
               </div>
             ) : (
-              <div className="flex h-52 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-forest/20 p-5 dark:border-white/20">
-                <span className="text-3xl opacity-50">📱</span>
-                <p className="mt-2 text-xs text-forest/70 dark:text-ink/70">
-                  Chưa cập nhật hình ảnh mã QR.
-                  <br />
-                  Bạn có thể dùng Số tài khoản bên trái để chuyển khoản.
+              <div className="flex h-44 w-full flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 p-4 dark:border-zinc-800">
+                <span className="text-2xl opacity-40">📱</span>
+                <p className="mt-2 text-xs text-gray-500 dark:text-zinc-400">
+                  Chưa có ảnh QR Code
                 </p>
               </div>
             )}
