@@ -200,7 +200,7 @@ export default function Hero({
 
         {/* first-letter:uppercase chứ không phải capitalize: chỉ hoa chữ cái
             đầu câu, còn "ngày", "tháng", "năm" giữ nguyên chữ thường. */}
-        <p className="hero-date mt-2 text-xl font-bold tracking-wide text-leaf-deep first-letter:uppercase sm:text-2xl dark:text-leaf-bright">
+        <p className="hero-date mt-2 text-sm font-semibold tracking-wide text-leaf-deep first-letter:uppercase sm:text-base dark:text-leaf-bright">
           {dateLabel}
         </p>
 
