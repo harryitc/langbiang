@@ -13,12 +13,46 @@ import {
   news as siteNews,
 } from "@/lib/site";
 import { gallery2025 } from "@/lib/gallery2025";
-import { CONTENT_VERSION, type Photo, type SiteContent } from "./schema";
+import {
+  CONTENT_VERSION,
+  type AmbassadorRole,
+  type Photo,
+  type SiteContent,
+} from "./schema";
 import {
   defaultEmailTemplates,
   TEMPLATE_BAO_BTC_ID,
   TEMPLATE_CAM_ON_ID,
 } from "./email-templates";
+
+/**
+ * Bốn vai trò "Đại sứ" mặc định.
+ *
+ * Dùng ở hai chỗ: nội dung mặc định của form đăng ký (dưới đây) và bước nâng
+ * cấp dữ liệu cũ trong store.ts. Admin sửa thoải mái trong mục "Form đăng ký".
+ */
+export const DEFAULT_ROLES: AmbassadorRole[] = [
+  {
+    icon: "🚌",
+    title: "Đại sứ Hành trình",
+    desc: "Trực tiếp mang yêu thương đến Langbiang (tự túc một phần kinh phí cho việc di chuyển và sinh hoạt).",
+  },
+  {
+    icon: "🤝",
+    title: "Đại sứ Kết nối",
+    desc: "Trở thành hậu phương vững chắc, chung tay tổ chức và kết nối các nguồn lực trước khi chương trình diễn ra.",
+  },
+  {
+    icon: "💝",
+    title: "Đại sứ Đồng hành",
+    desc: "Trao gửi sự sẻ chia từ xa, tiếp thêm sức mạnh cho các em nhỏ bằng hiện kim và những món quà thiết thực.",
+  },
+  {
+    icon: "📣",
+    title: "Đại sứ Truyền thông",
+    desc: "Lan toả thông điệp và hình ảnh của dự án đến cộng đồng thông qua tiếng nói và sức ảnh hưởng cá nhân.",
+  },
+];
 
 /** Nối các đoạn văn thành HTML an toàn (body: string[] -> bodyHtml). */
 function paragraphsToHtml(paras: string[]): string {
@@ -107,18 +141,7 @@ export const defaultContent: SiteContent = {
         titleHighlight: "một mùa trăng yêu thương",
         description:
           "Dù bạn trực tiếp lên đường hay đồng hành từ xa, mỗi tấm lòng đều góp phần làm nên điều kỳ diệu cho các em nhỏ Langbiang.",
-        highlights: [
-          {
-            icon: "🙋",
-            title: "Tình nguyện viên",
-            desc: "Trực tiếp tham gia hành trình 26–27/9",
-          },
-          {
-            icon: "🎁",
-            title: "Nhà hảo tâm",
-            desc: "Đóng góp quà, nhu yếu phẩm & kinh phí",
-          },
-        ],
+        roles: DEFAULT_ROLES,
         formTitle: "Đăng ký đồng hành",
         fields: [
           {
@@ -151,14 +174,10 @@ export const defaultContent: SiteContent = {
           },
           {
             name: "role",
-            label: "Bạn muốn tham gia với vai trò",
-            type: "select",
-            options: [
-              "Tình nguyện viên",
-              "Nhà hảo tâm / Nhà tài trợ",
-              "Cộng tác truyền thông",
-              "Khác",
-            ],
+            label: "Bạn muốn đồng hành với vai trò",
+            type: "roles",
+            placeholder: "Chọn được nhiều vai trò cùng lúc.",
+            required: true,
           },
           {
             name: "message",

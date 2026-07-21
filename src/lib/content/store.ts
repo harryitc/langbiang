@@ -6,7 +6,7 @@ import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redis } from "@/lib/redis";
-import { defaultContent } from "./defaults";
+import { defaultContent, DEFAULT_ROLES } from "./defaults";
 import { TEMPLATE_BAO_BTC_ID, TEMPLATE_CAM_ON_ID } from "./email-templates";
 import {
   CONTENT_TAG,
@@ -107,9 +107,60 @@ function migrateEmailTemplates(raw: unknown): unknown {
   };
 }
 
+/**
+ * Gộp vai trò về MỘT nguồn duy nhất (< v15).
+ *
+ * Trước v15 có hai danh sách rời nhau: `highlights` (thẻ giới thiệu ngoài trang
+ * chủ) và `options` của ô nhập kiểu "select" tên "role" (các lựa chọn trong
+ * form). Nay chỉ còn `roles`, và ô nhập kiểu "roles" đọc thẳng danh sách đó.
+ *
+ * Nguyên tắc: KHÔNG đè lên chữ admin đã tự soạn.
+ *  - Còn `highlights` -> chuyển nguyên sang `roles`.
+ *  - `highlights` rỗng/vắng (form mới, hoặc form chưa từng có thẻ nào) -> lấy
+ *    4 vai trò Đại sứ mặc định, vì ô nhập kiểu "roles" không có gì để hiện thì
+ *    khách không chọn được.
+ *  - Ô nhập "select" tên "role" -> đổi thành kiểu "roles", bỏ `options` (giờ
+ *    lấy từ `roles`). Các ô "select" khác giữ nguyên.
+ *
+ * Cần bước riêng vì mergeDeep THAY nguyên mảng `registerForms`: dữ liệu cũ
+ * trong Redis đè hẳn lên mặc định nên không tự có khoá `roles`.
+ */
+function migrateAmbassadorRoles(raw: unknown): unknown {
+  if (!isPlainObject(raw) || !isPlainObject(raw.main)) return raw;
+  const forms = raw.main.registerForms;
+  if (!Array.isArray(forms)) return raw;
+
+  return {
+    ...raw,
+    main: {
+      ...raw.main,
+      registerForms: forms.map((f) => {
+        if (!isPlainObject(f) || Array.isArray(f.roles)) return f;
+
+        const cu = Array.isArray(f.highlights) ? f.highlights : [];
+        const roles = cu.length > 0 ? cu : DEFAULT_ROLES;
+
+        const fields = Array.isArray(f.fields)
+          ? f.fields.map((o) =>
+              isPlainObject(o) && o.type === "select" && o.name === "role"
+                ? { ...o, type: "roles", options: undefined, required: true }
+                : o
+            )
+          : f.fields;
+
+        // Bỏ hẳn khoá cũ để không còn hai nguồn song song.
+        const { highlights: _bo, ...conLai } = f;
+        return { ...conLai, roles, fields };
+      }),
+    },
+  };
+}
+
 /** Chuẩn hoá dữ liệu thô từ store thành SiteContent đầy đủ. */
 export function normalize(raw: unknown): SiteContent {
-  const migrated = migrateEmailTemplates(migrateRegisterForms(raw));
+  const migrated = migrateAmbassadorRoles(
+    migrateEmailTemplates(migrateRegisterForms(raw))
+  );
   const merged = mergeDeep(defaultContent, migrated);
   return { ...merged, version: CONTENT_VERSION };
 }

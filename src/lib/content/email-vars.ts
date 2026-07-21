@@ -34,6 +34,19 @@ export function tenNguoiDangKy(
   return oTen ? clean(record.values[oTen.name], 120) : "";
 }
 
+/**
+ * Vai trò Đại sứ khách đã chọn — lấy từ ô nhập kiểu "roles" đầu tiên.
+ * Chọn nhiều thì trả về chuỗi đã nối sẵn ("A, B"); form không có ô vai trò
+ * hoặc khách bỏ trống thì trả về chuỗi rỗng.
+ */
+export function vaiTroNguoiDangKy(
+  form: RegisterForm,
+  record: Registration
+): string {
+  const o = form.fields.find((f) => f.type === "roles");
+  return o ? clean(record.values[o.name], 400) : "";
+}
+
 /** Email khách điền — lấy từ ô nhập kiểu "email" đầu tiên của form. */
 export function emailNguoiDangKy(
   form: RegisterForm,
@@ -84,6 +97,7 @@ export function bienChoNguoiDangKy(
     ...bienChungCuaChuongTrinh(content, form.name.trim() || form.id),
     ho_ten: tenNguoiDangKy(form, record),
     email: emailNguoiDangKy(form, record),
+    vai_tro: vaiTroNguoiDangKy(form, record),
     thoi_diem: new Date(record.at).toLocaleString("vi-VN", {
       timeZone: "Asia/Ho_Chi_Minh",
     }),

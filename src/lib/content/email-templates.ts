@@ -31,6 +31,11 @@ export type EmailTemplate = {
 export const EMAIL_VARS = [
   { key: "ho_ten", label: "Họ tên người đăng ký", vd: "Nguyễn Văn A" },
   { key: "email", label: "Email người đăng ký", vd: "an@email.com" },
+  {
+    key: "vai_tro",
+    label: "Vai trò Đại sứ đã chọn",
+    vd: "Đại sứ Hành trình, Đại sứ Truyền thông",
+  },
   { key: "ten_form", label: "Tên form đăng ký", vd: "Langbiang 2026" },
   { key: "nam", label: "Năm của mùa hiện tại", vd: "2026" },
   { key: "thoi_diem", label: "Lúc gửi đăng ký", vd: "09:12 20/07/2026" },
@@ -217,6 +222,7 @@ export function renderEmailTemplate(
 export const PREVIEW_VARS: EmailVarValues = {
   ho_ten: "Nguyễn Văn A",
   email: "nguyenvana@email.com",
+  vai_tro: "Đại sứ Hành trình, Đại sứ Truyền thông",
   ten_form: "Langbiang 2026",
   nam: "2026",
   thoi_diem: "09:12 20/07/2026",
@@ -230,7 +236,10 @@ export const PREVIEW_VARS: EmailVarValues = {
     { label: "Email", value: "nguyenvana@email.com" },
     { label: "Số điện thoại", value: "0901 234 567" },
     { label: "Ngày sinh", value: "2004-05-18" },
-    { label: "Vai trò", value: "Tình nguyện viên" },
+    {
+      label: "Bạn muốn đồng hành với vai trò",
+      value: "Đại sứ Hành trình, Đại sứ Truyền thông",
+    },
   ]),
 };
 
@@ -247,8 +256,9 @@ const camOnBody = `
 
 <p style="margin:0 0 14px;">
   Ban Tổ chức <strong>{{ten_su_kien}}</strong> đã nhận được đăng ký của bạn cho
-  <strong>{{ten_form}}</strong>. Cảm ơn bạn đã sẵn lòng đồng hành để mang một mùa
-  Trung thu trọn vẹn đến các em nhỏ vùng cao 🌙
+  <strong>{{ten_form}}</strong> với vai trò <strong>{{vai_tro}}</strong>. Cảm ơn
+  bạn đã sẵn lòng đồng hành để mang một mùa Trung thu trọn vẹn đến các em nhỏ
+  vùng cao 🌙
 </p>
 
 <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 20px;background:#f7faf7;border-left:4px solid #5cb85c;border-radius:8px;">
@@ -281,7 +291,8 @@ const camOnBody = `
 /** Mẫu email báo cho Ban Tổ chức khi có người đăng ký mới. */
 const baoBtcBody = `
 <p style="margin:0 0 14px;">
-  Vừa có một đăng ký mới qua form <strong>{{ten_form}}</strong>.
+  Vừa có một đăng ký mới qua form <strong>{{ten_form}}</strong> —
+  <strong>{{ho_ten}}</strong>, vai trò <strong>{{vai_tro}}</strong>.
 </p>
 
 <p style="margin:0 0 16px;color:#5b6b63;font-size:14px;">

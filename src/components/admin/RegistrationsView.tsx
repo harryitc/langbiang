@@ -11,7 +11,11 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Alert, Button, Card, Empty, Image, Select, Space, Table, Tag } from "antd";
 import { DownloadOutlined, MailOutlined } from "@ant-design/icons";
-import type { Registration, RegisterFieldType } from "@/lib/content/schema";
+import {
+  parseRoles,
+  type Registration,
+  type RegisterFieldType,
+} from "@/lib/content/schema";
 import { KHOA_CHON_TAM } from "./GuiEmailView";
 
 type Cot = { name: string; label: string; type?: RegisterFieldType };
@@ -206,6 +210,19 @@ export default function RegistrationsView({
                       className="h-12 w-12 cursor-pointer rounded object-cover"
                       onClick={() => setXemAnh(v)}
                     />
+                  );
+                }
+                // Ô vai trò chứa NHIỀU giá trị nối bằng dấu phẩy — tách ra
+                // thành từng thẻ cho dễ đọc và dễ đếm.
+                if (c.type === "roles") {
+                  return (
+                    <Space size={[4, 4]} wrap>
+                      {parseRoles(v).map((vaiTro) => (
+                        <Tag key={vaiTro} color="green">
+                          {vaiTro}
+                        </Tag>
+                      ))}
+                    </Space>
                   );
                 }
                 return <span className="whitespace-pre-wrap">{v}</span>;

@@ -145,7 +145,7 @@ export default function GuiEmailView({
   // tự nhập — báo trước ngay khi admin còn đang chọn.
   const bienRieng = mauDangChon
     ? bienDangDung(mauDangChon.subject, mauDangChon.bodyHtml).filter((b) =>
-        ["ho_ten", "thoi_diem", "bang_thong_tin"].includes(b)
+        ["ho_ten", "vai_tro", "thoi_diem", "bang_thong_tin"].includes(b)
       )
     : [];
 

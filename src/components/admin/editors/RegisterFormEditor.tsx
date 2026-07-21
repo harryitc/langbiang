@@ -40,7 +40,7 @@ import {
   type RegisterField,
   type RegisterFieldType,
   type RegisterForm,
-  type RegisterHighlight,
+  type AmbassadorRole,
 } from "@/lib/content/schema";
 import type { EmailTemplate } from "@/lib/content/email-templates";
 
@@ -52,6 +52,7 @@ const FIELD_TYPES: { value: RegisterFieldType; label: string }[] = [
   { value: "date", label: "Ngày tháng — có lịch để chọn" },
   { value: "textarea", label: "Đoạn văn dài — nhiều dòng" },
   { value: "select", label: "Danh sách chọn sẵn" },
+  { value: "roles", label: "Vai trò Đại sứ — chọn được nhiều" },
   { value: "photo", label: "Ảnh — khách tự tải ảnh lên" },
 ];
 
@@ -158,6 +159,8 @@ export default function RegisterFormEditor({
   const missingLabel = form.fields.filter((f) => !f.label.trim()).length;
   const duplicateName =
     new Set(form.fields.map((f) => f.name.trim())).size !== form.fields.length;
+  /** Form có ô cho khách chọn vai trò -> đổi tên vai trò là đụng tới dữ liệu. */
+  const coOVaiTro = form.fields.some((f) => f.type === "roles");
 
   const copyLink = async () => {
     try {
@@ -376,17 +379,39 @@ export default function RegisterFormEditor({
         </Field>
       </EditorCard>
 
-      {/* ---------------- Thẻ vai trò ---------------- */}
-      <EditorCard title="Các thẻ vai trò">
+      {/* ---------------- Vai trò Đại sứ ---------------- */}
+      <EditorCard title="Vai trò Đại sứ">
         <p className="mb-3 text-sm opacity-60">
-          Những ô vuông nhỏ nằm dưới đoạn giới thiệu ở{" "}
-          <strong>trang chủ</strong>, mỗi ô nói về một cách tham gia. Kéo để đổi
-          thứ tự. Để trống cũng được.
+          Danh sách này dùng cho <strong>cả hai nơi</strong>: những thẻ giới
+          thiệu nằm dưới đoạn mở đầu, và các lựa chọn trong ô nhập kiểu{" "}
+          <strong>“Vai trò Đại sứ”</strong> của form. Sửa ở đây là hai nơi đổi
+          theo nên không bao giờ lệch nhau. Kéo để đổi thứ tự.
         </p>
-        <ListEditor<RegisterHighlight>
-          value={form.highlights}
-          onChange={(highlights) => set("highlights", highlights)}
-          addLabel="Thêm thẻ vai trò"
+
+        {coOVaiTro ? (
+          <Alert
+            className="mb-3"
+            type="warning"
+            showIcon
+            title="Đổi tên vai trò không sửa các đăng ký đã nhận."
+            description="Những người đăng ký trước đó vẫn giữ tên vai trò cũ, nên khi thống kê bạn sẽ thấy cả tên cũ lẫn tên mới. Thêm vai trò hoặc sửa mô tả thì không sao."
+          />
+        ) : null}
+
+        {form.roles.length === 0 ? (
+          <Alert
+            className="mb-3"
+            type="info"
+            showIcon
+            title="Chưa có vai trò nào."
+            description="Thêm ít nhất một vai trò, nếu không phần thẻ giới thiệu sẽ bị ẩn và ô “Vai trò Đại sứ” trong form không có gì để khách chọn."
+          />
+        ) : null}
+
+        <ListEditor<AmbassadorRole>
+          value={form.roles}
+          onChange={(roles) => set("roles", roles)}
+          addLabel="Thêm vai trò"
           newItem={() => ({ icon: "🌙", title: "", desc: "" })}
           getSummary={(item) =>
             `${item.icon || "•"} ${item.title || "(chưa có tên)"}`
@@ -396,17 +421,20 @@ export default function RegisterFormEditor({
               <Field label="Biểu tượng" hint="Một ký tự emoji.">
                 <Input
                   value={item.icon}
-                  placeholder="🙋"
+                  placeholder="🚌"
                   onChange={(e) =>
                     updateItem({ ...item, icon: e.target.value })
                   }
                 />
               </Field>
               <div>
-                <Field label="Tên vai trò">
+                <Field
+                  label="Tên vai trò"
+                  hint="Chính là chữ được lưu vào đơn đăng ký khi khách chọn."
+                >
                   <Input
                     value={item.title}
-                    placeholder="Tình nguyện viên"
+                    placeholder="Đại sứ Hành trình"
                     status={item.title.trim() ? undefined : "error"}
                     onChange={(e) =>
                       updateItem({ ...item, title: e.target.value })
@@ -416,7 +444,7 @@ export default function RegisterFormEditor({
                 <Field label="Mô tả ngắn">
                   <Input
                     value={item.desc}
-                    placeholder="Trực tiếp tham gia hành trình 26–27/9"
+                    placeholder="Trực tiếp mang yêu thương đến Langbiang."
                     onChange={(e) =>
                       updateItem({ ...item, desc: e.target.value })
                     }
@@ -527,6 +555,16 @@ export default function RegisterFormEditor({
                 />
               ) : null}
 
+              {item.type === "roles" ? (
+                <Alert
+                  className="mb-3"
+                  type="info"
+                  showIcon
+                  title={`Ô này hiện ${form.roles.length} vai trò Đại sứ ở trên, khách tích được nhiều vai trò cùng lúc.`}
+                  description="Không có danh sách lựa chọn riêng — thêm, sửa hay xoá vai trò ở mục “Vai trò Đại sứ” phía trên. Nhiều vai trò được lưu chung một ô, ngăn nhau bằng dấu phẩy."
+                />
+              ) : null}
+
               {item.type === "select" ? (
                 <Field
                   label="Các lựa chọn"
@@ -555,12 +593,16 @@ export default function RegisterFormEditor({
                   label={
                     item.type === "photo"
                       ? "Dòng nhắc dưới nút chọn ảnh"
-                      : "Chữ gợi ý trong ô"
+                      : item.type === "roles"
+                        ? "Dòng nhắc dưới lưới thẻ vai trò"
+                        : "Chữ gợi ý trong ô"
                   }
                   hint={
                     item.type === "photo"
                       ? "Vd: Ảnh chân dung rõ mặt. Bỏ trống thì hiện lời nhắc mặc định."
-                      : "Chữ mờ hiện sẵn khi ô còn trống. Bỏ trống cũng được."
+                      : item.type === "roles"
+                        ? "Nhắc khách là chọn được nhiều vai trò. Bỏ trống thì hiện lời nhắc mặc định."
+                        : "Chữ mờ hiện sẵn khi ô còn trống. Bỏ trống cũng được."
                   }
                 >
                   <Input
@@ -568,7 +610,9 @@ export default function RegisterFormEditor({
                     placeholder={
                       item.type === "photo"
                         ? "Ảnh chân dung rõ mặt"
-                        : "Nguyễn Văn A"
+                        : item.type === "roles"
+                          ? "Chọn được nhiều vai trò cùng lúc."
+                          : "Nguyễn Văn A"
                     }
                     onChange={(e) =>
                       updateItem({ ...item, placeholder: e.target.value })
@@ -781,7 +825,12 @@ export default function RegisterFormEditor({
                 </p>
               ) : (
                 form.fields.map((f, i) => (
-                  <FieldPreview key={f.name || i} field={f} index={i} />
+                  <FieldPreview
+                    key={f.name || i}
+                    field={f}
+                    index={i}
+                    roles={form.roles}
+                  />
                 ))
               )}
             </div>
@@ -805,9 +854,11 @@ export default function RegisterFormEditor({
 function FieldPreview({
   field,
   index,
+  roles,
 }: {
   field: RegisterField;
   index: number;
+  roles: AmbassadorRole[];
 }) {
   const label = field.label.trim() || `(ô ${index + 1} chưa đặt tên)`;
   return (
@@ -829,6 +880,35 @@ function FieldPreview({
             <option key={i}>{opt || `(lựa chọn ${i + 1} chưa có chữ)`}</option>
           ))}
         </select>
+      ) : field.type === "roles" ? (
+        roles.length === 0 ? (
+          <p className="text-sm text-forest/50">
+            Chưa có vai trò nào — thêm ở mục “Vai trò Đại sứ” phía trên.
+          </p>
+        ) : (
+          <>
+            {/* Cùng bố cục với lưới thẻ ngoài web, nhưng chỉ để nhìn. */}
+            <div className="grid gap-2 sm:grid-cols-2">
+              {roles.map((r, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl border-2 border-leaf/20 bg-white/70 p-3"
+                >
+                  <span className="text-xl">{r.icon}</span>
+                  <p className="mt-1 text-sm font-bold leading-snug">
+                    {r.title || "(chưa có tên)"}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-forest/60">
+                    {r.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-1.5 text-xs text-forest/60">
+              {field.placeholder?.trim() || "Chọn được nhiều vai trò cùng lúc."}
+            </p>
+          </>
+        )
       ) : field.type === "photo" ? (
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 border-dashed border-leaf/40 text-xl">

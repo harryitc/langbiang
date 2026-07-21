@@ -4,6 +4,7 @@
 // Phần thẻ form nằm ở RegisterFormCard để dùng chung với trang /dang-ky/<id>.
 import Reveal from "@/components/Reveal";
 import RegisterFormCard from "./RegisterFormCard";
+import RoleCards from "./RoleCards";
 import type { RegisterForm } from "@/lib/content/schema";
 
 export default function Register({
@@ -23,31 +24,27 @@ export default function Register({
         <div className="absolute -right-10 bottom-0 h-72 w-72 rounded-full bg-sun blur-3xl" />
       </div>
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-2">
+      {/* max-w-7xl chứ không phải 6xl: cột trái phải đủ rộng cho dòng tiêu đề
+          viết tay cỡ lớn, nếu không chữ cuối bị rơi xuống một mình. */}
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
         <Reveal childrenStagger>
           <span className="mb-3 inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
             {content.eyebrow}
           </span>
-          <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
+          {/* text-balance: chia đều các dòng thay vì để chữ cuối rơi xuống
+              một mình — dòng viết tay cỡ lớn rất hay bị vậy ở màn vừa. */}
+          <h2 className="text-3xl font-extrabold leading-tight text-balance sm:text-4xl md:text-5xl">
             {content.title}
             <br />
             <span className="font-display text-4xl sm:text-5xl md:text-6xl">
               {content.titleHighlight}
             </span>
           </h2>
-          <p className="mt-5 max-w-md text-lg text-white/85">
+          <p className="mt-5 max-w-lg text-lg text-white/85 text-pretty">
             {content.description}
           </p>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {content.highlights.map((h, i) => (
-              <div key={i} className="glass rounded-2xl p-4 text-forest">
-                <span className="text-2xl">{h.icon}</span>
-                <p className="mt-1 font-bold">{h.title}</p>
-                <p className="text-sm text-forest/70">{h.desc}</p>
-              </div>
-            ))}
-          </div>
+          <RoleCards roles={content.roles} className="mt-8" />
         </Reveal>
 
         <Reveal>

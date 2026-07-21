@@ -11,7 +11,13 @@
 import { useEffect, useRef, useState } from "react";
 import { submitRegistrationAction } from "@/lib/content/register-actions";
 import { uploadRegistrationPhoto } from "@/lib/content/register-upload-client";
-import type { RegisterField, RegisterForm } from "@/lib/content/schema";
+import RoleCards from "./RoleCards";
+import {
+  ROLE_SEPARATOR,
+  type AmbassadorRole,
+  type RegisterField,
+  type RegisterForm,
+} from "@/lib/content/schema";
 
 const INPUT_CLASS =
   "w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition placeholder:text-forest/40 focus:border-leaf focus:ring-2 focus:ring-leaf/30";
@@ -87,6 +93,10 @@ export default function RegisterFormCard({
   const [photos, setPhotos] = useState<Record<string, string>>({});
   // Số ảnh đang tải dở — còn ảnh nào chưa xong thì khoá nút gửi lại.
   const [uploading, setUploading] = useState(0);
+  // Vai trò Đại sứ khách đã tích: mã trường -> danh sách tên vai trò.
+  // Giữ ở đây (không để trong từng ô) để gửi xong còn xoá sạch cùng lúc —
+  // el.reset() của trình duyệt không đụng tới trạng thái React.
+  const [roles, setRoles] = useState<Record<string, string[]>>({});
 
   // Khách đã đăng ký form này ở lần trước -> mở lại trang vẫn thấy màn cảm ơn.
   // Phải đọc trong useEffect chứ không đọc lúc dựng: máy chủ không có
@@ -111,6 +121,7 @@ export default function RegisterFormCard({
       if (res.ok) {
         el.reset();
         setPhotos({});
+        setRoles({});
         nho.ghi(form.id);
         setSent(true);
       } else {
@@ -157,7 +168,26 @@ export default function RegisterFormCard({
         <h3 className={`text-2xl font-bold text-leaf-deep${t(TOI.tieuDe)}`}>{form.formTitle}</h3>
 
         {form.fields.map((field, i) =>
-          field.type === "photo" ? (
+          field.type === "roles" ? (
+            <RolesFieldView
+              key={field.name || i}
+              field={field}
+              adaptive={adaptive}
+              roles={form.roles}
+              value={roles[field.name] ?? []}
+              onToggle={(title) =>
+                setRoles((prev) => {
+                  const dangCo = prev[field.name] ?? [];
+                  return {
+                    ...prev,
+                    [field.name]: dangCo.includes(title)
+                      ? dangCo.filter((x) => x !== title)
+                      : [...dangCo, title],
+                  };
+                })
+              }
+            />
+          ) : field.type === "photo" ? (
             <PhotoFieldView
               key={field.name || i}
               field={field}
@@ -280,6 +310,65 @@ function RegisterFieldView({
           required={field.required}
           className={o}
         />
+      )}
+    </div>
+  );
+}
+
+/**
+ * Ô VAI TRÒ ĐẠI SỨ: hiện đúng lưới thẻ như ngoài trang chủ (cùng component
+ * RoleCards) nhưng bấm chọn được, và chọn được NHIỀU vai trò cùng lúc.
+ *
+ * Các vai trò đã tích được gộp thành một chuỗi trong ô ẩn — nhờ vậy nơi lưu
+ * trữ, bảng "Đăng ký nhận được", file CSV và email đều nhận đúng một ô như mọi
+ * trường khác, không cần biết đây là ô nhiều lựa chọn.
+ */
+function RolesFieldView({
+  field,
+  adaptive,
+  roles,
+  value,
+  onToggle,
+}: {
+  field: RegisterField;
+  adaptive: boolean;
+  roles: AmbassadorRole[];
+  value: string[];
+  onToggle: (title: string) => void;
+}) {
+  const t = (cls: string) => (adaptive ? " " + cls : "");
+
+  // Giữ đúng thứ tự vai trò như admin đã sắp, không theo thứ tự khách bấm.
+  const daChon = roles.map((r) => r.title).filter((x) => value.includes(x));
+
+  return (
+    <div>
+      <FieldLabel field={field} adaptive={adaptive} />
+
+      {/* Thứ duy nhất thật sự được gửi đi. */}
+      <input
+        type="hidden"
+        name={field.name}
+        value={daChon.join(ROLE_SEPARATOR)}
+      />
+
+      {roles.length === 0 ? (
+        <p className={`text-sm text-forest/60${t(TOI.chuMo)}`}>
+          Chưa có vai trò nào để chọn.
+        </p>
+      ) : (
+        <>
+          <RoleCards
+            roles={roles}
+            selectable
+            adaptive={adaptive}
+            value={value}
+            onToggle={onToggle}
+          />
+          <p className={`mt-2 text-xs text-forest/60${t(TOI.chuMo)}`}>
+            {field.placeholder?.trim() || "Chọn được nhiều vai trò cùng lúc."}
+          </p>
+        </>
       )}
     </div>
   );

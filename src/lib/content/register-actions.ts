@@ -19,8 +19,10 @@ import { getContent } from "./store";
 import { addMediaItem } from "./media";
 import { VOLUNTEER_ALBUM_ID } from "./media-defaults";
 import {
+  parseRoles,
   registrationsKey,
   REGISTRATIONS_LIMIT,
+  ROLE_SEPARATOR,
   type Registration,
   type RegisterForm,
   type SiteContent,
@@ -65,12 +67,28 @@ export async function submitRegistrationAction(
   const labels: Record<string, string> = {};
   const thieu: string[] = [];
 
+  // Tên các vai trò Đại sứ đang được cấu hình — dùng để lọc ô kiểu "roles".
+  const vaiTroHopLe = (form.roles ?? []).map((r) => r.title.trim()).filter(Boolean);
+
   for (const field of fields) {
     if (!field.name) continue;
-    const value = clean(data?.[field.name]);
+    let value = clean(data?.[field.name]);
+
+    if (field.type === "roles") {
+      // Trình duyệt gửi gì cũng phải lọc lại: chỉ giữ vai trò có thật trong
+      // cấu hình, đúng thứ tự admin đã sắp, không trùng lặp.
+      const khachChon = new Set(parseRoles(value));
+      value = vaiTroHopLe.filter((t) => khachChon.has(t)).join(ROLE_SEPARATOR);
+    }
+
     labels[field.name] = labelOf(field);
     values[field.name] = value;
-    if (field.required && !value) thieu.push(labelOf(field));
+
+    // Ô "roles" mà chưa cấu hình vai trò nào thì khách không có gì để chọn —
+    // bắt buộc lúc đó là khoá cứng form, nên bỏ qua.
+    const batBuoc =
+      field.required && !(field.type === "roles" && vaiTroHopLe.length === 0);
+    if (batBuoc && !value) thieu.push(labelOf(field));
   }
 
   if (thieu.length > 0) {

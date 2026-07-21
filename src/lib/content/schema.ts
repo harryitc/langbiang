@@ -139,8 +139,14 @@ export type AboutSection = {
   ctaPrimaryLabel: string;
 };
 
-/** Một thẻ nhỏ giới thiệu vai trò ở khối Đăng ký. */
-export type RegisterHighlight = {
+/**
+ * Một vai trò "Đại sứ" mà khách có thể chọn khi đăng ký.
+ *
+ * NGUỒN DUY NHẤT: danh sách này vừa là những thẻ giới thiệu hiện ở khối Đăng
+ * ký, vừa là các lựa chọn của ô nhập kiểu "roles". Trước đây hai thứ đó là hai
+ * danh sách rời nhau nên chỉnh một bên là lệch — nay gộp làm một.
+ */
+export type AmbassadorRole = {
   icon: string;
   title: string;
   desc: string;
@@ -154,6 +160,12 @@ export type RegisterFieldType =
   | "date"
   | "textarea"
   | "select"
+  /**
+   * Ô chọn VAI TRÒ ĐẠI SỨ — hiện thành lưới thẻ giống ngoài trang chủ, khách
+   * tích được NHIỀU vai trò cùng lúc. Không có `options` riêng: lựa chọn lấy
+   * thẳng từ `RegisterSection.roles` nên không bao giờ lệch với thẻ hiển thị.
+   */
+  | "roles"
   /** Ô để khách tự chọn ảnh từ máy và tải lên (ảnh tình nguyện viên). */
   | "photo";
 
@@ -165,9 +177,23 @@ export type RegisterField = {
   type: RegisterFieldType;
   placeholder?: string;
   required?: boolean;
-  /** Danh sách lựa chọn — chỉ dùng khi type = "select". */
+  /**
+   * Danh sách lựa chọn — CHỈ dùng khi type = "select".
+   * Ô kiểu "roles" không dùng khoá này; nó đọc `RegisterSection.roles`.
+   */
   options?: string[];
 };
+
+/** Nhiều vai trò được lưu chung trong một ô, ngăn nhau bằng dấu này. */
+export const ROLE_SEPARATOR = ", ";
+
+/** Tách chuỗi vai trò đã lưu thành danh sách tên. */
+export function parseRoles(value: string | undefined): string[] {
+  return (value ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
 
 /** Khối "Đăng ký" ở trang chủ. */
 export type RegisterSection = {
@@ -176,7 +202,11 @@ export type RegisterSection = {
   /** Dòng thứ hai của tiêu đề — in bằng phông chữ viết tay, cỡ lớn hơn. */
   titleHighlight: string;
   description: string;
-  highlights: RegisterHighlight[];
+  /**
+   * Các vai trò Đại sứ — vừa hiện thành thẻ giới thiệu, vừa là lựa chọn của ô
+   * nhập kiểu "roles". Sửa ở đây là đổi cả hai nơi.
+   */
+  roles: AmbassadorRole[];
   /** Tiêu đề phía trên form. */
   formTitle: string;
   fields: RegisterField[];
@@ -417,7 +447,12 @@ export const SLIDESHOW_LIMIT = 6;
 // trong biến môi trường.
 // v14: chữ ở chân trang (main.footer) sửa được từ admin — đoạn giới thiệu, chữ
 // trên nút Fanpage, hai tiêu đề cột và hai dòng cuối trang.
-export const CONTENT_VERSION = 14;
+// v15: vai trò Đại sứ gộp về MỘT nguồn duy nhất. Trước đây thẻ giới thiệu
+// (register.highlights) và các lựa chọn của ô "vai trò" (field.options) là hai
+// danh sách rời nhau nên luôn lệch; nay chung `registerForms[].roles`. Thêm kiểu
+// ô nhập "roles": hiện đúng lưới thẻ như ngoài trang chủ và cho khách tích
+// NHIỀU vai trò (lưu chung một ô, ngăn nhau bằng ", ").
+export const CONTENT_VERSION = 15;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

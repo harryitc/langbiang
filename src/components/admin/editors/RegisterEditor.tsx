@@ -26,6 +26,7 @@ import {
   toRegisterSlug,
   type RegisterForm,
 } from "@/lib/content/schema";
+import { DEFAULT_ROLES } from "@/lib/content/defaults";
 
 /** Đường dẫn chưa ai dùng (thêm đuôi -2, -3… nếu trùng). */
 export function slugChuaDung(goc: string, dangDung: string[]): string {
@@ -45,7 +46,9 @@ function formMoi(dangDung: string[]): RegisterForm {
     title: "Cùng thắp sáng",
     titleHighlight: "một mùa trăng yêu thương",
     description: "",
-    highlights: [],
+    // Form mới có sẵn 4 vai trò Đại sứ mặc định — thêm ô nhập kiểu "Vai trò
+    // Đại sứ" là dùng được ngay, khỏi phải gõ lại từ đầu.
+    roles: DEFAULT_ROLES,
     formTitle: "Đăng ký đồng hành",
     fields: [
       {
