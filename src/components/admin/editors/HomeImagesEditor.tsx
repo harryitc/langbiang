@@ -265,7 +265,7 @@ export default function HomeImagesEditor({
           Dải màu cam nằm giữa trang chủ, mời mọi người mua ủng hộ. Ở đây chỉ đổi{" "}
           <strong>chữ</strong>. Đường dẫn của hai nút không sửa ở đây: nút trắng
           luôn dẫn sang gian hàng Shopee (đổi địa chỉ ở mục{" "}
-          <em>Thương hiệu &amp; SEO</em>), nút viền luôn dẫn sang trang Gây quỹ.
+          <em>Kênh gây quỹ</em>), nút viền luôn dẫn sang trang Gây quỹ.
         </p>
 
         <Field

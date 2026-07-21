@@ -13,6 +13,13 @@ import { getContent } from "@/lib/content/store";
 export default async function DonateBand() {
   const { main } = await getContent();
   const band = main.donateBand;
+
+  // Lấy liên kết Shopee từ kênh gây quỹ trong Kênh gây quỹ (main.fundraising.channels)
+  const shopeeChannel = main.fundraising?.channels?.find(
+    (c) => c.icon === "🛒" || c.name?.toLowerCase().includes("shopee")
+  );
+  const shopeeUrl = shopeeChannel?.href?.trim() || main.site.shopee || "#";
+
   return (
     <section id="donate" className="relative py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
@@ -37,8 +44,8 @@ export default async function DonateBand() {
 
               <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:min-w-[220px]">
                 <a
-                  href={main.site.shopee}
-                  target="_blank"
+                  href={shopeeUrl}
+                  target={shopeeUrl.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   className="animate-pulse-glow flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-bold text-[#ee4d2d] transition hover:scale-[1.03]"
                 >

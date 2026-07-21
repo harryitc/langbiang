@@ -42,9 +42,6 @@ function kiemTra(value: SiteMeta): Loi {
   if (value.facebook.trim() && !laUrlHopLe(value.facebook))
     loi.facebook =
       "Liên kết cần bắt đầu bằng https:// — chép lại từ thanh địa chỉ trình duyệt.";
-  if (value.shopee.trim() && !laUrlHopLe(value.shopee))
-    loi.shopee =
-      "Liên kết cần bắt đầu bằng https:// — chép lại từ thanh địa chỉ trình duyệt.";
   return loi;
 }
 
@@ -183,24 +180,6 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               status={loi.facebook ? "error" : undefined}
               placeholder="https://www.facebook.com/…"
               onChange={(e) => set("facebook", e.target.value)}
-            />
-          </Field>
-
-          <Field
-            label="Gian hàng Shopee"
-            hint={
-              loi.shopee ? (
-                <Text type="danger">{loi.shopee}</Text>
-              ) : (
-                "Gian hàng gây quỹ. Hiện ở trang chủ và trang Gây quỹ. Bỏ trống thì phần này tự ẩn."
-              )
-            }
-          >
-            <LinkInput
-              value={value.shopee}
-              status={loi.shopee ? "error" : undefined}
-              placeholder="https://shopee.vn/…"
-              onChange={(e) => set("shopee", e.target.value)}
             />
           </Field>
         </div>
