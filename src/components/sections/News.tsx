@@ -156,11 +156,10 @@ export default function News({
                       key={i}
                       onClick={() => scrollTo(i)}
                       aria-label={`Đến nhóm tin ${i + 1}`}
-                      className={`h-2 rounded-full transition-all ${
-                        i === selected
+                      className={`h-2 rounded-full transition-all ${i === selected
                           ? "w-6 bg-leaf-deep dark:bg-leaf-bright"
                           : "w-2 bg-leaf/30 hover:bg-leaf/50 dark:bg-leaf-bright/30"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -185,7 +184,7 @@ export default function News({
         )}
 
         {/* Bản tin — đăng ký nhận tin (chỉ ở trang tin tức đầy đủ) */}
-        {!carousel && (
+        {/* {!carousel && (
           <Reveal className="mt-14">
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-leaf-deep to-leaf p-7 text-white shadow-soft sm:p-10">
               <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/10" />
@@ -228,7 +227,7 @@ export default function News({
               </div>
             </div>
           </Reveal>
-        )}
+        )} */}
       </div>
     </section>
   );
