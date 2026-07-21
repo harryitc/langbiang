@@ -1,7 +1,14 @@
 "use client";
 
 // Trình biên tập Ban tổ chức (main.board) — 2 danh sách: Sáng lập & Thành viên.
-import { Alert, Input, Space, Switch } from "antd";
+import { useState } from "react";
+import { Alert, Avatar, Button, Empty, Input, Modal, Space, Switch } from "antd";
+import {
+  ImportOutlined,
+  PlusOutlined,
+  SearchOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import {
   useSectionAutosave,
   SaveStatusTag,
@@ -10,7 +17,144 @@ import {
   ImageField,
 } from "../editorKit";
 import { ItemListEditor } from "../itemList";
-import type { Board, Member } from "@/lib/content/schema";
+import type { Board, Member, Registration } from "@/lib/content/schema";
+
+/** Trích xuất tên và ảnh từ một đơn đăng ký */
+function extractRegistrantInfo(r: Registration) {
+  let name = "";
+  let photo = "";
+
+  for (const [key, val] of Object.entries(r.values ?? {})) {
+    if (!val || typeof val !== "string") continue;
+    const label = (r.labels?.[key] ?? key).toLowerCase();
+    const strVal = val.trim();
+
+    if (!name) {
+      if (
+        label.includes("tên") ||
+        label.includes("họ") ||
+        label.includes("name") ||
+        key.toLowerCase().includes("name")
+      ) {
+        name = strVal;
+      }
+    }
+
+    if (!photo) {
+      if (
+        label.includes("ảnh") ||
+        label.includes("photo") ||
+        label.includes("avatar") ||
+        strVal.startsWith("http") ||
+        strVal.startsWith("/uploads/")
+      ) {
+        photo = strVal;
+      }
+    }
+  }
+
+  if (!name) {
+    const firstNonUrl = Object.values(r.values ?? {}).find(
+      (v) => typeof v === "string" && !v.startsWith("http") && !v.startsWith("/") && v.trim().length > 0
+    );
+    name = firstNonUrl ? firstNonUrl.trim() : "Người đăng ký";
+  }
+
+  return { name, photo };
+}
+
+/** Modal chọn người đăng ký đơn giản (Ảnh + Họ tên) */
+function SelectRegistrantModal({
+  open,
+  onClose,
+  registrations = [],
+  onSelect,
+}: {
+  open: boolean;
+  onClose: () => void;
+  registrations?: Registration[];
+  onSelect: (item: { name: string; photo?: string }) => void;
+}) {
+  const [search, setSearch] = useState("");
+
+  const candidates = registrations.map((r, i) => {
+    const info = extractRegistrantInfo(r);
+    return { id: i, ...info, at: r.at };
+  });
+
+  const filtered = candidates.filter((c) =>
+    c.name.toLowerCase().includes(search.toLowerCase().trim())
+  );
+
+  return (
+    <Modal
+      open={open}
+      onCancel={onClose}
+      footer={null}
+      title="Chọn người đăng ký làm thành viên"
+      width={520}
+      destroyOnClose
+    >
+      <div className="mb-4 pt-2">
+        <Input
+          prefix={<SearchOutlined />}
+          placeholder="Tìm theo họ tên người đăng ký…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          allowClear
+        />
+      </div>
+
+      <div className="max-h-[380px] overflow-y-auto pr-1">
+        {filtered.length === 0 ? (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={
+              search ? "Không tìm thấy người đăng ký phù hợp." : "Chưa có lượt đăng ký nào."
+            }
+          />
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {filtered.map((c) => (
+              <div
+                key={c.id + c.name}
+                className="flex items-center justify-between py-2.5 px-3 hover:bg-gray-50 rounded-xl transition"
+              >
+                <div className="flex items-center gap-3">
+                  <Avatar
+                    src={c.photo || undefined}
+                    icon={!c.photo ? <UserOutlined /> : undefined}
+                    size={42}
+                    className="flex-shrink-0 bg-leaf"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">{c.name}</div>
+                    {c.at && (
+                      <div className="text-xs opacity-50">
+                        Đăng ký: {new Date(c.at).toLocaleDateString("vi-VN")}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <Button
+                  type="primary"
+                  size="small"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    onSelect({ name: c.name, photo: c.photo });
+                    onClose();
+                  }}
+                >
+                  Chọn
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </Modal>
+  );
+}
 
 /** Phần tử mới rỗng cho danh sách thành viên. */
 function newMember(): Member {
@@ -81,7 +225,6 @@ function MemberForm({
         hint="Ảnh chân dung. Bỏ trống thì trang hiện vòng tròn chữ cái đầu của tên."
       >
         <ImageField
-          /* Ảnh chân dung hiện trong vòng tròn nên cắt vuông. */
           aspect={1}
           value={item.photo ?? ""}
           onChange={(url) => update({ ...item, photo: url })}
@@ -110,17 +253,42 @@ function MemberForm({
   );
 }
 
-export default function BoardEditor({ initial }: { initial: Board }) {
+export default function BoardEditor({
+  initial,
+  registrations = [],
+}: {
+  initial: Board;
+  registrations?: Registration[];
+}) {
   const { value, update, status } = useSectionAutosave<Board>(
     "main.board",
     initial
   );
+
+  const [modalTarget, setModalTarget] = useState<"founders" | "members" | null>(null);
 
   const founders = value.founders ?? [];
   const members = value.members ?? [];
   const totalMissing =
     founders.filter((m) => missingFields(m).length > 0).length +
     members.filter((m) => missingFields(m).length > 0).length;
+
+  const handleSelectRegistrant = (selected: { name: string; photo?: string }) => {
+    const newM: Member = {
+      name: selected.name,
+      photo: selected.photo ?? "",
+      role: "",
+      bio: "",
+      isLeader: false,
+      facebook: "",
+    };
+
+    if (modalTarget === "founders") {
+      update({ ...value, founders: [...founders, newM] });
+    } else if (modalTarget === "members") {
+      update({ ...value, members: [...members, newM] });
+    }
+  };
 
   return (
     <EditorCard title="Ban tổ chức" extra={<SaveStatusTag status={status} />}>
@@ -140,9 +308,18 @@ export default function BoardEditor({ initial }: { initial: Board }) {
             xếp ở đây cũng là thứ tự khách nhìn thấy. Kéo biểu tượng ⣿ để đổi
             thứ tự; bấm vào một dòng để sửa chi tiết.
           </p>
-          <div className="mb-2 font-semibold">
-            Ban sáng lập — hiện ở đầu trang
+
+          <div className="mb-2 flex items-center justify-between">
+            <div className="font-semibold">Ban sáng lập — hiện ở đầu trang</div>
+            <Button
+              size="small"
+              icon={<ImportOutlined />}
+              onClick={() => setModalTarget("founders")}
+            >
+              Chọn từ người đăng ký
+            </Button>
           </div>
+
           <ItemListEditor<Member>
             addLabel="Thêm người sáng lập"
             value={founders}
@@ -166,9 +343,19 @@ export default function BoardEditor({ initial }: { initial: Board }) {
         </div>
 
         <div>
-          <div className="mb-2 font-semibold">
-            Các thành viên — mục riêng bên dưới, để trống thì mục này tự ẩn
+          <div className="mb-2 flex items-center justify-between">
+            <div className="font-semibold">
+              Các thành viên — mục riêng bên dưới, để trống thì mục này tự ẩn
+            </div>
+            <Button
+              size="small"
+              icon={<ImportOutlined />}
+              onClick={() => setModalTarget("members")}
+            >
+              Chọn từ người đăng ký
+            </Button>
           </div>
+
           <ItemListEditor<Member>
             addLabel="Thêm thành viên"
             value={members}
@@ -191,6 +378,13 @@ export default function BoardEditor({ initial }: { initial: Board }) {
           />
         </div>
       </Space>
+
+      <SelectRegistrantModal
+        open={modalTarget !== null}
+        onClose={() => setModalTarget(null)}
+        registrations={registrations}
+        onSelect={handleSelectRegistrant}
+      />
     </EditorCard>
   );
 }
