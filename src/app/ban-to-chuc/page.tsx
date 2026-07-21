@@ -59,23 +59,6 @@ export default async function BanToChucPage() {
               <h1 className="font-display pb-4 text-5xl font-bold leading-[1.12] text-gradient-green sm:text-6xl md:text-7xl">
                 Ban sáng lập
               </h1>
-              <p className="mt-6 text-lg leading-relaxed text-forest/75 dark:text-ink/75">
-                Những người thắp trăng — cùng nhau xây dựng và tổ chức từng mùa Trăng Sáng Langbiang bằng cả tấm lòng.
-              </p>
-              <div className="mt-10 flex flex-wrap gap-4">
-                <Link
-                  href="/#register"
-                  className="rounded-full bg-gradient-to-r from-leaf-deep to-leaf px-7 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:brightness-110"
-                >
-                  Đăng ký đồng hành 🌙
-                </Link>
-                <Link
-                  href="/"
-                  className="rounded-full border-2 border-leaf-deep/30 bg-white/60 px-7 py-3 text-sm font-semibold text-leaf-deep backdrop-blur transition hover:-translate-y-0.5 hover:bg-white dark:border-leaf-bright/25 dark:bg-white/5 dark:text-leaf-bright dark:hover:bg-white/10"
-                >
-                  Về trang chủ
-                </Link>
-              </div>
             </div>
           </div>
 
