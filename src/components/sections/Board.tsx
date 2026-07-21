@@ -39,9 +39,9 @@ export default async function Members() {
       <div className="mx-auto max-w-5xl px-5 sm:px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
-            Thành viên
+            Đội ngũ
           </span>
-          <h2 className="text-2xl font-extrabold text-forest sm:text-4xl dark:text-ink">
+          <h2 className="font-display text-3xl font-extrabold text-forest sm:text-5xl dark:text-ink">
             Các <span className="text-gradient-green">thành viên</span>
           </h2>
         </Reveal>
