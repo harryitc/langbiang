@@ -1,5 +1,5 @@
 import Reveal from "@/components/Reveal";
-import Photo from "@/components/Photo";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import { Daisy } from "@/components/Decor";
 import { getContent } from "@/lib/content/store";
 
@@ -17,10 +17,12 @@ export default async function About() {
         {/* Ảnh */}
         <Reveal className="relative">
           <div className="relative">
-            {/* Ảnh mục Giới thiệu — đổi trong admin (Ảnh trang chủ). */}
-            <Photo
+            {/* Ảnh mục Giới thiệu — đổi trong admin (Ảnh trang chủ).
+                Bấm vào để xem lớn. */}
+            <PhotoLightbox
               src={main.aboutImage?.trim() || "/gallery/about.jpg"}
               alt="Tình nguyện viên Trăng Sáng Langbiang bên các em nhỏ vùng cao"
+              caption={`${about.title} ${about.titleHighlight}`}
               ratio="aspect-[4/5]"
               priority
               className="shadow-soft"
