@@ -203,7 +203,7 @@ export default function Header({ siteName, logo, pastYears }: HeaderProps) {
 
 function Logo({ siteName, logo }: { siteName: string; logo?: string }) {
   return (
-    <span className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl shadow-sm ring-1 ring-white/50 dark:ring-white/10">
+    <span className="relative flex h-11 w-11 items-center justify-center overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={logo?.trim() || "/logo-mark.png"}
