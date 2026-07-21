@@ -166,8 +166,8 @@ export default function RegistrationsView({
               className="cursor-pointer"
             >
               {tichMoc.length === 0
-                ? "Xoá đã chọn"
-                : `Xoá đã chọn (${tichMoc.length})`}
+                ? "Xoá"
+                : `Xoá (${tichMoc.length})`}
             </Button>
           </Popconfirm>
 
