@@ -14,7 +14,7 @@ type HeaderProps = {
 const nav = [
   { href: "#about", label: "Về dự án" },
   { href: "/chuong-trinh", label: "Chương trình" },
-  { href: "/gay-quy", label: "Gây quỹ" },
+  { href: "/gay-quy", label: "Đóng góp" },
   { href: "/ban-to-chuc", label: "Ban tổ chức" },
   { href: "/tin-tuc", label: "Tin tức" },
 ];
