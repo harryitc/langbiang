@@ -198,7 +198,9 @@ export default function Hero({
           {subtitle}
         </p>
 
-        <p className="hero-date mt-2 text-xl font-bold uppercase tracking-wide text-leaf-deep sm:text-2xl dark:text-leaf-bright">
+        {/* first-letter:uppercase chứ không phải capitalize: chỉ hoa chữ cái
+            đầu câu, còn "ngày", "tháng", "năm" giữ nguyên chữ thường. */}
+        <p className="hero-date mt-2 text-xl font-bold tracking-wide text-leaf-deep first-letter:uppercase sm:text-2xl dark:text-leaf-bright">
           {dateLabel}
         </p>
 
