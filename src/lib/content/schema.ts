@@ -55,6 +55,14 @@ export type FundraisingChannel = {
   cta: string;
   href: string;
   highlight: boolean;
+  /** Ảnh mã QR chuyển khoản (tuỳ chọn) */
+  qrImage?: string;
+  /** Tên ngân hàng (tuỳ chọn) */
+  bankName?: string;
+  /** Số tài khoản ngân hàng (tuỳ chọn) */
+  accountNumber?: string;
+  /** Tên chủ tài khoản (tuỳ chọn) */
+  accountName?: string;
 };
 
 /** Khối gây quỹ (đơn + danh sách kênh). */

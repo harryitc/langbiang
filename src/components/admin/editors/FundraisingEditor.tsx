@@ -8,6 +8,7 @@ import {
   ListEditor,
   Field,
   LinkInput,
+  ImageField,
 } from "../editorKit";
 import type { Fundraising, FundraisingChannel } from "@/lib/content/schema";
 
@@ -208,7 +209,7 @@ export default function FundraisingEditor({
 
               <Field
                 label="Liên kết"
-                hint="Nơi khách được đưa tới khi bấm nút. Dán đầy đủ, bắt đầu bằng https://. Gõ dấu # nếu nút chỉ để khách xem thông tin ở phần Ghi chú."
+                hint="Nơi khách được đưa tới khi bấm nút. Dán đầy đủ, bắt đầu bằng https://. Gõ dấu # nếu sử dụng Pop-up Mã QR."
               >
                 <LinkInput
                   value={item.href}
@@ -219,6 +220,49 @@ export default function FundraisingEditor({
                 {errors.href ? (
                   <div className="mt-1 text-xs text-red-500">{errors.href}</div>
                 ) : null}
+              </Field>
+
+              <Field
+                label="Ảnh mã QR chuyển khoản"
+                hint="Dành cho kênh chuyển khoản trực tiếp. Khi người dùng bấm nút, pop-up sẽ hiển thị ảnh QR này để quét và tải về."
+              >
+                <ImageField
+                  value={item.qrImage ?? ""}
+                  onChange={(url) => updateItem({ ...item, qrImage: url })}
+                />
+              </Field>
+
+              <Field
+                label="Tên Ngân hàng"
+                hint="Vd: Vietcombank, Techcombank, MBBank..."
+              >
+                <Input
+                  value={item.bankName ?? ""}
+                  placeholder="Vd: Vietcombank"
+                  onChange={(e) => updateItem({ ...item, bankName: e.target.value })}
+                />
+              </Field>
+
+              <Field
+                label="Số tài khoản"
+                hint="Số tài khoản ngân hàng ủng hộ (khách bấm nút có thể sao chép nhanh)."
+              >
+                <Input
+                  value={item.accountNumber ?? ""}
+                  placeholder="Vd: 0123456789"
+                  onChange={(e) => updateItem({ ...item, accountNumber: e.target.value })}
+                />
+              </Field>
+
+              <Field
+                label="Tên chủ tài khoản"
+                hint="Tên người hoặc tổ chức nhận tiền chuyển khoản."
+              >
+                <Input
+                  value={item.accountName ?? ""}
+                  placeholder="Vd: TRANG SANG LANGBIANG"
+                  onChange={(e) => updateItem({ ...item, accountName: e.target.value })}
+                />
               </Field>
 
               <Field

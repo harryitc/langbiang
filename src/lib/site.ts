@@ -142,10 +142,14 @@ export const fundraising = {
     {
       icon: "💳",
       name: "Chuyển khoản trực tiếp",
-      note: "Vietcombank • 0123456789 • TRANG SANG LANGBIANG",
-      cta: "Sao chép STK",
+      note: "Ủng hộ trực tiếp vào tài khoản ngân hàng của dự án.",
+      cta: "Mã QR & Chuyển khoản",
       href: "#",
       highlight: false,
+      bankName: "Vietcombank",
+      accountNumber: "0123456789",
+      accountName: "TRANG SANG LANGBIANG",
+      qrImage: "",
     },
     {
       icon: "🎁",
