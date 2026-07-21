@@ -56,7 +56,7 @@ export default async function Home() {
         {registerForm ? (
           <Register facebook={site.facebook} content={registerForm} />
         ) : null}
-        <Sponsors tiers={sponsorTiers} currentYear={currentYear} />
+        <Sponsors tiers={sponsorTiers} currentYear={currentYear} header={main.sponsorsHeader} />
         <Faq faqs={main.faqs} />
         <ExploreGrid />
       </main>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Reveal from "@/components/Reveal";
-import type { Sponsor, SponsorTier } from "@/lib/content/schema";
+import type { Sponsor, SponsorTier, SponsorsHeader } from "@/lib/content/schema";
 
 // tạo initials từ tên đơn vị cho logo placeholder
 function initials(name: string) {
@@ -48,10 +48,13 @@ function SponsorLogo({ s, onClick }: { s: Sponsor; onClick: () => void }) {
 export default function Sponsors({
   tiers,
   currentYear,
+  header,
 }: {
   tiers: SponsorTier[];
   /** Số năm hiện tại — dùng cho lời kêu gọi tài trợ (Phụ lục A, nhóm A1). */
   currentYear: number;
+  /** Tiêu đề & mô tả tùy chỉnh của mục Nhà tài trợ */
+  header?: SponsorsHeader;
 }) {
   const [active, setActive] = useState<Sponsor | null>(null);
 
@@ -69,22 +72,32 @@ export default function Sponsors({
   // Phần rỗng thì ẩn (FR4).
   if (tiers.length === 0) return null;
 
+  const eyebrow = header?.eyebrow?.trim() || "Đơn vị đồng hành";
+  const title = header?.title?.trim() || "Cảm ơn những";
+  const titleHighlight = header?.titleHighlight?.trim() || "tấm lòng vàng";
+  const desc =
+    header?.desc?.trim() ||
+    "Sự đồng hành của các đơn vị dưới đây giúp ánh trăng của chúng mình toả sáng hơn.";
+
   return (
     <section className="relative py-16 sm:py-24">
       <span id="sponsors" aria-hidden className="block" />
       <div className="mx-auto max-w-7xl px-5 sm:px-6">
         <Reveal className="mx-auto max-w-3xl text-center">
           <span className="mb-3 inline-block rounded-full bg-sun/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-sunset">
-            Đơn vị đồng hành
+            {eyebrow}
           </span>
           <h2 className="text-2xl font-extrabold text-forest sm:text-4xl md:text-5xl dark:text-ink">
-            Cảm ơn những{" "}
-            <span className="text-gradient-sun">tấm lòng vàng</span>
+            {title}{" "}
+            {titleHighlight && (
+              <span className="text-gradient-sun">{titleHighlight}</span>
+            )}
           </h2>
-          <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
-            Sự đồng hành của các đơn vị dưới đây giúp ánh trăng của chúng mình
-            toả sáng hơn.
-          </p>
+          {desc && (
+            <p className="mt-4 text-base text-forest/75 sm:text-lg dark:text-ink/75">
+              {desc}
+            </p>
+          )}
         </Reveal>
 
         <div className="mt-12 space-y-10 sm:mt-14 sm:space-y-12">

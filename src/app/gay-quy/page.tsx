@@ -32,7 +32,7 @@ export default async function FundraisingPage() {
       <SpendingReportLink report={spendingReport} year={currentYear} />
 
       {/* Nhà tài trợ mùa hiện tại (main.sponsorTiers) — tự ẩn nếu chưa có đơn vị nào. */}
-      <Sponsors tiers={sponsorTiers} currentYear={currentYear} />
+      <Sponsors tiers={sponsorTiers} currentYear={currentYear} header={main.sponsorsHeader} />
     </SubPageShell>
   );
 }

@@ -72,7 +72,7 @@ export default async function PastYearPage({
     >
       <RetroSummary html={data.summaryHtml} title={data.title} year={data.year} />
       <Gallery photos={data.gallery} year={data.year} />
-      <Sponsors tiers={data.sponsorTiers} currentYear={currentYear} />
+      <Sponsors tiers={data.sponsorTiers} currentYear={currentYear} header={data.sponsorsHeader} />
       <SpendingReportLink report={data.spendingReport} year={data.year} />
 
       <section className="py-16 text-center sm:py-24">

@@ -232,6 +232,12 @@ export const defaultContent: SiteContent = {
     // Nhà tài trợ của MÙA HIỆN TẠI — bắt đầu trống, admin tự thêm cho năm nay.
     // (Nhà tài trợ mùa 2025 thuộc về pastYears[2025], không dùng lại ở đây.)
     sponsorTiers: [],
+    sponsorsHeader: {
+      eyebrow: "Đơn vị đồng hành",
+      title: "Cảm ơn những",
+      titleHighlight: "tấm lòng vàng",
+      desc: "Sự đồng hành của các đơn vị dưới đây giúp ánh trăng của chúng mình toả sáng hơn.",
+    },
     board: {
       founders: board.founders.map((m) => ({ ...m })),
       members: board.members.map((m) => ({ ...m })),
@@ -269,6 +275,12 @@ export const defaultContent: SiteContent = {
         tier: t.tier,
         sponsors: t.sponsors.map((s) => ({ ...s })),
       })),
+      sponsorsHeader: {
+        eyebrow: "Đơn vị đồng hành mùa 2025",
+        title: "Cảm ơn những",
+        titleHighlight: "tấm lòng vàng",
+        desc: "Sự sẻ chia quý báu từ các đơn vị tài trợ đã làm nên thành công của Trăng Sáng Langbiang 2025.",
+      },
       // Link Google Sheet báo cáo thu – chi mùa 2025 (admin dán vào sau).
       spendingReport: {
         url: "",

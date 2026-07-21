@@ -294,12 +294,82 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
                     key: "sponsors",
                     label: `Nhà tài trợ (${item.sponsorTiers.length} hạng)`,
                     children: (
-                      <SponsorTierListEditor
-                        value={item.sponsorTiers}
-                        onChange={(sponsorTiers) =>
-                          updateItem({ ...item, sponsorTiers })
-                        }
-                      />
+                      <Space orientation="vertical" size={12} style={{ width: "100%" }}>
+                        <div className="rounded-xl border border-black/10 bg-black/[0.02] p-3 dark:border-white/10 dark:bg-white/[0.02]">
+                          <div className="mb-2 text-xs font-bold uppercase opacity-70">
+                            Tiêu đề & Mô tả mục Nhà tài trợ
+                          </div>
+                          <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
+                            <Field label="Nhãn phụ" hint="Vd: Đơn vị đồng hành mùa 2025">
+                              <Input
+                                value={item.sponsorsHeader?.eyebrow ?? ""}
+                                placeholder="Vd: Đơn vị đồng hành mùa 2025"
+                                onChange={(e) =>
+                                  updateItem({
+                                    ...item,
+                                    sponsorsHeader: {
+                                      ...item.sponsorsHeader,
+                                      eyebrow: e.target.value,
+                                    },
+                                  })
+                                }
+                              />
+                            </Field>
+                            <Field label="Tiêu đề chính" hint="Vd: Cảm ơn những">
+                              <Input
+                                value={item.sponsorsHeader?.title ?? ""}
+                                placeholder="Vd: Cảm ơn những"
+                                onChange={(e) =>
+                                  updateItem({
+                                    ...item,
+                                    sponsorsHeader: {
+                                      ...item.sponsorsHeader,
+                                      title: e.target.value,
+                                    },
+                                  })
+                                }
+                              />
+                            </Field>
+                            <Field label="Tiêu đề nổi bật (nối sau tiêu đề)" hint="Vd: tấm lòng vàng">
+                              <Input
+                                value={item.sponsorsHeader?.titleHighlight ?? ""}
+                                placeholder="Vd: tấm lòng vàng"
+                                onChange={(e) =>
+                                  updateItem({
+                                    ...item,
+                                    sponsorsHeader: {
+                                      ...item.sponsorsHeader,
+                                      titleHighlight: e.target.value,
+                                    },
+                                  })
+                                }
+                              />
+                            </Field>
+                            <Field label="Mô tả" hint="Đoạn văn giới thiệu ngắn">
+                              <Input
+                                value={item.sponsorsHeader?.desc ?? ""}
+                                placeholder="Sự sẻ chia quý báu từ các đơn vị..."
+                                onChange={(e) =>
+                                  updateItem({
+                                    ...item,
+                                    sponsorsHeader: {
+                                      ...item.sponsorsHeader,
+                                      desc: e.target.value,
+                                    },
+                                  })
+                                }
+                              />
+                            </Field>
+                          </div>
+                        </div>
+
+                        <SponsorTierListEditor
+                          value={item.sponsorTiers}
+                          onChange={(sponsorTiers) =>
+                            updateItem({ ...item, sponsorTiers })
+                          }
+                        />
+                      </Space>
                     ),
                   },
                 ]}

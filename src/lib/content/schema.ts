@@ -90,6 +90,14 @@ export type DonateBand = {
   secondaryLabel: string;
 };
 
+/** Nội dung tiêu đề & mô tả mục Nhà tài trợ / Đơn vị đồng hành. */
+export type SponsorsHeader = {
+  eyebrow?: string;
+  title?: string;
+  titleHighlight?: string;
+  desc?: string;
+};
+
 /** Một hạng tài trợ + các đơn vị trong hạng. */
 export type SponsorTier = {
   tier: string;
@@ -407,6 +415,8 @@ export type MainContent = {
   donateBand: DonateBand;
   fundraising: Fundraising;
   sponsorTiers: SponsorTier[];
+  /** Tiêu đề & mô tả tùy chỉnh cho mục Nhà tài trợ trang chủ / mùa hiện tại. */
+  sponsorsHeader?: SponsorsHeader;
   board: Board;
   spendingReport: SpendingReport;
   footer: FooterContent;
@@ -426,6 +436,8 @@ export type PastYear = {
   summaryHtml: string;
   gallery: Photo[];
   sponsorTiers: SponsorTier[];
+  /** Tiêu đề & mô tả tùy chỉnh cho mục Nhà tài trợ mùa năm đó. */
+  sponsorsHeader?: SponsorsHeader;
   /** Báo cáo thu – chi của mùa đó (link Google Sheet). Bỏ trống thì ẩn. */
   spendingReport?: SpendingReport;
 };
