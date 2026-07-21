@@ -33,7 +33,7 @@ export default async function BanToChucPage() {
   return (
     <>
       <SmoothScroll />
-      <Cursor />
+      {/* <Cursor /> */}
       <ThemeToggle />
       <BackToTop />
       <SubPageHeader currentYear={currentYear} />

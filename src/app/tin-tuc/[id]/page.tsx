@@ -104,7 +104,7 @@ export default async function NewsDetailPage({
   return (
     <>
       <SmoothScroll />
-      <Cursor />
+      {/* <Cursor /> */}
       <ThemeToggle />
       <BackToTop />
       <SubPageHeader

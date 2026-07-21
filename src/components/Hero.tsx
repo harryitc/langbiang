@@ -42,10 +42,10 @@ type HeroFloat = {
 };
 
 const heroFloats: HeroFloat[] = [
-  { src: "/gallery/g8.jpg", alt: "Đêm hội Trăng rằm", side: "left", top: "32%", offset: "1.5vw", width: "clamp(96px,11vw,210px)", rotate: -7, depth: -70, delay: "0s" },
-  { src: "/gallery/g4.jpg", alt: "Rước đèn dưới trăng", side: "left", top: "64%", offset: "5vw", width: "clamp(80px,9vw,168px)", rotate: 5, depth: -110, delay: "1.4s" },
-  { src: "/gallery/g2.jpg", alt: "Nụ cười em thơ", side: "right", top: "28%", offset: "1.5vw", width: "clamp(96px,11vw,210px)", rotate: 7, depth: -80, delay: "0.7s" },
-  { src: "/gallery/g6.jpg", alt: "Tình nguyện viên", side: "right", top: "61%", offset: "4.5vw", width: "clamp(80px,9vw,168px)", rotate: -5, depth: -120, delay: "2.1s" },
+  { src: "/gallery/g8.jpg", alt: "Đêm hội Trăng rằm", side: "left", top: "calc(850px - 85%)", offset: "1.5vw", width: "clamp(96px,11vw,210px)", rotate: -7, depth: -70, delay: "0s" },
+  { src: "/gallery/g4.jpg", alt: "Rước đèn dưới trăng", side: "left", top: "calc(450px)", offset: "5vw", width: "clamp(80px,9vw,168px)", rotate: 5, depth: -110, delay: "1.4s" },
+  { src: "/gallery/g2.jpg", alt: "Nụ cười em thơ", side: "right", top: "calc(850px - 85%)", offset: "1.5vw", width: "clamp(96px,11vw,210px)", rotate: 7, depth: -80, delay: "0.7s" },
+  { src: "/gallery/g6.jpg", alt: "Tình nguyện viên", side: "right", top: "calc(450px)", offset: "4.5vw", width: "clamp(80px,9vw,168px)", rotate: -5, depth: -120, delay: "2.1s" },
 ];
 
 export default function Hero({
@@ -99,7 +99,8 @@ export default function Hero({
       // parallax on scroll
       gsap.to(".hero-content", {
         y: 120,
-        opacity: 0.2,
+        // opacity: 0.2,
+        opacity: 1,
         ease: "none",
         scrollTrigger: {
           trigger: root.current,
@@ -131,7 +132,7 @@ export default function Hero({
     <section
       ref={root}
       id="top"
-      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden"
+      className="relative min-h-[850px] items-center justify-center overflow-hidden"
     >
       {/* Bầu trời gradient */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream dark:from-[#0a1626] dark:via-[#0c1712] dark:to-[#0c1712]" />

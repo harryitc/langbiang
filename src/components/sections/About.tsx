@@ -11,7 +11,7 @@ export default async function About() {
   const about = main.about;
 
   return (
-    <section className="relative py-24 sm:py-32">
+    <section className="relative pb-24 sm:pb-32 pt-12 sm:pt-16">
       <span id="about" aria-hidden className="block" />
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
         {/* Ảnh */}

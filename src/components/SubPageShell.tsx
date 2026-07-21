@@ -32,7 +32,7 @@ export default async function SubPageShell({
   return (
     <>
       <SmoothScroll />
-      <Cursor />
+      {/* <Cursor /> */}
       <ThemeToggle />
       <BackToTop />
 

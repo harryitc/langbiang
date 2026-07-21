@@ -34,7 +34,7 @@ export default async function Home() {
   return (
     <>
       <SmoothScroll />
-      <Cursor />
+      {/* <Cursor /> */}
       <ThemeToggle />
       <BackToTop />
       <Header siteName={site.name} logo={site.logo} pastYears={years} />
