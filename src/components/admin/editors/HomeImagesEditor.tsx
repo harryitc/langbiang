@@ -2,7 +2,7 @@
 
 // Nội dung trang chủ: chữ ở màn hình đầu, logo, 4 ảnh nổi quanh Hero và ảnh
 // mục Giới thiệu. Bố cục Hero giữ trong code — ở đây chỉ đổi chữ và ảnh.
-import { Alert, Input } from "antd";
+import { Input } from "antd";
 import {
   useSectionAutosave,
   SaveStatusTag,

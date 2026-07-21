@@ -114,17 +114,37 @@ function migrateEmailTemplates(raw: unknown): unknown {
  * chủ) và `options` của ô nhập kiểu "select" tên "role" (các lựa chọn trong
  * form). Nay chỉ còn `roles`, và ô nhập kiểu "roles" đọc thẳng danh sách đó.
  *
- * Nguyên tắc: KHÔNG đè lên chữ admin đã tự soạn.
- *  - Còn `highlights` -> chuyển nguyên sang `roles`.
- *  - `highlights` rỗng/vắng (form mới, hoặc form chưa từng có thẻ nào) -> lấy
- *    4 vai trò Đại sứ mặc định, vì ô nhập kiểu "roles" không có gì để hiện thì
- *    khách không chọn được.
+ * Nguyên tắc: KHÔNG đè lên chữ admin đã tự soạn, nhưng cũng không giữ lại thứ
+ * chưa ai đụng vào.
+ *  - `highlights` vắng/rỗng, HOẶC vẫn y nguyên hai thẻ mặc định thời trước
+ *    (chưa ai sửa) -> lấy 4 vai trò Đại sứ mặc định.
+ *  - `highlights` đã được sửa -> chuyển nguyên sang `roles`.
  *  - Ô nhập "select" tên "role" -> đổi thành kiểu "roles", bỏ `options` (giờ
  *    lấy từ `roles`). Các ô "select" khác giữ nguyên.
  *
  * Cần bước riêng vì mergeDeep THAY nguyên mảng `registerForms`: dữ liệu cũ
  * trong Redis đè hẳn lên mặc định nên không tự có khoá `roles`.
  */
+/**
+ * Hai thẻ vai trò mặc định của thời trước v15 — nhận ra để thay bằng 4 vai trò
+ * Đại sứ. Đây là chữ do CODE cài sẵn chứ không phải admin gõ ra, nên giữ lại
+ * chỉ tổ khiến website hiện danh sách vai trò đã lỗi thời.
+ *
+ * So bằng TÊN vai trò: mô tả có thể đã bị sửa vặt, nhưng tên còn nguyên cả hai
+ * thì gần như chắc chắn chưa ai đụng tới danh sách này.
+ */
+const THE_MAC_DINH_CU = ["Tình nguyện viên", "Nhà hảo tâm"];
+
+function laTheMacDinhCu(cu: unknown[]): boolean {
+  if (cu.length !== THE_MAC_DINH_CU.length) return false;
+  return cu.every(
+    (t, i) =>
+      isPlainObject(t) &&
+      typeof t.title === "string" &&
+      t.title.trim() === THE_MAC_DINH_CU[i]
+  );
+}
+
 function migrateAmbassadorRoles(raw: unknown): unknown {
   if (!isPlainObject(raw) || !isPlainObject(raw.main)) return raw;
   const forms = raw.main.registerForms;
@@ -138,7 +158,7 @@ function migrateAmbassadorRoles(raw: unknown): unknown {
         if (!isPlainObject(f) || Array.isArray(f.roles)) return f;
 
         const cu = Array.isArray(f.highlights) ? f.highlights : [];
-        const roles = cu.length > 0 ? cu : DEFAULT_ROLES;
+        const roles = cu.length > 0 && !laTheMacDinhCu(cu) ? cu : DEFAULT_ROLES;
 
         const fields = Array.isArray(f.fields)
           ? f.fields.map((o) =>

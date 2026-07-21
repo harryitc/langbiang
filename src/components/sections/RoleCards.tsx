@@ -1,38 +1,29 @@
-// Lưới thẻ VAI TRÒ ĐẠI SỨ — MỘT bố cục duy nhất dùng cho cả hai vai trò hiển
-// thị lẫn chọn lựa:
-//   - chỉ giới thiệu: khối "Đăng ký" ở trang chủ, trang chia sẻ /dang-ky/<id>;
-//   - cho chọn: ô nhập kiểu "roles" bên trong form đăng ký.
+// Vai trò ĐẠI SỨ — một danh sách dữ liệu, hai cách bày ra màn hình:
 //
-// Cố ý gộp làm một để hai nơi không bao giờ trông khác nhau. Khác biệt duy nhất
-// khi bật `selectable` là thẻ trở thành nhãn bấm được (có ô tích ẩn phía trong)
-// và thẻ đang chọn được tô viền — bố cục, cỡ chữ, khoảng cách giữ nguyên.
+//   1. THẺ GIỚI THIỆU (mặc định) — lưới thẻ kính có emoji, tên và mô tả đầy đủ.
+//      Dùng ở cột trái khối "Đăng ký" trang chủ và trang chia sẻ /dang-ky/<id>.
+//   2. Ô TÍCH GỌN (`selectable`) — mỗi vai trò một dòng: ô tích nhỏ, emoji, tên.
+//      Dùng bên trong form đăng ký. CỐ Ý không lặp lại mô tả: cột bên trái đã
+//      nói rõ từng vai trò rồi, in lại lần nữa chỉ làm form dài và rối.
+//
+// Cả hai cùng đọc `RegisterSection.roles` nên danh sách vai trò không bao giờ
+// lệch nhau — đó mới là thứ cần dùng chung, chứ không phải kiểu dáng.
 //
 // KHÔNG có "use client": file này theo phe của nơi gọi nó. Trang chủ gọi từ
 // component máy chủ -> không tốn JS; form đăng ký gọi từ component trình duyệt
 // -> tự thành phần trình duyệt và bấm chọn được.
 import type { AmbassadorRole } from "@/lib/content/schema";
 
-/** Lớp bổ sung cho chế độ tối — chỉ dùng khi NỀN phía sau cũng tối đi. */
-const TOI = {
-  the: "dark:border-leaf-bright/20",
-  tieuDe: "dark:text-ink",
-  mota: "dark:text-ink/70",
-  chon: "dark:border-leaf-bright dark:bg-leaf-bright/10",
-};
-
 export default function RoleCards({
   roles,
   selectable = false,
-  adaptive = false,
   value = [],
   onToggle,
   className = "",
 }: {
   roles: AmbassadorRole[];
-  /** Cho khách tích chọn thay vì chỉ đọc. */
+  /** Hiện dạng ô tích gọn cho khách chọn, thay vì thẻ giới thiệu. */
   selectable?: boolean;
-  /** Bật màu cho chế độ tối — chỉ khi nền phía sau cũng tối. */
-  adaptive?: boolean;
   /** Tên các vai trò đang được chọn. */
   value?: string[];
   onToggle?: (title: string) => void;
@@ -40,79 +31,52 @@ export default function RoleCards({
 }) {
   if (roles.length === 0) return null;
 
-  const t = (cls: string) => (adaptive ? " " + cls : "");
-
-  return (
-    // Một cột ở màn hẹp, hai cột từ sm trở lên. Mô tả vai trò khá dài nên không
-    // chia ba/bốn cột: cột càng hẹp thì chữ càng vỡ vụn, mỗi dòng vài chữ.
-    <div className={`grid gap-3 sm:grid-cols-2 ${className}`.trim()}>
-      {roles.map((role, i) => {
-        const chon = value.includes(role.title);
-
-        const noiDung = (
-          <>
-            <span className="text-2xl leading-none">{role.icon}</span>
-            <p
-              className={`mt-1.5 font-bold leading-snug text-balance${t(TOI.tieuDe)}`}
-            >
-              {role.title}
-            </p>
-            <p
-              className={`mt-0.5 text-sm leading-relaxed text-forest/70 text-pretty${t(TOI.mota)}`}
-            >
-              {role.desc}
-            </p>
-          </>
-        );
-
-        // Nền kính + bo góc dùng chung cho cả hai chế độ.
-        const nen = `glass rounded-2xl p-4 text-forest${t(TOI.the)}`;
-
-        if (!selectable) {
-          return (
-            <div key={i} className={nen}>
-              {noiDung}
-            </div>
-          );
-        }
-
-        return (
+  // --- Dạng ô tích gọn, nằm trong form ---------------------------------------
+  if (selectable) {
+    return (
+      // Một cột: tên vai trò khá dài, chia hai cột là chữ bị ngắt giữa chừng.
+      <div className={`grid gap-2 ${className}`.trim()}>
+        {roles.map((role, i) => (
           <label
             key={i}
-            className={`${nen} relative cursor-pointer border-2 transition ${
-              chon
-                ? `border-leaf-deep bg-white/70 shadow-soft${t(TOI.chon)}`
-                : `border-transparent hover:border-leaf/40${t(TOI.the)}`
-            }`}
+            className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-leaf/20 bg-white/60 px-3 py-2.5 transition hover:border-leaf/50 has-[:checked]:border-leaf-deep has-[:checked]:bg-leaf/10"
           >
-            {/* Ô tích thật, ẩn khỏi mắt nhưng bàn phím và trình đọc màn hình
-                vẫn dùng được. CỐ Ý không đặt `name`: thứ được gửi đi là ô ẩn
-                gộp sẵn ở RegisterFormCard, không phải từng ô tích rời. */}
             <input
               type="checkbox"
-              className="peer sr-only"
-              value={role.title}
-              checked={chon}
+              // CỐ Ý không đặt `name`: thứ được gửi đi là ô ẩn gộp sẵn ở
+              // RegisterFormCard, không phải từng ô tích rời.
+              className="h-4 w-4 shrink-0 cursor-pointer accent-leaf-deep"
+              checked={value.includes(role.title)}
               onChange={() => onToggle?.(role.title)}
             />
-
-            {/* Dấu tích góc phải — chỉ hiện khi đang chọn. */}
-            <span
-              aria-hidden="true"
-              className={`absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white transition ${
-                chon ? "bg-leaf-deep opacity-100" : "opacity-0"
-              }`}
-            >
-              ✓
+            <span aria-hidden="true" className="shrink-0 text-base leading-none">
+              {role.icon}
             </span>
-
-            {/* Viền sáng khi di chuột bằng bàn phím (Tab). */}
-            <span className="pointer-events-none absolute inset-0 rounded-2xl ring-leaf/50 peer-focus-visible:ring-2" />
-
-            <span className="block pr-6">{noiDung}</span>
+            <span className="text-sm font-semibold leading-snug text-forest">
+              {role.title}
+            </span>
           </label>
-        );
-      })}
+        ))}
+      </div>
+    );
+  }
+
+  // --- Dạng thẻ giới thiệu, nằm ngoài form ----------------------------------
+  return (
+    // Mô tả vai trò khá dài nên chỉ chia tối đa hai cột: cột càng hẹp thì chữ
+    // càng vỡ vụn, mỗi dòng còn vài chữ.
+    <div className={`grid gap-3 sm:grid-cols-2 ${className}`.trim()}>
+      {roles.map((role, i) => (
+        <div key={i} className="glass rounded-2xl p-4 text-forest">
+          <span className="text-2xl leading-none">{role.icon}</span>
+          <p className="mt-1.5 font-bold leading-snug text-balance">
+            {role.title}
+          </p>
+          <p className="mt-0.5 text-sm leading-relaxed text-forest/70 text-pretty">
+            {role.desc}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }

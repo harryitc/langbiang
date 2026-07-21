@@ -58,7 +58,7 @@ export default async function Page({ params }: Params) {
   return (
     <main className="relative flex min-h-screen flex-col overflow-hidden py-16 sm:py-20">
       {/* Bầu trời gradient — lấy nguyên của Hero trang chủ. */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream dark:from-[#0a1626] dark:via-[#0c1712] dark:to-[#0c1712]" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream" />
       <HeroCanvas />
 
       {/* Cành lá & hoa ở góc, như Hero. */}
@@ -70,48 +70,44 @@ export default async function Page({ params }: Params) {
         <div className="text-center lg:text-left">
           <Link
             href="/"
-            className="cursor-pointer text-xs font-bold uppercase tracking-widest text-leaf-deep/70 transition hover:text-leaf-deep dark:text-leaf-bright/70 dark:hover:text-leaf-bright"
+            className="cursor-pointer text-xs font-bold uppercase tracking-widest text-leaf-deep/70 transition hover:text-leaf-deep"
           >
             {site.name}
           </Link>
 
           <span className="mt-4 mb-3 block">
-            <span className="inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
+            <span className="inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur">
               {form.eyebrow}
             </span>
           </span>
 
-          <h1 className="text-3xl font-extrabold leading-tight text-balance text-forest dark:text-ink sm:text-4xl md:text-5xl">
+          {/* Cùng cách xử lý với khối Đăng ký trang chủ: cỡ chữ dòng viết tay
+              tính theo bề ngang cột nên luôn nằm gọn một hàng. */}
+          <h1 className="@container text-3xl font-extrabold leading-tight text-balance text-forest sm:text-4xl md:text-5xl">
             {form.title}
             <br />
-            <span className="font-display text-4xl text-leaf-deep dark:text-leaf-bright sm:text-5xl md:text-6xl">
+            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)] text-leaf-deep">
               {form.titleHighlight}
             </span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-lg text-lg text-forest/75 text-pretty dark:text-ink/75 lg:mx-0">
+          <p className="mx-auto mt-5 max-w-lg text-lg text-forest/75 text-pretty lg:mx-0">
             {form.description}
           </p>
 
-          {/* Cùng lưới thẻ vai trò với trang chủ. adaptive: nền trang này tối
-              đi ở chế độ tối nên thẻ phải tối theo. */}
-          <RoleCards
-            roles={form.roles}
-            adaptive
-            className="mt-8 text-left"
-          />
+          {/* Cùng lưới thẻ vai trò với trang chủ. */}
+          <RoleCards roles={form.roles} className="mt-8 text-left" />
         </div>
 
-        {/* Cột phải — form. adaptive: nền trang này tối đi ở chế độ tối nên
-            thẻ form phải tối theo (khác trang chủ, nền xanh lá cố định). */}
-        <RegisterFormCard form={form} facebook={site.facebook} adaptive />
+        {/* Cột phải — form. */}
+        <RegisterFormCard form={form} facebook={site.facebook} />
       </div>
 
-      <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60 dark:text-ink/60">
+      <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60">
         {form.name.trim() || form.formTitle} ·{" "}
         <Link
           href="/"
-          className="cursor-pointer underline hover:text-leaf-deep dark:hover:text-leaf-bright"
+          className="cursor-pointer underline hover:text-leaf-deep"
         >
           Về trang chủ {site.name}
         </Link>

@@ -39,7 +39,7 @@ export function tenNguoiDangKy(
  * Chọn nhiều thì trả về chuỗi đã nối sẵn ("A, B"); form không có ô vai trò
  * hoặc khách bỏ trống thì trả về chuỗi rỗng.
  */
-export function vaiTroNguoiDangKy(
+function vaiTroNguoiDangKy(
   form: RegisterForm,
   record: Registration
 ): string {

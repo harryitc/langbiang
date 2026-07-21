@@ -4,7 +4,7 @@ import SubPageShell from "@/components/SubPageShell";
 import Activities from "@/components/sections/Activities";
 import Timeline from "@/components/sections/Timeline";
 import { getContent } from "@/lib/content/store";
-import { fillYear, eventDateLabel, locationFor } from "@/lib/content/year";
+import { eventDateLabel, locationFor } from "@/lib/content/year";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { main, currentYear } = await getContent();

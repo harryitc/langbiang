@@ -13,7 +13,7 @@ import Faq from "@/components/sections/Faq";
 import ExploreGrid from "@/components/ExploreGrid";
 import Footer from "@/components/sections/Footer";
 import { getContent } from "@/lib/content/store";
-import { fillYear, eventDateLabel } from "@/lib/content/year";
+import { eventDateLabel } from "@/lib/content/year";
 import { activeRegisterForm } from "@/lib/content/schema";
 
 export default async function Home() {

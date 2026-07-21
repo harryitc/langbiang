@@ -1,6 +1,6 @@
 import { GrassBorder } from "@/components/Decor";
 import { getContent } from "@/lib/content/store";
-import { fillYear, eventDateLabel, locationFor } from "@/lib/content/year";
+import { eventDateLabel, locationFor } from "@/lib/content/year";
 
 export default async function Footer() {
   const { main, currentYear, pastYears } = await getContent();

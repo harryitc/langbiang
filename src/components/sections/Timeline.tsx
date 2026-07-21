@@ -1,6 +1,6 @@
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/content/store";
-import { fillYear, eventDateLabel, locationFor } from "@/lib/content/year";
+import { eventDateLabel, locationFor } from "@/lib/content/year";
 
 export default async function Timeline() {
   const { main, currentYear } = await getContent();

@@ -588,21 +588,17 @@ export default function RegisterFormEditor({
                     )}
                   />
                 </Field>
-              ) : (
+              ) : item.type === "roles" ? null : ( // Ô vai trò không có chữ gợi ý: nó là danh sách ô tích.
                 <Field
                   label={
                     item.type === "photo"
                       ? "Dòng nhắc dưới nút chọn ảnh"
-                      : item.type === "roles"
-                        ? "Dòng nhắc dưới lưới thẻ vai trò"
-                        : "Chữ gợi ý trong ô"
+                      : "Chữ gợi ý trong ô"
                   }
                   hint={
                     item.type === "photo"
                       ? "Vd: Ảnh chân dung rõ mặt. Bỏ trống thì hiện lời nhắc mặc định."
-                      : item.type === "roles"
-                        ? "Nhắc khách là chọn được nhiều vai trò. Bỏ trống thì hiện lời nhắc mặc định."
-                        : "Chữ mờ hiện sẵn khi ô còn trống. Bỏ trống cũng được."
+                      : "Chữ mờ hiện sẵn khi ô còn trống. Bỏ trống cũng được."
                   }
                 >
                   <Input
@@ -610,9 +606,7 @@ export default function RegisterFormEditor({
                     placeholder={
                       item.type === "photo"
                         ? "Ảnh chân dung rõ mặt"
-                        : item.type === "roles"
-                          ? "Chọn được nhiều vai trò cùng lúc."
-                          : "Nguyễn Văn A"
+                        : "Nguyễn Văn A"
                     }
                     onChange={(e) =>
                       updateItem({ ...item, placeholder: e.target.value })
@@ -886,28 +880,22 @@ function FieldPreview({
             Chưa có vai trò nào — thêm ở mục “Vai trò Đại sứ” phía trên.
           </p>
         ) : (
-          <>
-            {/* Cùng bố cục với lưới thẻ ngoài web, nhưng chỉ để nhìn. */}
-            <div className="grid gap-2 sm:grid-cols-2">
-              {roles.map((r, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl border-2 border-leaf/20 bg-white/70 p-3"
-                >
-                  <span className="text-xl">{r.icon}</span>
-                  <p className="mt-1 text-sm font-bold leading-snug">
-                    {r.title || "(chưa có tên)"}
-                  </p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-forest/60">
-                    {r.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <p className="mt-1.5 text-xs text-forest/60">
-              {field.placeholder?.trim() || "Chọn được nhiều vai trò cùng lúc."}
-            </p>
-          </>
+          // Trong form là ô tích gọn, không có mô tả — mô tả đầy đủ nằm ở lưới
+          // thẻ bên ngoài form.
+          <div className="grid gap-2">
+            {roles.map((r, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-2.5 rounded-xl border border-leaf/20 bg-white/70 px-3 py-2"
+              >
+                <input type="checkbox" disabled className="h-4 w-4" />
+                <span className="text-base leading-none">{r.icon}</span>
+                <span className="text-sm font-semibold">
+                  {r.title || "(chưa có tên)"}
+                </span>
+              </div>
+            ))}
+          </div>
         )
       ) : field.type === "photo" ? (
         <div className="flex items-center gap-3">

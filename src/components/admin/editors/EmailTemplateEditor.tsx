@@ -31,7 +31,7 @@ import {
   renderEmailTemplate,
   type EmailTemplate,
 } from "@/lib/content/email-templates";
-import { NHAN_GUI_CHO, type FormDungMau } from "./EmailTemplatesEditor";
+import { type FormDungMau } from "./EmailTemplatesEditor";
 
 type BienEmail = { key: string; label: string; vd: string };
 

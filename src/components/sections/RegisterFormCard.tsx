@@ -23,25 +23,6 @@ const INPUT_CLASS =
   "w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition placeholder:text-forest/40 focus:border-leaf focus:ring-2 focus:ring-leaf/30";
 
 /**
- * Lớp bổ sung cho chế độ tối.
- *
- * Chỉ dùng ở nơi NỀN cũng đổi màu theo chế độ tối (trang chia sẻ /dang-ky/<id>,
- * nền là bầu trời Hero). Khối "Đăng ký" ở trang chủ nằm trên nền xanh lá cố
- * định — nền không tối đi thì thẻ cũng không được tối, nếu không sẽ thành thẻ
- * đen trên nền xanh sáng. Vì vậy mặc định TẮT.
- */
-const TOI = {
-  the: "glass-adaptive dark:text-ink",
-  tieuDe: "dark:text-leaf-bright",
-  nhan: "dark:text-ink/80",
-  o: "dark:border-leaf-bright/20 dark:bg-white/5 dark:text-ink dark:placeholder:text-ink/40",
-  chuMo: "dark:text-ink/60",
-  vien: "dark:border-leaf-bright/30 dark:hover:bg-leaf-bright/10",
-  chuNhan: "dark:text-leaf-bright",
-  viDeMo: "dark:text-ink/75",
-};
-
-/**
  * Khoá ghi nhớ "máy này đã đăng ký form đó rồi" trong localStorage.
  * Tách theo từng form: đăng ký đợt này không làm form đợt khác coi như đã xong.
  */
@@ -77,15 +58,10 @@ const nho = {
 export default function RegisterFormCard({
   form,
   facebook,
-  adaptive = false,
 }: {
   form: RegisterForm;
   facebook: string;
-  /** Bật màu cho chế độ tối — chỉ dùng khi nền phía sau cũng tối đi. */
-  adaptive?: boolean;
 }) {
-  /** Lấy lớp dark khi bật, còn không thì rỗng. */
-  const t = (cls: string) => (adaptive ? " " + cls : "");
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -139,13 +115,13 @@ export default function RegisterFormCard({
 
   if (sent) {
     return (
-      <div className={`glass rounded-3xl p-7 text-forest shadow-soft sm:p-9${t(TOI.the)}`}>
+      <div className="glass rounded-3xl p-7 text-forest shadow-soft sm:p-9">
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <span className="text-6xl">💚</span>
-          <h3 className={`mt-4 text-2xl font-bold text-leaf-deep${t(TOI.tieuDe)}`}>
+          <h3 className="mt-4 text-2xl font-bold text-leaf-deep">
             {form.successTitle}
           </h3>
-          <p className={`mt-2 text-forest/75${t(TOI.viDeMo)}`}>{form.successNote}</p>
+          <p className="mt-2 text-forest/75">{form.successNote}</p>
           <button
             onClick={() => {
               // Bấm gửi đơn khác -> quên trạng thái cũ, trả form về trống.
@@ -153,7 +129,7 @@ export default function RegisterFormCard({
               setSent(false);
               setError(null);
             }}
-            className={`mt-6 cursor-pointer rounded-full border-2 border-leaf/30 px-6 py-2.5 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10${t(TOI.vien)}${t(TOI.tieuDe)}`}
+            className="mt-6 cursor-pointer rounded-full border-2 border-leaf/30 px-6 py-2.5 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10"
           >
             {form.successAgainLabel}
           </button>
@@ -163,16 +139,15 @@ export default function RegisterFormCard({
   }
 
   return (
-    <div className={`glass rounded-3xl p-7 text-forest shadow-soft sm:p-9${t(TOI.the)}`}>
+    <div className="glass rounded-3xl p-7 text-forest shadow-soft sm:p-9">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <h3 className={`text-2xl font-bold text-leaf-deep${t(TOI.tieuDe)}`}>{form.formTitle}</h3>
+        <h3 className="text-2xl font-bold text-leaf-deep">{form.formTitle}</h3>
 
         {form.fields.map((field, i) =>
           field.type === "roles" ? (
             <RolesFieldView
               key={field.name || i}
               field={field}
-              adaptive={adaptive}
               roles={form.roles}
               value={roles[field.name] ?? []}
               onToggle={(title) =>
@@ -191,7 +166,6 @@ export default function RegisterFormCard({
             <PhotoFieldView
               key={field.name || i}
               field={field}
-              adaptive={adaptive}
               value={photos[field.name] ?? ""}
               onValue={(url) =>
                 setPhotos((prev) => ({ ...prev, [field.name]: url }))
@@ -202,7 +176,7 @@ export default function RegisterFormCard({
               onError={setError}
             />
           ) : (
-            <RegisterFieldView key={field.name || i} field={field} adaptive={adaptive} />
+            <RegisterFieldView key={field.name || i} field={field} />
           )
         )}
 
@@ -237,13 +211,13 @@ export default function RegisterFormCard({
               ? "Đang tải ảnh lên…"
               : form.submitLabel}
         </button>
-        <p className={`text-center text-xs text-forest/60${t(TOI.chuMo)}`}>
+        <p className="text-center text-xs text-forest/60">
           {form.contactNote}{" "}
           <a
             href={facebook}
             target="_blank"
             rel="noopener noreferrer"
-            className={`cursor-pointer font-semibold text-leaf-deep underline${t(TOI.tieuDe)}`}
+            className="cursor-pointer font-semibold text-leaf-deep underline"
           >
             {form.contactLinkLabel}
           </a>
@@ -256,14 +230,12 @@ export default function RegisterFormCard({
 /** Nhãn phía trên một ô nhập (kèm dấu * nếu bắt buộc). */
 function FieldLabel({
   field,
-  adaptive,
 }: {
   field: RegisterField;
-  adaptive: boolean;
 }) {
   return (
     <label
-      className={`mb-1.5 block text-sm font-semibold text-forest/80${adaptive ? " " + TOI.nhan : ""}`}
+      className="mb-1.5 block text-sm font-semibold text-forest/80"
     >
       {field.label}
       {field.required && <span className="text-sunset"> *</span>}
@@ -274,15 +246,13 @@ function FieldLabel({
 /** Một trường của form, dựng theo cấu hình trong admin. */
 function RegisterFieldView({
   field,
-  adaptive,
 }: {
   field: RegisterField;
-  adaptive: boolean;
 }) {
-  const o = INPUT_CLASS + (adaptive ? " " + TOI.o : "");
+  const o = INPUT_CLASS;
   return (
     <div>
-      <FieldLabel field={field} adaptive={adaptive} />
+      <FieldLabel field={field} />
 
       {field.type === "textarea" ? (
         <textarea
@@ -325,25 +295,22 @@ function RegisterFieldView({
  */
 function RolesFieldView({
   field,
-  adaptive,
   roles,
   value,
   onToggle,
 }: {
   field: RegisterField;
-  adaptive: boolean;
   roles: AmbassadorRole[];
   value: string[];
   onToggle: (title: string) => void;
 }) {
-  const t = (cls: string) => (adaptive ? " " + cls : "");
 
   // Giữ đúng thứ tự vai trò như admin đã sắp, không theo thứ tự khách bấm.
   const daChon = roles.map((r) => r.title).filter((x) => value.includes(x));
 
   return (
     <div>
-      <FieldLabel field={field} adaptive={adaptive} />
+      <FieldLabel field={field} />
 
       {/* Thứ duy nhất thật sự được gửi đi. */}
       <input
@@ -353,22 +320,16 @@ function RolesFieldView({
       />
 
       {roles.length === 0 ? (
-        <p className={`text-sm text-forest/60${t(TOI.chuMo)}`}>
+        <p className="text-sm text-forest/60">
           Chưa có vai trò nào để chọn.
         </p>
       ) : (
-        <>
-          <RoleCards
-            roles={roles}
-            selectable
-            adaptive={adaptive}
-            value={value}
-            onToggle={onToggle}
-          />
-          <p className={`mt-2 text-xs text-forest/60${t(TOI.chuMo)}`}>
-            {field.placeholder?.trim() || "Chọn được nhiều vai trò cùng lúc."}
-          </p>
-        </>
+        <RoleCards
+          roles={roles}
+          selectable
+          value={value}
+          onToggle={onToggle}
+        />
       )}
     </div>
   );
@@ -381,14 +342,12 @@ function RolesFieldView({
  */
 function PhotoFieldView({
   field,
-  adaptive,
   value,
   onValue,
   onUploadingChange,
   onError,
 }: {
   field: RegisterField;
-  adaptive: boolean;
   value: string;
   onValue: (url: string) => void;
   onUploadingChange: (dangTai: boolean) => void;
@@ -413,10 +372,9 @@ function PhotoFieldView({
     }
   }
 
-  const t = (cls: string) => (adaptive ? " " + cls : "");
   return (
     <div>
-      <FieldLabel field={field} adaptive={adaptive} />
+      <FieldLabel field={field} />
 
       {/* Đường dẫn ảnh đã tải lên — đây mới là thứ được gửi đi. */}
       <input type="hidden" name={field.name} value={value} />
@@ -430,7 +388,7 @@ function PhotoFieldView({
             className="h-20 w-20 shrink-0 rounded-xl object-cover ring-2 ring-leaf/30"
           />
         ) : (
-          <div className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-leaf/30 text-2xl${t(TOI.vien)}`}>
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-leaf/30 text-2xl">
             🖼️
           </div>
         )}
@@ -440,11 +398,11 @@ function PhotoFieldView({
             type="button"
             disabled={busy}
             onClick={() => inputRef.current?.click()}
-            className={`cursor-pointer rounded-full border-2 border-leaf/30 px-4 py-2 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10 disabled:cursor-not-allowed disabled:opacity-60${t(TOI.vien)}${t(TOI.chuNhan)}`}
+            className="cursor-pointer rounded-full border-2 border-leaf/30 px-4 py-2 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {busy ? "Đang tải lên…" : value ? "Chọn ảnh khác" : "Chọn ảnh"}
           </button>
-          <p className={`mt-1 text-xs text-forest/60${t(TOI.chuMo)}`}>
+          <p className="mt-1 text-xs text-forest/60">
             {field.placeholder?.trim() ||
               "Ảnh jpg, png hoặc webp, nhẹ hơn 5MB."}
           </p>

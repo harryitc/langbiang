@@ -228,7 +228,6 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
         })}
         renderForm={(item, updateItem, index) => {
           const duplicate = isDuplicateYear(years, index);
-          const issues = countIssues(item) + (duplicate ? 1 : 0);
           return (
             <Space orientation="vertical" size={4} style={{ width: "100%" }}>
 

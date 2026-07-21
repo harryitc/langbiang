@@ -176,7 +176,6 @@ export const defaultContent: SiteContent = {
             name: "role",
             label: "Bạn muốn đồng hành với vai trò",
             type: "roles",
-            placeholder: "Chọn được nhiều vai trò cùng lúc.",
             required: true,
           },
           {

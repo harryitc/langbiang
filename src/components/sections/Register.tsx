@@ -31,12 +31,15 @@ export default function Register({
           <span className="mb-3 inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
             {content.eyebrow}
           </span>
-          {/* text-balance: chia đều các dòng thay vì để chữ cuối rơi xuống
-              một mình — dòng viết tay cỡ lớn rất hay bị vậy ở màn vừa. */}
-          <h2 className="text-3xl font-extrabold leading-tight text-balance sm:text-4xl md:text-5xl">
+          {/* @container: cỡ chữ dòng viết tay tính theo bề ngang CỘT này, không
+              phải bề ngang màn hình — ở lg cột chỉ rộng một nửa nên nếu tính
+              theo màn hình thì chữ sẽ tràn.
+              whitespace-nowrap + cỡ chữ co giãn (cqw): dòng viết tay luôn nằm
+              gọn MỘT hàng ở mọi khổ màn hình, thay vì rớt chữ cuối xuống dưới. */}
+          <h2 className="@container text-3xl font-extrabold leading-tight text-balance sm:text-4xl md:text-5xl">
             {content.title}
             <br />
-            <span className="font-display text-4xl sm:text-5xl md:text-6xl">
+            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)]">
               {content.titleHighlight}
             </span>
           </h2>
