@@ -490,7 +490,11 @@ export const SLIDESHOW_LIMIT = 6;
 // lỗi chưa lộ ra chỉ vì chưa ai điền ba ô ấy.
 // v17: chữ trên dải "Gian hàng quyên góp" ở trang chủ (main.donateBand) sửa
 // được từ admin thay vì nằm cứng trong DonateBand.tsx.
-export const CONTENT_VERSION = 17;
+// v18: đổi lời văn mặc định của dải "Gian hàng quyên góp" -> "Gian hàng gây
+// quỹ". Chỉ đổi CHỮ chứ không đổi cấu trúc, nhưng vẫn phải bump: khoá của
+// unstable_cache có kèm số này, không đổi thì bản đã nhớ vẫn được dùng và
+// khách còn thấy chữ cũ (Data Cache trên Vercel sống qua cả lần triển khai mới).
+export const CONTENT_VERSION = 18;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */

@@ -216,11 +216,11 @@ export const defaultContent: SiteContent = {
     ],
     faqs: faqs.map((f) => ({ ...f })),
     donateBand: {
-      eyebrow: "Gian hàng quyên góp",
-      title: "Mua sắm cũng là sẻ chia 🛒",
-      desc: "Mỗi sản phẩm bạn mua tại gian hàng Shopee của dự án là một phần quà Trung thu gửi đến các em nhỏ Langbiang.",
-      primaryLabel: "Ghé gian hàng Shopee",
-      secondaryLabel: "Cách khác để đóng góp",
+      eyebrow: "Gian hàng gây quỹ",
+      title: "Sở hữu kỷ vật, Trao gửi yêu thương 🎁",
+      desc: "Toàn bộ lợi nhuận sẽ được chuyển thành những phần quà trao tận tay các em nhỏ tại Langbiang.",
+      primaryLabel: "Ủng hộ qua Shopee",
+      secondaryLabel: "Các hình thức đồng hành khác",
     },
     fundraising: {
       title: fundraising.title,
