@@ -50,7 +50,7 @@ export default async function SubPageShell({
               <img
                 src={bgImage}
                 alt=""
-                className="h-full w-full object-cover opacity-65 transition-all duration-500 dark:opacity-40 dark:brightness-[0.8]"
+                className="h-full w-full object-cover opacity-25 transition-all duration-500 dark:opacity-40 dark:brightness-[0.8]"
               />
               {/* Lớp phủ chuyển màu mượt với nền */}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#dff2e6]/30 to-cream dark:via-night-2/30 dark:to-night" />
