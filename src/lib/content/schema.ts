@@ -526,7 +526,7 @@ export const SLIDESHOW_LIMIT = 6;
 // quỹ". Chỉ đổi CHỮ chứ không đổi cấu trúc, nhưng vẫn phải bump: khoá của
 // unstable_cache có kèm số này, không đổi thì bản đã nhớ vẫn được dùng và
 // khách còn thấy chữ cũ (Data Cache trên Vercel sống qua cả lần triển khai mới).
-export const CONTENT_VERSION = 19;
+export const CONTENT_VERSION = 18;
 /** Tag cho unstable_cache/revalidateTag. */
 export const CONTENT_TAG = "content";
 /** Khoá Redis cho bản đã xuất bản (khách xem). */
