@@ -16,7 +16,7 @@ export default async function Footer() {
       ? ([[`/${latestPastYear.year}`, `Mùa ${latestPastYear.year}`]] as [string, string][])
       : []),
     ["/tin-tuc", "Tin tức"],
-    ["/gay-quy", "Gây quỹ"],
+    ["/gay-quy", "Đóng góp"],
     ["/#register", "Đăng ký"],
   ];
 

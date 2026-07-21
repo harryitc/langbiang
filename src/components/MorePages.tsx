@@ -5,7 +5,7 @@ const cards = [
   {
     href: "/gay-quy",
     icon: "🛒",
-    eyebrow: "Chung tay gây quỹ",
+    eyebrow: "Chung tay đóng góp",
     title: "Đồng hành & Gây quỹ",
     desc: "Ủng hộ qua gian hàng Shopee, chuyển khoản hoặc hiện vật.",
     cta: "Cùng gây quỹ",

@@ -91,12 +91,12 @@ export default async function PastYearPage({
             >
               Đăng ký tham gia 🌙
             </Link>
-            <Link
+            {/* <Link
               href="/ban-to-chuc"
               className="rounded-full border-2 border-leaf-deep/30 bg-white/60 px-8 py-3.5 font-semibold text-leaf-deep transition hover:-translate-y-0.5 hover:bg-white dark:border-leaf-bright/25 dark:bg-white/5 dark:text-leaf-bright dark:hover:bg-white/10"
             >
               Gặp ban tổ chức
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>
