@@ -49,9 +49,8 @@ export default function Header({ siteName, logo, pastYears }: HeaderProps) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass glass-adaptive shadow-soft py-2" : "bg-transparent py-4"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? "glass glass-adaptive shadow-soft py-2" : "bg-transparent py-4"
+        }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
         <a href="#top" className="flex min-w-0 items-center gap-2 sm:gap-2.5">
@@ -138,19 +137,16 @@ export default function Header({ siteName, logo, pastYears }: HeaderProps) {
         >
           <div className="space-y-1.5">
             <span
-              className={`block h-0.5 w-6 bg-current transition ${
-                open ? "translate-y-2 rotate-45" : ""
-              }`}
+              className={`block h-0.5 w-6 bg-current transition ${open ? "translate-y-2 rotate-45" : ""
+                }`}
             />
             <span
-              className={`block h-0.5 w-6 bg-current transition ${
-                open ? "opacity-0" : ""
-              }`}
+              className={`block h-0.5 w-6 bg-current transition ${open ? "opacity-0" : ""
+                }`}
             />
             <span
-              className={`block h-0.5 w-6 bg-current transition ${
-                open ? "-translate-y-2 -rotate-45" : ""
-              }`}
+              className={`block h-0.5 w-6 bg-current transition ${open ? "-translate-y-2 -rotate-45" : ""
+                }`}
             />
           </div>
         </button>
@@ -158,9 +154,8 @@ export default function Header({ siteName, logo, pastYears }: HeaderProps) {
 
       {/* Mobile menu */}
       <div
-        className={`overflow-hidden transition-all duration-300 lg:hidden ${
-          open ? "max-h-[32rem]" : "max-h-0"
-        }`}
+        className={`overflow-hidden transition-all duration-300 lg:hidden ${open ? "max-h-[32rem]" : "max-h-0"
+          }`}
       >
         <nav className="glass glass-adaptive mx-4 mt-2 flex flex-col rounded-2xl p-3">
           {nav.map((n) => (
@@ -215,7 +210,7 @@ function Logo({ siteName, logo }: { siteName: string; logo?: string }) {
         alt={siteName}
         width={44}
         height={44}
-        className="h-11 w-11 object-cover"
+        className="object-cover"
       />
     </span>
   );
