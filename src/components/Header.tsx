@@ -49,7 +49,7 @@ export default function Header({ siteName, logo, pastYears }: HeaderProps) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? "glass glass-adaptive shadow-soft py-2" : "bg-transparent py-4"
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? "glass glass-adaptive shadow-soft py-2" : "bg-transparent py-2"
         }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
