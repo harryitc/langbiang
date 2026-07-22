@@ -37,7 +37,13 @@ export default async function Home() {
       {/* <Cursor /> */}
       <ThemeToggle />
       <BackToTop />
-      <Header siteName={site.name} logo={site.logo} pastYears={years} />
+      <Header
+        siteName={site.name}
+        shortName={site.shortName}
+        tagline={site.tagline}
+        logo={site.logo}
+        pastYears={years}
+      />
       <main>
         <Hero
           dateLabel={eventDateLabel(event.dateLabel, currentYear)}

@@ -5,6 +5,10 @@ import { useEffect, useRef, useState } from "react";
 type HeaderProps = {
   /** Tên dự án (dùng cho alt của logo). */
   siteName: string;
+  /** Tên rút gọn (dùng để hiển thị ở logo/menu trên cùng). */
+  shortName?: string;
+  /** Khẩu hiệu dự án (tagline). */
+  tagline?: string;
   /** Logo từ admin; bỏ trống -> dùng logo mặc định. */
   logo?: string;
   /** Danh mục năm đã qua, đã sắp mới → cũ (FR4). Rỗng thì ẩn dropdown "Năm". */
@@ -19,7 +23,13 @@ const nav = [
   { href: "/tin-tuc", label: "Tin tức" },
 ];
 
-export default function Header({ siteName, logo, pastYears }: HeaderProps) {
+export default function Header({
+  siteName,
+  shortName,
+  tagline,
+  logo,
+  pastYears,
+}: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [yearsOpen, setYearsOpen] = useState(false);
@@ -57,10 +67,10 @@ export default function Header({ siteName, logo, pastYears }: HeaderProps) {
           <Logo siteName={siteName} logo={logo} />
           <span className="min-w-0 leading-tight">
             <span className="block text-[10px] font-semibold uppercase tracking-wider text-leaf-deep/70 sm:text-[11px] dark:text-leaf-bright/70">
-              Dự án tình nguyện
+              {tagline || "Dự án tình nguyện"}
             </span>
             <span className="block truncate font-display text-lg font-bold text-leaf-deep sm:text-xl dark:text-leaf-bright">
-              Trăng sáng Langbiang
+              {shortName || siteName || "Trăng sáng Langbiang"}
             </span>
           </span>
         </a>
