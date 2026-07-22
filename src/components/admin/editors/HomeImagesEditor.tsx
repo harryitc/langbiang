@@ -247,11 +247,11 @@ export default function HomeImagesEditor({
 
         <Field
           label="Dòng đậm trong ô kính trên ảnh"
-          hint="Bỏ trống thì hệ thống tự điền “Mùa … · năm” theo số mùa đã qua và năm đang chạy."
+          hint="Tiêu đề chữ đậm trong ô kính nhỏ ở góc ảnh. Hỗ trợ ký hiệu {năm} hoặc {year} để đồng bộ năm hiện tại."
         >
           <Input
             value={aboutText.badgeTitle ?? ""}
-            placeholder="Bỏ trống — hệ thống tự điền “Mùa … · năm”"
+            placeholder="Mùa 2 năm {year}"
             onChange={(e) => setAboutText("badgeTitle", e.target.value)}
           />
         </Field>

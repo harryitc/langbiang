@@ -2,11 +2,10 @@ import Reveal from "@/components/Reveal";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import { Daisy } from "@/components/Decor";
 import { getContent } from "@/lib/content/store";
+import { fillYear } from "@/lib/content/year";
 
 export default async function About() {
-  const { main, currentYear, pastYears } = await getContent();
-  // Mùa thứ mấy = số năm đã qua + 1 (mùa đang tới).
-  const seasonNo = pastYears.length + 1;
+  const { main, currentYear } = await getContent();
   // Chữ của mục này do admin nhập (main.about).
   const about = main.about;
 
@@ -27,14 +26,20 @@ export default async function About() {
               priority
               className="shadow-soft"
             />
-            <div className="glass glass-adaptive absolute -bottom-6 -right-4 max-w-[220px] rounded-2xl p-4 shadow-soft sm:-right-8">
-              <p className="font-display text-3xl font-bold text-leaf-deep dark:text-leaf-bright">
-                {about.badgeTitle?.trim() || `Mùa ${seasonNo} · ${currentYear}`}
-              </p>
-              <p className="mt-1 text-sm text-forest/75 dark:text-ink/75">
-                {about.badgeNote}
-              </p>
-            </div>
+            {(about.badgeTitle?.trim() || about.badgeNote?.trim()) && (
+              <div className="glass glass-adaptive absolute -bottom-6 -right-4 max-w-[220px] rounded-2xl p-4 shadow-soft sm:-right-8">
+                {about.badgeTitle?.trim() && (
+                  <p className="font-display text-3xl font-bold text-leaf-deep dark:text-leaf-bright">
+                    {fillYear(about.badgeTitle, currentYear)}
+                  </p>
+                )}
+                {about.badgeNote?.trim() && (
+                  <p className="mt-1 text-sm text-forest/75 dark:text-ink/75">
+                    {about.badgeNote}
+                  </p>
+                )}
+              </div>
+            )}
             <Daisy className="absolute -left-4 -top-4 animate-float" size={44} />
           </div>
         </Reveal>
