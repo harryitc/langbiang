@@ -4,15 +4,17 @@ import SmoothScroll from "@/components/SmoothScroll";
 import ThemeToggle from "@/components/ThemeToggle";
 import BackToTop from "@/components/BackToTop";
 import SubPageHeader from "@/components/SubPageHeader";
-import Members from "@/components/sections/Board";
+import MembersList from "@/components/sections/MembersList";
 import Footer from "@/components/sections/Footer";
 import { getContent } from "@/lib/content/store";
 import FounderGallery from "./FounderGallery";
+import HeroCanvas from "@/components/HeroCanvas";
+import { LeafBranch, Daisy } from "@/components/Decor";
 
 export const metadata: Metadata = {
-  title: "Ban sáng lập",
+  title: "Ban tổ chức",
   description:
-    "Gặp gỡ ban sáng lập Trăng Sáng Langbiang — những người đứng sau hành trình mang Trung thu đến trẻ em vùng cao.",
+    "Gặp gỡ ban sáng lập và ban tổ chức Trăng Sáng Langbiang — những người đứng sau hành trình mang Trung thu đến trẻ em vùng cao.",
   alternates: { canonical: "/ban-to-chuc" },
 };
 
@@ -27,20 +29,22 @@ export default async function BanToChucPage() {
       <BackToTop />
       <SubPageHeader currentYear={currentYear} />
 
-      <main>
-        <section className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-[#dff2e6] to-cream pb-16 pt-20 dark:from-[#0a1626] dark:via-night-2 dark:to-night sm:pb-24 sm:pt-24">
-          {/* Ảnh nền mờ */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/team/bg-hero.jpg"
-            alt=""
-            aria-hidden
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-multiply dark:opacity-90 dark:mix-blend-soft-light"
-          />
+      {/* Toàn bộ trang nằm trong một main duy nhất với nền hero xuyên suốt */}
+      <main className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream dark:from-[#0a1626] dark:via-night-2 dark:to-night">
+        {/* Canvas trăng + đom đóm + lá bay — trải xuyên suốt toàn trang */}
+        <HeroCanvas />
 
-          {/* Tiêu đề phần Ban sáng lập */}
-          <div className="relative mx-auto max-w-4xl px-5 text-center sm:px-6">
-            <span className="mb-3 inline-block rounded-full bg-white/60 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
+        {/* Cành lá góc trái trên */}
+        <LeafBranch className="pointer-events-none absolute -left-6 -top-6 z-10 h-56 w-72 animate-sway opacity-90 md:h-72 md:w-96" />
+        {/* Hoa cúc góc phải giữa trang */}
+        <Daisy className="pointer-events-none absolute right-6 top-1/3 z-10 h-16 w-16 animate-float opacity-70 md:h-24 md:w-24" />
+        {/* Hoa cúc nhỏ góc trái dưới */}
+        <Daisy className="pointer-events-none absolute bottom-32 left-8 z-10 h-10 w-10 animate-float opacity-50 md:h-14 md:w-14 [animation-delay:2s]" />
+
+        {/* ── BAN SÁNG LẬP ── */}
+        <section className="relative z-20 pb-16 pt-20 sm:pb-24 sm:pt-24">
+          <div className="mx-auto max-w-4xl px-5 text-center sm:px-6">
+            <span className="mb-3 inline-block rounded-full bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
               Đội ngũ
             </span>
             <h1 className="font-display pb-4 text-4xl font-extrabold text-gradient-green sm:text-6xl">
@@ -48,14 +52,41 @@ export default async function BanToChucPage() {
             </h1>
           </div>
 
-          {/* Danh sách Ban sáng lập — Mỗi người 1 hàng, căn giữa + click mở LightGallery */}
           <FounderGallery founders={board.founders} />
         </section>
 
-        {/* Thành viên Ban tổ chức (Lưới responsive) */}
-        <Members />
+        {/* Đường phân cách mỏng */}
+        {board?.members && board.members.length > 0 && (
+          <div className="relative z-20 mx-auto max-w-6xl px-5 sm:px-6">
+            <div className="h-px bg-gradient-to-r from-transparent via-leaf/30 to-transparent" />
+          </div>
+        )}
 
-        <section className="py-16 text-center sm:py-20">
+        {/* ── BAN TỔ CHỨC ── */}
+        {board?.members && board.members.length > 0 && (
+          <section id="members" className="relative z-20 py-16 sm:py-20">
+            <div className="mx-auto max-w-6xl px-5 sm:px-6">
+              <div className="mx-auto max-w-2xl text-center">
+                <span className="mb-3 inline-block rounded-full bg-white/50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
+                  Đội ngũ
+                </span>
+                <h2 className="font-display text-3xl font-extrabold text-gradient-green sm:text-5xl">
+                  Ban tổ chức
+                </h2>
+              </div>
+
+              <MembersList members={board.members} />
+            </div>
+          </section>
+        )}
+
+        {/* Đường phân cách mỏng */}
+        <div className="relative z-20 mx-auto max-w-6xl px-5 sm:px-6">
+          <div className="h-px bg-gradient-to-r from-transparent via-leaf/30 to-transparent" />
+        </div>
+
+        {/* ── NÚT ĐĂNG KÝ ── */}
+        <section className="relative z-20 py-16 text-center sm:py-20">
           <div className="mx-auto max-w-2xl px-5 sm:px-6">
             <p className="mb-6 text-base text-forest/70 dark:text-ink/70">
               Muốn trở thành một phần của đội ngũ mùa {currentYear}?
