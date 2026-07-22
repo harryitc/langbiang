@@ -14,8 +14,8 @@ export default async function Members() {
           <span className="mb-3 inline-block rounded-full bg-leaf/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
             Đội ngũ
           </span>
-          <h2 className="font-display text-3xl font-extrabold text-forest sm:text-5xl dark:text-ink">
-            Ban <span className="text-gradient-green">tổ chức</span>
+          <h2 className="font-display text-3xl font-extrabold text-gradient-green sm:text-5xl">
+            Ban tổ chức
           </h2>
         </Reveal>
 
