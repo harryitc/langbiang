@@ -82,6 +82,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
                     </div>
                   )}
 
+
                   {/* Icon Facebook bên trong góc dưới bên phải ảnh */}
                   {m.facebook && (
                     <a
@@ -90,7 +91,7 @@ export default function FounderGallery({ founders }: { founders: Member[] }) {
                       rel="noopener noreferrer"
                       title={`Facebook của ${m.name}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="absolute bottom-2 right-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-sm ring-2 ring-white transition-transform duration-200 hover:scale-110 dark:ring-night"
+                      className="absolute bottom-2 right-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-[#1877F2]/10 text-[#1877F2] transition-all duration-200 hover:scale-110 hover:bg-[#1877F2] hover:text-white dark:bg-white/10 dark:text-white dark:hover:bg-[#1877F2]"
                     >
                       <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />

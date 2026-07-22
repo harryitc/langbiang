@@ -115,7 +115,7 @@ html.lenis body {
 }
 
 .text-gradient-green {
-  background: linear-gradient(120deg, #2e7d32, #5cb85c 45%, #7cc34a);
+  background: linear-gradient(120deg, #1b5e20, #2e7d32 60%, #43a047);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
