@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -22,6 +22,10 @@ type HeroProps = {
   countdownLabel: string;
   /** Dòng chữ trên tiêu đề (site.tagline). */
   tagline: string;
+  /** Tiêu đề chính lớn - Dòng 1 (chữ nghệ thuật) ở đầu trang chủ. */
+  heroTitle1: string;
+  /** Tiêu đề chính lớn - Dòng 2 (chữ nghệ thuật) ở đầu trang chủ. */
+  heroTitle2: string;
   /** Dòng địa điểm dưới tiêu đề (site.subtitle). */
   subtitle: string;
   /** 4 ảnh nổi quanh Hero (main.heroPhotos); thiếu thì dùng ảnh mặc định. */
@@ -53,6 +57,8 @@ export default function Hero({
   dateISO,
   countdownLabel,
   tagline,
+  heroTitle1,
+  heroTitle2,
   subtitle,
   photos = [],
 }: HeroProps) {
@@ -184,14 +190,20 @@ export default function Hero({
         </p>
 
         <h1 className="hero-title">
-          <span className="sr-only">Trăng sáng Langbiang</span>
+          <span className="sr-only">
+            {heroTitle2.trim() ? `${heroTitle1} ${heroTitle2}` : heroTitle1}
+          </span>
           <span
             aria-hidden
             className="hero-script font-display block pb-4 text-[3.25rem] font-bold leading-[1.12] text-gradient-green drop-shadow-sm sm:text-7xl md:text-8xl"
           >
-            Trăng sáng
-            <br />
-            Langbiang
+            {heroTitle1}
+            {heroTitle2.trim() && (
+              <>
+                <br />
+                {heroTitle2}
+              </>
+            )}
           </span>
         </h1>
 

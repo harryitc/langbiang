@@ -133,6 +133,10 @@ export type SiteMeta = {
   headerTitle: string;
   /** Dòng chữ nhỏ phía trên tên ở Header. */
   headerTagline: string;
+  /** Tiêu đề chính lớn - Dòng 1 (chữ nghệ thuật) ở đầu trang chủ. */
+  heroTitle1: string;
+  /** Tiêu đề chính lớn - Dòng 2 (chữ nghệ thuật) ở đầu trang chủ (không bắt buộc, tự xuống dòng). */
+  heroTitle2: string;
   subtitle: string;
   description: string;
   facebook: string;

@@ -52,6 +52,8 @@ export default async function Home() {
             event.countdownLabel?.trim() || COUNTDOWN_LABEL_MAC_DINH
           }
           tagline={site.heroTagline?.trim() || site.tagline}
+          heroTitle1={site.heroTitle1}
+          heroTitle2={site.heroTitle2}
           subtitle={site.subtitle}
           photos={main.heroPhotos}
         />

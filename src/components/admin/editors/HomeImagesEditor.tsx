@@ -87,7 +87,7 @@ export default function HomeImagesEditor({
         }
       >
         <p className="mb-3 text-sm opacity-60">
-          Hai dòng chữ kẹp trên và dưới tên dự án ở màn hình đầu tiên. Đây là chữ{" "}
+          Các dòng chữ hiển thị ở màn hình đầu tiên. Đây là chữ{" "}
           <strong>khách nhìn thấy</strong> — khác với phần Thương hiệu &amp; SEO
           (thông tin gửi cho Google), nên có thể viết khác nhau.
         </p>
@@ -100,6 +100,28 @@ export default function HomeImagesEditor({
             value={site.heroTagline ?? ""}
             placeholder="Dự án tình nguyện"
             onChange={(e) => setSite("heroTagline", e.target.value)}
+          />
+        </Field>
+
+        <Field
+          label="Dòng 1 tiêu đề chính (chữ viết tay)"
+          hint="Dòng thứ nhất của tiêu đề chính vẽ nghệ thuật."
+        >
+          <Input
+            value={site.heroTitle1 ?? ""}
+            placeholder="Trăng sáng"
+            onChange={(e) => setSite("heroTitle1", e.target.value)}
+          />
+        </Field>
+
+        <Field
+          label="Dòng 2 tiêu đề chính (chữ viết tay)"
+          hint="Dòng thứ hai của tiêu đề chính (tự động xuống hàng dưới Dòng 1. Để trống cũng được)."
+        >
+          <Input
+            value={site.heroTitle2 ?? ""}
+            placeholder="Langbiang"
+            onChange={(e) => setSite("heroTitle2", e.target.value)}
           />
         </Field>
 

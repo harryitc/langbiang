@@ -88,6 +88,8 @@ export const defaultContent: SiteContent = {
       tagline: site.tagline,
       headerTitle: "Trăng sáng Langbiang",
       headerTagline: "Dự án tình nguyện",
+      heroTitle1: "Trăng sáng",
+      heroTitle2: "Langbiang",
       subtitle: site.subtitle,
       description: site.description,
       facebook: site.facebook,
