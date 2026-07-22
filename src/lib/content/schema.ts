@@ -34,11 +34,20 @@ export type TimelineItem = {
   desc: string;
 };
 
+/** Một ảnh trong cụm Polaroid của lịch trình. */
+export type TimelinePhoto = {
+  url: string;
+  /** Chú thích hiển thị dưới ảnh Polaroid. */
+  note: string;
+};
+
 /** Một ngày trong lịch trình, gồm nhiều mốc. */
 export type TimelineDay = {
   day: string;
   date: string;
   items: TimelineItem[];
+  /** Danh sách ảnh Polaroid — tối đa 3 ảnh, mỗi ảnh có URL và chú thích. */
+  images?: TimelinePhoto[];
 };
 
 /** Câu hỏi thường gặp. */

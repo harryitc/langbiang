@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mùa Hè Xanh - Langbiang Memories</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dbdad6",
+                        "surface-bright": "#fbf9f5",
+                        "surface": "#fbf9f5",
+                        "on-tertiary-container": "#6fe87c",
+                        "tertiary-fixed": "#83fc8e",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f2f0ed",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#d7e2ff",
+                        "outline-variant": "#c2c6d4",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e4e2de",
+                        "on-tertiary-fixed": "#002106",
+                        "tertiary": "#004c17",
+                        "surface-tint": "#115cb9",
+                        "inverse-surface": "#30312e",
+                        "surface-container-high": "#eae8e4",
+                        "background": "#fbf9f5",
+                        "on-surface": "#1b1c1a",
+                        "surface-container-low": "#f5f3ef",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#584400",
+                        "primary-fixed-dim": "#acc7ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#acc7ff",
+                        "on-primary-fixed-variant": "#004491",
+                        "primary-container": "#0056b3",
+                        "outline": "#727784",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#006722",
+                        "primary": "#003f87",
+                        "on-surface-variant": "#424752",
+                        "on-tertiary-fixed-variant": "#00531a",
+                        "secondary-fixed": "#ffe08b",
+                        "surface-variant": "#e4e2de",
+                        "on-secondary-container": "#6e5700",
+                        "on-primary-fixed": "#001a40",
+                        "surface-container": "#efeeea",
+                        "secondary": "#745b00",
+                        "secondary-container": "#fecb00",
+                        "on-secondary-fixed": "#241a00",
+                        "secondary-fixed-dim": "#f1c100",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#66df75",
+                        "on-primary-container": "#bbd0ff",
+                        "on-background": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "display-lg-mobile": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "caption-hand": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "caption-hand": ["16px", { "lineHeight": "22px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .paper-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        .polaroid-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+        }
+        .tape {
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: absolute;
+            width: 80px;
+            height: 25px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-surface paper-texture text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="docked full-width top-0 sticky shadow-sm dark:bg-surface-container-lowest z-50 bg-surface/90 dark:bg-surface-container-lowest/90 backdrop-blur-sm transition-all duration-300">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-20">
+<!-- Brand Logo -->
+<a class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed flex items-center gap-2 hover:scale-95 duration-150 transition-transform" href="#">
+                Mùa Hè Xanh
+            </a>
+<!-- Desktop Navigation -->
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-label-md text-primary font-bold border-b-2 border-primary pb-1 hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/50 transition-all rounded-t-sm px-2" href="#">Memories</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/50 rounded-sm px-2 py-1" href="#">Gallery</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/50 rounded-sm px-2 py-1" href="#">Thoughts</a>
+</div>
+<!-- Trailing Action -->
+<a class="hidden md:inline-flex items-center justify-center px-6 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm hover:shadow-md active:scale-95 duration-150" href="#">
+                Join Us
+            </a>
+<!-- Mobile Menu Button (Hamburger) -->
+<button aria-label="Menu" class="md:hidden text-on-surface p-2 hover:bg-surface-container-high rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-20 relative">
+<!-- Scrapbook Header -->
+<header class="text-center mb-24 relative z-10">
+<div class="inline-block relative">
+<h1 class="font-display-lg-mobile md:font-display-lg text-primary mb-4 transform -rotate-1 inline-block bg-secondary-fixed/30 px-6 py-2 rounded-sm shadow-sm border border-secondary-fixed-dim/20">2 Ngày 1 Đêm Yêu Thương</h1>
+<!-- Doodle Star -->
+<svg class="absolute -top-6 -right-8 w-12 h-12 text-tertiary-container animate-pulse" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<p class="font-caption-hand text-caption-hand text-on-surface-variant max-w-2xl mx-auto mt-6 transform rotate-1 text-xl">"Hành trình rực rỡ tại Langbiang - Nơi những trái tim xanh hội ngộ..."</p>
+</header>
+<!-- Timeline Container - Organic Layout -->
+<div class="relative w-full pb-32"><!-- Central Dashed Line -->
+<div class="hidden md:block absolute top-0 bottom-0 left-1/2 -ml-0.5 w-1 border-l-2 border-dashed border-outline-variant/60 z-0"></div>
+<!-- Day 0: Departure -->
+<div class="flex flex-col md:flex-row items-center w-full mb-32 relative z-10">
+<div class="w-full md:w-1/2 flex justify-center md:justify-end md:pr-16 mb-8 md:mb-0 relative">
+<div class="bg-surface-container-lowest p-4 pb-12 rounded-sm polaroid-shadow transform -rotate-3 hover:rotate-0 transition-transform duration-300 w-80 relative">
+<div class="tape top-[-10px] left-1/2 -ml-10 transform rotate-2"></div>
+<img alt="Departure" class="w-full h-64 object-cover filter contrast-125 sepia-[.15]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDR2s11ambgUdNfsUeCb_dkc66nbWsuIEL4_B9Cw2OYYpAM4tlaOBR8_DZTtV5VvzyLoPs7wDAqORMCrTmEzn60-TbcA2P2AZZhcU4GjFfu5S18WfFWjBUhiio3meoRMTeHRu5DOk63qqqtubkq6FLvhWeqx1l-9g2b7SvNLlP81sMV-NUmK_-lM4NftyleRMIIWYoaIv_wt7nfrpUkLNQJ2ryH5MCPb8phj9E1ZNAbJTp7sZpDmOYKg"/>
+<p class="font-caption-hand text-caption-hand text-center mt-6 text-on-surface">25/09 - Khởi hành từ TP.HCM</p>
+</div>
+</div>
+<div class="w-full md:w-1/2 md:pl-16 relative">
+<div class="bg-secondary-fixed/40 p-6 shadow-sm transform rotate-2 max-w-md relative">
+<div class="absolute top-2 left-1/2 -ml-2 w-4 h-4 rounded-full bg-error/80 shadow-sm"></div>
+<h3 class="font-headline-md text-headline-md text-on-secondary-container mb-2 font-bold">20:00 - Tập trung</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Đoàn xuất phát từ TP.HCM đến phường Langbiang - Đà Lạt. Những háo hức đầu tiên bắt đầu nhen nhóm trên chuyến xe đêm.</p>
+</div>
+</div>
+</div>
+<!-- Day 1: Activities -->
+<div class="flex flex-col md:flex-row-reverse items-center w-full mb-32 relative z-10">
+<div class="w-full md:w-1/2 flex justify-center md:justify-start md:pl-16 mb-8 md:mb-0 relative">
+<div class="relative w-80 h-80">
+<div class="absolute top-0 right-0 bg-surface-container-lowest p-3 pb-8 rounded-sm polaroid-shadow transform rotate-6 hover:z-20 transition-all duration-300 w-64">
+<img alt="Cooking" class="w-full h-48 object-cover filter contrast-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCggBWTbcbMNPW4SDlYD2l_nRwYSBcT1RZ9VT5oO-aEc2w-jDX_6sHEqM1vQgysgYJjv3rgCqO48LmrA4fQWL2PPjAIvEbmPgVVEc7COugx6Nn_D7NrnFwmkbYGANdNvPQIKePtQScdjQadbFsXSre5Rh4nSfqsSKNS-QI_lybzJQkVMwcPG8pT8K0kMMzSbSl-cUG1OCe7gJJp_5e8oKa0ibldWF62vv2OOqjAueAcbSUsSZ-_3KNOIA"/>
+<p class="font-caption-hand text-caption-hand text-center mt-4 text-on-surface">Nấu ăn cho em</p>
+</div>
+<div class="absolute bottom-0 left-0 bg-surface-container-lowest p-4 pb-10 rounded-sm polaroid-shadow transform -rotate-4 hover:z-20 transition-all duration-300 w-72 z-10">
+<div class="tape top-[-5px] right-4 transform -rotate-12 bg-primary/20"></div>
+<img alt="Festival" class="w-full h-48 object-cover filter sepia-[.1]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCx5IevrUgC2qgGIcJxPMPbc-9Ts-PPZy2y4vWN3seI7CbtQ3GElVRQ_OYuZ15fas-JltMiP2WDWk1qilLisSArwOXuPyibXmpskxqZBVhBfev-ILz0WAjkhs5JOSWZjnJI4VR7yO0ozA54puyRy3ImMsWhp2vSnJHztCb8C8_PRz8YLGWiMehfse6XWrnI_EeKZwZarb0FYnYLujK1s1OaDGx94wFffyALPjlY_ygiGAwCmL1b7I7c5A"/>
+<p class="font-caption-hand text-caption-hand text-center mt-4 text-on-surface">Hội trăng rằm</p>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/2 md:pr-16 flex flex-col items-end relative text-right">
+<div class="bg-surface-container-high/60 p-6 rounded-br-3xl rounded-tl-xl shadow-sm transform -rotate-1 max-w-md border-l-4 border-tertiary-container relative">
+<h3 class="font-headline-md text-headline-md text-primary mb-2 font-bold">26/09 - Ngày Hội Ngộ</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-2">08:30 - Sinh hoạt "Tự hào Việt Nam" đầy ý nghĩa.</p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-2">11:00 - Cùng nhau chuẩn bị bữa trưa ấm áp.</p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">14:00 - Rước đèn, phá cỗ và trao quà yêu thương.</p>
+</div>
+</div>
+</div>
+<!-- Day 2: Farewell -->
+<div class="flex flex-col md:flex-row items-center w-full mb-32 relative z-10">
+<div class="w-full md:w-1/2 flex justify-center md:justify-end md:pr-16 mb-8 md:mb-0 relative">
+<div class="bg-surface-container-lowest p-4 pb-12 rounded-sm polaroid-shadow transform rotate-2 hover:rotate-0 transition-transform duration-300 w-80 relative">
+<div class="tape top-[-10px] right-10 transform -rotate-6"></div>
+<img alt="Dalat" class="w-full h-64 object-cover filter contrast-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCggBWTbcbMNPW4SDlYD2l_nRwYSBcT1RZ9VT5oO-aEc2w-jDX_6sHEqM1vQgysgYJjv3rgCqO48LmrA4fQWL2PPjAIvEbmPgVVEc7COugx6Nn_D7NrnFwmkbYGANdNvPQIKePtQScdjQadbFsXSre5Rh4nSfqsSKNS-QI_lybzJQkVMwcPG8pT8K0kMMzSbSl-cUG1OCe7gJJp_5e8oKa0ibldWF62vv2OOqjAueAcbSUsSZ-_3KNOIA"/>
+<p class="font-caption-hand text-caption-hand text-center mt-6 text-on-surface">27/09 - Tạm biệt Langbiang</p>
+</div>
+</div>
+<div class="w-full md:w-1/2 md:pl-16 relative">
+<div class="bg-secondary-fixed/30 p-6 shadow-sm transform -rotate-2 max-w-md relative">
+<div class="absolute top-2 right-4 w-4 h-4 rounded-full bg-primary/60 shadow-sm"></div>
+<h3 class="font-headline-md text-headline-md text-on-secondary-container mb-2 font-bold">Hành trình kết thúc</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-2">07:30 - Sinh hoạt ngoại khóa &amp; tham quan các thắng cảnh Đà Lạt.</p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">16:00 - Xuất phát về lại TP.HCM, mang theo những kỷ niệm khó quên.</p>
+</div>
+</div>
+</div></div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-surface-container-low dark:bg-surface-container-lowest border-t border-outline-variant flat no shadows py-12">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto gap-6 md:gap-0">
+<span class="font-headline-md text-headline-md text-on-surface">Mùa Hè Xanh</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-center md:text-left">© 2024 Mùa Hè Xanh - Hành trình của những trái tim xanh.</span>
+<div class="flex gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Facebook</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Instagram</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">YouTube</a>
+</div>
+</div>
+</footer>
+</body></html>
