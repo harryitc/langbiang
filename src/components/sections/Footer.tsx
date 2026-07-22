@@ -28,7 +28,7 @@ export default async function Footer() {
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <p className="font-display text-3xl font-bold text-white">
-              {meta.name}
+              {footer.title}
             </p>
             <p className="mt-3 max-w-sm whitespace-pre-line text-white/70">
               {footer.description}
@@ -86,7 +86,7 @@ export default async function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60 sm:flex-row">
           <p>
-            © {currentYear} {meta.name}. {footer.copyrightNote}
+            © {currentYear} {footer.title}. {footer.copyrightNote}
           </p>
           <p>{footer.bottomNote}</p>
         </div>

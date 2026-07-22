@@ -33,8 +33,9 @@ type Loi = Partial<Record<keyof SiteMeta, string>>;
 function kiemTra(value: SiteMeta): Loi {
   const loi: Loi = {};
   if (!value.name.trim()) loi.name = "Chưa điền Tên dự án.";
-  if (!value.shortName.trim()) loi.shortName = "Chưa điền Tên rút gọn.";
   if (!value.tagline.trim()) loi.tagline = "Chưa điền Khẩu hiệu.";
+  if (!value.headerTitle.trim()) loi.headerTitle = "Chưa điền Tên ở Header.";
+  if (!value.headerTagline.trim()) loi.headerTagline = "Chưa điền Khẩu hiệu ở Header.";
   if (!value.description.trim()) loi.description = "Chưa điền Mô tả.";
   if (!value.email.trim()) loi.email = "Chưa điền Email liên hệ.";
   else if (!laEmailHopLe(value.email))
@@ -87,7 +88,7 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               loi.name ? (
                 <Text type="danger">{loi.name}</Text>
               ) : (
-                "Tên đầy đủ của dự án. Hiện ở tên tab trình duyệt và chân trang."
+                "Tên đầy đủ của dự án. Hiện ở tên tab trình duyệt (SEO) và tên gửi email."
               )
             }
           >
@@ -99,23 +100,6 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
             />
           </Field>
 
-          <Field
-            label="Tên rút gọn *"
-            hint={
-              loi.shortName ? (
-                <Text type="danger">{loi.shortName}</Text>
-              ) : (
-                "Hiện ở thanh menu trên cùng và chân trang của mọi trang."
-              )
-            }
-          >
-            <Input
-              value={value.shortName}
-              status={loi.shortName ? "error" : undefined}
-              placeholder="Trăng Sáng Langbiang"
-              onChange={(e) => set("shortName", e.target.value)}
-            />
-          </Field>
 
           <Field
             label="Khẩu hiệu *"
@@ -180,6 +164,49 @@ export default function SiteEditor({ initial }: { initial: SiteMeta }) {
               status={loi.facebook ? "error" : undefined}
               placeholder="https://www.facebook.com/…"
               onChange={(e) => set("facebook", e.target.value)}
+            />
+          </Field>
+        </div>
+      </EditorCard>
+
+      <EditorCard
+        title="Thanh menu đầu trang (Header)"
+        extra={<SaveStatusTag status={status} />}
+      >
+        <div className="grid gap-x-4 md:grid-cols-2">
+          <Field
+            label="Tên hiển thị ở Header *"
+            hint={
+              loi.headerTitle ? (
+                <Text type="danger">{loi.headerTitle}</Text>
+              ) : (
+                "Tên chính hiển thị cạnh Logo trên thanh Header."
+              )
+            }
+          >
+            <Input
+              value={value.headerTitle}
+              status={loi.headerTitle ? "error" : undefined}
+              placeholder="Trăng sáng Langbiang"
+              onChange={(e) => set("headerTitle", e.target.value)}
+            />
+          </Field>
+
+          <Field
+            label="Dòng chữ nhỏ ở Header *"
+            hint={
+              loi.headerTagline ? (
+                <Text type="danger">{loi.headerTagline}</Text>
+              ) : (
+                "Dòng mô tả/khẩu hiệu nhỏ phía trên tên ở Header."
+              )
+            }
+          >
+            <Input
+              value={value.headerTagline}
+              status={loi.headerTagline ? "error" : undefined}
+              placeholder="Dự án tình nguyện"
+              onChange={(e) => set("headerTagline", e.target.value)}
             />
           </Field>
         </div>

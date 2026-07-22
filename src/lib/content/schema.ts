@@ -128,8 +128,11 @@ export type SpendingReport = {
 /** Thông tin thương hiệu + liên hệ + SEO/OG. */
 export type SiteMeta = {
   name: string;
-  shortName: string;
   tagline: string;
+  /** Tên hiển thị cạnh Logo ở Header. */
+  headerTitle: string;
+  /** Dòng chữ nhỏ phía trên tên ở Header. */
+  headerTagline: string;
   subtitle: string;
   description: string;
   facebook: string;
@@ -378,6 +381,8 @@ export type NewsPost = {
  * "Sự kiện" cùng "Thương hiệu", nên sửa một chỗ là cả website đổi theo.
  */
 export type FooterContent = {
+  /** Tên hiển thị ở chân trang (Footer Title). */
+  title: string;
   /** Đoạn giới thiệu ngắn dưới tên dự án. */
   description: string;
   /** Chữ trên nút dẫn sang Fanpage (địa chỉ lấy ở mục Thương hiệu). */

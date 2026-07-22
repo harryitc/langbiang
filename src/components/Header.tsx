@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from "react";
 type HeaderProps = {
   /** Tên dự án (dùng cho alt của logo). */
   siteName: string;
-  /** Tên rút gọn (dùng để hiển thị ở logo/menu trên cùng). */
-  shortName: string;
-  /** Khẩu hiệu dự án (tagline). */
-  tagline: string;
+  /** Tên hiển thị cạnh Logo ở Header. */
+  headerTitle: string;
+  /** Dòng chữ nhỏ phía trên tên ở Header (tagline). */
+  headerTagline: string;
   /** Logo từ admin; bỏ trống -> dùng logo mặc định. */
   logo?: string;
   /** Danh mục năm đã qua, đã sắp mới → cũ (FR4). Rỗng thì ẩn dropdown "Năm". */
@@ -25,8 +25,8 @@ const nav = [
 
 export default function Header({
   siteName,
-  shortName,
-  tagline,
+  headerTitle,
+  headerTagline,
   logo,
   pastYears,
 }: HeaderProps) {
@@ -65,16 +65,16 @@ export default function Header({
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
         <a href="#top" className="flex min-w-0 items-center gap-2 sm:gap-2.5">
           <Logo siteName={siteName} logo={logo} />
-          {(tagline.trim() || shortName.trim()) && (
+          {(headerTagline.trim() || headerTitle.trim()) && (
             <span className="min-w-0 leading-tight">
-              {tagline.trim() && (
+              {headerTagline.trim() && (
                 <span className="block text-[10px] font-semibold uppercase tracking-wider text-leaf-deep/70 sm:text-[11px] dark:text-leaf-bright/70">
-                  {tagline}
+                  {headerTagline}
                 </span>
               )}
-              {shortName.trim() && (
+              {headerTitle.trim() && (
                 <span className="block truncate font-display text-lg font-bold text-leaf-deep sm:text-xl dark:text-leaf-bright">
-                  {shortName}
+                  {headerTitle}
                 </span>
               )}
             </span>

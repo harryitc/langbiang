@@ -12,6 +12,7 @@ import type { FooterContent } from "@/lib/content/schema";
 /** Chân trang hiện ở mọi trang, nên bỏ trống một ô là cả website bị hụt chữ. */
 function validate(value: FooterContent) {
   return {
+    title: value.title.trim() ? "" : "Chưa nhập tên hiển thị chân trang.",
     description: value.description.trim() ? "" : "Chưa nhập đoạn giới thiệu.",
     facebookLabel: value.facebookLabel.trim() ? "" : "Chưa nhập chữ trên nút.",
     exploreTitle: value.exploreTitle.trim() ? "" : "Chưa nhập tiêu đề cột.",
@@ -42,8 +43,24 @@ export default function FooterEditor({ initial }: { initial: FooterContent }) {
       />
 
       <Field
+        label="Tên hiển thị ở chân trang"
+        hint="Tên lớn của dự án hiện ở góc dưới bên trái của chân trang và trước dòng bản quyền."
+      >
+        <Input
+          value={value.title}
+          maxLength={100}
+          placeholder="Trăng Sáng Langbiang"
+          status={errors.title ? "error" : undefined}
+          onChange={(e) => set({ title: e.target.value })}
+        />
+        {errors.title ? (
+          <div className="mt-1 text-xs text-red-500">{errors.title}</div>
+        ) : null}
+      </Field>
+
+      <Field
         label="Đoạn giới thiệu"
-        hint="Vài dòng ngắn dưới tên dự án. Xuống dòng được giữ nguyên khi hiển thị."
+        hint="Vài dòng ngắn dưới tên chân trang. Xuống dòng được giữ nguyên khi hiển thị."
       >
         <Input.TextArea
           value={value.description}
@@ -106,7 +123,7 @@ export default function FooterEditor({ initial }: { initial: FooterContent }) {
 
       <Field
         label="Câu sau dòng bản quyền"
-        hint="Phần “© số năm, tên dự án.” do hệ thống tự viết; đây là câu nối tiếp phía sau. Để trống cũng được."
+        hint="Phần “© số năm, tên chân trang.” do hệ thống tự viết; đây là câu nối tiếp phía sau. Để trống cũng được."
       >
         <Input
           value={value.copyrightNote}

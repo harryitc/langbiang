@@ -39,8 +39,8 @@ export default async function Home() {
       <BackToTop />
       <Header
         siteName={site.name}
-        shortName={site.shortName}
-        tagline={site.tagline}
+        headerTitle={site.headerTitle}
+        headerTagline={site.headerTagline}
         logo={site.logo}
         pastYears={years}
       />

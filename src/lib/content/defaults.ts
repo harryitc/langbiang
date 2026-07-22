@@ -85,8 +85,9 @@ export const defaultContent: SiteContent = {
   main: {
     site: {
       name: site.name,
-      shortName: site.shortName,
       tagline: site.tagline,
+      headerTitle: "Trăng sáng Langbiang",
+      headerTagline: "Dự án tình nguyện",
       subtitle: site.subtitle,
       description: site.description,
       facebook: site.facebook,
@@ -250,6 +251,7 @@ export const defaultContent: SiteContent = {
     },
     // Chữ ở chân trang — giữ đúng nội dung đã hardcode trong Footer.tsx.
     footer: {
+      title: "Trăng Sáng Langbiang",
       description:
         "Dự án tình nguyện mang Trung thu ấm áp đến các em nhỏ vùng cao Langbiang – Đà Lạt, Lâm Đồng.",
       facebookLabel: "Theo dõi Fanpage",
