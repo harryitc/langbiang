@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Reveal from "@/components/Reveal";
 import type { Member } from "@/lib/content/schema";
 
 const INITIAL_COUNT = 12;
@@ -72,11 +71,11 @@ export default function MembersList({ members }: { members: Member[] }) {
 
   return (
     <div className="mt-12">
-      <Reveal childrenStagger className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
         {visibleMembers.map((m, idx) => (
           <MemberCard key={m.name + idx} m={m} />
         ))}
-      </Reveal>
+      </div>
 
       {hasMore && (
         <div className="mt-10 text-center">
