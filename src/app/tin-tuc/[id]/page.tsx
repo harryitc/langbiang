@@ -25,6 +25,21 @@ function anhBia(post: NewsPost): string {
   return post.coverImg?.trim() || post.img;
 }
 
+function formatDate(dateStr?: string): string {
+  if (!dateStr) return "";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
 export async function generateStaticParams(): Promise<Params[]> {
   const { news } = await getContent();
   return news.map((post) => ({ id: post.id }));
@@ -132,9 +147,16 @@ export default async function NewsDetailPage({
 
           {/* Tiêu đề */}
           <header className="mt-6">
-            <span className="inline-block rounded-full bg-leaf/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wide text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
-              {post.tag}
-            </span>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-block rounded-full bg-leaf/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wide text-leaf-deep dark:bg-leaf-bright/15 dark:text-leaf-bright">
+                {post.tag}
+              </span>
+              {post.date && (
+                <span className="text-sm text-forest/60 dark:text-ink/60">
+                  {formatDate(post.date)}
+                </span>
+              )}
+            </div>
             {/* Font thường (không dùng font-display) cho khớp tiêu đề trên thẻ tin. */}
             <h1 className="mt-4 text-3xl font-bold leading-tight text-forest sm:text-4xl md:text-5xl dark:text-ink">
               {post.title}
