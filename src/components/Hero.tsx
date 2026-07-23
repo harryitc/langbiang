@@ -70,42 +70,9 @@ export default function Hero({
     () => {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      const SEL = [
-        ".hero-eyebrow",
-        ".hero-title",
-        ".hero-script",
-        ".hero-sub",
-        ".hero-date",
-        ".hero-cta > *",
-        ".hero-count",
-      ];
-      // Đảm bảo mọi phần tử luôn hiện lại sau khi animate (không kẹt opacity:0)
-      const reveal = () => gsap.set(SEL, { clearProps: "all", opacity: 1 });
-
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
-        onComplete: reveal,
-        onInterrupt: reveal,
-      });
-      tl.from(".hero-eyebrow", { y: 30, opacity: 0, duration: 0.7 })
-        .from(".hero-title", { y: 50, opacity: 0, duration: 1 }, "-=0.3")
-        .from(".hero-script", { scale: 0.8, opacity: 0, duration: 1 }, "-=0.6")
-        .from(".hero-sub", { y: 24, opacity: 0, duration: 0.7 }, "-=0.5")
-        .from(".hero-date", { y: 20, opacity: 0, duration: 0.6 }, "-=0.4")
-        .from(
-          ".hero-cta > *",
-          { y: 24, opacity: 0, duration: 0.6, stagger: 0.12 },
-          "-=0.3"
-        )
-        .from(".hero-count", { y: 24, opacity: 0, duration: 0.6 }, "-=0.2");
-
-      // Lưới an toàn: dù có gì xảy ra, sau 4s tất cả phải hiện
-      gsap.delayedCall(4, reveal);
-
       // parallax on scroll
       gsap.to(".hero-content", {
         y: 120,
-        // opacity: 0.2,
         opacity: 1,
         ease: "none",
         scrollTrigger: {

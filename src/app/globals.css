@@ -149,11 +149,6 @@ html.lenis body {
   box-shadow: 0 18px 50px -20px rgba(27, 94, 32, 0.35);
 }
 
-/* ---------- Reveal (GSAP fallback: keep visible) ---------- */
-.reveal-init {
-  opacity: 0;
-  transform: translateY(40px);
-}
 
 /* ---------- Animations ---------- */
 @keyframes float-y {
@@ -275,10 +270,6 @@ html.lenis body {
   .animate-blink,
   .skeleton {
     animation: none;
-  }
-  .reveal-init {
-    opacity: 1;
-    transform: none;
   }
 }
 
