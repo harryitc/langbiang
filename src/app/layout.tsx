@@ -71,8 +71,8 @@ export async function generateMetadata(): Promise<Metadata> {
       googleBot: { index: true, follow: true, "max-image-preview": "large" },
     },
     icons: {
-      icon: [{ url: "/logo-mark.png", type: "image/png" }],
-      apple: "/logo-mark.png",
+      icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
+      apple: "/favicon.ico",
     },
     verification: {
       google: "XOGtXG7k4uoGXRpKkNHEx8MO0pZh5VieLL3V_7AO8JY",
