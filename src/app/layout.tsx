@@ -70,9 +70,40 @@ export async function generateMetadata(): Promise<Metadata> {
       follow: true,
       googleBot: { index: true, follow: true, "max-image-preview": "large" },
     },
+    // icons: {
+    //   icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
+    //   apple: "/favicon.ico",
+    // },
+    // icons: {
+    //   icon: [
+    //     { url: "/favicon.ico" },
+    //     { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    //   ],
+    //   shortcut: "/favicon.ico",
+    //   apple: "/apple-touch-icon.png",
+    // },
     icons: {
-      icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
-      apple: "/favicon.ico",
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        {
+          url: "/favicon-32x32.png",
+          type: "image/png",
+          sizes: "32x32",
+        },
+        {
+          url: "/favicon-16x16.png",
+          type: "image/png",
+          sizes: "16x16",
+        },
+      ],
+      apple: [
+        {
+          url: "/apple-touch-icon.png",
+          sizes: "180x180",
+          type: "image/png",
+        },
+      ],
+      shortcut: "/favicon.ico",
     },
     verification: {
       google: "XOGtXG7k4uoGXRpKkNHEx8MO0pZh5VieLL3V_7AO8JY",
