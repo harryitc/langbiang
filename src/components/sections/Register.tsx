@@ -13,9 +13,13 @@ import type { RegisterForm } from "@/lib/content/schema";
 export default function Register({
   facebook,
   content,
+  logo,
+  siteName = "TRĂNG SÁNG LANGBIANG",
 }: {
   facebook: string;
   content: RegisterForm;
+  logo?: string;
+  siteName?: string;
 }) {
   return (
     <section
@@ -30,9 +34,17 @@ export default function Register({
           viết tay cỡ lớn, nếu không chữ cuối bị rơi xuống một mình. */}
       <div className="relative z-20 mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
         <Reveal childrenStagger>
-          <span className="mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
-            {content.eyebrow}
-          </span>
+          <div className="mb-4 flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={logo?.trim() || "/logo-mark.png"}
+              alt="Logo"
+              className="h-10 w-10 shrink-0 object-contain"
+            />
+            <span className="font-display text-xl sm:text-2xl font-bold text-leaf-deep dark:text-leaf-bright">
+              {siteName}
+            </span>
+          </div>
           {/* @container: cỡ chữ dòng viết tay tính theo bề ngang CỘT này, không
               phải bề ngang màn hình — ở lg cột chỉ rộng một nửa nên nếu tính
               theo màn hình thì chữ sẽ tràn.
@@ -53,7 +65,7 @@ export default function Register({
         </Reveal>
 
         <Reveal>
-          <RegisterFormCard form={content} facebook={facebook} />
+          <RegisterFormCard form={content} facebook={facebook} logo={logo} />
         </Reveal>
       </div>
     </section>

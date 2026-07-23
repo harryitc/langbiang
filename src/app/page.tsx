@@ -62,7 +62,7 @@ export default async function Home() {
         <News posts={news} currentYear={currentYear} carousel limit={5} />
         <DonateBand />
         {registerForm ? (
-          <Register facebook={site.facebook} content={registerForm} />
+          <Register facebook={site.facebook} content={registerForm} logo={site.logo} siteName={site.name} />
         ) : null}
         <Sponsors tiers={sponsorTiers} currentYear={currentYear} header={main.sponsorsHeader} />
         <Faq faqs={main.faqs} />

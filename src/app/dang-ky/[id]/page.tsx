@@ -70,18 +70,20 @@ export default async function Page({ params }: Params) {
       <div className="relative z-20 mx-auto grid w-full max-w-7xl flex-1 items-center gap-12 px-6 lg:grid-cols-2">
         {/* Cột trái — giới thiệu */}
         <div className="text-center lg:text-left">
-          <Link
-            href="/"
-            className="cursor-pointer text-xs font-bold uppercase tracking-widest text-leaf-deep/70 transition hover:text-leaf-deep dark:text-leaf-bright/70 dark:hover:text-leaf-bright"
-          >
-            {site.name}
-          </Link>
-
-          <span className="mt-4 mb-3 block">
-            <span className="inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/40 dark:bg-white/10 dark:text-leaf-bright">
-              {form.eyebrow}
-            </span>
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3 lg:justify-start">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={site.logo?.trim() || "/logo-mark.png"}
+              alt={site.name}
+              className="h-10 w-10 shrink-0 object-contain"
+            />
+            <Link
+              href="/"
+              className="font-display text-xl sm:text-2xl font-bold text-leaf-deep transition hover:text-sunset dark:text-leaf-bright dark:hover:text-sun"
+            >
+              {site.name}
+            </Link>
+          </div>
 
           {/* Cùng cách xử lý với khối Đăng ký trang chủ: cỡ chữ dòng viết tay
               tính theo bề ngang cột nên luôn nằm gọn một hàng. */}
@@ -102,7 +104,7 @@ export default async function Page({ params }: Params) {
         </div>
 
         {/* Cột phải — form. */}
-        <RegisterFormCard form={form} facebook={site.facebook} />
+        <RegisterFormCard form={form} facebook={site.facebook} logo={site.logo} />
       </div>
 
       <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60 dark:text-ink/60">

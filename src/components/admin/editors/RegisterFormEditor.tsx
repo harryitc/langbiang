@@ -336,17 +336,6 @@ export default function RegisterFormEditor({
           form.
         </p>
 
-        <Field
-          label="Nhãn nhỏ phía trên tiêu đề"
-          hint="Dòng chữ in hoa trong viên thuốc mờ, vd: Tham gia cùng chúng mình."
-        >
-          <Input
-            value={form.eyebrow}
-            placeholder="Tham gia cùng chúng mình"
-            onChange={(e) => set("eyebrow", e.target.value)}
-          />
-        </Field>
-
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="Tiêu đề — dòng trên" hint="Chữ in đậm thường.">
             <Input

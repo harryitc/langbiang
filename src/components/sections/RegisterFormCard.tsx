@@ -67,10 +67,13 @@ const nho = {
 export default function RegisterFormCard({
   form,
   facebook,
+  logo,
 }: {
   form: RegisterForm;
   facebook: string;
+  logo?: string;
 }) {
+  const logoUrl = logo?.trim() || "/logo-mark.png";
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
