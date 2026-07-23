@@ -69,16 +69,6 @@ export default function ImageCropperModal({
     if (r > 0 && c > 0) setTuChon(r / c);
   }, [tuNhap, rong, cao]);
 
-  // Bấm Esc để đóng, giống các hộp thoại khác.
-  useEffect(() => {
-    if (!file) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCancel();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [file, onCancel]);
-
   if (!file) return null;
 
   async function xong() {
@@ -104,10 +94,7 @@ export default function ImageCropperModal({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/60 p-3"
-      onClick={onCancel}
-    >
+    <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/60 p-3">
       <div
         className="flex max-h-full w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
