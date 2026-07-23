@@ -456,7 +456,9 @@ export function ImageField({
       <Modal
         open={open}
         onCancel={() => setOpen(false)}
-        width={920}
+        width={960}
+        centered
+        maskClosable={false}
         footer={null}
         destroyOnHidden
         title="Chọn ảnh từ kho"

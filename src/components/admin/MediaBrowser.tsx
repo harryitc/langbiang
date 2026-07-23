@@ -12,6 +12,7 @@ import {
   Image as AntdImage,
   Input,
   Popconfirm,
+  Popover,
   Select,
   Spin,
   Tag,
@@ -98,6 +99,10 @@ export default function MediaBrowser({
   useEffect(() => {
     void refetch();
   }, []);
+
+  useEffect(() => {
+    if (cropping) setSelected(null);
+  }, [cropping]);
 
   // Đổi album / từ khoá → xem lại từ lô đầu.
   useEffect(() => {
@@ -226,11 +231,11 @@ export default function MediaBrowser({
   const canManage = mode === "manage";
 
   return (
-    <div className="flex min-h-[420px] flex-col gap-3 md:flex-row">
+    <div className="flex min-h-[460px] max-h-[70vh] flex-col gap-4 overflow-hidden pt-1 md:flex-row">
       {/* Cột album */}
-      <div className="md:w-56 md:shrink-0">
+      <div className="flex max-h-full flex-col md:w-52 md:shrink-0 md:border-r md:border-gray-100 md:pr-3 dark:md:border-zinc-800">
         <div className="mb-2 flex items-center justify-between">
-          <strong className="text-sm">Album</strong>
+          <strong className="text-sm font-bold text-gray-800 dark:text-zinc-200">Album</strong>
           {canManage ? (
             <Button
               size="small"
@@ -246,7 +251,7 @@ export default function MediaBrowser({
             </Button>
           ) : null}
         </div>
-        <div className="flex flex-row gap-1 overflow-x-auto md:flex-col md:overflow-visible">
+        <div className="flex flex-row gap-1 overflow-x-auto overflow-y-auto pr-1 md:flex-col md:overflow-x-hidden">
           <AlbumButton
             active={albumId === ALL}
             label="Tất cả"
@@ -274,8 +279,8 @@ export default function MediaBrowser({
       </div>
 
       {/* Khu vực ảnh */}
-      <div className="flex min-w-0 flex-1 flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="flex min-w-0 flex-1 flex-col gap-3.5 max-h-full overflow-y-auto pr-2 pb-2">
+        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 bg-white pb-2 pt-0.5 dark:bg-zinc-900">
           <Input.Search
             allowClear
             placeholder="Tìm theo tên ảnh…"
@@ -342,148 +347,151 @@ export default function MediaBrowser({
           ) : (
             <>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-                {visible.slice(0, limit).map((it, idx) => (
-                  // relative để bảng thao tác neo tuyệt đối ngay dưới ảnh.
-                  <div key={it.id} className="relative">
-                    <Thumb
-                      item={it}
-                      active={selected === it.id}
-                      checked={multiple && picked.includes(it.url)}
-                      onClick={() => {
-                        if (multiple) {
-                          setPicked((cur) =>
-                            cur.includes(it.url)
-                              ? cur.filter((u) => u !== it.url)
-                              : [...cur, it.url]
-                          );
-                          return;
-                        }
-                        setSelected((cur) => (cur === it.id ? null : it.id));
-                      }}
-                      onDoubleClick={
-                        !multiple && mode === "pick"
-                          ? () => onPick?.(it.url)
-                          : undefined
-                      }
-                      onPreview={() => {
-                        setPreviewIndex(idx);
-                        setPreviewOpen(true);
-                      }}
-                    />
-
-                    {/* Bảng thao tác gọn, nổi ngay dưới ảnh đang chọn — khỏi
-                        phải cuộn lên thanh công cụ. */}
-                    {!multiple && selected === it.id ? (
-                      <div className="absolute left-1/2 top-full z-30 mt-2 w-60 -translate-x-1/2 rounded-xl border border-[#2e7d32]/30 bg-white p-2.5 shadow-lg">
-                        <div
-                          className="truncate text-xs font-medium leading-5"
-                          title={it.name}
-                        >
-                          {it.name}
+                {visible.slice(0, limit).map((it, idx) => {
+                  const isSelected = !multiple && selected === it.id;
+                  const popoverContent = (
+                    <div className="w-56 p-0.5 text-left">
+                      <div className="truncate text-xs font-bold text-gray-800 dark:text-zinc-200" title={it.name}>
+                        {it.name}
+                      </div>
+                      {!canManage ? (
+                        <div className="truncate text-[11px] text-gray-500">
+                          {albums.find((a) => a.id === it.albumId)?.name ?? "Khác"}
                         </div>
-                        {/* Ở chế độ quản lý đã có ô chọn album bên dưới nên
-                            không lặp lại tên album ở đây. */}
-                        {!canManage ? (
-                          <div className="truncate text-[11px] leading-4 opacity-60">
-                            {albums.find((a) => a.id === it.albumId)?.name ?? "Khác"}
-                          </div>
-                        ) : null}
+                      ) : null}
 
-                        {/* Hàng nút — kẻ mảnh tách khỏi phần tên cho đỡ dồn cục. */}
-                        <div className="mt-2 flex items-center justify-end gap-1 border-t border-black/5 pt-2">
-                          {mode === "pick" ? (
-                            <Button
-                              size="small"
-                              type="primary"
-                              className="!h-7 flex-1 cursor-pointer"
-                              icon={<CheckOutlined />}
-                              onClick={() => onPick?.(it.url)}
-                            >
-                              Chọn
-                            </Button>
-                          ) : null}
-                          {/* Nhóm nút biểu tượng luôn dồn về phải, cách đều nhau. */}
-                          <Tooltip title="Sao chép đường dẫn ảnh">
+                      <div className="mt-2 flex items-center justify-end gap-1 border-t border-gray-100 pt-2 dark:border-zinc-800">
+                        {mode === "pick" ? (
+                          <Button
+                            size="small"
+                            type="primary"
+                            className="!h-7 flex-1 cursor-pointer"
+                            icon={<CheckOutlined />}
+                            onClick={() => {
+                              setSelected(null);
+                              onPick?.(it.url);
+                            }}
+                          >
+                            Chọn
+                          </Button>
+                        ) : null}
+                        <Tooltip title="Sao chép đường dẫn ảnh">
+                          <Button
+                            size="small"
+                            type="text"
+                            className={ICON_BTN}
+                            icon={<CopyOutlined />}
+                            onClick={() => {
+                              setSelected(null);
+                              void navigator.clipboard?.writeText(it.url);
+                              message.success("Đã sao chép đường dẫn.");
+                            }}
+                          />
+                        </Tooltip>
+                        {canManage ? (
+                          <Tooltip title="Cắt / thu phóng ảnh">
                             <Button
                               size="small"
                               type="text"
                               className={ICON_BTN}
-                              icon={<CopyOutlined />}
+                              icon={<ScissorOutlined />}
                               onClick={() => {
-                                void navigator.clipboard?.writeText(it.url);
-                                message.success("Đã sao chép đường dẫn.");
+                                setSelected(null);
+                                void catLai(it);
                               }}
                             />
                           </Tooltip>
-                          {canManage ? (
-                            <Tooltip title="Cắt / thu phóng — lưu thành ảnh mới">
-                              <Button
-                                size="small"
-                                type="text"
-                                className={ICON_BTN}
-                                icon={<ScissorOutlined />}
-                                onClick={() => void catLai(it)}
-                              />
-                            </Tooltip>
-                          ) : null}
-                          {canManage ? (
-                            <Popconfirm
-                              title="Xoá ảnh này?"
-                              description={
-                                it.seeded
-                                  ? "Ảnh có sẵn của dự án — chỉ gỡ khỏi kho, ảnh gốc vẫn còn."
-                                  : "Ảnh sẽ mất hẳn. Chỗ nào đang dùng ảnh này sẽ bị trống."
-                              }
-                              okText="Xoá"
-                              cancelText="Huỷ"
-                              onConfirm={() =>
-                                run(deleteMediaAction(it.id), "Đã xoá ảnh.").then(
-                                  () => setSelected(null)
-                                )
-                              }
-                            >
-                              <Tooltip title="Xoá ảnh khỏi kho">
-                                {/* type="text" + danger: vẫn đỏ để nhận ra là
-                                    hành động nguy hiểm nhưng không lấn át. */}
-                                <Button
-                                  size="small"
-                                  type="text"
-                                  danger
-                                  className={ICON_BTN}
-                                  icon={<DeleteOutlined />}
-                                />
-                              </Tooltip>
-                            </Popconfirm>
-                          ) : null}
-                          <Tooltip title="Đóng">
-                            <Button
-                              size="small"
-                              type="text"
-                              className={ICON_BTN}
-                              icon={<CloseOutlined />}
-                              onClick={() => setSelected(null)}
-                            />
-                          </Tooltip>
-                        </div>
-
-                        {canManage ? (
-                          <Select
-                            size="small"
-                            value={it.albumId}
-                            className="mt-2 w-full cursor-pointer"
-                            onChange={(v) =>
-                              run(moveMediaAction(it.id, v), "Đã chuyển album.")
-                            }
-                            options={albums.map((a) => ({
-                              value: a.id,
-                              label: a.name,
-                            }))}
-                          />
                         ) : null}
+                        {canManage ? (
+                          <Popconfirm
+                            title="Xoá ảnh này?"
+                            description={
+                              it.seeded
+                                ? "Ảnh có sẵn của dự án — chỉ gỡ khỏi kho, ảnh gốc vẫn còn."
+                                : "Ảnh sẽ mất hẳn. Chỗ nào đang dùng ảnh này sẽ bị trống."
+                            }
+                            okText="Xoá"
+                            cancelText="Huỷ"
+                            onConfirm={() =>
+                              run(deleteMediaAction(it.id), "Đã xoá ảnh.").then(() => setSelected(null))
+                            }
+                          >
+                            <Tooltip title="Xoá ảnh khỏi kho">
+                              <Button size="small" type="text" danger className={ICON_BTN} icon={<DeleteOutlined />} />
+                            </Tooltip>
+                          </Popconfirm>
+                        ) : null}
+                        <Tooltip title="Đóng">
+                          <Button
+                            size="small"
+                            type="text"
+                            className={ICON_BTN}
+                            icon={<CloseOutlined />}
+                            onClick={() => setSelected(null)}
+                          />
+                        </Tooltip>
                       </div>
-                    ) : null}
-                  </div>
-                ))}
+
+                      {canManage ? (
+                        <Select
+                          size="small"
+                          value={it.albumId}
+                          className="mt-2 w-full cursor-pointer"
+                          onChange={(v) => {
+                            setSelected(null);
+                            void run(moveMediaAction(it.id, v), "Đã chuyển album.");
+                          }}
+                          options={albums.map((a) => ({
+                            value: a.id,
+                            label: a.name,
+                          }))}
+                        />
+                      ) : null}
+                    </div>
+                  );
+
+                  return (
+                    <div key={it.id}>
+                      <Popover
+                        content={popoverContent}
+                        trigger="click"
+                        open={isSelected}
+                        onOpenChange={(v) => {
+                          if (!multiple) setSelected(v ? it.id : null);
+                        }}
+                        placement="bottom"
+                      >
+                        <div>
+                          <Thumb
+                            item={it}
+                            active={isSelected}
+                            checked={multiple && picked.includes(it.url)}
+                            onClick={() => {
+                              if (multiple) {
+                                setPicked((cur) =>
+                                  cur.includes(it.url)
+                                    ? cur.filter((u) => u !== it.url)
+                                    : [...cur, it.url]
+                                );
+                                return;
+                              }
+                              setSelected((cur) => (cur === it.id ? null : it.id));
+                            }}
+                            onDoubleClick={
+                              !multiple && mode === "pick"
+                                ? () => onPick?.(it.url)
+                                : undefined
+                            }
+                            onPreview={() => {
+                              setPreviewIndex(idx);
+                              setPreviewOpen(true);
+                            }}
+                          />
+                        </div>
+                      </Popover>
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Lightbox xem chi tiết + duyệt qua lại (ảnh trong lô đang hiện). */}

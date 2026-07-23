@@ -195,7 +195,9 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
       <Modal
         open={pickOpen}
         onCancel={() => setPickOpen(false)}
-        width={920}
+        width={960}
+        centered
+        maskClosable={false}
         footer={null}
         destroyOnHidden
         title={
@@ -210,7 +212,9 @@ export default function SlideshowEditor({ initial }: { initial: Photo[] }) {
       <Modal
         open={pickManyOpen}
         onCancel={() => setPickManyOpen(false)}
-        width={920}
+        width={960}
+        centered
+        maskClosable={false}
         footer={null}
         destroyOnHidden
         title="Chọn ảnh từ kho — có thể chọn nhiều hoặc cả album"
