@@ -71,6 +71,16 @@ export const timeline = [
   {
     day: "Ngày 1",
     date: "26/09/2026",
+    images: [
+      {
+        url: "https://lh3.googleusercontent.com/aida-public/AB6AXuBDR2s11ambgUdNfsUeCb_dkc66nbWsuIEL4_B9Cw2OYYpAM4tlaOBR8_DZTtV5VvzyLoPs7wDAqORMCrTmEzn60-TbcA2P2AZZhcU4GjFfu5S18WfFWjBUhiio3meoRMTeHRu5DOk63qqqtubkq6FLvhWeqx1l-9g2b7SvNLlP81sMV-NUmK_-lM4NftyleRMIIWYoaIv_wt7nfrpUkLNQJ2ryH5MCPb8phj9E1ZNAbJTp7sZpDmOYKg",
+        note: "Khởi hành từ TP.HCM 🚌",
+      },
+      {
+        url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCx5IevrUgC2qgGIcJxPMPbc-9Ts-PPZy2y4vWN3seI7CbtQ3GElVRQ_OYuZ15fas-JltMiP2WDWk1qilLisSArwOXuPyibXmpskxqZBVhBfev-ILz0WAjkhs5JOSWZjnJI4VR7yO0ozA54puyRy3ImMsWhp2vSnJHztCb8C8_PRz8YLGWiMehfse6XWrnI_EeKZwZarb0FYnYLujK1s1OaDGx94wFffyALPjlY_ygiGAwCmL1b7I7c5A",
+        note: "Cao nguyên Langbiang 🏔️",
+      },
+    ],
     items: [
       { time: "05:30", title: "Tập trung & khởi hành", desc: "Đoàn xuất phát từ TP.HCM hướng về cao nguyên Langbiang." },
       { time: "13:00", title: "Đến Langbiang", desc: "Nhận chỗ nghỉ, chuẩn bị hậu cần và trang trí sân khấu." },
@@ -81,6 +91,12 @@ export const timeline = [
   {
     day: "Ngày 2",
     date: "27/09/2026",
+    images: [
+      {
+        url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCggBWTbcbMNPW4SDlYD2l_nRwYSBcT1RZ9VT5oO-aEc2w-jDX_6sHEqM1vQgysgYJjv3rgCqO48LmrA4fQWL2PPjAIvEbmPgVVEc7COugx6Nn_D7NrnFwmkbYGANdNvPQIKePtQScdjQadbFsXSre5Rh4nSfqsSKNS-QI_lybzJQkVMwcPG8pT8K0kMMzSbSl-cUG1OCe7gJJp_5e8oKa0ibldWF62vv2OOqjAueAcbSUsSZ-_3KNOIA",
+        note: "Sân chơi & trao quà 🎁",
+      },
+    ],
     items: [
       { time: "07:00", title: "Sân chơi buổi sáng", desc: "Trò chơi dân gian, làm lồng đèn và các hoạt động trải nghiệm." },
       { time: "09:30", title: "Trao quà & học bổng", desc: "Gửi tặng quà, nhu yếu phẩm và học bổng đến các em." },

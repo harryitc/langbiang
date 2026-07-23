@@ -1,25 +1,26 @@
 "use client";
 
 import { useMemo } from "react";
-import { Alert, Input, Space, Tag } from "antd";
+import { Alert, Button, Input, Space, Tag } from "antd";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   useSectionAutosave,
   SaveStatusTag,
   EditorCard,
   ListEditor,
   Field,
+  ImageField,
 } from "../editorKit";
 import { ItemListEditor } from "../itemList";
-import type { TimelineDay, TimelineItem } from "@/lib/content/schema";
+import type { TimelineDay, TimelineItem, TimelinePhoto } from "@/lib/content/schema";
 
 const { TextArea } = Input;
 
 /* ------------------------------------------------------------------
-   Kiểm tra trường bắt buộc (FR2: "Cần điền {tên trường}.")
+   Kiểm tra trường bắt buộc
    ------------------------------------------------------------------ */
 const isBlank = (v: string | undefined) => !v || v.trim() === "";
 
-/** Đếm số trường bắt buộc còn trống trong toàn bộ lịch trình. */
 function countMissing(days: TimelineDay[]): number {
   let missing = 0;
   for (const d of days) {
@@ -34,7 +35,81 @@ function countMissing(days: TimelineDay[]): number {
 }
 
 /* ------------------------------------------------------------------
-   Cấp 2 — các mốc trong một ngày
+   Editor nhiều ảnh — mỗi ảnh có url + note
+   ------------------------------------------------------------------ */
+function ImagesEditor({
+  value,
+  onChange,
+}: {
+  value: TimelinePhoto[];
+  onChange: (next: TimelinePhoto[]) => void;
+}) {
+  const images = value ?? [];
+
+  function update(idx: number, patch: Partial<TimelinePhoto>) {
+    const next = images.map((img, i) => (i === idx ? { ...img, ...patch } : img));
+    onChange(next);
+  }
+
+  function remove(idx: number) {
+    onChange(images.filter((_, i) => i !== idx));
+  }
+
+  function add() {
+    onChange([...images, { url: "", note: "" }]);
+  }
+
+  return (
+    <Field
+      label="Ảnh Polaroid (nhiều ảnh)"
+      hint="Tối đa 3 ảnh hiển thị chồng nhau và xoè ra khi hover. Nên dùng tỉ lệ 4:3 hoặc 1:1."
+    >
+      <div className="flex flex-wrap gap-5 items-start">
+        {images.map((photo, i) => (
+          <div key={i} className="flex flex-col gap-1.5 rounded-lg border border-black/5 bg-black/[0.015] p-3">
+            <div className="text-xs font-semibold opacity-50 mb-1">Ảnh #{i + 1}</div>
+            <ImageField
+              value={photo.url}
+              onChange={(newUrl) => update(i, { url: newUrl })}
+            />
+            <Input
+              size="small"
+              placeholder="Chú thích hiển thị dưới ảnh, vd: “Khởi hành từ TP.HCM 🚌”"
+              value={photo.note}
+              onChange={(e) => update(i, { note: e.target.value })}
+            />
+            <Button
+              size="small"
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
+              className="cursor-pointer"
+              onClick={() => remove(i)}
+            >
+              Xóa ảnh #{i + 1}
+            </Button>
+          </div>
+        ))}
+        {images.length < 3 && (
+          <Button
+            size="small"
+            icon={<PlusOutlined />}
+            className="cursor-pointer mt-1"
+            onClick={add}
+          >
+            Thêm ảnh
+          </Button>
+        )}
+      </div>
+      {images.length === 0 && (
+        <p className="mt-2 text-xs text-gray-400">Chưa có ảnh — nhấn “Thêm ảnh” để bắt đầu.</p>
+      )}
+    </Field>
+  );
+}
+
+/* ------------------------------------------------------------------
+   Editor các mốc trong ngày
    ------------------------------------------------------------------ */
 function ItemsEditor({
   value,
@@ -50,7 +125,9 @@ function ItemsEditor({
       title="Các mốc trong ngày"
       addLabel="Thêm mốc thời gian"
       newItem={() => ({ time: "", title: "", desc: "" })}
-      getSummary={(item) => [item.time, item.title].filter(Boolean).join(" — ") || "(chưa có mốc)"}
+      getSummary={(item) =>
+        [item.time, item.title].filter(Boolean).join(" — ") || "(chưa có mốc)"
+      }
       renderItem={(item, update) => (
         <div className="grid gap-3 md:grid-cols-[140px_1fr]">
           <Field label="Giờ">
@@ -70,7 +147,10 @@ function ItemsEditor({
                 onChange={(e) => update({ ...item, title: e.target.value })}
               />
             </Field>
-            <Field label="Mô tả" hint="Không bắt buộc — mô tả ngắn cho mốc này.">
+            <Field
+              label="Mô tả"
+              hint="Không bắt buộc — mô tả ngắn hiển thị dưới tiêu đề mốc này."
+            >
               <TextArea
                 rows={2}
                 placeholder="Đoàn xuất phát từ TP.HCM hướng về cao nguyên Langbiang."
@@ -86,7 +166,7 @@ function ItemsEditor({
 }
 
 /* ------------------------------------------------------------------
-   Cấp 1 — các ngày của lịch trình (main.timeline)
+   Editor chính — danh sách ngày (main.timeline)
    ------------------------------------------------------------------ */
 export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) {
   const { value, update, status } = useSectionAutosave<TimelineDay[]>(
@@ -108,8 +188,9 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
     >
       <p className="mb-3 text-sm opacity-60">
         Hiện ở mục &ldquo;Hành trình hai ngày một đêm&rdquo; trên{" "}
-        <strong>trang Chương trình</strong>. Mỗi ngày là một cột, bên trong là
-        các mốc giờ xếp từ sáng đến tối.
+        <strong>trang Chương trình</strong>. Ngày đầu tiên sẽ có ghim &quot;Khởi
+        hành&quot;, ngày cuối có dấu kết thúc. Các ngày giữa xen kẽ trái/phải với
+        cụm ảnh Polaroid.
       </p>
 
       {missing > 0 ? (
@@ -127,17 +208,32 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
         onChange={update}
         addLabel="Thêm ngày"
         drawerTitle="Ngày trong lịch trình"
-        newItem={() => ({ day: "", date: "", items: [] })}
-        getRow={(day) => ({
+        newItem={() => ({ day: "", date: "", items: [], images: [] })}
+        getRow={(day, idx) => ({
           title: day.day || "(chưa đặt nhãn ngày)",
           subtitle: day.date || undefined,
-          tags: [{ text: `${day.items.length} mốc` }],
+          tags: [
+            {
+              text:
+                idx === 0
+                  ? "📌 Khởi hành"
+                  : idx === value.length - 1
+                  ? "🔵 Kết thúc"
+                  : `Ngày ${idx + 1}`,
+              color: idx === 0 ? "red" : idx === value.length - 1 ? "blue" : undefined,
+            },
+            { text: `${day.items.length} mốc` },
+            {
+              text: `${(day.images ?? []).length} ảnh`,
+              color: (day.images ?? []).length > 0 ? "green" : undefined,
+            },
+          ],
           invalid: isBlank(day.day) || isBlank(day.date),
         })}
         renderForm={(day, updateDay) => (
           <div className="rounded-lg border border-black/5 bg-black/[0.02] p-3">
             <div className="grid gap-3 md:grid-cols-2">
-              <Field label="Nhãn ngày" hint="Chữ hiện ở đầu cột, vd Ngày 1.">
+              <Field label="Nhãn ngày" hint="Vd: Ngày 1, Ngày 0, Khởi hành…">
                 <Input
                   placeholder="Ngày 1"
                   value={day.day}
@@ -147,7 +243,7 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
               </Field>
               <Field
                 label="Ngày"
-                hint="Gõ theo dạng ngày/tháng/năm, vd 26/09/2026. Nhớ đổi năm khi sang mùa mới."
+                hint="Dạng ngày/tháng/năm, vd 26/09/2026."
               >
                 <Input
                   placeholder="26/09/2026"
@@ -157,6 +253,11 @@ export default function TimelineEditor({ initial }: { initial: TimelineDay[] }) 
                 />
               </Field>
             </div>
+
+            <ImagesEditor
+              value={day.images ?? []}
+              onChange={(imgs) => updateDay({ ...day, images: imgs })}
+            />
 
             <ItemsEditor
               value={day.items}

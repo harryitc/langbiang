@@ -117,11 +117,19 @@ export const defaultContent: SiteContent = {
       locationProgram: "",
     },
     activities: activities.map((a) => ({ ...a })),
-    timeline: timeline.map((d) => ({
-      day: d.day,
-      date: d.date,
-      items: d.items.map((it) => ({ ...it })),
-    })),
+    timeline: timeline.map((d) => {
+      type OldDay = { images?: (string | { url: string; note: string })[]; image?: string };
+      const old = d as OldDay;
+      const raw = old.images ?? (old.image ? [old.image] : []);
+      return {
+        day: d.day,
+        date: d.date,
+        items: d.items.map((it) => ({ ...it })),
+        images: raw.map((img) =>
+          typeof img === "string" ? { url: img, note: "" } : img
+        ),
+      };
+    }),
     gallery: gallery.map((g) => ({ ...g })),
     // 4 ảnh nổi ở Hero (bố cục bay lượn giữ trong code, chỉ ảnh là đổi được).
     heroPhotos: ["/gallery/g8.jpg", "/gallery/g4.jpg", "/gallery/g2.jpg", "/gallery/g6.jpg"],
