@@ -59,17 +59,16 @@ export default function OrgLeadGallery({ members }: { members: Member[] }) {
 
   return (
     <>
-      <div className="mx-auto mb-12 mt-10 max-w-4xl px-5 sm:px-6">
-        {/* Flex row căn giữa — nếu có nhiều trưởng ban thì xếp ngang */}
-        <div className="flex flex-wrap content-start items-start justify-center gap-10 sm:gap-14">
+      <div className="mx-auto mb-12 mt-10 max-w-6xl px-5 sm:px-6">
+        {/* Flex row căn giữa — tối đa 3 người mỗi hàng, tự động căn giữa các card */}
+        <div className="flex flex-wrap items-start justify-center gap-8 sm:gap-10 md:gap-12">
           {leaders.map((m, idx) => {
             const hasPhoto = Boolean(m.photo);
-            const wClass = "w-36 sm:w-44";
 
             return (
               <div
                 key={m.name + idx}
-                className="flex w-44 flex-col items-center self-start text-center sm:w-52"
+                className="flex w-full min-w-[240px] max-w-[320px] sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-2rem)] lg:max-w-[350px] flex-col items-center self-start text-center"
               >
                 {/* Khung ảnh + badges */}
                 <div className="relative">
@@ -81,9 +80,9 @@ export default function OrgLeadGallery({ members }: { members: Member[] }) {
                       rel="noopener noreferrer"
                       title={`Facebook của ${m.name}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="absolute bottom-2 right-2 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-[#1877F2]/10 text-[#1877F2] transition-all duration-200 hover:scale-110 hover:bg-[#1877F2] hover:text-white dark:bg-white/10 dark:text-white dark:hover:bg-[#1877F2]"
+                      className="absolute bottom-2 right-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-[#1877F2]/10 text-[#1877F2] transition-all duration-200 hover:scale-110 hover:bg-[#1877F2] hover:text-white dark:bg-white/10 dark:text-white dark:hover:bg-[#1877F2]"
                     >
-                      <svg className="h-3 w-3 fill-current" viewBox="0 0 24 24">
+                      <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                       </svg>
                     </a>
@@ -92,7 +91,7 @@ export default function OrgLeadGallery({ members }: { members: Member[] }) {
                   {/* Ảnh chân dung */}
                   <div
                     onClick={() => hasPhoto && openAt(m)}
-                    className={`group relative aspect-[4/5] ${wClass} overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass shadow-lg ring-4 ring-white/70 dark:ring-white/10 ${
+                    className={`group relative aspect-[4/5] w-36 sm:w-44 overflow-hidden rounded-2xl bg-gradient-to-br from-leaf to-grass shadow-lg ring-4 ring-white/70 dark:ring-white/10 ${
                       hasPhoto ? "cursor-pointer" : ""
                     }`}
                   >
@@ -106,7 +105,7 @@ export default function OrgLeadGallery({ members }: { members: Member[] }) {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <span className="flex h-full w-full items-center justify-center text-2xl font-bold text-white sm:text-3xl">
+                      <span className="flex h-full w-full items-center justify-center text-3xl font-bold text-white sm:text-4xl">
                         {initials(m.name)}
                       </span>
                     )}

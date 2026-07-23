@@ -162,6 +162,7 @@ function SelectRegistrantModal({
       }}
       title="Chọn người đăng ký làm thành viên"
       width={560}
+      centered
       destroyOnClose
       footer={
         <div className="flex items-center justify-between pt-2">
@@ -211,7 +212,7 @@ function SelectRegistrantModal({
         )}
       </div>
 
-      <div className="max-h-[380px] overflow-y-auto pr-1">
+      <div className="max-h-[380px] overflow-y-auto">
         {filtered.length === 0 ? (
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -229,13 +230,12 @@ function SelectRegistrantModal({
                 <div
                   key={c.id + c.name}
                   onClick={() => toggleSelect(c.id, isExisting)}
-                  className={`flex items-center justify-between rounded-xl p-2.5 transition select-none ${
-                    isExisting
-                      ? "bg-gray-50 opacity-60 cursor-not-allowed"
-                      : isChecked
+                  className={`flex items-center justify-between rounded-xl p-2.5 transition select-none ${isExisting
+                    ? "bg-gray-50 opacity-60 cursor-not-allowed"
+                    : isChecked
                       ? "bg-leaf/10 ring-1 ring-leaf/30 cursor-pointer"
                       : "hover:bg-gray-50 cursor-pointer"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <Checkbox

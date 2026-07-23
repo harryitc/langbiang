@@ -1,7 +1,7 @@
 // Trang quản trị: Kho ảnh tập trung (album). Tạo/sửa/xoá album, upload, xoá,
 // di chuyển ảnh. Mọi trường ảnh trong CMS chọn ảnh từ kho này.
 import { Card } from "antd";
-import MediaBrowser from "@/components/admin/MediaBrowser";
+import MediaManager from "@/components/admin/MediaManager";
 
 export default function Page() {
   return (
@@ -14,7 +14,7 @@ export default function Page() {
         kho trước; ở các phần nội dung, bấm &ldquo;Chọn từ kho ảnh&rdquo; để lấy
         ra dùng. Xoá ảnh upload sẽ xoá luôn file trên lưu trữ.
       </p>
-      <MediaBrowser mode="manage" />
+      <MediaManager />
     </Card>
   );
 }

@@ -145,8 +145,8 @@ export default function GuiEmailView({
   // tự nhập — báo trước ngay khi admin còn đang chọn.
   const bienRieng = mauDangChon
     ? bienDangDung(mauDangChon.subject, mauDangChon.bodyHtml).filter((b) =>
-        ["ho_ten", "vai_tro", "thoi_diem", "bang_thong_tin"].includes(b)
-      )
+      ["ho_ten", "vai_tro", "thoi_diem", "bang_thong_tin"].includes(b)
+    )
     : [];
 
   const yeuCau: YeuCauGui = {
@@ -192,7 +192,7 @@ export default function GuiEmailView({
       if (kq.soLoi > 0) {
         message.warning(
           `Gửi xong nhưng KHÔNG trọn vẹn: ${kq.soThanhCong} thư gửi được, ${kq.soLoi} thư bị lỗi. ` +
-            "Bạn xem lại nhật ký bên dưới rồi gửi lại cho những người còn thiếu nhé."
+          "Bạn xem lại nhật ký bên dưới rồi gửi lại cho những người còn thiếu nhé."
         );
       } else {
         message.success(`Đã gửi xong ${kq.soThanhCong} lá thư.`);
@@ -203,7 +203,7 @@ export default function GuiEmailView({
     } catch {
       message.error(
         "Không kết nối được với máy chủ nên chưa rõ thư đã gửi hay chưa. " +
-          "Bạn xem nhật ký bên dưới trước khi gửi lại nhé."
+        "Bạn xem nhật ký bên dưới trước khi gửi lại nhé."
       );
     } finally {
       setDangGui(false);
@@ -479,6 +479,7 @@ export default function GuiEmailView({
         onCancel={() => !dangGui && setXemTruoc(null)}
         width={900}
         destroyOnHidden
+        style={{ top: 24, paddingBottom: 24 }}
         title="Xem lại trước khi gửi"
         footer={
           <Space orientation="horizontal">
