@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Alert, Input, Space, Tag } from "antd";
+import { Alert, Input, Select, Space, Tag } from "antd";
 import {
   useSectionAutosave,
   SaveStatusTag,
@@ -49,7 +49,7 @@ function ItemsEditor({
       onChange={onChange}
       title="Các mốc trong ngày"
       addLabel="Thêm mốc thời gian"
-      newItem={() => ({ time: "", title: "", desc: "" })}
+      newItem={() => ({ time: "", title: "", desc: "", pin: undefined })}
       getSummary={(item) => [item.time, item.title].filter(Boolean).join(" — ") || "(chưa có mốc)"}
       renderItem={(item, update) => (
         <div className="grid gap-3 md:grid-cols-[140px_1fr]">
@@ -76,6 +76,19 @@ function ItemsEditor({
                 placeholder="Đoàn xuất phát từ TP.HCM hướng về cao nguyên Langbiang."
                 value={item.desc}
                 onChange={(e) => update({ ...item, desc: e.target.value })}
+              />
+            </Field>
+            <Field label="Ghim nổi bật" hint="Hiện badge đặc biệt trên giao diện lịch trình.">
+              <Select
+                allowClear
+                placeholder="Không ghim"
+                value={item.pin ?? null}
+                onChange={(v) => update({ ...item, pin: v ?? undefined })}
+                options={[
+                  { value: "start", label: "📍 Điểm xuất phát" },
+                  { value: "end",   label: "🏁 Điểm kết thúc" },
+                ]}
+                style={{ width: "100%" }}
               />
             </Field>
           </Space>

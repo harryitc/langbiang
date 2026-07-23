@@ -32,6 +32,8 @@ export type TimelineItem = {
   time: string;
   title: string;
   desc: string;
+  /** Ghim nổi bật: "start" = điểm xuất phát, "end" = điểm kết thúc. */
+  pin?: "start" | "end";
 };
 
 /** Một ngày trong lịch trình, gồm nhiều mốc. */

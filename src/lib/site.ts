@@ -72,7 +72,7 @@ export const timeline = [
     day: "Ngày 1",
     date: "26/09/2026",
     items: [
-      { time: "05:30", title: "Tập trung & khởi hành", desc: "Đoàn xuất phát từ TP.HCM hướng về cao nguyên Langbiang." },
+      { time: "05:30", title: "Tập trung & khởi hành", desc: "Đoàn xuất phát từ TP.HCM hướng về cao nguyên Langbiang.", pin: "start" as const },
       { time: "13:00", title: "Đến Langbiang", desc: "Nhận chỗ nghỉ, chuẩn bị hậu cần và trang trí sân khấu." },
       { time: "16:00", title: "Dựng gian hàng", desc: "Set-up sân chơi, khu trao quà và các tiểu cảnh check-in." },
       { time: "19:00", title: "Đêm hội Trăng rằm", desc: "Chương trình văn nghệ, rước đèn và phá cỗ cùng các em nhỏ." },
@@ -85,7 +85,7 @@ export const timeline = [
       { time: "07:00", title: "Sân chơi buổi sáng", desc: "Trò chơi dân gian, làm lồng đèn và các hoạt động trải nghiệm." },
       { time: "09:30", title: "Trao quà & học bổng", desc: "Gửi tặng quà, nhu yếu phẩm và học bổng đến các em." },
       { time: "11:30", title: "Bữa cơm yêu thương", desc: "Cùng nhau chuẩn bị và sẻ chia bữa trưa ấm áp." },
-      { time: "14:00", title: "Tổng kết & tạm biệt", desc: "Chụp ảnh lưu niệm, thu dọn và lên đường trở về." },
+      { time: "14:00", title: "Tổng kết & tạm biệt", desc: "Chụp ảnh lưu niệm, thu dọn và lên đường trở về.", pin: "end" as const },
     ],
   },
 ];
