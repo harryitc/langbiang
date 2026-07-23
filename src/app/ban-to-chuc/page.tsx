@@ -8,6 +8,7 @@ import MembersList from "@/components/sections/MembersList";
 import Footer from "@/components/sections/Footer";
 import { getContent } from "@/lib/content/store";
 import FounderGallery from "./FounderGallery";
+import OrgLeadGallery from "./OrgLeadGallery";
 import HeroCanvas from "@/components/HeroCanvas";
 import { LeafBranch, Daisy } from "@/components/Decor";
 
@@ -21,6 +22,14 @@ export const metadata: Metadata = {
 export default async function BanToChucPage() {
   const { main, currentYear } = await getContent();
   const { board } = main;
+
+  // Tách trưởng ban tổ chức ra khỏi danh sách thành viên
+  const orgLeaders = (board?.members ?? []).filter(
+    (m) => m.isLeader || m.role?.toLowerCase().includes("trưởng ban")
+  );
+  const orgNonLeaders = (board?.members ?? []).filter(
+    (m) => !m.isLeader && !m.role?.toLowerCase().includes("trưởng ban")
+  );
 
   return (
     <>
@@ -75,7 +84,20 @@ export default async function BanToChucPage() {
                 </h2>
               </div>
 
-              <MembersList members={board.members} />
+              {/* Trưởng ban tổ chức — gallery căn giữa, ảnh nhỏ hơn ban sáng lập */}
+              {orgLeaders.length > 0 && (
+                <OrgLeadGallery members={orgLeaders} />
+              )}
+
+              {/* Đường phân cách mỏng giữa trưởng ban và thành viên (chỉ khi có cả hai) */}
+              {orgLeaders.length > 0 && orgNonLeaders.length > 0 && (
+                <div className="mb-2 h-px bg-gradient-to-r from-transparent via-leaf/20 to-transparent" />
+              )}
+
+              {/* Thành viên ban tổ chức (không phải trưởng ban) — dạng card */}
+              {orgNonLeaders.length > 0 && (
+                <MembersList members={orgNonLeaders} />
+              )}
             </div>
           </section>
         )}
