@@ -18,6 +18,7 @@ type RevealProps = {
   stagger?: number;
   /** animate direct children instead of the wrapper itself */
   childrenStagger?: boolean;
+  once?: boolean;
   id?: string;
 };
 
@@ -26,9 +27,10 @@ export default function Reveal({
   as: Tag = "div",
   className = "",
   delay = 0,
-  y = 42,
-  stagger = 0.12,
+  y = 35,
+  stagger = 0.1,
   childrenStagger = false,
+  once = true,
   id,
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
@@ -43,18 +45,24 @@ export default function Reveal({
         ? (Array.from(el.children) as HTMLElement[])
         : [el];
 
-      gsap.set(targets, { opacity: 0, y });
+      // Đặt GPU hint tạm thời để animation mượt 60-120 FPS
+      gsap.set(targets, { opacity: 0, y, willChange: "transform, opacity" });
       gsap.to(targets, {
         opacity: 1,
         y: 0,
-        duration: 0.9,
+        duration: 0.8,
         delay,
         stagger: childrenStagger ? stagger : 0,
-        ease: "power3.out",
+        ease: "power2.out",
+        onComplete: () => {
+          // Xóa willChange để giải phóng bộ nhớ GPU sau khi hiện xong
+          gsap.set(targets, { clearProps: "willChange" });
+        },
         scrollTrigger: {
           trigger: el,
-          start: "top 85%",
+          start: "top 88%",
           toggleActions: "play none none none",
+          once,
         },
       });
     },
@@ -67,3 +75,4 @@ export default function Reveal({
     </Tag>
   );
 }
+

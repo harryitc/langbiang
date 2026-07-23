@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import Reveal from "@/components/Reveal";
 import { SLIDESHOW_LIMIT, type Photo } from "@/lib/content/schema";
 
 /**
@@ -51,7 +52,7 @@ export default function BannerSlider({ photos }: { photos: Photo[] }) {
       aria-label="Khoảnh khắc chương trình"
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-gradient-to-b from-cream to-[#e7ddc9] px-4 py-16 dark:from-[#0c1712] dark:to-[#0a120e] sm:px-6"
     >
-      <div className="group relative w-full max-w-5xl">
+      <Reveal className="group relative w-full max-w-5xl">
         {/* Ăng-ten */}
         <div className="pointer-events-none absolute -top-16 left-1/2 z-0 h-16 w-40 -translate-x-1/2 sm:-top-24 sm:h-24 sm:w-56">
           <span className="absolute bottom-0 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full bg-[#2d4531] shadow-inner" />
@@ -178,7 +179,7 @@ export default function BannerSlider({ photos }: { photos: Photo[] }) {
           <span className="h-6 w-3 origin-top -rotate-[18deg] rounded-b-lg bg-gradient-to-b from-[#243a29] to-[#182a1c] sm:h-8" />
           <span className="h-6 w-3 origin-top rotate-[18deg] rounded-b-lg bg-gradient-to-b from-[#243a29] to-[#182a1c] sm:h-8" />
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
