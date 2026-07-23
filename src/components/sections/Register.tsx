@@ -20,7 +20,7 @@ export default function Register({
   return (
     <section
       id="register"
-      className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream py-24 sm:py-32"
+      className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream py-24 sm:py-32 dark:from-[#0a1626] dark:via-[#0c1712] dark:to-[#0c1712]"
     >
       {/* Cành lá & hoa ở góc, giống trang /dang-ky/<id> */}
       <LeafBranch className="pointer-events-none absolute -left-6 -top-6 z-10 h-56 w-72 animate-sway opacity-90 md:h-72 md:w-96" />
@@ -30,7 +30,7 @@ export default function Register({
           viết tay cỡ lớn, nếu không chữ cuối bị rơi xuống một mình. */}
       <div className="relative z-20 mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
         <Reveal childrenStagger>
-          <span className="mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur">
+          <span className="mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/30 dark:bg-white/5 dark:text-leaf-bright">
             {content.eyebrow}
           </span>
           {/* @container: cỡ chữ dòng viết tay tính theo bề ngang CỘT này, không
@@ -38,14 +38,14 @@ export default function Register({
               theo màn hình thì chữ sẽ tràn.
               whitespace-nowrap + cỡ chữ co giãn (cqw): dòng viết tay luôn nằm
               gọn MỘT hàng ở mọi khổ màn hình, thay vì rớt chữ cuối xuống dưới. */}
-          <h2 className="@container text-3xl font-extrabold leading-tight text-balance text-forest sm:text-4xl md:text-5xl">
+          <h2 className="@container text-3xl font-extrabold leading-tight text-balance text-forest dark:text-ink sm:text-4xl md:text-5xl">
             {content.title}
             <br />
-            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)] text-leaf-deep">
+            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)] text-leaf-deep dark:text-leaf-bright">
               {content.titleHighlight}
             </span>
           </h2>
-          <p className="mt-5 max-w-lg text-lg text-forest/75 text-pretty">
+          <p className="mt-5 max-w-lg text-lg text-forest/75 dark:text-ink/75 text-pretty">
             {content.description}
           </p>
 

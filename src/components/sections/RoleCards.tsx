@@ -39,20 +39,20 @@ export default function RoleCards({
         {roles.map((role, i) => (
           <label
             key={i}
-            className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-leaf/20 bg-white/60 px-3 py-2.5 transition hover:border-leaf/50 has-[:checked]:border-leaf-deep has-[:checked]:bg-leaf/10"
+            className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-leaf/20 bg-white/60 dark:bg-white/10 dark:border-leaf-bright/20 px-3 py-2.5 transition hover:border-leaf/50 dark:hover:border-leaf-bright/50 has-[:checked]:border-leaf-deep dark:has-[:checked]:border-leaf-bright has-[:checked]:bg-leaf/10 dark:has-[:checked]:bg-leaf-bright/15"
           >
             <input
               type="checkbox"
               // CỐ Ý không đặt `name`: thứ được gửi đi là ô ẩn gộp sẵn ở
               // RegisterFormCard, không phải từng ô tích rời.
-              className="h-4 w-4 shrink-0 cursor-pointer accent-leaf-deep"
+              className="h-4 w-4 shrink-0 cursor-pointer accent-leaf-deep dark:accent-leaf-bright"
               checked={value.includes(role.title)}
               onChange={() => onToggle?.(role.title)}
             />
             <span aria-hidden="true" className="shrink-0 text-base leading-none">
               {role.icon}
             </span>
-            <span className="text-sm font-semibold leading-snug text-forest">
+            <span className="text-sm font-semibold leading-snug text-forest dark:text-ink">
               {role.title}
             </span>
           </label>
@@ -67,12 +67,12 @@ export default function RoleCards({
     // càng vỡ vụn, mỗi dòng còn vài chữ.
     <div className={`grid gap-3 sm:grid-cols-2 ${className}`.trim()}>
       {roles.map((role, i) => (
-        <div key={i} className="glass rounded-2xl p-4 text-forest">
+        <div key={i} className="glass glass-adaptive rounded-2xl p-4 text-forest dark:text-ink">
           <span className="text-2xl leading-none">{role.icon}</span>
           <p className="mt-1.5 font-bold leading-snug text-balance">
             {role.title}
           </p>
-          <p className="mt-0.5 text-sm leading-relaxed text-forest/70 text-pretty">
+          <p className="mt-0.5 text-sm leading-relaxed text-forest/70 dark:text-ink/70 text-pretty">
             {role.desc}
           </p>
         </div>

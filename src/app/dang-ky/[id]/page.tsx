@@ -15,6 +15,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import HeroCanvas from "@/components/HeroCanvas";
 import { LeafBranch, Daisy } from "@/components/Decor";
+import ThemeToggle from "@/components/ThemeToggle";
 import RegisterFormCard from "@/components/sections/RegisterFormCard";
 import RoleCards from "@/components/sections/RoleCards";
 import { getContent } from "@/lib/content/store";
@@ -57,8 +58,9 @@ export default async function Page({ params }: Params) {
 
   return (
     <main className="relative flex min-h-screen flex-col overflow-hidden py-16 sm:py-20">
+      <ThemeToggle />
       {/* Bầu trời gradient — lấy nguyên của Hero trang chủ. */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream dark:from-[#0c1712] dark:via-[#12211b] dark:to-[#0c1712]" />
       <HeroCanvas />
 
       {/* Cành lá & hoa ở góc, như Hero. */}
@@ -70,28 +72,28 @@ export default async function Page({ params }: Params) {
         <div className="text-center lg:text-left">
           <Link
             href="/"
-            className="cursor-pointer text-xs font-bold uppercase tracking-widest text-leaf-deep/70 transition hover:text-leaf-deep"
+            className="cursor-pointer text-xs font-bold uppercase tracking-widest text-leaf-deep/70 transition hover:text-leaf-deep dark:text-leaf-bright/70 dark:hover:text-leaf-bright"
           >
             {site.name}
           </Link>
 
           <span className="mt-4 mb-3 block">
-            <span className="inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur">
+            <span className="inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur dark:border-leaf-bright/40 dark:bg-white/10 dark:text-leaf-bright">
               {form.eyebrow}
             </span>
           </span>
 
           {/* Cùng cách xử lý với khối Đăng ký trang chủ: cỡ chữ dòng viết tay
               tính theo bề ngang cột nên luôn nằm gọn một hàng. */}
-          <h1 className="@container text-3xl font-extrabold leading-tight text-balance text-forest sm:text-4xl md:text-5xl">
+          <h1 className="@container text-3xl font-extrabold leading-tight text-balance text-forest sm:text-4xl md:text-5xl dark:text-ink">
             {form.title}
             <br />
-            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)] text-leaf-deep">
+            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)] text-leaf-deep dark:text-leaf-bright">
               {form.titleHighlight}
             </span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-lg text-lg text-forest/75 text-pretty lg:mx-0">
+          <p className="mx-auto mt-5 max-w-lg text-lg text-forest/75 text-pretty lg:mx-0 dark:text-ink/75">
             {form.description}
           </p>
 
@@ -103,11 +105,11 @@ export default async function Page({ params }: Params) {
         <RegisterFormCard form={form} facebook={site.facebook} />
       </div>
 
-      <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60">
+      <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60 dark:text-ink/60">
         {(form.name ?? "").trim() || form.formTitle} ·{" "}
         <Link
           href="/"
-          className="cursor-pointer underline hover:text-leaf-deep"
+          className="cursor-pointer underline hover:text-leaf-deep dark:hover:text-leaf-bright"
         >
           Về trang chủ {site.name}
         </Link>

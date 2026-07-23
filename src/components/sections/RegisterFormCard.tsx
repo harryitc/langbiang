@@ -29,7 +29,7 @@ const ImageCropperModal = dynamic(
 );
 
 const INPUT_CLASS =
-  "w-full rounded-xl border border-leaf/20 bg-white/80 px-4 py-3 text-forest outline-none transition placeholder:text-forest/40 focus:border-leaf focus:ring-2 focus:ring-leaf/30";
+  "w-full rounded-xl border border-leaf/20 bg-white/80 dark:bg-white/10 dark:border-leaf-bright/20 px-4 py-3 text-forest dark:text-ink outline-none transition placeholder:text-forest/40 dark:placeholder:text-ink/40 focus:border-leaf dark:focus:border-leaf-bright focus:ring-2 focus:ring-leaf/30 dark:focus:ring-leaf-bright/30";
 
 /**
  * Khoá ghi nhớ "máy này đã đăng ký form đó rồi" trong localStorage.
@@ -124,13 +124,13 @@ export default function RegisterFormCard({
 
   if (sent) {
     return (
-      <div className="glass rounded-3xl p-7 text-forest shadow-soft sm:p-9">
+      <div className="glass glass-adaptive rounded-3xl p-7 text-forest dark:text-ink shadow-soft sm:p-9">
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <span className="text-6xl">💚</span>
-          <h3 className="mt-4 text-2xl font-bold text-leaf-deep">
+          <h3 className="mt-4 text-2xl font-bold text-leaf-deep dark:text-leaf-bright">
             {form.successTitle}
           </h3>
-          <p className="mt-2 text-forest/75">{form.successNote}</p>
+          <p className="mt-2 text-forest/75 dark:text-ink/75">{form.successNote}</p>
           <button
             onClick={() => {
               // Bấm gửi đơn khác -> quên trạng thái cũ, trả form về trống.
@@ -138,7 +138,7 @@ export default function RegisterFormCard({
               setSent(false);
               setError(null);
             }}
-            className="mt-6 cursor-pointer rounded-full border-2 border-leaf/30 px-6 py-2.5 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10"
+            className="mt-6 cursor-pointer rounded-full border-2 border-leaf/30 dark:border-leaf-bright/30 px-6 py-2.5 text-sm font-semibold text-leaf-deep dark:text-leaf-bright transition hover:bg-leaf/10 dark:hover:bg-leaf-bright/10"
           >
             {form.successAgainLabel}
           </button>
@@ -148,9 +148,9 @@ export default function RegisterFormCard({
   }
 
   return (
-    <div className="glass rounded-3xl p-7 text-forest shadow-soft sm:p-9">
+    <div className="glass glass-adaptive rounded-3xl p-7 text-forest dark:text-ink shadow-soft sm:p-9">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <h3 className="text-2xl font-bold text-leaf-deep">{form.formTitle}</h3>
+        <h3 className="text-2xl font-bold text-leaf-deep dark:text-leaf-bright">{form.formTitle}</h3>
 
         {form.fields.map((field, i) =>
           field.type === "roles" ? (
@@ -212,7 +212,7 @@ export default function RegisterFormCard({
         <button
           type="submit"
           disabled={sending || uploading > 0}
-          className="w-full cursor-pointer rounded-full bg-gradient-to-r from-leaf-deep to-leaf py-3.5 text-base font-semibold text-white shadow-soft transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full cursor-pointer rounded-full bg-gradient-to-r from-leaf-deep to-leaf dark:from-leaf dark:to-grass py-3.5 text-base font-semibold text-white shadow-soft transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {sending
             ? "Đang gửi…"
@@ -220,13 +220,13 @@ export default function RegisterFormCard({
               ? "Đang tải ảnh lên…"
               : form.submitLabel}
         </button>
-        <p className="text-center text-xs text-forest/60">
+        <p className="text-center text-xs text-forest/60 dark:text-ink/60">
           {form.contactNote}{" "}
           <a
             href={facebook}
             target="_blank"
             rel="noopener noreferrer"
-            className="cursor-pointer font-semibold text-leaf-deep underline"
+            className="cursor-pointer font-semibold text-leaf-deep dark:text-leaf-bright underline"
           >
             {form.contactLinkLabel}
           </a>
@@ -265,7 +265,7 @@ function FieldLabel({
 }) {
   return (
     <label
-      className="mb-1.5 block text-sm font-semibold text-forest/80"
+      className="mb-1.5 block text-sm font-semibold text-forest/80 dark:text-ink/80"
     >
       {nhanGon(field.label)}
       {field.required && <span className="text-sunset"> *</span>}
@@ -436,11 +436,11 @@ function PhotoFieldView({
             type="button"
             disabled={busy}
             onClick={() => inputRef.current?.click()}
-            className="cursor-pointer rounded-full border-2 border-leaf/30 px-4 py-2 text-sm font-semibold text-leaf-deep transition hover:bg-leaf/10 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cursor-pointer rounded-full border-2 border-leaf/30 dark:border-leaf-bright/30 px-4 py-2 text-sm font-semibold text-leaf-deep dark:text-leaf-bright transition hover:bg-leaf/10 dark:hover:bg-leaf-bright/10 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {busy ? "Đang tải lên…" : value ? "Chọn ảnh khác" : "Chọn ảnh"}
           </button>
-          <p className="mt-1 text-xs text-forest/60">
+          <p className="mt-1 text-xs text-forest/60 dark:text-ink/60">
             {goiY(field, "Ảnh jpg, png hoặc webp, nhẹ hơn 5MB.")}
           </p>
         </div>
