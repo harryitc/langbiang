@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { form, site } = await timForm(id);
   if (!form) return { title: "Không tìm thấy form đăng ký" };
 
-  const title = form.name.trim() || form.formTitle;
+  const title = (form.name ?? "").trim() || form.formTitle;
   return {
     title,
     description: form.description,
@@ -104,7 +104,7 @@ export default async function Page({ params }: Params) {
       </div>
 
       <p className="relative z-20 mt-12 px-6 text-center text-xs text-forest/60">
-        {form.name.trim() || form.formTitle} ·{" "}
+        {(form.name ?? "").trim() || form.formTitle} ·{" "}
         <Link
           href="/"
           className="cursor-pointer underline hover:text-leaf-deep"

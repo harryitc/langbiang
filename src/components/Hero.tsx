@@ -191,14 +191,14 @@ export default function Hero({
 
         <h1 className="hero-title">
           <span className="sr-only">
-            {heroTitle2.trim() ? `${heroTitle1} ${heroTitle2}` : heroTitle1}
+            {(heroTitle2 ?? "").trim() ? `${heroTitle1} ${heroTitle2}` : heroTitle1}
           </span>
           <span
             aria-hidden
             className="hero-script font-display block pb-4 text-[3.25rem] font-bold leading-[1.12] text-gradient-green drop-shadow-sm sm:text-7xl md:text-8xl"
           >
             {heroTitle1}
-            {heroTitle2.trim() && (
+            {(heroTitle2 ?? "").trim() && (
               <>
                 <br />
                 {heroTitle2}

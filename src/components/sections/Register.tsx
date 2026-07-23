@@ -1,8 +1,11 @@
 // Khối "Đăng ký" ở trang chủ. Toàn bộ chữ và danh sách trường của form đều do
 // admin cấu hình — form nào hiện ở đây là do admin chọn ("Đặt làm form hiển thị
 // ở trang chủ" trong mục Form đăng ký).
-// Phần thẻ form nằm ở RegisterFormCard để dùng chung với trang /dang-ky/<id>.
+// Đồng bộ giao diện với trang chia sẻ riêng /dang-ky/<id> (nền sky-soft/cream,
+// cành lá, hoa cúc, chữ forest/leaf-deep). Không dùng HeroCanvas để tránh trùng
+// lặp animation rơi rơi.
 import Reveal from "@/components/Reveal";
+import { LeafBranch, Daisy } from "@/components/Decor";
 import RegisterFormCard from "./RegisterFormCard";
 import RoleCards from "./RoleCards";
 import type { RegisterForm } from "@/lib/content/schema";
@@ -17,18 +20,17 @@ export default function Register({
   return (
     <section
       id="register"
-      className="relative overflow-hidden bg-gradient-to-br from-leaf-deep via-leaf to-grass py-24 text-white sm:py-32"
+      className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-[#c9ecf2] to-cream py-24 sm:py-32"
     >
-      <div className="pointer-events-none absolute inset-0 opacity-20">
-        <div className="absolute -left-10 top-10 h-64 w-64 rounded-full bg-white blur-3xl" />
-        <div className="absolute -right-10 bottom-0 h-72 w-72 rounded-full bg-sun blur-3xl" />
-      </div>
+      {/* Cành lá & hoa ở góc, giống trang /dang-ky/<id> */}
+      <LeafBranch className="pointer-events-none absolute -left-6 -top-6 z-10 h-56 w-72 animate-sway opacity-90 md:h-72 md:w-96" />
+      <Daisy className="pointer-events-none absolute bottom-8 right-6 z-10 h-16 w-16 animate-float opacity-80 md:h-24 md:w-24" />
 
       {/* max-w-7xl chứ không phải 6xl: cột trái phải đủ rộng cho dòng tiêu đề
           viết tay cỡ lớn, nếu không chữ cuối bị rơi xuống một mình. */}
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
+      <div className="relative z-20 mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
         <Reveal childrenStagger>
-          <span className="mb-3 inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
+          <span className="mb-3 inline-block rounded-full border border-leaf/40 bg-white/50 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-leaf-deep backdrop-blur">
             {content.eyebrow}
           </span>
           {/* @container: cỡ chữ dòng viết tay tính theo bề ngang CỘT này, không
@@ -36,18 +38,18 @@ export default function Register({
               theo màn hình thì chữ sẽ tràn.
               whitespace-nowrap + cỡ chữ co giãn (cqw): dòng viết tay luôn nằm
               gọn MỘT hàng ở mọi khổ màn hình, thay vì rớt chữ cuối xuống dưới. */}
-          <h2 className="@container text-3xl font-extrabold leading-tight text-balance sm:text-4xl md:text-5xl">
+          <h2 className="@container text-3xl font-extrabold leading-tight text-balance text-forest sm:text-4xl md:text-5xl">
             {content.title}
             <br />
-            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)]">
+            <span className="font-display whitespace-nowrap text-[clamp(1.25rem,9cqw,3.75rem)] text-leaf-deep">
               {content.titleHighlight}
             </span>
           </h2>
-          <p className="mt-5 max-w-lg text-lg text-white/85 text-pretty">
+          <p className="mt-5 max-w-lg text-lg text-forest/75 text-pretty">
             {content.description}
           </p>
 
-          <RoleCards roles={content.roles} className="mt-8" />
+          <RoleCards roles={content.roles} className="mt-8 text-left" />
         </Reveal>
 
         <Reveal>

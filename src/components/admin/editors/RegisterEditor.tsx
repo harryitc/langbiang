@@ -214,7 +214,7 @@ export default function RegisterEditor({
               render: (_, f) => (
                 <div>
                   <div className="font-medium">
-                    {f.name.trim() || (
+                    {(f.name ?? "").trim() || (
                       <span className="opacity-40">(chưa đặt tên form)</span>
                     )}
                   </div>
