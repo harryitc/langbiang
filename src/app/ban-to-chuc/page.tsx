@@ -74,7 +74,7 @@ export default async function BanToChucPage() {
         {/* ── BAN TỔ CHỨC ── */}
         {board?.members && board.members.length > 0 && (
           <section id="members" className="relative z-20 py-16 sm:py-20">
-            <div className="mx-auto max-w-6xl px-5 sm:px-6">
+            <div className="mx-auto max-w-7xl px-5 sm:px-6">
               <div className="mx-auto max-w-2xl text-center">
                 <span className="mb-3 inline-block rounded-full bg-white/50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-leaf-deep backdrop-blur dark:bg-white/5 dark:text-leaf-bright">
                   Đội ngũ

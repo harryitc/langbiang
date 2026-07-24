@@ -34,11 +34,12 @@ function MemberCard({ m }: { m: Member }) {
 
       {/* Họ tên và nội dung ở giữa */}
       <div className="min-w-0 flex-1">
-        <h4 className="text-sm font-bold leading-snug text-forest dark:text-ink [overflow-wrap:anywhere] sm:text-base" title={m.name}>
+        {/* 1 dòng, cắt khi tràn nhưng KHÔNG hiện dấu "…" (text-clip thay vì text-ellipsis) */}
+        <h4 className="overflow-hidden text-clip whitespace-nowrap text-sm font-bold text-forest dark:text-ink sm:text-base" title={m.name}>
           {m.name}
         </h4>
         {m.bio && (
-          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-forest/75 dark:text-ink/70 sm:text-sm" title={m.bio}>
+          <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-forest/75 dark:text-ink/70 sm:text-[15px]" title={m.bio}>
             {m.bio}
           </p>
         )}
@@ -71,7 +72,8 @@ export default function MembersList({ members }: { members: Member[] }) {
 
   return (
     <div className="mt-12">
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
+      {/* Lưới với cột cố định 400px — card không co giãn, tự căn giữa và xuống hàng */}
+      <div className="grid grid-cols-1 justify-center gap-5 sm:gap-6 md:[grid-template-columns:repeat(auto-fit,380px)]">
         {visibleMembers.map((m, idx) => (
           <MemberCard key={m.name + idx} m={m} />
         ))}
