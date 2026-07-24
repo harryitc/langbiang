@@ -1,6 +1,6 @@
 {
-    "name": "Trăng sáng",
-    "short_name": "Trăng sáng",
+    "name": "Trăng Sáng Langbiang",
+    "short_name": "Trăng Sáng",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
+    "theme_color": "#7cc34a",
+    "background_color": "#0c1712",
     "display": "standalone"
 }

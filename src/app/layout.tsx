@@ -57,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: meta.name,
       title,
       description,
-      images: [{ url: ogImage, width: 1200, height: 628, alt: meta.name }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: meta.name }],
     },
     twitter: {
       card: "summary_large_image",
@@ -70,18 +70,6 @@ export async function generateMetadata(): Promise<Metadata> {
       follow: true,
       googleBot: { index: true, follow: true, "max-image-preview": "large" },
     },
-    // icons: {
-    //   icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
-    //   apple: "/favicon.ico",
-    // },
-    // icons: {
-    //   icon: [
-    //     { url: "/favicon.ico" },
-    //     { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    //   ],
-    //   shortcut: "/favicon.ico",
-    //   apple: "/apple-touch-icon.png",
-    // },
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },
