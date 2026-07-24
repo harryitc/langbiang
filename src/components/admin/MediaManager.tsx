@@ -204,9 +204,9 @@ export default function MediaManager() {
   return (
     <div className="flex min-h-[460px] flex-col gap-6 pt-1 md:flex-row">
       {/* Cột album */}
-      <div className="flex flex-col md:w-52 md:shrink-0 md:border-r md:border-gray-100 md:pr-4 dark:md:border-zinc-800">
+      <div className="flex flex-col md:w-52 md:shrink-0 md:border-r md:border-gray-100 md:pr-4">
         <div className="mb-2 flex items-center justify-between">
-          <strong className="text-sm font-bold text-gray-800 dark:text-zinc-200">Album</strong>
+          <strong className="text-sm font-bold text-gray-800">Album</strong>
           <Button
             size="small"
             type="text"
@@ -293,11 +293,11 @@ export default function MediaManager() {
                   const isSelected = selected === it.id;
                   const popoverContent = (
                     <div className="w-56 p-0.5 text-left">
-                      <div className="truncate text-xs font-bold text-gray-800 dark:text-zinc-200" title={it.name}>
+                      <div className="truncate text-xs font-bold text-gray-800" title={it.name}>
                         {it.name}
                       </div>
 
-                      <div className="mt-2 flex items-center justify-end gap-1 border-t border-gray-100 pt-2 dark:border-zinc-800">
+                      <div className="mt-2 flex items-center justify-end gap-1 border-t border-gray-100 pt-2">
                         <Tooltip title="Sao chép đường dẫn ảnh">
                           <Button
                             size="small"

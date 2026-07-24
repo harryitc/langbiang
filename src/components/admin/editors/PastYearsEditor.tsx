@@ -295,7 +295,7 @@ export default function PastYearsEditor({ initial }: { initial: PastYear[] }) {
                     label: `Nhà tài trợ (${item.sponsorTiers.length} hạng)`,
                     children: (
                       <Space orientation="vertical" size={12} style={{ width: "100%" }}>
-                        <div className="rounded-xl border border-black/10 bg-black/[0.02] p-3 dark:border-white/10 dark:bg-white/[0.02]">
+                        <div className="rounded-xl border border-black/10 bg-black/[0.02] p-3">
                           <div className="mb-2 text-xs font-bold uppercase opacity-70">
                             Tiêu đề & Mô tả mục Nhà tài trợ
                           </div>

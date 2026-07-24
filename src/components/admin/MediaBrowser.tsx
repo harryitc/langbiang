@@ -233,9 +233,9 @@ export default function MediaBrowser({
   return (
     <div className="flex min-h-[460px] max-h-[70vh] flex-col gap-4 overflow-hidden pt-1 md:flex-row">
       {/* Cột album */}
-      <div className="flex max-h-full flex-col md:w-52 md:shrink-0 md:border-r md:border-gray-100 md:pr-3 dark:md:border-zinc-800">
+      <div className="flex max-h-full flex-col md:w-52 md:shrink-0 md:border-r md:border-gray-100 md:pr-3">
         <div className="mb-2 flex items-center justify-between">
-          <strong className="text-sm font-bold text-gray-800 dark:text-zinc-200">Album</strong>
+          <strong className="text-sm font-bold text-gray-800">Album</strong>
           {canManage ? (
             <Button
               size="small"
@@ -280,7 +280,7 @@ export default function MediaBrowser({
 
       {/* Khu vực ảnh */}
       <div className="flex min-w-0 flex-1 flex-col gap-3.5 max-h-full overflow-y-auto pr-2 pb-2">
-        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 bg-white pb-2 pt-0.5 dark:bg-zinc-900">
+        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 bg-white pb-2 pt-0.5">
           <Input.Search
             allowClear
             placeholder="Tìm theo tên ảnh…"
@@ -351,7 +351,7 @@ export default function MediaBrowser({
                   const isSelected = !multiple && selected === it.id;
                   const popoverContent = (
                     <div className="w-56 p-0.5 text-left">
-                      <div className="truncate text-xs font-bold text-gray-800 dark:text-zinc-200" title={it.name}>
+                      <div className="truncate text-xs font-bold text-gray-800" title={it.name}>
                         {it.name}
                       </div>
                       {!canManage ? (
@@ -360,7 +360,7 @@ export default function MediaBrowser({
                         </div>
                       ) : null}
 
-                      <div className="mt-2 flex items-center justify-end gap-1 border-t border-gray-100 pt-2 dark:border-zinc-800">
+                      <div className="mt-2 flex items-center justify-end gap-1 border-t border-gray-100 pt-2">
                         {mode === "pick" ? (
                           <Button
                             size="small"
