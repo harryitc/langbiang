@@ -34,7 +34,7 @@ function MemberCard({ m }: { m: Member }) {
 
       {/* Họ tên và nội dung ở giữa */}
       <div className="min-w-0 flex-1">
-        <h4 className="truncate text-sm font-bold text-forest dark:text-ink sm:text-base" title={m.name}>
+        <h4 className="text-sm font-bold leading-snug text-forest dark:text-ink [overflow-wrap:anywhere] sm:text-base" title={m.name}>
           {m.name}
         </h4>
         {m.bio && (
