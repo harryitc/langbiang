@@ -10,13 +10,24 @@ import "server-only";
 // xác thực tên miền, Resend CHỈ cho gửi tới email chủ tài khoản — nên tình
 // nguyện viên không bao giờ nhận được thư cảm ơn. Đó là lý do đổi sang đây.)
 //
-// Cần hai biến môi trường:
-//   GMAIL_USER          — địa chỉ Gmail dùng để gửi, vd bantochuc@gmail.com
-//   GMAIL_APP_PASSWORD  — "mật khẩu ứng dụng" 16 ký tự lấy trong tài khoản
-//                         Google (KHÔNG phải mật khẩu đăng nhập thường).
-// Thiếu một trong hai -> không gửi, chỉ ghi log; mọi việc khác vẫn chạy.
+// Hỗ trợ HAI cách xác thực với Gmail, tự dò theo biến môi trường:
+//
+//  A) OAuth2 (KHUYẾN NGHỊ — ổn định, không bị thu hồi khi đổi mật khẩu):
+//     GMAIL_USER                 — địa chỉ Gmail dùng để gửi (chính là account
+//                                  đã bấm "cho phép" khi lấy refresh token)
+//     GMAIL_OAUTH_CLIENT_ID      — OAuth client ID (Google Cloud Console)
+//     GMAIL_OAUTH_CLIENT_SECRET  — OAuth client secret
+//     GMAIL_OAUTH_REFRESH_TOKEN  — refresh token (app phải Published, xem
+//                                  docs/email-oauth2-setup.md)
+//
+//  B) App Password (cũ, dự phòng — hay bị Google thu hồi):
+//     GMAIL_USER + GMAIL_APP_PASSWORD (mật khẩu ứng dụng 16 ký tự).
+//
+// Có đủ bộ OAuth2 -> dùng OAuth2. Không thì thử App Password. Không có gì ->
+// không gửi, chỉ ghi log; mọi việc khác vẫn chạy.
 import nodemailer from "nodemailer";
 import type { Transporter } from "nodemailer";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
 
 /** Một lá thư đã sẵn sàng gửi. */
 export type ThuGui = {
@@ -37,15 +48,51 @@ export type KetQuaGui = {
 /** Gmail chặn ở khoảng 500 thư/ngày với tài khoản thường. */
 export const GIOI_HAN_NGAY = 500;
 
+/** Chọn cách xác thực dựa trên biến môi trường đang có. */
+function cheDoAuth(): "oauth2" | "app-password" | null {
+  if (!process.env.GMAIL_USER) return null;
+  if (
+    process.env.GMAIL_OAUTH_CLIENT_ID &&
+    process.env.GMAIL_OAUTH_CLIENT_SECRET &&
+    process.env.GMAIL_OAUTH_REFRESH_TOKEN
+  ) {
+    return "oauth2";
+  }
+  if (process.env.GMAIL_APP_PASSWORD) return "app-password";
+  return null;
+}
+
+/** Object `auth` cho nodemailer, hoặc null nếu chưa đủ cấu hình. */
+function dungAuth(): SMTPTransport.Options["auth"] | null {
+  switch (cheDoAuth()) {
+    case "oauth2":
+      return {
+        type: "OAuth2",
+        user: process.env.GMAIL_USER,
+        clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
+        clientSecret: process.env.GMAIL_OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_OAUTH_REFRESH_TOKEN,
+      };
+    case "app-password":
+      return {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      };
+    default:
+      return null;
+  }
+}
+
 /** Cấu hình đã đủ để gửi chưa. */
 export function daCauHinhGuiThu(): boolean {
-  return !!(process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD);
+  return cheDoAuth() !== null;
 }
 
 /** Câu giải thích khi chưa cấu hình — dùng chung để không viết lại nhiều nơi. */
 export const CHUA_CAU_HINH =
-  "Chưa cấu hình hộp thư gửi đi (GMAIL_USER và GMAIL_APP_PASSWORD). " +
-  "Vào phần biến môi trường của dự án để thêm, rồi thử lại.";
+  "Chưa cấu hình hộp thư gửi đi. Cần GMAIL_USER cùng bộ OAuth2 " +
+  "(GMAIL_OAUTH_CLIENT_ID, GMAIL_OAUTH_CLIENT_SECRET, GMAIL_OAUTH_REFRESH_TOKEN) " +
+  "hoặc GMAIL_APP_PASSWORD. Xem docs/email-oauth2-setup.md.";
 
 /**
  * Dòng "người gửi" hiện trong hộp thư người nhận.
@@ -67,10 +114,7 @@ function layTransporter(): Transporter {
       host: "smtp.gmail.com",
       port: 465,
       secure: true,
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
+      auth: dungAuth() ?? undefined,
       pool: true,
       maxConnections: 3,
       // Gmail khó chịu khi bị dội quá nhanh; giữ nhịp vừa phải.
