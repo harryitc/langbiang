@@ -7,6 +7,7 @@ import SubPageHeader from "@/components/SubPageHeader";
 import MembersList from "@/components/sections/MembersList";
 import Footer from "@/components/sections/Footer";
 import { getContent } from "@/lib/content/store";
+import { isMemberActive } from "@/lib/site";
 import FounderGallery from "./FounderGallery";
 import OrgLeadGallery from "./OrgLeadGallery";
 import HeroCanvas from "@/components/HeroCanvas";
@@ -23,11 +24,15 @@ export default async function BanToChucPage() {
   const { main, currentYear } = await getContent();
   const { board } = main;
 
+  // Chỉ hiển thị thành viên đang được kích hoạt (ẩn người bị tắt).
+  const activeFounders = (board?.founders ?? []).filter(isMemberActive);
+  const activeMembers = (board?.members ?? []).filter(isMemberActive);
+
   // Tách trưởng ban tổ chức ra khỏi danh sách thành viên
-  const orgLeaders = (board?.members ?? []).filter(
+  const orgLeaders = activeMembers.filter(
     (m) => m.isLeader || m.role?.toLowerCase().includes("trưởng ban")
   );
-  const orgNonLeaders = (board?.members ?? []).filter(
+  const orgNonLeaders = activeMembers.filter(
     (m) => !m.isLeader && !m.role?.toLowerCase().includes("trưởng ban")
   );
 
@@ -61,18 +66,18 @@ export default async function BanToChucPage() {
             </h1>
           </div>
 
-          <FounderGallery founders={board.founders} />
+          <FounderGallery founders={activeFounders} />
         </section>
 
         {/* Đường phân cách mỏng */}
-        {board?.members && board.members.length > 0 && (
+        {activeMembers.length > 0 && (
           <div className="relative z-20 mx-auto max-w-6xl px-5 sm:px-6">
             <div className="h-px bg-gradient-to-r from-transparent via-leaf/30 to-transparent" />
           </div>
         )}
 
         {/* ── BAN TỔ CHỨC ── */}
-        {board?.members && board.members.length > 0 && (
+        {activeMembers.length > 0 && (
           <section id="members" className="relative z-20 py-16 sm:py-20">
             <div className="mx-auto max-w-7xl px-5 sm:px-6">
               <div className="mx-auto max-w-2xl text-center">

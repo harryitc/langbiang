@@ -278,7 +278,7 @@ function SelectRegistrantModal({
 
 /** Phần tử mới rỗng cho danh sách thành viên. */
 function newMember(): Member {
-  return { name: "", role: "", photo: "", bio: "", isLeader: false, facebook: "" };
+  return { name: "", role: "", photo: "", bio: "", isLeader: false, facebook: "", active: true };
 }
 
 /** Danh sách trường bắt buộc còn trống của một thành viên (FR2-R3). */
@@ -339,6 +339,21 @@ function MemberForm({
           </div>
         </Field>
       </div>
+
+      <Field
+        label="Kích hoạt"
+        hint="Bật thì thành viên hiển thị trên website. Tắt để tạm ẩn mà không cần xoá."
+      >
+        <div className="flex items-center gap-2 pt-1">
+          <Switch
+            checked={item.active !== false}
+            onChange={(checked) => update({ ...item, active: checked })}
+          />
+          <span className="text-xs text-gray-500">
+            {item.active !== false ? "Đang hiển thị trên web" : "Đang ẩn — không hiện trên web"}
+          </span>
+        </div>
+      </Field>
 
       <Field
         label="Ảnh (tùy chọn)"
@@ -416,6 +431,7 @@ export default function BoardEditor({
       bio: "",
       isLeader: false,
       facebook: "",
+      active: true,
     }));
 
     if (modalTarget === "founders") {
@@ -494,6 +510,7 @@ export default function BoardEditor({
               subtitle: m.role || undefined,
               thumb: m.photo || undefined,
               invalid: missingFields(m).length > 0,
+              tags: m.active === false ? [{ text: "Chưa kích hoạt", color: "default" }] : undefined,
             })}
             drawerTitle="Thành viên"
             renderForm={(item, updateItem) => (
@@ -557,6 +574,7 @@ export default function BoardEditor({
               subtitle: m.role || undefined,
               thumb: m.photo || undefined,
               invalid: missingFields(m).length > 0,
+              tags: m.active === false ? [{ text: "Chưa kích hoạt", color: "default" }] : undefined,
             })}
             drawerTitle="Thành viên"
             renderForm={(item, updateItem) => (

@@ -1,5 +1,6 @@
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/content/store";
+import { isMemberActive } from "@/lib/site";
 import type { Member } from "@/lib/content/schema";
 
 function initials(name: string) {
@@ -70,7 +71,7 @@ function Connector() {
 
 export default async function Founders() {
   const { main } = await getContent();
-  const [lead, ...coFounders] = main.board.founders;
+  const [lead, ...coFounders] = main.board.founders.filter(isMemberActive);
 
   return (
     <section id="founders" className="relative py-16 sm:py-20">

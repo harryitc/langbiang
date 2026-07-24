@@ -1,10 +1,12 @@
 import { getContent } from "@/lib/content/store";
+import { isMemberActive } from "@/lib/site";
 import MembersList from "./MembersList";
 
 export default async function Members() {
   const { main } = await getContent();
   const { board } = main;
-  if (!board?.members || board.members.length === 0) return null;
+  const members = (board?.members ?? []).filter(isMemberActive);
+  if (members.length === 0) return null;
 
   return (
     <section id="members" className="relative py-16 sm:py-20">
@@ -18,7 +20,7 @@ export default async function Members() {
           </h2>
         </div>
 
-        <MembersList members={board.members} />
+        <MembersList members={members} />
       </div>
     </section>
   );

@@ -334,7 +334,12 @@ export type Member = {
   bio: string;
   isLeader?: boolean; // Đánh dấu Trưởng ban để hiện ngôi sao ở góc trái trên ảnh
   facebook?: string; // Đường dẫn Facebook cá nhân
+  active?: boolean; // Kích hoạt: hiện trên web. Bỏ trống = coi như đang bật (dữ liệu cũ)
 };
+
+/** Thành viên có được hiển thị trên trang công khai không.
+ *  `active` bỏ trống hoặc true = hiện; chỉ ẩn khi bị tắt (active === false). */
+export const isMemberActive = (m: Member): boolean => m.active !== false;
 
 export const board: { founders: Member[]; members: Member[] } = {
   founders: [
