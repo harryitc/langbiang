@@ -94,9 +94,6 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: "/favicon.ico",
     },
     manifest: "/site.webmanifest",
-    verification: {
-      google: "XOGtXG7k4uoGXRpKkNHEx8MO0pZh5VieLL3V_7AO8JY",
-    },
   };
 }
 
